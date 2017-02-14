@@ -6,10 +6,17 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,10 +37,28 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 @Controller
+//@WebServlet(urlPatterns = {"/*"}, asyncSupported=true)
+@EnableAsync
+//@WebFilter(urlPatterns = "/index", asyncSupported = true)
 public class UserController {
 
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest req=(HttpServletRequest)request;
+//check if "role" attribute is null
+        if(req.getSession().getAttribute("user")==null){
+//forward request to login.jsp
+            req.getRequestDispatcher("/homePage.jsp").forward(request, response);
+        }else{
+        chain.doFilter(request, response);
+        }
+    }
+	
 	@RequestMapping(value="/GetGroupsOfUserServlet",method = RequestMethod.GET)
-	protected void getGroupsOfStudent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected String getGroupsOfStudent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getRequestedSessionId() != null
+		        && !request.isRequestedSessionIdValid()) {
+		    return "redirect:./index";
+		}else{
 		User userTry = (User) request.getSession().getAttribute("user");
 		if(!userTry.isTeacher()){
 		User user = (User) request.getSession().getAttribute("user");
@@ -60,6 +85,8 @@ public class UserController {
 				response.setContentType("application/json");
 				response.getWriter().write(jsonGroups.toString());
 			
+		}
+		return null;
 		}
 	}
 	
@@ -135,11 +162,53 @@ public class UserController {
 		}
 		return "error";
 	}
+	/*public static boolean isAjax(HttpServletRequest request) {
+		   return "XMLHttpRequest"
+		             .equals(request.getHeader("X-Requested-With"));
+		}*/
+	/*public  boolean isAjax(HttpServletRequest request) {
+		System.out.println(request.getHeader("X-Requested-With") + "PPP");
+		   return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+		}*/
+	@RequestMapping(value="/indexReturn",method = RequestMethod.GET)
+	protected String loginGetReturn(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//request.getRequestDispatcher("homePage.jsp").forward(request, response);
+		System.out.println("OPAPAPAPAPPAPAAPPAPAPAPAPAPAP");
+		System.out.println(response.getStatus());
+		//System.out.println);
 	
+		 
+	    
+			System.out.println("ITS AJAX");
+			request.getSession().invalidate();
+			response.setStatus(403);
+		
+		//return heardeName;
+		return null;
+	}
 	@RequestMapping(value="/index",method = RequestMethod.GET)
 	protected String loginGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//request.getRequestDispatcher("homePage.jsp").forward(request, response);
-		return "homePage";
+		System.out.println("OPAPAPAPAPPAPAAPPAPAPAPAPAPAP");
+		System.out.println(response.getStatus());
+		//System.out.println);
+	
+		 
+	           // include other file	
+		//if(request.getAttribute("")){
+		System.out.println(request.getSession().getId());
+		System.out.println(request.getSession().getAttribute("sessionId"));
+		System.out.println(request.getSession().isNew() + " 0");
+		if(!request.getSession().isNew()){
+			return "homePage";		
+		}else{
+			System.out.println("SESSION IS NEW");
+			response.setStatus(401);			
+			return "homePage";		
+
+		}
+		//return heardeName;
+		//return null;
 	}
 	/*@RequestMapping(value="/**",method = RequestMethod.GET)
 	protected String goToDefaultPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -149,17 +218,19 @@ public class UserController {
 	
 	@RequestMapping(value="/LoginServlet",method = RequestMethod.POST)
 	protected String loginPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		User user = null;
+		HttpSession session = null; //sessionCreated() is executed
+		//session.setMaxInactiveInterval(10);
 		String username = request.getParameter("username").trim();
 		String password = request.getParameter("password").trim();
-		
-		request.getSession().setMaxInactiveInterval(100000);
 		if(isThereEmptyFieldLogin(username, password)){
 			request.getSession().setAttribute("invalidField", true);
 		}
 		else{
 		try {
 			if(doesUserLoginExist(username,password)){
+				session = request.getSession();
 				user = UserDAO.getInstance().getUserByUsername(username);
 				request.getSession().setAttribute("user", user);
 				ArrayList<Group> allGroups;
@@ -171,7 +242,7 @@ public class UserController {
 						t.setGroups(UserDAO.getInstance().getGroupsOfUser(t.getId()));
 					}
 					request.getServletContext().setAttribute("allTeachers", allTeachers);
-					
+					System.out.println(session.getMaxInactiveInterval()+"LLLLL");
 				} catch (UserException | GroupException e) {
 					System.out.println(e.getMessage());
 					e.printStackTrace();
@@ -193,9 +264,9 @@ public class UserController {
 				}
 				
 			}else{
-				request.setAttribute("invalidField", true);
-				request.setAttribute("usernameTry", username);
-				request.setAttribute("passwordTry", password);
+				request.getSession().setAttribute("invalidField", true);
+				request.getSession().setAttribute("usernameTry", username);
+				request.getSession().setAttribute("passwordTry", password);
 			//	response.sendRedirect("./LoginServlet");
 			}
 		} catch (UserException e) {
@@ -208,7 +279,7 @@ public class UserController {
 			return "exception";
 		}
 	}
-		return "redirect:./LoginServlet";
+		return "redirect:./index";
 	}
 	private boolean doesUserLoginExist(String username, String password) throws UserException{
 			return UserDAO.getInstance().doesUserExistInDB(username, password);
@@ -226,7 +297,7 @@ public class UserController {
 		request.getSession().removeAttribute("user");
 		request.getSession().invalidate();
 		//response.sendRedirect("./LoginServlet");
-		return "redirect:./LoginServlet";
+		return "redirect:./index";
 	}
 	
 	

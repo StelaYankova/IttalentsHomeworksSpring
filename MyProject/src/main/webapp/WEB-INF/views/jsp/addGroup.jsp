@@ -210,6 +210,17 @@
 	$(document).ready(function() {
 		$('[data-toggle="popover"]').popover();
 	});
+	
+	$(function () {
+	      $.ajaxSetup({
+	        statusCode: {
+	          401: function () {
+	            location.href = '/MyProject/index';
+	          }
+	        }
+	      });
+	    });
+	
 </script>
 </body>
 </html>

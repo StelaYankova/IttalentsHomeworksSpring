@@ -195,7 +195,6 @@ WHERE UH.user_id = 3 AND UH.homework_id= 4;*/
 				}else{
 					uploadedOnString = rs.getString(3); 
 					LocalDateTime uploadedOn = LocalDateTime.parse(uploadedOnString, formatter);
-					System.out.println("DAO UPLOADED ON : " + uploadedOn);
 					tasksOfHomeworkOfStudent.add(new Task(rs.getInt(2), rs.getString(4), uploadedOn));
 				}
 			}
@@ -327,9 +326,7 @@ WHERE UH.user_id = 3 AND UH.homework_id= 4;*/
 	@Override
 	public void setTeacherGrade(HomeworkDetails homeworkDetails, int studentId, int teacherGrade) throws UserException, ValidationException{
 		Connection con = manager.getConnection();
-		System.out.println("isGradeTooLong: " + ValidationsDAO.getInstance().isGradeTooLog(teacherGrade));
-		System.out.println("isGradeValid: " + ValidationsDAO.getInstance().isGradeValueValid(teacherGrade));
-		System.out.println("grade " + teacherGrade);
+		
 		if((!ValidationsDAO.getInstance().isGradeTooLog(teacherGrade)) && ValidationsDAO.getInstance().isGradeValueValid(teacherGrade)){
 		try {
 			PreparedStatement ps = con.prepareStatement(SET_TEACHER_GRADE_TO_HOMEWORK);
@@ -467,17 +464,13 @@ WHERE UH.user_id = 3 AND UH.homework_id= 4;*/
 				ps.setString(1, user.getPassword());
 				ps.setString(2, user.getEmail());
 				ps.setInt(3, id);
-				System.out.println("NOT THREW EXCEPTION");
 
 				ps.executeUpdate();
 
 			} catch (SQLException e) {
-				System.out.println("W EXCEPTION");
-
 				throw new UserException("Something went wrong with updating user..");
 			}
 		}else{
-			System.out.println("THREW EXCEPTION");
 			throw new ValidationException("update user --> invalid fields");
 		}
 	}
@@ -587,7 +580,6 @@ WHERE UH.user_id = 3 AND UH.homework_id= 4;*/
 			st = (Statement) con.createStatement();
 			ResultSet rs = st.executeQuery("SELECT * FROM IttalentsHomeworks.Users WHERE isTeacher = 1;");
 			while(rs.next()){
-				System.out.println(rs.getInt(1) + ","+ rs.getString(2)+ ","+rs.getString(4)+ ","+ rs.getBoolean(5));
 				allTeachers.add(new Teacher(rs.getInt(1), rs.getString(2), rs.getString(4), rs.getBoolean(5)));
 			}
 		} catch (SQLException e) {
@@ -605,7 +597,6 @@ WHERE UH.user_id = 3 AND UH.homework_id= 4;*/
 			st = (Statement) con.createStatement();
 			ResultSet rs = st.executeQuery("SELECT * FROM IttalentsHomeworks.Users WHERE isTeacher = 0;");
 			while(rs.next()){
-				System.out.println(rs.getInt(1) + ","+ rs.getString(2)+ ","+rs.getString(4)+ ","+ rs.getBoolean(5));
 				allStudents.add(new Student(rs.getInt(1), rs.getString(2), rs.getString(4), rs.getBoolean(5)));
 			}
 		} catch (SQLException e) {

@@ -346,6 +346,22 @@ function areYouSureRemove(e, username,groupId){
 				}
 			}
 		});
+		
 	}
+	$(function () {
+	      $.ajaxSetup({
+	        statusCode: {
+	          401: function () {
+	            location.href = '/MyProject/index';
+	          }
+	        }
+	      });
+	    });
+	function selectOption(index){ 
+		  document.getElementById("chosenGroup").options.selectedIndex = index;
+		}
+	$(document).ready(function(e) {
+		selectOption(0);
+	});
 </script>
 </html>

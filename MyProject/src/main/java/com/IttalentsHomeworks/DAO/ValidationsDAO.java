@@ -219,7 +219,6 @@ public class ValidationsDAO implements IValidationsDAO{
 	
 	@Override
 	public boolean isGradeValueValid(int grade){
-		System.out.println("Grade is " + grade);
 		if(grade >= 0 && grade <= 100){
 			return true;
 		}

@@ -52,6 +52,8 @@
 <div id="image">
 		<img src="images/logo-black.png" class="img-rounded" width="380" height="236">
 	</div>
+	<input type="hidden" id="refresh" value="no">
+	
 	<c:if test="${not empty invalidFields}">
 		<c:if test="${not invalidFields}">
 			<script>
@@ -59,7 +61,7 @@
 			</script>
 		</c:if>
 	</c:if>
-Choose group: <select id =  "chosenGroup" class="selectpicker">
+Choose group: <select id = "chosenGroup" class="selectpicker">
  <option value="null">-</option>
    <option value="allGroups">All Groups</option>
 
@@ -89,6 +91,7 @@ Choose group: <select id =  "chosenGroup" class="selectpicker">
 	overflow:hidden; 
 	overflow-y:scroll;overflow-x:scroll;"></ul>
 	<script>
+	 
 	$(document).ready(function() {
 		var table = $('#resultTable').DataTable({
 			"aoColumnDefs" : [ {
@@ -116,9 +119,10 @@ Choose group: <select id =  "chosenGroup" class="selectpicker">
 		}
 		
 		var groupId = $(this).find(":selected").val();
-		$.ajax({
+   		$.ajax({
 			url:'./seeHomeworksOfGroupServlet',
 			type:'GET',
+			cache: false,
 			data:{
 				"chosenGroup": groupId
 			},
@@ -155,15 +159,38 @@ Choose group: <select id =  "chosenGroup" class="selectpicker">
 			}
 				
 		}
+		/*error:function (data){
+		    console.log(data)
+			if(data.status == 200){
+				alert("Session has expired");
+		    	 window.location.href = data.redirect; 
+		    }else{
+		    	<c:if test="${empty sessionScope.user}">
+				console.log("expired")
+					alert('session expired!');
+				
+		</c:if>
+		    	//alert("Something went wrong, code: " + xhr.status + " " + xhr.message)
+		    //var err = eval("(" + xhr.responseText + ")");
+  alert("code: " + xhr.status + " " + xhr.responseText);
+		             // Take action, referencing xhr.responseText as needed.
+		    }
+		} ,*/
+		/*error: function(response){
+			//console.log(18)
+			alert("Session has expired");
+			 window.location.href = './index'; 
+		}*/
+		
 	});
 	});});
+	
+	
 	function chooseGroupFirst(){
 		alert("If you would like to see the homework of some of the students you should choose group first.")
 	}
 	
 	function chooseStudent(homeworkId, groupId){
-		
-	console.log("hw id: "  + homeworkId)
 		if(!$('#listOfStudentsOfGroup').is(':empty') ) {
 			$( "#listOfStudentsOfGroup").empty();
 		}
@@ -189,10 +216,28 @@ Choose group: <select id =  "chosenGroup" class="selectpicker">
 					}
 
 				}
-			}
+			},
+			
 			});
-	};
-	
+		
+
+	    
+	}; 
+	$(function () {
+	      $.ajaxSetup({
+	        statusCode: {
+	          401: function () {
+	            location.href = '/MyProject/index';
+	          }
+	        }
+	      });
+	    });
+	function selectOption(index){ 
+		  document.getElementById("chosenGroup").options.selectedIndex = index;
+		}
+	$(document).ready(function(e) {
+		selectOption(0);
+	});
 
 	/*for(var i in response){
 	

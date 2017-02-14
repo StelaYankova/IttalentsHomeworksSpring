@@ -44,6 +44,10 @@ public class ValidationsController {
 	
 	@RequestMapping(value="/IsChosenStudentAlreadyInGroup",method = RequestMethod.GET)
 	protected String isChosenStudentAlreadyInGroup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getRequestedSessionId() != null
+		        && !request.isRequestedSessionIdValid()) {
+		    return "redirect:./index";
+		}else{
 		int chosenGroupId = Integer.parseInt(request.getParameter("chosenGroupId"));
 		String chosenStudentUsername = request.getParameter("chosenStudentUsername").trim();
 		try {
@@ -64,10 +68,15 @@ public class ValidationsController {
 			return "exception";
 		}
 		return null;
+		}
 	}
 	
 	@RequestMapping(value="/IsGroupNameUnique",method = RequestMethod.GET)
 	protected String isGroupNameUnique(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getRequestedSessionId() != null
+		        && !request.isRequestedSessionIdValid()) {
+		    return "redirect:./index";
+		}else{
 		String groupName = request.getParameter("name").trim();
 		try {
 			if(ValidationsDAO.getInstance().isGroupNameUnique(groupName)){
@@ -81,10 +90,15 @@ public class ValidationsController {
 			return "exception";
 		}
 		return null;
+		}
 	}
 	
 	@RequestMapping(value="/IsGroupNameUniqueUpdate",method = RequestMethod.GET)
 	protected String isGroupNameUniqueUpdate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getRequestedSessionId() != null
+		        && !request.isRequestedSessionIdValid()) {
+		    return "redirect:./index";
+		}else{
 		String groupName = request.getParameter("name").trim();
 		Group currGroup = (Group) request.getSession().getAttribute("currGroup");
 		int currGroupId = currGroup.getId();
@@ -106,17 +120,24 @@ public class ValidationsController {
 			return "exception";
 		}
 		return null;
+		}
 	}
 	
 	
 	@RequestMapping(value="/IsGroupNameValid",method = RequestMethod.GET)
-	protected void isGroupNameValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected String isGroupNameValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getRequestedSessionId() != null
+		        && !request.isRequestedSessionIdValid()) {
+		    return "redirect:./index";
+		}else{
 		String groupName = request.getParameter("name").trim();
 		if(isLengthGroupNameValid(groupName) && areCharactersGroupNameValid(groupName)){
 			response.setStatus(200);
 		}else{
 			response.setStatus(400);
 		}
+		}
+		return null;
 	}
 	private boolean isLengthGroupNameValid(String groupName) {
 		if (groupName.length() >= 5 && groupName.length() <= 20) {
@@ -135,7 +156,11 @@ public class ValidationsController {
 	}
 	
 	@RequestMapping(value="/IsHomeworkClosingTimeValid",method = RequestMethod.GET)
-	protected void isHomeworkClosingTimeValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected String isHomeworkClosingTimeValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getRequestedSessionId() != null
+		        && !request.isRequestedSessionIdValid()) {
+		    return "redirect:./index";
+		}else{
 		String opens = request.getParameter("opens").replace("/", "-");
 		String closes = request.getParameter("closes").replace("/", "-");
 		try {
@@ -154,26 +179,39 @@ public class ValidationsController {
 			response.setStatus(400);
 
 		}
+		}
+		return null;
 	}
 	
 	@RequestMapping(value="/IsHomeworkHeadingUnique",method = RequestMethod.GET)
-	protected void isHomeworkHeadingValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected String isHomeworkHeadingValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getRequestedSessionId() != null
+		        && !request.isRequestedSessionIdValid()) {
+		    return "redirect:./index";
+		}else{
 		String heading = request.getParameter("heading").trim();
 		if(GroupDAO.getInstance().isHomeworkHeadingUnique(heading)){
 			response.setStatus(200);
 		}else{
 			response.setStatus(400);
-		}
+		}}
+		return null;
 	}
 	
 	@RequestMapping(value="/IsHomeworkHeadingValid",method = RequestMethod.GET)
-	protected void isHomeworkHeadingUnique(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected String isHomeworkHeadingUnique(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getRequestedSessionId() != null
+		        && !request.isRequestedSessionIdValid()) {
+		    return "redirect:./index";
+		}else{
 		String heading = request.getParameter("heading").trim();
 		if(isLengthHomeworkHeadingValid(heading) && areCharactersHomeworkHeadingValid(heading)){
 			response.setStatus(200);
 		}else{
 			response.setStatus(400);
 		}
+		}
+		return null;
 	}
 	private boolean isLengthHomeworkHeadingValid(String heading) {
 		if (heading.length() >= 5 && heading.length() <= 40) {
@@ -192,8 +230,12 @@ public class ValidationsController {
 	}
 	
 	@RequestMapping(value="/IsHomeworkOpeningTimeValid",method = RequestMethod.GET)
-	protected void isHomeworkOpeningTimeValid(HttpServletRequest request, HttpServletResponse response)
+	protected String isHomeworkOpeningTimeValid(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		if (request.getRequestedSessionId() != null
+		        && !request.isRequestedSessionIdValid()) {
+		    return "redirect:./index";
+		}else{
 		String opens = request.getParameter("opens").replace("/", "-");
 
 		try {
@@ -211,10 +253,16 @@ public class ValidationsController {
 			response.setStatus(400);
 
 		}
+		}
+		return null;
 	}
 	
 	@RequestMapping(value="/IsHomeworkUpdateClosingTimeValid",method = RequestMethod.GET)
-	protected void isHomeworkUpdateClosingTimeValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected String isHomeworkUpdateClosingTimeValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getRequestedSessionId() != null
+		        && !request.isRequestedSessionIdValid()) {
+		    return "redirect:./index";
+		}else{
 		String opens = request.getParameter("opens").trim().replace("/", "-");
 		String closes = request.getParameter("closes").trim().replace("/", "-");
 		
@@ -238,12 +286,16 @@ public class ValidationsController {
 		} catch (NumberFormatException e) {
 			response.setStatus(400);
 
-		}
+		}}
+		return null;
 	}
 	
 	@RequestMapping(value="/IsHomeworkUpdateHeadingIsRepeated",method = RequestMethod.GET)
-protected void isHomeworkUpdateHeadingIsRepeated(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+protected String isHomeworkUpdateHeadingIsRepeated(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getRequestedSessionId() != null
+		        && !request.isRequestedSessionIdValid()) {
+		    return "redirect:./index";
+		}else{
 		String heading = request.getParameter("heading").trim();
 		HomeworkDetails currHd = (HomeworkDetails) request.getSession().getAttribute("currHomework");
 		if(currHd.getHeading().equals(heading) || GroupDAO.getInstance().isHomeworkHeadingUnique(heading)){
@@ -252,15 +304,22 @@ protected void isHomeworkUpdateHeadingIsRepeated(HttpServletRequest request, Htt
 			response.setStatus(400);
 		}
 	}
+		return null;}
 
 	@RequestMapping(value="/IsHomeworkUpdateHeadingValid",method = RequestMethod.GET)
-	protected void isHomeworkUpdateHeadingValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected String isHomeworkUpdateHeadingValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getRequestedSessionId() != null
+		        && !request.isRequestedSessionIdValid()) {
+		    return "redirect:./index";
+		}else{
 		String heading = request.getParameter("heading").trim();
 		if(isLengthHomeworkUpdateHeadingValid(heading) && areCharactersHomeworkUpdateHeadingValid(heading)){
 			response.setStatus(200);
 		}else{
 			response.setStatus(400);
 		}
+		}
+		return null;
 	}
 
 	private boolean isLengthHomeworkUpdateHeadingValid(String heading) {
@@ -281,8 +340,14 @@ protected void isHomeworkUpdateHeadingIsRepeated(HttpServletRequest request, Htt
 	
 	
 	@RequestMapping(value="/IsHomeworkUpdateOpeningTimeValid",method = RequestMethod.GET)
-	protected void isHomeworkUpdateOpeningTimeValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String opens = request.getParameter("opens").replace("/", "-");
+	protected String isHomeworkUpdateOpeningTimeValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		if (request.getRequestedSessionId() != null
+		        && !request.isRequestedSessionIdValid()) {
+		    return "redirect:./index";
+		}else{
+			String opens = request.getParameter("opens").replace("/", "-");
+		
 		HomeworkDetails currHd = (HomeworkDetails) request.getSession().getAttribute("currHomework");
 	
 		try {
@@ -303,17 +368,19 @@ protected void isHomeworkUpdateHeadingIsRepeated(HttpServletRequest request, Htt
 		} catch (NumberFormatException e) {
 			response.setStatus(400);
 
-		}
+		}}
+		return null;
 	}
 	
 	@RequestMapping(value="/IsPasswordValid",method = RequestMethod.GET)
-	protected void isPasswordValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected String isPasswordValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String password = request.getParameter("password").trim();
 		if(isLengthPasswordValid(password) && areCharactersPasswordValid(password)){
 			response.setStatus(200);
 		}else{
 			response.setStatus(400);
 		}
+		return null;
 	}
 
 	private boolean isLengthPasswordValid(String password) {
@@ -354,13 +421,14 @@ protected void isHomeworkUpdateHeadingIsRepeated(HttpServletRequest request, Htt
 	}
 	
 	@RequestMapping(value="/IsUsernameValid",method = RequestMethod.GET)
-	protected void isUsernameValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected String isUsernameValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username").trim();
 		if(isLengthUsernameValid(username) && areCharactersUsernameValid(username)){
 			response.setStatus(200);
 		}else{
 			response.setStatus(400);
 		}
+		return null;
 	}
 
 	private boolean isLengthUsernameValid(String username) {
@@ -381,6 +449,7 @@ protected void isHomeworkUpdateHeadingIsRepeated(HttpServletRequest request, Htt
 	
 	@RequestMapping(value="/ValidateLogin",method = RequestMethod.GET)
 	protected String validateLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		String username = request.getParameter("username").trim();
 		String password = request.getParameter("password").trim();
 		boolean areUsernamePasswordValid;

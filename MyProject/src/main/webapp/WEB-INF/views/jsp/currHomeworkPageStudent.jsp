@@ -163,7 +163,7 @@ position: absolute;
 			return true;
 		}
 	 
-	/*$('#uploadSolutionForm').submit(function(e) {
+	$('#uploadSolutionForm').submit(function(e) {
 		e.preventDefault();
 		var file = document.forms["uploadSolutionForm"]["file"].value;
 		if(file == ""){
@@ -186,7 +186,18 @@ position: absolute;
 
 		}
 		});
-	});*/
+	});
+	$(function () {
+	      $.ajaxSetup({
+	        statusCode: {
+	          401: function () {
+	            location.href = '/MyProject/index';
+	          }
+	        }
+	      });
+	    });
+
+
 	</script>
 </body>
 </html>

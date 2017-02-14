@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -334,6 +335,16 @@ public class GroupController {
 		@RequestMapping(value="/getAllStudentsOfGroupServlet",method = RequestMethod.GET)
 		protected String getAllStudentsOfGroup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			//TODO throw exception
+			HttpSession session = request.getSession(true);
+			System.out.println(session.getCreationTime()-session.getLastAccessedTime() + "kkkkkkk");
+			System.out.println(session.getLastAccessedTime() + ")))))");
+			if (session.isNew() || session.getAttribute("user") == null) {
+				System.out.println("EXPIREDDDDDDDD");
+
+				response.setStatus(401);
+			   // return "redirect:./index";
+				return null;
+			}else{
 					User user = (User) request.getSession().getAttribute("user");
 					if(user.isTeacher()){
 			String groupIdStr = request.getParameter("chosenGroupId");
@@ -390,7 +401,7 @@ public class GroupController {
 				}
 			}
 			}
-					return null;
+					return null;}
 		}
 		
 		@RequestMapping(value="/RemoveGroupServlet",method = RequestMethod.POST)
@@ -422,6 +433,11 @@ public class GroupController {
 		protected String removeStudentFromGroup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 				 {
 			//TODO throw exception
+			if (request.getRequestedSessionId() == null
+			        && !request.isRequestedSessionIdValid()) {
+				System.out.println("SESUSUSUSSUSUUSSU");
+			    return "redirect:./index";
+			}else{
 					User user = (User) request.getSession().getAttribute("user");
 					if(user.isTeacher()){
 			if (!(request.getParameter("chosenGroupId").equals("null"))) {
@@ -451,7 +467,7 @@ public class GroupController {
 			//response.sendRedirect("./AddStudentToGroupServlet");
 			//request.getRequestDispatcher("addStudentToGroup.jsp").forward(request, response);
 		}
-					return null;}
+					return null;}}
 
 		@RequestMapping(value="/SeeGroups",method = RequestMethod.GET)
 		protected String seeGroups(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

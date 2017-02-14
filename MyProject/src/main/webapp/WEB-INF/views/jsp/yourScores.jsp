@@ -141,11 +141,20 @@
 			});
 		});
 	});
-		window.onpageshow = function(event) {
-			if (event.persisted) {
-				window.location.reload()
-			}
-		};
-	</script>
+	$(function () {
+	      $.ajaxSetup({
+	        statusCode: {
+	          401: function () {
+	            location.href = '/MyProject/index';
+	          }
+	        }
+	      });
+	    });
+	function selectOption(index){ 
+		  document.getElementById("selectGroup").options.selectedIndex = index;
+		}
+	$(document).ready(function(e) {
+		selectOption(0);
+	});	</script>
 </body>
 </html>

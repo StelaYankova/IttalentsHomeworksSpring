@@ -119,11 +119,11 @@ float:left;
 							<div class="form-group">
 								<label>Username:</label> <input type="text"
 									class=" form-control input-sm" maxlength="15"
-									value="${usernameTry}" name="username" required />
+									value="${sessionScope.usernameTry}" name="username" required />
 							</div>
 							<div class="form-group">
 								<label>Password:</label> <input type="password"
-									class="form-control input-sm" value="${passwordTry}"
+									class="form-control input-sm" value="${sessionScope.passwordTry}"
 									maxlength="15" name="password" required />
 							</div>
 							<input style="align: right" type="submit"
@@ -132,8 +132,8 @@ float:left;
 							in" onclick = "validateFormLogin()"/> -->
 
 						</form>
-						<c:if test="${not empty invalidField}">
-							<c:if test="${invalidField}">
+						<c:if test="${not empty sessionScope.invalidField}">
+							<c:if test="${sessionScope.invalidField}">
 								<p id="usernamePasswordMsg" class="input-invalid-login">Wrong
 									username/password!@</p>
 							</c:if>
@@ -142,12 +142,21 @@ float:left;
 					</div>
 				</li>
 				<div class="container">
-					<li><a href="registerPage.jsp" style="color: #9d9d9d"><span
+					<li><a href="./RegisterServlet" style="color: #9d9d9d"><span
 							class="glyphicon glyphicon-log-in btn-sm"></span>Register here</a></li>
 				</div>
 			</ul>
 		</div>
 	</nav>
+	<c:if test="${not empty sessionScope.invalidFields}">
+		<c:remove var="invalidFields" scope="session" />
+	</c:if>
+	<c:if test="${not empty sessionScope.usernameTry}">
+		<c:remove var="usernameTry" scope="session" />
+	</c:if>
+	<c:if test="${not empty sessionScope.passwordTry}">
+		<c:remove var="passwordTry" scope="session" />
+	</c:if>
 </body>
 <script>
 	$('#signInForm')
@@ -181,6 +190,15 @@ float:left;
 		}
 	});
 });
-
+	$(function () {
+	      $.ajaxSetup({
+	        statusCode: {
+	          401: function () {
+	            location.href = '/MyProject/index';
+	          }
+	        }
+	      });
+	    });
+	
 </script>
 </html>

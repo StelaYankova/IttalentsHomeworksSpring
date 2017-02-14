@@ -490,14 +490,9 @@ public class GroupDAO implements IGroupDAO {
 		Connection con = manager.getConnection();// get id
 		//con.setAutoCommit(false);
 		HomeworkDetails currHd = GroupDAO.getInstance().getHomeworkDetailsById(homeworkDetails.getId());
-		System.out.println("WWWWW12");
 
 		if(ValidationsDAO.getInstance().isHomeworkUpdateHeadingUnique(homeworkDetails.getHeading(), currHd)){
-			System.out.println("WWWWW");
-			System.out.println(homeworkDetails.getTasksFile() != null);
-			System.out.println(homeworkDetails.getTasksFile().trim().equals(""));
-			System.out.println(groupsForHomework);
-			System.out.println(groupsForHomework.size());
+		
 		if (homeworkDetails.getTasksFile() != null && !(homeworkDetails.getTasksFile().trim().equals(""))
 				&& groupsForHomework != null && groupsForHomework.size() > 0) {
 		if(!ValidationsDAO.getInstance().updateGroupAreThereEmptyFields(homeworkDetails.getHeading(), homeworkDetails.getOpeningTime().toString(), homeworkDetails.getClosingTime().toString(), homeworkDetails.getTasksFile().trim())){
@@ -533,24 +528,20 @@ public class GroupDAO implements IGroupDAO {
 			//con.commit();
 		} catch (SQLException e) {
 			//con.rollback();
-			System.out.println("00000");
 			throw new GroupException("Something went wrong with updating homework details..");
 		} finally {
 					// con.setAutoCommit(true);
 				}
 			} else {
-				System.out.println("11111");
 
 					throw new ValidationException("Update homework --> invalid field");
 				}
 			} else {
-				System.out.println("2222222");
 
 				throw new ValidationException("Update homework --> empty field");
 			}
 		
 		} else {
-			System.out.println("003333333000");
 
 			throw new ValidationException("Update homework --> empty field");
 
@@ -832,10 +823,8 @@ public class GroupDAO implements IGroupDAO {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 				String openingTimeString = rs.getString(3);
 				String closingTimeString = rs.getString(4);
-				System.out.println("FROM DAO " + openingTimeString);
 
 				LocalDateTime openingTime = LocalDateTime.parse(openingTimeString, formatter);
-				System.out.println(openingTime);
 				LocalDateTime closingTime = LocalDateTime.parse(closingTimeString, formatter);
 				//String removeTOpens = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(openingTime);
 			//	String removeTCloses = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(closingTime);

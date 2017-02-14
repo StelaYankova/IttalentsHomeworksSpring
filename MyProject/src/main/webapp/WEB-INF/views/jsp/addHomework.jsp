@@ -277,7 +277,7 @@ $
 			//console.log('This file size is: ' + (document.forms["addHomeworkForm"].files[0].size/1024/1024).toFixed(2) + " MB");
 			return true;
 		}
-		/*$('#addHomeworkForm')
+		$('#addHomeworkForm')
 				.submit(
 						function(e) {
 							e.preventDefault();
@@ -518,7 +518,18 @@ $
 															.submit();
 												}
 											});
-						});*/
+						});
+						
+						$(function () {
+						      $.ajaxSetup({
+						        statusCode: {
+						          401: function () {
+						            location.href = '/MyProject/index';
+						          }
+						        }
+						      });
+						    });
+						
 	</script>
 </body>
 </html>

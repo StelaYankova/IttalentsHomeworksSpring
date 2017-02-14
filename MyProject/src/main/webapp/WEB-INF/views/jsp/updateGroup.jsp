@@ -147,7 +147,7 @@
 		<c:remove var="allTeachersExist" scope="session" />
 	</c:if>
 	<script>
-	/*$('#updateGroupForm').submit(function(e) {
+	$('#updateGroupForm').submit(function(e) {
 		e.preventDefault();
 		var name = document.forms["updateGroupForm"]["groupName"].value;
 
@@ -226,7 +226,17 @@
 	});
 	$(document).ready(function() {
 		$('[data-toggle="popover"]').popover();
-	});*/
+	});
+	$(function () {
+	      $.ajaxSetup({
+	        statusCode: {
+	          401: function () {
+	            location.href = '/MyProject/index';
+	          }
+	        }
+	      });
+	    });
+	
 </script>
 </body>
 </html>
