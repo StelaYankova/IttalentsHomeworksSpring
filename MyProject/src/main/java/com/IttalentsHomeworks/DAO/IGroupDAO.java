@@ -1,7 +1,6 @@
 package com.IttalentsHomeworks.DAO;
-
+import java.sql.SQLException;
 import java.util.ArrayList;
-
 import com.IttalentsHomeworks.DB.DBManager;
 import com.IttalentsHomeworks.Exceptions.GroupException;
 import com.IttalentsHomeworks.Exceptions.NotUniqueUsernameException;
@@ -11,7 +10,6 @@ import com.IttalentsHomeworks.model.Group;
 import com.IttalentsHomeworks.model.HomeworkDetails;
 import com.IttalentsHomeworks.model.Student;
 import com.IttalentsHomeworks.model.Teacher;
-import com.IttalentsHomeworks.model.User;
 
 public interface IGroupDAO {
 
@@ -25,11 +23,10 @@ public interface IGroupDAO {
 
 	ArrayList<HomeworkDetails> getHomeworkDetailsOfGroup(Group g) throws GroupException;
 
-	boolean isUserAlreadyInGroup(Group g, User u) throws GroupException, UserException;
+	boolean isUserAlreadyInGroup(Group g, String username) throws GroupException, UserException;
 
-	void addUserToGroup(Group g, User u) throws GroupException, UserException, ValidationException;
+	void addUserToGroup(Group g, int idUser) throws GroupException, UserException, ValidationException;
 
-	// constructor with teachers
 	void createNewGroup(Group g) throws GroupException, ValidationException;
 
 	ArrayList<HomeworkDetails> getAllHomeworksDetails() throws GroupException;
@@ -56,12 +53,12 @@ public interface IGroupDAO {
 
 	void removeHomeworkDetails(HomeworkDetails hd) throws GroupException, UserException;
 
-	void updateGroup(Group group, ArrayList<Integer> wishedTeacherIds) throws GroupException, ValidationException;
+	void updateGroup(Group group, ArrayList<Integer> wishedTeacherIds) throws GroupException, ValidationException, UserException;
 
 	ArrayList<Integer> getIdsOfGroupsForWhichIsHomework(HomeworkDetails homeworkDetails) throws GroupException;
 
-	HomeworkDetails getHomeworkDetailsById(int chosenHomeworkId) throws GroupException;;
+	HomeworkDetails getHomeworkDetailsById(int chosenHomeworkId) throws GroupException;
 
-	public boolean isHomeworkHeadingUnique(String heading);
+	void addHomeworkToGroupTransaction(HomeworkDetails homeworkDetails, Group group) throws GroupException, UserException, SQLException;
 
 }

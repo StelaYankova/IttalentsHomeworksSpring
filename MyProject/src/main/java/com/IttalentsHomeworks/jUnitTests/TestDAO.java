@@ -2,7 +2,9 @@ package com.IttalentsHomeworks.jUnitTests;
 
 import static org.junit.Assert.assertEquals;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import org.junit.FixMethodOrder;
@@ -11,8 +13,11 @@ import org.junit.runners.MethodSorters;
 
 import com.IttalentsHomeworks.DAO.GroupDAO;
 import com.IttalentsHomeworks.DAO.UserDAO;
+import com.IttalentsHomeworks.DAO.ValidationsDAO;
 import com.IttalentsHomeworks.Exceptions.GroupException;
+import com.IttalentsHomeworks.Exceptions.NotUniqueUsernameException;
 import com.IttalentsHomeworks.Exceptions.UserException;
+import com.IttalentsHomeworks.Exceptions.ValidationException;
 import com.IttalentsHomeworks.model.Group;
 import com.IttalentsHomeworks.model.Homework;
 import com.IttalentsHomeworks.model.HomeworkDetails;
@@ -24,14 +29,18 @@ import com.IttalentsHomeworks.model.User;
 
 public class TestDAO {
 
-	static User user1 = new Student("user.1", "1234", "email@user1");
+	static User user1 = new Student("user22221", "1222234", "1222234", "email@user1");
 	static Teacher user2 = null;
 	static Teacher user2ToAddToGroupUpdate1 = null;
 	static Teacher user2ToAddToGroupUpdate2 = null;
 	ArrayList<Teacher> teachersForGroup = new ArrayList<>();
-	static LocalDateTime opening = LocalDateTime.of(2016, 12, 24, 15, 00, 00);
-	static LocalDateTime closing = LocalDateTime.of(2016, 12, 30, 15, 00, 00);
-	static HomeworkDetails hd = new HomeworkDetails(0, "test_homework", opening, closing, 5, "testTasks.pdf");
+	 static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	 static String openingString = LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+	static LocalDateTime opening =  LocalDateTime.parse(openingString, formatter);
+	 static String closingString = LocalDateTime.now().plusDays(3).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+
+	static LocalDateTime closing = LocalDateTime.parse(closingString, formatter);
+	static HomeworkDetails hd = new HomeworkDetails("test_homework", opening, closing, 5, "testTasks.pdf");
 	static Group group1 = null;
 	@Test 
 	public void test01isUsernameUnique() throws UserException, GroupException{		
@@ -41,14 +50,13 @@ public class TestDAO {
 
 		String username = user1.getUsername();
 		boolean validAnser = true;
-		boolean answer = UserDAO.getInstance().isUsernameUnique(username);
+		boolean answer = ValidationsDAO.getInstance().isUsernameUnique(username);
 		assertEquals(validAnser, answer);
 	}
 	
 	@Test 
-	public void test02createUser() throws UserException, GroupException{
+	public void test02createUser() throws UserException, GroupException, NoSuchAlgorithmException, ValidationException{
 		UserDAO.getInstance().createNewUser(user1);
-		
 		User userReturned = UserDAO.getInstance().getUserByUsername(user1.getUsername());
 		String username = user1.getUsername();
 		String password = user1.getPassword();
@@ -57,7 +65,7 @@ public class TestDAO {
 		String passwordReturned = userReturned.getPassword();
 		String emailReturned = userReturned.getEmail();
 		assertEquals(username,usernameReturned);
-		assertEquals(password, passwordReturned);
+		assertEquals(ValidationsDAO.getInstance().encryptPass(password), passwordReturned);
 		assertEquals(email, emailReturned);
 	}
 	
@@ -86,7 +94,7 @@ public class TestDAO {
 	}
 	
 	@Test
-	public void test06createGroup() throws GroupException, UserException{
+	public void test06createGroup() throws GroupException, UserException, ValidationException{
 		teachersForGroup.add(user2);
 		group1 = new Group("groupTest", teachersForGroup);
 		GroupDAO.getInstance().createNewGroup(group1);
@@ -104,7 +112,7 @@ public class TestDAO {
 	@Test
 	public void test07removeTeacherFromGroup() throws GroupException, UserException{		
 		boolean isTeacherReturned = false;
-		GroupDAO.getInstance().removeUserFromGroup(group1,user2);
+		GroupDAO.getInstance().removeUserFromGroup(group1,user2.getId());
 		for(Teacher t: GroupDAO.getInstance().getTeachersOfGroup(group1)){
 			if(t.getId() == user2.getId()){
 				isTeacherReturned = true;
@@ -115,9 +123,9 @@ public class TestDAO {
 	}
 	
 	@Test 
-	public void test08addTeacherToGroup() throws GroupException, UserException{
+	public void test08addTeacherToGroup() throws GroupException, UserException, ValidationException{
 		boolean isTeacherReturned = false;
-		GroupDAO.getInstance().addUserToGroup(group1, user2);
+		GroupDAO.getInstance().addUserToGroup(group1, user2.getId());
 		for(Teacher t: GroupDAO.getInstance().getTeachersOfGroup(group1)){
 			if(t.getId() == user2.getId()){
 				isTeacherReturned = true;
@@ -129,16 +137,16 @@ public class TestDAO {
 	
 	@Test
 	public void test09isUserAlreadyInGroup() throws GroupException, UserException{
-		boolean isStudentReturned = GroupDAO.getInstance().isUserAlreadyInGroup(group1, user1);
+		boolean isStudentReturned = GroupDAO.getInstance().isUserAlreadyInGroup(group1, user1.getUsername());
 		assertEquals(false, isStudentReturned);
-		boolean isTeacherReturned = GroupDAO.getInstance().isUserAlreadyInGroup(group1, user2);
+		boolean isTeacherReturned = GroupDAO.getInstance().isUserAlreadyInGroup(group1, user2.getUsername());
 		assertEquals(true, isTeacherReturned);
 	}
 	
 	@Test 
-	public void test10addStudentToGroup() throws GroupException, UserException{
+	public void test10addStudentToGroup() throws GroupException, UserException, ValidationException{
 		boolean isStudentReturned = false;
-		GroupDAO.getInstance().addUserToGroup(group1, user1);
+		GroupDAO.getInstance().addUserToGroup(group1, user1.getId());
 		for(Student s: GroupDAO.getInstance().getStudentsOfGroup(group1)){
 			if(s.getId() == user1.getId()){
 				isStudentReturned = true;
@@ -150,9 +158,9 @@ public class TestDAO {
 	}
 	
 	@Test
-	public void test11removeStudentFromGroup() throws GroupException, UserException{		
+	public void test11removeStudentFromGroup() throws GroupException, UserException, ValidationException{		
 		boolean isStudentReturned = false;
-		GroupDAO.getInstance().removeUserFromGroup(group1,user1);
+		GroupDAO.getInstance().removeUserFromGroup(group1,user1.getId());
 		for(Student s: GroupDAO.getInstance().getStudentsOfGroup(group1)){
 			if(s.getId() == user1.getId()){
 				isStudentReturned = true;
@@ -160,13 +168,13 @@ public class TestDAO {
 			}
 		}
 		//we add the student again
-		GroupDAO.getInstance().addUserToGroup(group1, user1);
+		GroupDAO.getInstance().addUserToGroup(group1, user1.getId());
 		assertEquals(false, isStudentReturned);
 	}
 	
 	@Test
 	public void test12isGroupNameUnique() throws GroupException{
-		boolean isUnique = GroupDAO.getInstance().isGroupNameUnique(group1.getName());
+		boolean isUnique = ValidationsDAO.getInstance().isGroupNameUnique(group1.getName());
 		assertEquals(false, isUnique);
 	}
 	
@@ -178,7 +186,7 @@ public class TestDAO {
 	}
 	
 	@Test
-	public void test14createHomeworkForGroup() throws GroupException, UserException{
+	public void test14createHomeworkForGroup() throws GroupException, UserException, ValidationException, NotUniqueUsernameException{
 		ArrayList<Group> groupsForHw = new ArrayList<>();
 		groupsForHw.add(group1);
 		GroupDAO.getInstance().createHomeworkDetails(hd, groupsForHw);
@@ -244,7 +252,7 @@ public class TestDAO {
 	}
 	
 	@Test
-	public void test20addTeacherComment() throws UserException{
+	public void test20addTeacherComment() throws UserException, ValidationException{
 		ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(user1.getId());
 		assertEquals(" ", homeworksOfStudent.get(0).getTeacherComment());
 		UserDAO.getInstance().setTeacherComment(hd, user1.getId(), "not bad");
@@ -253,7 +261,7 @@ public class TestDAO {
 	}
 	
 	@Test
-	public void test21addTeacherGrade() throws UserException{
+	public void test21addTeacherGrade() throws UserException, ValidationException{
 		ArrayList<Homework> homeworksOfStudentByGroup = UserDAO.getInstance().getHomeworksOfStudentByGroup(user1.getId(), group1);
 		assertEquals(0, homeworksOfStudentByGroup.get(0).getTeacherGrade());
 		UserDAO.getInstance().setTeacherGrade(hd, user1.getId(), 12);
@@ -261,26 +269,33 @@ public class TestDAO {
 		assertEquals(12, homeworksOfStudentByGroup.get(0).getTeacherGrade());
 	}
 	@Test
-	public void test21updateHomework() throws GroupException, UserException{
+	public void test21updateHomework() throws GroupException, UserException, ValidationException, NotUniqueUsernameException{
+		String openingStringUpdated = LocalDateTime.now().plusDays(3)
+				.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+		LocalDateTime openingUpdated = LocalDateTime.parse(openingStringUpdated, formatter);
+		String closingStringUpdated = LocalDateTime.now().plusDays(4)
+				.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+		LocalDateTime closingUpdated = LocalDateTime.parse(closingStringUpdated, formatter);
+
 		for(HomeworkDetails hd1: GroupDAO.getInstance().getAllHomeworksDetails()){
 			if(hd1.getId() == hd.getId()){
 				assertEquals("test_homework", hd.getHeading());
-				assertEquals(LocalDateTime.of(2016, 12, 24, 15, 00, 00), hd.getOpeningTime());
-				assertEquals(LocalDateTime.of(2016, 12, 30, 15, 00, 00), hd.getClosingTime());
+				assertEquals(opening, hd.getOpeningTime());
+				assertEquals(closing, hd.getClosingTime());
 				assertEquals(5, hd.getNumberOfTasks());
 				assertEquals("testTasks.pdf", hd.getTasksFile());
 			}
 		}
 		ArrayList<Group> groupsforHomework = new ArrayList<>();
 		groupsforHomework.add(group1);
-		HomeworkDetails updatedHomework = new HomeworkDetails(hd.getId(), "new heading12211", LocalDateTime.of(2016, 12, 12, 18, 22, 13), LocalDateTime.of(2016, 12, 19, 18, 22, 13), 5, "newFile.pdf");
+		HomeworkDetails updatedHomework = new HomeworkDetails(hd.getId(), "new heading1221135", openingUpdated, closingUpdated, 5, "newFile.pdf");
 		GroupDAO.getInstance().updateHomeworkDetails(updatedHomework, groupsforHomework);
 		ArrayList<HomeworkDetails> newHd = GroupDAO.getInstance().getHomeworkDetailsOfGroup(group1);
 		for(HomeworkDetails hd1: GroupDAO.getInstance().getAllHomeworksDetails()){
 			if(hd1.getId() == updatedHomework.getId()){
-				assertEquals( "new heading12211", newHd.get(0).getHeading());
-				assertEquals(LocalDateTime.of(2016, 12, 12, 18, 22, 13), newHd.get(0).getOpeningTime());
-				assertEquals(LocalDateTime.of(2016, 12, 19, 18, 22, 13), newHd.get(0).getClosingTime());
+				assertEquals( "new heading1221135", newHd.get(0).getHeading());
+				assertEquals(openingUpdated, newHd.get(0).getOpeningTime());
+				assertEquals(closingUpdated, newHd.get(0).getClosingTime());
 				assertEquals(5, newHd.get(0).getNumberOfTasks());
 				assertEquals("newFile.pdf", newHd.get(0).getTasksFile());
 			}
@@ -315,20 +330,20 @@ public class TestDAO {
 	}
 	
 	@Test
-	public void test23updateUser() throws UserException, GroupException{
-		User updatedUser = new Student(user1.getUsername(), "newPass123","newEmail@abv.bg");
+	public void test23updateUser() throws UserException, GroupException, NoSuchAlgorithmException, ValidationException{
+		User updatedUser = new Student(user1.getUsername(), "newPass123", "newPass123","newEmail@abv.bg");
 		UserDAO.getInstance().updateUser(updatedUser);
 		
 		User newUser = UserDAO.getInstance().getUserByUsername(user1.getUsername());
 
 		assertEquals(user1.getUsername(), newUser.getUsername());
-		assertEquals(updatedUser.getPassword(), newUser.getPassword());
+		assertEquals(ValidationsDAO.getInstance().encryptPass(updatedUser.getPassword()), newUser.getPassword());
 		assertEquals(updatedUser.getEmail(), newUser.getEmail());
 		user1 = newUser;
 	}
 	
 	@Test
-	public void test24updateGroup() throws GroupException, UserException{
+	public void test24updateGroup() throws GroupException, UserException, ValidationException{
 		String name = "newName";
 		Group updatedGroup = new Group(group1.getId(), name);
 		//TODO 
@@ -381,12 +396,13 @@ public class TestDAO {
 	}
 	
 	@Test
-	public void test25doesUserExistInDB() throws UserException{
-		boolean doesExists = UserDAO.getInstance().doesUserExistInDB(user1.getUsername(), user1.getPassword());
+	public void test25doesUserExistInDB() throws UserException, NoSuchAlgorithmException{
+		System.out.println(user1.getPassword());
+		boolean doesExists = ValidationsDAO.getInstance().doesUserExistInDB(user1.getUsername(), "newPass123");
 		assertEquals(true, doesExists);
 	}
 	@Test
-	public void test44removeGroup() throws UserException, GroupException{
+	public void test26removeGroup() throws UserException, GroupException{
 		GroupDAO.getInstance().removeGroup(group1);	
 		Group g = GroupDAO.getInstance().getGroupById(group1.getId());
 		assertEquals(null, g);
@@ -394,7 +410,7 @@ public class TestDAO {
 	
 	
 	@Test
-	public void test45removeUserProfile() throws UserException, GroupException{
+	public void test27removeUserProfile() throws UserException, GroupException{
 		UserDAO.getInstance().removeUserProfile(user1);
 		User userIdReturned = UserDAO.getInstance().getUserByUsername(user1.getUsername());
 		assertEquals(null, userIdReturned);

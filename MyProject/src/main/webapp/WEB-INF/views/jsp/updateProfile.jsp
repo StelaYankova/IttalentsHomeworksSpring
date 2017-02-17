@@ -76,7 +76,7 @@
 				
 					<input type="password" class="form-control"
 						value="${sessionScope.user.password}" name="password"
-						placeholder="Enter password" value data-toggle="popover"
+						placeholder="Enter password" maxlength = "15" data-toggle="popover"
 						data-placement="bottom" data-trigger="focus"
 						data-content="Size of password - 6 to 15 symbols. Valid inputs are numbers and letters (large and small)"
 						required/>
@@ -92,11 +92,10 @@
 			<div class="form-group">
 				<label class="control-label col-sm-6">Repeat new password</label>
 				<div class="col-sm-6">
-					<input type="password" class="form-control"
-						value="${sessionScope.user.password}" name="repeatedPassword"
+					<input type="password" class="form-control" placeholder="Repeat password"
+						value="${sessionScope.user.password}" maxlength = "15" name="repeatedPassword"
 						required/>
 							<c:if test="${not empty validRepeatedPass}">
-
 						<c:if test="${not validRepeatedPass}">
 							<p id="repeatedPasswordMsg" class="input-invalid">Passwords
 								are different</p>
@@ -109,10 +108,9 @@
 			<div class="form-group">
 				<label class="control-label col-sm-6">Email</label>
 				<div class="col-sm-6">
-					<input type="email" class="form-control"
+					<input type="email" class="form-control" placeholder="Enter email"
 						value="${sessionScope.user.email}" name="email" required/>
 						<c:if test="${not empty validEmail}">
-
 						<c:if test="${not validEmail}">
 							<p id="emailMsg" class="input-invalid">Invalid email</p>
 						</c:if>
@@ -129,6 +127,7 @@
 			</div>
 		</form>
 	</div>
+	
 </body>
 <script>
 	function checkIsEmailValid() {
@@ -179,7 +178,8 @@
 							isEmailValid = false;
 						}
 
-						if ((isPasswordValid === true
+						
+	if ((isPasswordValid === true
 								&& isRepeatedPasswordValid === true && isEmailValid === true)) {
 							if (password !== repeatedPassword) {
 								document.getElementById("repeatedPasswordMsg")
@@ -190,31 +190,39 @@
 								isRepeatedPasswordValid = true;
 
 							}
-
-							$.ajax({
-								url : './IsPasswordValid',
-								type : 'GET',
-								data : {
-									"password" : password
-								},
-								success : function(response) {
-									if (!$('#passwordMsg').is(':empty')) {
-										$("#passwordMsg").empty();
-										isPasswordValid = true;
-									}
-								},
-								error : function(data) {
-									if (!$('#passwordMsg').is(':empty')) {
-										$("#passwordMsg").empty();
-									}
-									isPasswordValid = false;
-									document.getElementById("passwordMsg")
-											.append("Password is not valid");
-									console.log("invalid pass")
-								}
-							});
-
-							isEmailValid = checkIsEmailValid();
+							console.log(password.length)
+							if (password.length !== 32) {
+								console.log(000)
+								$
+										.ajax({
+											url : './IsPasswordValid',
+											type : 'GET',
+											data : {
+												"password" : password
+											},
+											success : function(response) {
+												if (!$('#passwordMsg').is(
+														':empty')) {
+													$("#passwordMsg").empty();
+													isPasswordValid = true;
+												}
+											},
+											error : function(data) {
+												if (!$('#passwordMsg').is(
+														':empty')) {
+													$("#passwordMsg").empty();
+												}
+												isPasswordValid = false;
+												document
+														.getElementById(
+																"passwordMsg")
+														.append(
+																"Password is not valid");
+												console.log("invalid pass")
+											}
+										});
+							}
+							
 							if (!isEmailValid) {
 								if (!$('#emailMsg').is(':empty')) {
 									$("#emailMsg").empty();
@@ -227,27 +235,53 @@
 									$("#emailMsg").empty();
 								}
 							}
-							$( document ).ajaxStop(function() {
-							if ((isPasswordValid === true
-									&& isRepeatedPasswordValid === true && isEmailValid === true)) {
-								document.getElementById("updateForm").submit();
+
+							console.log(isPasswordValid)
+							console.log(isEmailValid)
+						
+	console.log(isRepeatedPasswordValid)
+
+							if (password.length !== 32) {
+								$(document)
+										.ajaxStop(
+												function() {
+													if ((isPasswordValid === true
+															&& isRepeatedPasswordValid === true && isEmailValid === true)) {
+														document
+																.getElementById(
+																		"updateForm")
+																.submit();
+													}
+												});
+							} else {
+								if ((isPasswordValid === true
+										&& isRepeatedPasswordValid === true && isEmailValid === true)) {
+									document.getElementById("updateForm")
+											.submit();
+								}
 							}
-						});}
+						}
+
 					});
 
 	$(document).ready(function() {
 		$('[data-toggle="popover"]').popover();
 	});
-	$(function () {
-	      $.ajaxSetup({
-	        statusCode: {
-	          401: function () {
-	            location.href = '/MyProject/index';
-	          }
-	        }
-	      });
-	    });
-	
+	$(function() {
+		$.ajaxSetup({
+			statusCode : {
+				401 : function() {
+					location.href = '/MyProject/index';
+				},
+				403 : function() {
+					location.href = '/MyProject/forbiddenPage';
+				},
+				500 : function() {
+					location.href = '/MyProject/exceptionPage';
+				}
+			}
+		});
+	});
 </script>
 
 </html>

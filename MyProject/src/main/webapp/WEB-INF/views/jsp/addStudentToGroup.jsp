@@ -259,10 +259,7 @@ function areYouSureRemove(e, username,groupId){
 					getStudents(groupId);
 					alert('Student is removed successfully')
 
-				},
-				error: function (error) {
-			       // alert(error.);
-			    }
+				}
 			});
 		} else {
 			return false;
@@ -348,20 +345,27 @@ function areYouSureRemove(e, username,groupId){
 		});
 		
 	}
-	$(function () {
-	      $.ajaxSetup({
-	        statusCode: {
-	          401: function () {
-	            location.href = '/MyProject/index';
-	          }
-	        }
-	      });
-	    });
+	
 	function selectOption(index){ 
 		  document.getElementById("chosenGroup").options.selectedIndex = index;
 		}
 	$(document).ready(function(e) {
 		selectOption(0);
 	});
+	$(function () {
+	      $.ajaxSetup({
+	        statusCode: {
+	          401: function () {
+	            location.href = '/MyProject/index';
+	          },
+	          403: function () {
+		            location.href = '/MyProject/forbiddenPage';
+		      },
+		      500: function(){
+		    	  location.href = '/MyProject/exceptionPage';
+		      }
+	        }
+	      });
+	    });
 </script>
 </html>

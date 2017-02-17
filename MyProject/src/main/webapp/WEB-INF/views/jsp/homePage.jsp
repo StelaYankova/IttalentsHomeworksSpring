@@ -21,7 +21,7 @@ body {
 }
 </style>
 <body>
-	<%@ include file="navBarHomeRegisterPage.jsp"%>
+	 <%@ include file="navBarHomeRegisterPage.jsp"%> 
 
 	<c:if test="${not empty sessionScope.sessionDestroyed}">
 		<c:if test="sessionDestroyed">

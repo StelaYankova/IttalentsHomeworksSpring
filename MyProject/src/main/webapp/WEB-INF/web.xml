@@ -16,15 +16,4 @@
 		com.IttalentsHomeworks.controller.SessionListener
 	</listener-class>
 </listener>
-<session-config>
-    <session-timeout>1</session-timeout>  <!-- 30 min --> 
-</session-config>
-
-
- <!--  <servlet-mapping>
-    <servlet-name>LogoutServlet</servlet-name>
-    <url-pattern>/LogoutServlet</url-pattern>
-  </servlet-mapping> -->
-
- 
 </web-app>

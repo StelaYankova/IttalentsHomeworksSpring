@@ -95,10 +95,15 @@ $(function () {
       statusCode: {
         401: function () {
           location.href = '/MyProject/index';
-        }
+        },
+        403: function () {
+	            location.href = '/MyProject/forbiddenPage';
+	      },
+	      500: function(){
+	    	  location.href = '/MyProject/exceptionPage';
+	      }
       }
     });
   });
-
 </script>
 </html>

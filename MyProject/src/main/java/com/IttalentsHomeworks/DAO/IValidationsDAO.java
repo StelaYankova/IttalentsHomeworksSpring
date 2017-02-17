@@ -1,12 +1,8 @@
 package com.IttalentsHomeworks.DAO;
 
-import java.util.ArrayList;
-
-import javax.servlet.http.Part;
-
+import java.security.NoSuchAlgorithmException;
 import com.IttalentsHomeworks.Exceptions.GroupException;
 import com.IttalentsHomeworks.Exceptions.UserException;
-import com.IttalentsHomeworks.model.Group;
 import com.IttalentsHomeworks.model.HomeworkDetails;
 
 public interface IValidationsDAO {
@@ -39,15 +35,15 @@ public interface IValidationsDAO {
 	
 	boolean isGroupNameUniqueUpdate(int groupId, String groupName);
 		
-	public boolean isGradeTooLog(int grade);
+	public boolean isGradeTooLong(int grade);
 	
 	public boolean isGradeValueValid(int grade);
 	
 	public boolean isCommentLengthValid(String comment);
 	
-	public boolean doesStudentExist(String username);
+	public boolean doesStudentExist(String username) throws UserException;
 	
-	public boolean isStudentAlreadyInGroupAddStudent(int groupId, String username);
+	public boolean isStudentAlreadyInGroupAddStudent(int groupId, String username) throws GroupException, UserException;
 	
 	public boolean isThereEmptyFieldAddStudentToGroup(String username);
 	
@@ -57,7 +53,7 @@ public interface IValidationsDAO {
 	
 	public boolean areCharactersHeadingValidAddHomework(String heading);
 	
-	public boolean isHomeworkHeadingUniqueAddHomework(String heading);
+	public boolean isHomeworkHeadingUniqueAddHomework(String heading) throws GroupException;
 	
 	public boolean isHomeworkOpeningTimeValidAddHomework(String opens);
 	
@@ -71,12 +67,22 @@ public interface IValidationsDAO {
 	
 	public boolean areHomeworkUpdateCharactersValid(String heading);
 	
-	public boolean isHomeworkUpdateHeadingUnique(String heading, HomeworkDetails currHd);
+	public boolean isHomeworkUpdateHeadingUnique(String heading, HomeworkDetails currHd) throws GroupException;
 	
 	public boolean isHomeworkUpdateOpeningTimeValid(String opens, HomeworkDetails currHd);
 	
 	public boolean isHomeworkUpdateClosingTimeValid(String opens, String closes, HomeworkDetails currHd);
 	
 	public boolean isHomeworkUpdateNumberOfTasksValid(int numberOfTasks);
+
+	boolean isHomeworkHeadingUnique(String heading) throws GroupException;
 		
+	boolean doesUserExistInDB(String username, String password) throws UserException, NoSuchAlgorithmException;
+
+	boolean doesUserExistInDBByUsername(String username) throws UserException;
+	
+	public String encryptPass(String pass) throws NoSuchAlgorithmException;
+
+	boolean isPasswordUpdateValid(String password);
+
 }

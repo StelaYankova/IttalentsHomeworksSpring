@@ -81,7 +81,6 @@
 					</c:if>
 					<c:if test="${not empty validUsername}">
 						<c:if test="${not empty uniqueUsername}">
-
 							<c:if test="${validUsername}">
 								<c:if test="${not uniqueUsername}">
 									<p id="usernameMsg" class="input-invalid">Username already
@@ -89,7 +88,6 @@
 								</c:if>
 							</c:if>
 						</c:if>
-
 					</c:if>
 					<p id="usernameMsg" class="input-invalid"></p>
 
@@ -103,7 +101,7 @@
 						placeholder="Enter password" data-toggle="popover"
 						data-placement="bottom" data-trigger="focus"
 						data-content="Size of password - 6 to 15 symbols. Valid inputs are numbers and letters (large and small)"
-						required />
+						 required/>
 					<c:if test="${not empty validPass}">
 
 						<c:if test="${not validPass}">
@@ -118,9 +116,8 @@
 				<div class="col-sm-6">
 					<input type="password" class="form-control" maxlength="15"
 						name="repeatedPassword" placeholder="Repeat password"
-						value="${userTry.repeatedPassword }" required/>
+						value="${userTry.repeatedPassword }" />
 					<c:if test="${not empty validRepeatedPass}">
-
 						<c:if test="${not validRepeatedPass}">
 							<p id="repeatedPasswordMsg" class="input-invalid">Passwords
 								are different</p>
@@ -136,7 +133,6 @@
 						placeholder="Enter email" maxlength="40" value="${userTry.email}"
 						required/>
 					<c:if test="${not empty validEmail}">
-
 						<c:if test="${not validEmail}">
 							<p id="emailMsg" class="input-invalid">Invalid email</p>
 						</c:if>
@@ -155,6 +151,7 @@
 		</form>
 	</div>
 </body>
+
 <script>
 	function checkIsEmailValid() {
 		var email = document.forms["registerForm"]["email"].value;
@@ -201,14 +198,13 @@
 						}
 
 						if (password == "") {
-
 							document.getElementById("passwordMsg").append(
 									"Fill password");
 							isPasswordValid = false;
 						}
-						if (password == "") {
+						if (repeatedPassword == "") {
 
-							document.getElementById("repeatPasswordMsg")
+							document.getElementById("repeatedPasswordMsg")
 									.append("Fill repeated password");
 							isRepeatedPasswordValid = false;
 						}
@@ -350,10 +346,15 @@
 	        statusCode: {
 	          401: function () {
 	            location.href = '/MyProject/index';
-	          }
+	          },
+	          403: function () {
+		            location.href = '/MyProject/forbiddenPage';
+		      },
+		      500: function(){
+		    	  location.href = '/MyProject/exceptionPage';
+		      }
 	        }
 	      });
 	    });
-	
 </script>
 </html>

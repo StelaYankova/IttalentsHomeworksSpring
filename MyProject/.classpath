@@ -28,5 +28,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Users/Stela/Downloads/UnlimitedJCEPolicyJDK8/local_policy.jar"/>
+	<classpathentry kind="lib" path="/Users/Stela/Downloads/UnlimitedJCEPolicyJDK8/US_export_policy.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

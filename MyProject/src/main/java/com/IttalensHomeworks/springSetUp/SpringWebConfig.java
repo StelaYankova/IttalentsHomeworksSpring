@@ -1,9 +1,6 @@
 package com.IttalensHomeworks.springSetUp;
 
 import java.util.Locale;
-
-import javax.servlet.http.HttpSessionListener;
-
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,9 +16,6 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
-
-import com.IttalentsHomeworks.controller.SessionListener;
-
 @Configuration
 @EnableWebMvc
 @ComponentScan("com")

@@ -1,5 +1,7 @@
 package com.IttalentsHomeworks.DAO;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,13 +9,10 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.servlet.http.Part;
-
 import com.IttalentsHomeworks.DB.DBManager;
 import com.IttalentsHomeworks.Exceptions.GroupException;
 import com.IttalentsHomeworks.Exceptions.UserException;
@@ -24,8 +23,11 @@ public class ValidationsDAO implements IValidationsDAO{
 
 	private static IValidationsDAO instance;
 	private DBManager manager;
-	private static final String IS_USERNAME_UNIQUE = "SELECT * FROM IttalentsHomeworks.Users WHERE username = ?;";
-	private static final String IS_GROUP_NAME_UNIQUE = "SELECT id FROM IttalentsHomeworks.Groups WHERE group_name = ?";
+	private static final String IS_USERNAME_UNIQUE = "SELECT * FROM IttalentsHomeworks.Users WHERE BINARY username = ?;";
+	private static final String IS_GROUP_NAME_UNIQUE = "SELECT id FROM IttalentsHomeworks.Groups WHERE BINARY group_name = ?";
+	private static final String IS_HOMEWORK_HEADING_UNIQUE = "SELECT * FROM IttalentsHomeworks.Homework WHERE BINARY heading = ?";
+	private static final String DOES_USER_EXIST = "SELECT * FROM IttalentsHomeworks.Users WHERE BINARY username = ? AND BINARY pass = ?;";
+	private static final String DOES_USER_EXIST_BY_USERNAME = "SELECT * FROM IttalentsHomeworks.Users WHERE BINARY username = ?";
 
 	private ValidationsDAO() {
 		setManager(DBManager.getInstance());
@@ -210,7 +212,7 @@ public class ValidationsDAO implements IValidationsDAO{
 	}
 	
 	@Override
-	public boolean isGradeTooLog(int grade){
+	public boolean isGradeTooLong(int grade){
 		if(grade > 100){
 			return true;
 		}
@@ -234,31 +236,51 @@ public class ValidationsDAO implements IValidationsDAO{
 	}
 	
 	@Override
-	public boolean doesStudentExist(String username) {
-		try {
+	public boolean doesStudentExist(String username) throws UserException {
 			if (ValidationsDAO.getInstance().isUsernameUnique(username)) {
 				return false;
 			}
-		} catch (UserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return true;
 	}
-
 	@Override
-	public boolean isStudentAlreadyInGroupAddStudent(int groupId, String username) {
-		Group chosenGroup;
+	public String encryptPass(String pass) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(pass.getBytes());
+
+        byte byteData[] = md.digest();
+
+        //convert the byte to hex format method 1
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < byteData.length; i++) {
+         sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+        }
+		return sb.toString();
+	}
+	@Override
+	public boolean doesUserExistInDB(String username, String password) throws UserException, NoSuchAlgorithmException {
+		Connection con = manager.getConnection();
+		PreparedStatement ps;
 		try {
-			chosenGroup = GroupDAO.getInstance().getGroupById(groupId);
-			com.IttalentsHomeworks.model.User chosenStudent = UserDAO.getInstance().getUserByUsername(username);
-			if (GroupDAO.getInstance().isUserAlreadyInGroup(chosenGroup, chosenStudent)) {
+			ps = con.prepareStatement(DOES_USER_EXIST);
+			ps.setString(1, username);
+			ps.setString(2, encryptPass(password));
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
 				return true;
 			}
-		} catch (GroupException | UserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new UserException("Something went wrong with checking if the user is valid..");
 		}
+		return false;
+	}
+	@Override
+	public boolean isStudentAlreadyInGroupAddStudent(int groupId, String username) throws GroupException, UserException {
+		Group chosenGroup;
+			chosenGroup = GroupDAO.getInstance().getGroupById(groupId);
+			//User chosenStudent = UserDAO.getInstance().getUserByUsername(username);
+			if (GroupDAO.getInstance().isUserAlreadyInGroup(chosenGroup, username)) {
+				return true;
+			}
 		return false;
 
 	}
@@ -300,9 +322,9 @@ public class ValidationsDAO implements IValidationsDAO{
 	}
 	
 	@Override
-	public boolean isHomeworkHeadingUniqueAddHomework(String heading) {
+	public boolean isHomeworkHeadingUniqueAddHomework(String heading) throws GroupException {
 		if (heading != null && (!heading.equals(""))) {
-			if (GroupDAO.getInstance().isHomeworkHeadingUnique(heading)) {
+			if (ValidationsDAO.getInstance().isHomeworkHeadingUnique(heading)) {
 				return true;
 			}
 		}else{//if its null it is unique --> it will be catched in the next try (for empty fields) and the file will be removed from the system
@@ -324,7 +346,7 @@ public class ValidationsDAO implements IValidationsDAO{
 			} else {
 				return false;
 			}
-		} catch (NumberFormatException e) {
+		} catch (DateTimeParseException e) {
 			return false;
 		}
 	}
@@ -343,7 +365,7 @@ public class ValidationsDAO implements IValidationsDAO{
 			} else {
 				return false;
 			}
-		} catch (NumberFormatException e) {
+		} catch (DateTimeParseException e) {
 			return false;
 		}
 	}
@@ -385,9 +407,9 @@ public class ValidationsDAO implements IValidationsDAO{
 	}
 	
 	@Override
-	public boolean isHomeworkUpdateHeadingUnique(String heading, HomeworkDetails currHd) {
+	public boolean isHomeworkUpdateHeadingUnique(String heading, HomeworkDetails currHd) throws GroupException {
 		if (heading != null && (!heading.equals(""))) {
-			if (currHd.getHeading().equals(heading) || GroupDAO.getInstance().isHomeworkHeadingUnique(heading)) {
+			if (currHd.getHeading().equals(heading) || ValidationsDAO.getInstance().isHomeworkHeadingUnique(heading)) {
 				return true;
 			}
 		}else{
@@ -449,5 +471,56 @@ public class ValidationsDAO implements IValidationsDAO{
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean isHomeworkHeadingUnique(String heading) throws GroupException{
+		Connection con = manager.getConnection();
+		try {
+			PreparedStatement ps = con.prepareStatement(IS_HOMEWORK_HEADING_UNIQUE);
+			ps.setString(1, heading);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+				return false;
+			}
+		} catch (SQLException e) {
+			throw new GroupException("Something went wrong with checking if group heading is unique.." + e.getMessage());
+		}
+		return true;
+		
+	}
 
+	@Override
+	public boolean doesUserExistInDBByUsername(String username) throws UserException {
+		Connection con = manager.getConnection();
+		PreparedStatement ps;
+		try {
+			ps = con.prepareStatement(DOES_USER_EXIST_BY_USERNAME);
+			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return true;
+			}
+		} catch (SQLException e) {
+			throw new UserException("Something went wrong with checking if the user is valid..");
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isPasswordUpdateValid(String pass) {
+		boolean isPasswordValid = true;
+		if (pass.length() != 32) {
+			if (pass.length() >= 6 && pass.length() <= 15) {
+				for (int i = 0; i < pass.length(); i++) {
+					if (!(((int) pass.charAt(i) >= 48 && (int) pass.charAt(i) <= 57)
+							|| ((int) pass.charAt(i) >= 65 && (int) pass.charAt(i) <= 90)
+							|| ((int) pass.charAt(i) >= 97 && (int) pass.charAt(i) <= 122))) {
+						isPasswordValid = false;
+						break;
+					}
+				}
+			}
+		}
+		return isPasswordValid;
+	}
 }

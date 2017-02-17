@@ -1,82 +1,76 @@
 package com.IttalentsHomeworks.controller;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import com.IttalentsHomeworks.DAO.GroupDAO;
-import com.IttalentsHomeworks.DAO.UserDAO;
 import com.IttalentsHomeworks.DAO.ValidationsDAO;
 import com.IttalentsHomeworks.Exceptions.GroupException;
 import com.IttalentsHomeworks.Exceptions.UserException;
 import com.IttalentsHomeworks.model.Group;
 import com.IttalentsHomeworks.model.HomeworkDetails;
+import com.IttalentsHomeworks.model.User;
 
 @Controller
 public class ValidationsController {
 
 	@RequestMapping(value="/DoesUserExist",method = RequestMethod.GET)
-	protected String checkIfUserAlreadyExists(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void checkIfUserAlreadyExists(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String chosenStudentUsername = request.getParameter("chosenStudentUsername").trim();
 		try {
 			if(ValidationsDAO.getInstance().isUsernameUnique(chosenStudentUsername)){//if its unique id is not in DB
-				response.setStatus(400);
+				return;
 			}else{
 				response.setStatus(200);
 			}
 		} catch (UserException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-			return "exception";
+			response.setStatus(500);
 		}
-		return null;
 	}
 	
 	@RequestMapping(value="/IsChosenStudentAlreadyInGroup",method = RequestMethod.GET)
-	protected String isChosenStudentAlreadyInGroup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getRequestedSessionId() != null
-		        && !request.isRequestedSessionIdValid()) {
-		    return "redirect:./index";
-		}else{
-		int chosenGroupId = Integer.parseInt(request.getParameter("chosenGroupId"));
-		String chosenStudentUsername = request.getParameter("chosenStudentUsername").trim();
-		try {
-			Group chosenGroup = GroupDAO.getInstance().getGroupById(chosenGroupId);
-			com.IttalentsHomeworks.model.User chosenStudent = UserDAO.getInstance().getUserByUsername(chosenStudentUsername);
-			if(GroupDAO.getInstance().isUserAlreadyInGroup(chosenGroup, chosenStudent)){
-				response.setStatus(400);
-			}else{
-				response.setStatus(200);
-			}
-		} catch (GroupException e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-			return "exception";
-		} catch (UserException e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-			return "exception";
-		}
-		return null;
+	protected void isChosenStudentAlreadyInGroup(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user.isTeacher()) {
+			int chosenGroupId = Integer.parseInt(request.getParameter("chosenGroupId"));
+			String chosenStudentUsername = request.getParameter("chosenStudentUsername").trim();
+			try {
+				Group chosenGroup = GroupDAO.getInstance().getGroupById(chosenGroupId);
+				if (GroupDAO.getInstance().isUserAlreadyInGroup(chosenGroup, chosenStudentUsername)) {
+					response.setStatus(400);
+				} else {
+					response.setStatus(200);
+				}
+			} catch (GroupException e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+				response.setStatus(500);
+			} catch (UserException e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+				response.setStatus(500);
+			} 
+		} else {
+			response.setStatus(403);
 		}
 	}
 	
 	@RequestMapping(value="/IsGroupNameUnique",method = RequestMethod.GET)
-	protected String isGroupNameUnique(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getRequestedSessionId() != null
-		        && !request.isRequestedSessionIdValid()) {
-		    return "redirect:./index";
-		}else{
+	protected void isGroupNameUnique(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		User user = (User) request.getSession().getAttribute("user");
+		if(user.isTeacher()){
 		String groupName = request.getParameter("name").trim();
 		try {
 			if(ValidationsDAO.getInstance().isGroupNameUnique(groupName)){
@@ -87,18 +81,17 @@ public class ValidationsController {
 		} catch (GroupException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-			return "exception";
+			response.setStatus(500);	
 		}
-		return null;
+		}else{
+			response.setStatus(403);
 		}
 	}
 	
 	@RequestMapping(value="/IsGroupNameUniqueUpdate",method = RequestMethod.GET)
-	protected String isGroupNameUniqueUpdate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getRequestedSessionId() != null
-		        && !request.isRequestedSessionIdValid()) {
-		    return "redirect:./index";
-		}else{
+	protected void isGroupNameUniqueUpdate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		User user = (User) request.getSession().getAttribute("user");
+		if(user.isTeacher()){
 		String groupName = request.getParameter("name").trim();
 		Group currGroup = (Group) request.getSession().getAttribute("currGroup");
 		int currGroupId = currGroup.getId();
@@ -117,27 +110,26 @@ public class ValidationsController {
 		} catch (GroupException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-			return "exception";
-		}
-		return null;
+			response.setStatus(500);	
+		}}else{
+			response.setStatus(403);
 		}
 	}
 	
 	
 	@RequestMapping(value="/IsGroupNameValid",method = RequestMethod.GET)
-	protected String isGroupNameValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getRequestedSessionId() != null
-		        && !request.isRequestedSessionIdValid()) {
-		    return "redirect:./index";
-		}else{
+	protected void isGroupNameValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		User user = (User) request.getSession().getAttribute("user");
+		if(user.isTeacher()){
 		String groupName = request.getParameter("name").trim();
 		if(isLengthGroupNameValid(groupName) && areCharactersGroupNameValid(groupName)){
 			response.setStatus(200);
 		}else{
 			response.setStatus(400);
 		}
+		}else{
+			response.setStatus(403);
 		}
-		return null;
 	}
 	private boolean isLengthGroupNameValid(String groupName) {
 		if (groupName.length() >= 5 && groupName.length() <= 20) {
@@ -156,11 +148,9 @@ public class ValidationsController {
 	}
 	
 	@RequestMapping(value="/IsHomeworkClosingTimeValid",method = RequestMethod.GET)
-	protected String isHomeworkClosingTimeValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getRequestedSessionId() != null
-		        && !request.isRequestedSessionIdValid()) {
-		    return "redirect:./index";
-		}else{
+	protected void isHomeworkClosingTimeValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		User user = (User) request.getSession().getAttribute("user");
+		if(user.isTeacher()){
 		String opens = request.getParameter("opens").replace("/", "-");
 		String closes = request.getParameter("closes").replace("/", "-");
 		try {
@@ -168,7 +158,6 @@ public class ValidationsController {
 			LocalDateTime openingDateTime = LocalDateTime.parse(opens, formatter);
 			LocalDateTime closingDateTime = LocalDateTime.parse(closes, formatter);
 			long diffInMonths = ChronoUnit.MONTHS.between(openingDateTime, closingDateTime);
-
 			if (closingDateTime.isAfter(LocalDateTime.now()) && closingDateTime.isAfter(openingDateTime)
 					&& diffInMonths < 6) {
 				response.setStatus(200);
@@ -177,41 +166,43 @@ public class ValidationsController {
 			}
 		} catch (NumberFormatException e) {
 			response.setStatus(400);
-
+		}}else{
+			response.setStatus(403);
 		}
-		}
-		return null;
 	}
 	
-	@RequestMapping(value="/IsHomeworkHeadingUnique",method = RequestMethod.GET)
-	protected String isHomeworkHeadingValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getRequestedSessionId() != null
-		        && !request.isRequestedSessionIdValid()) {
-		    return "redirect:./index";
-		}else{
-		String heading = request.getParameter("heading").trim();
-		if(GroupDAO.getInstance().isHomeworkHeadingUnique(heading)){
-			response.setStatus(200);
-		}else{
-			response.setStatus(400);
-		}}
-		return null;
+	@RequestMapping(value = "/IsHomeworkHeadingUnique", method = RequestMethod.GET)
+	protected void isHomeworkHeadingValid(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user.isTeacher()) {
+			String heading = request.getParameter("heading").trim();
+			try {
+				if (ValidationsDAO.getInstance().isHomeworkHeadingUnique(heading)) {
+					response.setStatus(200);
+				} else {
+					response.setStatus(400);
+				}
+			} catch (GroupException e) {
+				response.setStatus(500);
+			}
+		} else {
+			response.setStatus(403);
+		}
 	}
 	
 	@RequestMapping(value="/IsHomeworkHeadingValid",method = RequestMethod.GET)
-	protected String isHomeworkHeadingUnique(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getRequestedSessionId() != null
-		        && !request.isRequestedSessionIdValid()) {
-		    return "redirect:./index";
-		}else{
+	protected void isHomeworkHeadingUnique(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		User user = (User) request.getSession().getAttribute("user");
+		if(user.isTeacher()){
 		String heading = request.getParameter("heading").trim();
 		if(isLengthHomeworkHeadingValid(heading) && areCharactersHomeworkHeadingValid(heading)){
 			response.setStatus(200);
 		}else{
 			response.setStatus(400);
+		}}else{
+			response.setStatus(403);
 		}
-		}
-		return null;
 	}
 	private boolean isLengthHomeworkHeadingValid(String heading) {
 		if (heading.length() >= 5 && heading.length() <= 40) {
@@ -230,14 +221,11 @@ public class ValidationsController {
 	}
 	
 	@RequestMapping(value="/IsHomeworkOpeningTimeValid",method = RequestMethod.GET)
-	protected String isHomeworkOpeningTimeValid(HttpServletRequest request, HttpServletResponse response)
+	protected void isHomeworkOpeningTimeValid(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (request.getRequestedSessionId() != null
-		        && !request.isRequestedSessionIdValid()) {
-		    return "redirect:./index";
-		}else{
+		User user = (User) request.getSession().getAttribute("user");
+		if(user.isTeacher()){
 		String opens = request.getParameter("opens").replace("/", "-");
-
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -251,75 +239,75 @@ public class ValidationsController {
 			}
 		} catch (NumberFormatException e) {
 			response.setStatus(400);
-
+		}}else{
+			response.setStatus(403);
 		}
-		}
-		return null;
 	}
 	
 	@RequestMapping(value="/IsHomeworkUpdateClosingTimeValid",method = RequestMethod.GET)
-	protected String isHomeworkUpdateClosingTimeValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getRequestedSessionId() != null
-		        && !request.isRequestedSessionIdValid()) {
-		    return "redirect:./index";
+	protected void isHomeworkUpdateClosingTimeValid(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user.isTeacher()) {
+			String opens = request.getParameter("opens").trim().replace("/", "-");
+			String closes = request.getParameter("closes").trim().replace("/", "-");
+			HomeworkDetails currHd = (HomeworkDetails) request.getSession().getAttribute("currHomework");
+			try {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+				LocalDateTime openingDateTime = LocalDateTime.parse(opens, formatter);
+				LocalDateTime closingDateTime = LocalDateTime.parse(closes, formatter);
+				long diffInMonths = ChronoUnit.MONTHS.between(openingDateTime, closingDateTime);
+				if (closingDateTime.equals(currHd.getClosingTime())) {
+					response.setStatus(200);
+				} else {
+					if (closingDateTime.isAfter(LocalDateTime.now()) && closingDateTime.isAfter(openingDateTime)
+							&& diffInMonths < 6) {
+						response.setStatus(200);
+					} else {
+						response.setStatus(400);
+					}
+				}
+			} catch (NumberFormatException e) {
+				response.setStatus(400);
+			}
 		}else{
-		String opens = request.getParameter("opens").trim().replace("/", "-");
-		String closes = request.getParameter("closes").trim().replace("/", "-");
-		
-		HomeworkDetails currHd = (HomeworkDetails) request.getSession().getAttribute("currHomework");
+			response.setStatus(403);
+		}
+	}
 
-		try {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-			LocalDateTime openingDateTime = LocalDateTime.parse(opens, formatter);
-			LocalDateTime closingDateTime = LocalDateTime.parse(closes, formatter);
-			long diffInMonths = ChronoUnit.MONTHS.between(openingDateTime, closingDateTime);
-			if (closingDateTime.equals(currHd.getClosingTime())) {
-				response.setStatus(200);
-			}else{
-			if (closingDateTime.isAfter(LocalDateTime.now()) && closingDateTime.isAfter(openingDateTime)
-					&& diffInMonths < 6) {
+	@RequestMapping(value = "/IsHomeworkUpdateHeadingIsRepeated", method = RequestMethod.GET)
+	protected void isHomeworkUpdateHeadingIsRepeated(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user.isTeacher()) {
+			String heading = request.getParameter("heading").trim();
+			HomeworkDetails currHd = (HomeworkDetails) request.getSession().getAttribute("currHomework");
+			try {
+				if (currHd.getHeading().equals(heading) || ValidationsDAO.getInstance().isHomeworkHeadingUnique(heading)) {
+					response.setStatus(200);
+				} else {
+					response.setStatus(400);
+				}
+			} catch (GroupException e) {
+				response.setStatus(500);
+			}
+		} else {
+			response.setStatus(403);
+		}
+	}
+	@RequestMapping(value="/IsHomeworkUpdateHeadingValid",method = RequestMethod.GET)
+	protected void isHomeworkUpdateHeadingValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user.isTeacher()) {
+			String heading = request.getParameter("heading").trim();
+			if (isLengthHomeworkUpdateHeadingValid(heading) && areCharactersHomeworkUpdateHeadingValid(heading)) {
 				response.setStatus(200);
 			} else {
 				response.setStatus(400);
 			}
-			}
-		} catch (NumberFormatException e) {
-			response.setStatus(400);
-
-		}}
-		return null;
-	}
-	
-	@RequestMapping(value="/IsHomeworkUpdateHeadingIsRepeated",method = RequestMethod.GET)
-protected String isHomeworkUpdateHeadingIsRepeated(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getRequestedSessionId() != null
-		        && !request.isRequestedSessionIdValid()) {
-		    return "redirect:./index";
-		}else{
-		String heading = request.getParameter("heading").trim();
-		HomeworkDetails currHd = (HomeworkDetails) request.getSession().getAttribute("currHomework");
-		if(currHd.getHeading().equals(heading) || GroupDAO.getInstance().isHomeworkHeadingUnique(heading)){
-			response.setStatus(200);
-		}else{
-			response.setStatus(400);
+		} else {
+			response.setStatus(403);
 		}
-	}
-		return null;}
-
-	@RequestMapping(value="/IsHomeworkUpdateHeadingValid",method = RequestMethod.GET)
-	protected String isHomeworkUpdateHeadingValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getRequestedSessionId() != null
-		        && !request.isRequestedSessionIdValid()) {
-		    return "redirect:./index";
-		}else{
-		String heading = request.getParameter("heading").trim();
-		if(isLengthHomeworkUpdateHeadingValid(heading) && areCharactersHomeworkUpdateHeadingValid(heading)){
-			response.setStatus(200);
-		}else{
-			response.setStatus(400);
-		}
-		}
-		return null;
 	}
 
 	private boolean isLengthHomeworkUpdateHeadingValid(String heading) {
@@ -340,47 +328,42 @@ protected String isHomeworkUpdateHeadingIsRepeated(HttpServletRequest request, H
 	
 	
 	@RequestMapping(value="/IsHomeworkUpdateOpeningTimeValid",method = RequestMethod.GET)
-	protected String isHomeworkUpdateOpeningTimeValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		if (request.getRequestedSessionId() != null
-		        && !request.isRequestedSessionIdValid()) {
-		    return "redirect:./index";
-		}else{
+	protected void isHomeworkUpdateOpeningTimeValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			String opens = request.getParameter("opens").replace("/", "-");
-		
-		HomeworkDetails currHd = (HomeworkDetails) request.getSession().getAttribute("currHomework");
-	
-		try {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-			LocalDateTime openingTime = LocalDateTime.parse(opens, formatter);
-			LocalDate openingDate = openingTime.toLocalDate();
-			if(openingTime.equals(currHd.getOpeningTime())){
-				response.setStatus(200);
-			}else{
-			if (openingDate.isAfter(LocalDate.now().minusDays(1))
-					&& openingDate.isBefore(LocalDate.now().plusMonths(6).minusDays(1))) {
-				response.setStatus(200);
-			} else {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user.isTeacher()) {
+			HomeworkDetails currHd = (HomeworkDetails) request.getSession().getAttribute("currHomework");
+			try {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+				LocalDateTime openingTime = LocalDateTime.parse(opens, formatter);
+				LocalDate openingDate = openingTime.toLocalDate();
+				if (openingTime.equals(currHd.getOpeningTime())) {
+					response.setStatus(200);
+				} else {
+					if (openingDate.isAfter(LocalDate.now().minusDays(1))
+							&& openingDate.isBefore(LocalDate.now().plusMonths(6).minusDays(1))) {
+						response.setStatus(200);
+					} else {
+						response.setStatus(400);
+					}
+				}
+			} catch (NumberFormatException e) {
 				response.setStatus(400);
 			}
-			}
-		} catch (NumberFormatException e) {
-			response.setStatus(400);
-
-		}}
-		return null;
+		} else {
+			response.setStatus(403);
+		}
 	}
 	
 	@RequestMapping(value="/IsPasswordValid",method = RequestMethod.GET)
-	protected String isPasswordValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void isPasswordValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		String password = request.getParameter("password").trim();
 		if(isLengthPasswordValid(password) && areCharactersPasswordValid(password)){
 			response.setStatus(200);
 		}else{
 			response.setStatus(400);
 		}
-		return null;
 	}
 
 	private boolean isLengthPasswordValid(String password) {
@@ -398,10 +381,9 @@ protected String isHomeworkUpdateHeadingIsRepeated(HttpServletRequest request, H
 		}
 		return true;
 	}
-	
-	
-	@RequestMapping(value="/IsUsernameUniqueServlet",method = RequestMethod.GET)
-	protected String isUsernameUnique(HttpServletRequest request, HttpServletResponse response)
+
+	@RequestMapping(value = "/IsUsernameUniqueServlet", method = RequestMethod.GET)
+	protected void isUsernameUnique(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String username = request.getParameter("username").trim();
 		boolean isUnique = false;
@@ -410,25 +392,23 @@ protected String isHomeworkUpdateHeadingIsRepeated(HttpServletRequest request, H
 		} catch (UserException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-			return "exception";
+			response.setStatus(500);
 		}
 		if (isUnique) {
 			response.setStatus(200);
 		} else {
 			response.setStatus(400);
 		}
-		return null;
 	}
 	
 	@RequestMapping(value="/IsUsernameValid",method = RequestMethod.GET)
-	protected String isUsernameValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void isUsernameValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username").trim();
 		if(isLengthUsernameValid(username) && areCharactersUsernameValid(username)){
 			response.setStatus(200);
 		}else{
 			response.setStatus(400);
 		}
-		return null;
 	}
 
 	private boolean isLengthUsernameValid(String username) {
@@ -448,13 +428,12 @@ protected String isHomeworkUpdateHeadingIsRepeated(HttpServletRequest request, H
 	}
 	
 	@RequestMapping(value="/ValidateLogin",method = RequestMethod.GET)
-	protected String validateLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void validateLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username").trim();
 		String password = request.getParameter("password").trim();
 		boolean areUsernamePasswordValid;
 		try {
-			areUsernamePasswordValid = UserDAO.getInstance().doesUserExistInDB(username, password);
+			areUsernamePasswordValid = ValidationsDAO.getInstance().doesUserExistInDB(username, password);
 			if(areUsernamePasswordValid){
 				response.setStatus(200);
 			}else{
@@ -463,9 +442,12 @@ protected String isHomeworkUpdateHeadingIsRepeated(HttpServletRequest request, H
 		} catch (UserException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-			return "exception";
-		}
-		return null;
-		
+			response.setStatus(500);
+		} catch (NoSuchAlgorithmException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			response.setStatus(500);
+		}	
 	}
+
 }

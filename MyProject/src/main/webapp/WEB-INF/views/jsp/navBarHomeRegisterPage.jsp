@@ -119,26 +119,25 @@ float:left;
 							<div class="form-group">
 								<label>Username:</label> <input type="text"
 									class=" form-control input-sm" maxlength="15"
-									value="${sessionScope.usernameTry}" name="username" required />
+									value="${sessionScope.usernameTry}" name="username"  required/>
 							</div>
 							<div class="form-group">
 								<label>Password:</label> <input type="password"
 									class="form-control input-sm" value="${sessionScope.passwordTry}"
-									maxlength="15" name="password" required />
+									maxlength="15" name="password"  required/>
 							</div>
 							<input style="align: right" type="submit"
 								class="btn btn-xs btn-default" value="Sign in">
-							<!-- <input type="button" class="btn btn-xs btn-default" value = "Sign
-							in" onclick = "validateFormLogin()"/> -->
 
 						</form>
 						<c:if test="${not empty sessionScope.invalidField}">
 							<c:if test="${sessionScope.invalidField}">
 								<p id="usernamePasswordMsg" class="input-invalid-login">Wrong
-									username/password!@</p>
+									username/password</p>
 							</c:if>
 						</c:if>
 						<p id="usernamePasswordMsg" class="input-invalid-login"></p>
+						
 					</div>
 				</li>
 				<div class="container">
@@ -195,10 +194,15 @@ float:left;
 	        statusCode: {
 	          401: function () {
 	            location.href = '/MyProject/index';
-	          }
+	          },
+	          403: function () {
+		            location.href = '/MyProject/forbiddenPage';
+		      },
+		      500: function(){
+		    	  location.href = '/MyProject/exceptionPage';
+		      }
 	        }
 	      });
 	    });
-	
 </script>
 </html>

@@ -10,7 +10,7 @@
 <style>
 body {
 	background:
-		url("images/error.png")
+		url("images/pageNotFound.png")
 		no-repeat center center fixed;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;

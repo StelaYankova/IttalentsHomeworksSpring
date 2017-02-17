@@ -223,15 +223,7 @@ Choose group: <select id = "chosenGroup" class="selectpicker">
 
 	    
 	}; 
-	$(function () {
-	      $.ajaxSetup({
-	        statusCode: {
-	          401: function () {
-	            location.href = '/MyProject/index';
-	          }
-	        }
-	      });
-	    });
+	
 	function selectOption(index){ 
 		  document.getElementById("chosenGroup").options.selectedIndex = index;
 		}
@@ -259,6 +251,21 @@ Choose group: <select id = "chosenGroup" class="selectpicker">
 	}
 	}*/
 //});
+$(function () {
+	      $.ajaxSetup({
+	        statusCode: {
+	          401: function () {
+	            location.href = '/MyProject/index';
+	          },
+	          403: function () {
+		            location.href = '/MyProject/forbiddenPage';
+		      },
+		      500: function(){
+		    	  location.href = '/MyProject/exceptionPage';
+		      }
+	        }
+	      });
+	    });
 </script>
 </body>
 </html>

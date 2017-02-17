@@ -1,5 +1,6 @@
 package com.IttalentsHomeworks.DAO;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -36,7 +37,7 @@ public interface IUserDAO {
 	//all homeworks
 	ArrayList<Homework> getHomeworksOfStudent(int id) throws UserException;
 
-	void createNewUser(User u) throws UserException, ValidationException;
+	void createNewUser(User u) throws UserException, ValidationException, NoSuchAlgorithmException;
 
 	void removeUserProfile(User u) throws UserException;
 
@@ -49,13 +50,11 @@ public interface IUserDAO {
 
 	void setTimeOfUploadOfTask(HomeworkDetails hd, Student st, int taskNum, LocalDateTime timeOfUpload) throws UserException;
 
-	void updateUser(User u) throws UserException, ValidationException;
+	void updateUser(User u) throws UserException, ValidationException, NoSuchAlgorithmException;
 
 	Student getStudentsByUsername(String string) throws UserException;
 
 	boolean isTaskNumberValid(int studentId, int homeworkId, int taskNum) throws UserException;
-
-	boolean doesUserExistInDB(String username, String password) throws UserException;
 
 	void addHomeworkToStudent(User user, HomeworkDetails hd) throws UserException;
 

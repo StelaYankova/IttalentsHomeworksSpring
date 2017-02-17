@@ -181,22 +181,28 @@ function seeHomeworks(e,e1){
 			}
 		});
 	});
-	$(function () {
-	      $.ajaxSetup({
-	        statusCode: {
-	          401: function () {
-	            location.href = '/MyProject/index';
-	          }
-	        }
-	      });
-	    });
+
 	function selectOption(index){ 
 		  document.getElementById("chosenGroup").options.selectedIndex = index;
 		}
 	$(document).ready(function(e) {
 		selectOption(0);
 	});
-
+	$(function () {
+	      $.ajaxSetup({
+	        statusCode: {
+	          401: function () {
+	            location.href = '/MyProject/index';
+	          },
+	          403: function () {
+		            location.href = '/MyProject/forbiddenPage';
+		      },
+		      500: function(){
+		    	  location.href = '/MyProject/exceptionPage';
+		      }
+	        }
+	      });
+	    });
 /*var row = $("<tr>");
 row.append($("<td><form action = './GetHomeworkOfStudentServlet' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button type = 'submit'>" + response[i].heading +"</button></form></td>"))
  .append($("<td>"+ response[i].opens+"</td>"))
