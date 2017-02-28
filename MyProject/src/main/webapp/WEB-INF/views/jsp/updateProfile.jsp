@@ -32,10 +32,38 @@
 </style>
 <body>
 	<c:if test="${sessionScope.isTeacher == false}"><%@ include
-			file="navBarStudent.jsp"%></c:if>
+			file="navBarStudent.jsp"%>
+		<nav class="breadcrumb-nav">
+			<ul class="breadcrumb">
+				<li><a
+					href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
+					<span class="divider"> <span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
+				<li><a
+					href="http://localhost:8080/MyProject/UpdateYourProfileServlet">Your
+						profile</a> <span class="divider"> <span class="accesshide "><span
+							class="arrow_text"></span>&nbsp;</span>
+				</span></li>
+			</ul>
+		</nav>
+	</c:if>
 	<c:if test="${sessionScope.isTeacher == true}"><%@ include
-			file="navBarTeacher.jsp"%></c:if>
-<c:if test="${not empty invalidFields}">
+			file="navBarTeacher.jsp"%>
+	<nav class="breadcrumb-nav">
+		<ul class="breadcrumb">
+			<li><a href="http://localhost:8080/MyProject/GetMainPageTeacher">Homne</a>
+				<span class="divider"> <span class="accesshide "><span
+						class="arrow_text"></span></span>
+			</span></li>
+			<li><a
+				href="http://localhost:8080/MyProject/UpdateYourProfileServlet">Your
+					profile</a> <span class="divider"> <span class="accesshide "><span
+						class="arrow_text"></span>&nbsp;</span>
+			</span></li>
+		</ul>
+	</nav></c:if>
+	<c:if test="${not empty invalidFields}">
 
 	<c:if test="${not invalidFields}">
 		<div class="alert alert-success">
@@ -190,9 +218,7 @@
 								isRepeatedPasswordValid = true;
 
 							}
-							console.log(password.length)
 							if (password.length !== 32) {
-								console.log(000)
 								$
 										.ajax({
 											url : './IsPasswordValid',
@@ -218,7 +244,6 @@
 																"passwordMsg")
 														.append(
 																"Password is not valid");
-												console.log("invalid pass")
 											}
 										});
 							}
@@ -235,11 +260,6 @@
 									$("#emailMsg").empty();
 								}
 							}
-
-							console.log(isPasswordValid)
-							console.log(isEmailValid)
-						
-	console.log(isRepeatedPasswordValid)
 
 							if (password.length !== 32) {
 								$(document)

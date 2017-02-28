@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.IttalentsHomeworks.DAO.GroupDAO;
+import com.IttalentsHomeworks.DAO.IValidationsDAO;
 import com.IttalentsHomeworks.DAO.ValidationsDAO;
 import com.IttalentsHomeworks.Exceptions.GroupException;
 import com.IttalentsHomeworks.Exceptions.UserException;
@@ -22,7 +23,50 @@ import com.IttalentsHomeworks.model.User;
 
 @Controller
 public class ValidationsController {
-
+//
+//	protected static final int ASCII_TABLE_VALUE_OF_NINE = 57;
+//	protected static final int ASCII_TABLE_VALUE_OF_ZERO = 48;
+//	protected static final int MAX_SIZE_OF_INTEGER = 10;
+//	protected static final int MIN_SIZE_OF_INTEGER = 0;
+//	protected static final int FORBIDDEN_STATUS = IValidationsDAO.FORBIDDEN_STATUS;
+//	protected static final int INTERNAL_SERVER_ERROR_STATUS = IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS;
+//	protected static final int SUCCESS_STATUS = IValidationsDAO.SUCCESS_STATUS;
+//	protected static final int COUNTER_BEGINNING_ZERO = 0;
+//	protected static final int GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO = 126;
+//	protected static final int GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM = 32;
+//	protected static final int MAX_SIZE_OF_GROUP_NAME = 20;
+//	protected static final int MIN_SIZE_OF_GROUP_NAME = 5;
+//	protected static final int MAX_SIZE_IN_MB_FOR_TASK_SOLUTION = 1;
+//	protected static final int MAX_LENGTH_OF_COMMENT = 150;
+//	protected static final int MAX_VALUE_OF_GRADE = 100;
+//	protected static final int MIN_VALUE_OF_GRADE = 0;
+//	protected static final int MAX_LENGTH_OF_GRADE = 3;
+//	protected static final int MINUS_ONE_DAY = 1;
+//	protected static final int MAX_NUMBER_OF_CHARACTERS_SOLUTION_TASK_1_MB = 1048576;
+//	protected static final int MIN_NUMBER_OF_CHARACTERS_SOLUTION_TASK = 0;
+//	protected static final int BAD_REQUEST_STATUS = IValidationsDAO.BAD_REQUEST_STATUS;
+//	protected static final int MAX_SIZE_IN_MB_FOR_HOMEWORK_ASSIGNMENT = 20;
+//	protected static final int MAX_NUMBER_OF_TASKS_FOR_HOMEWORK = 40;
+//	protected static final int MIN_NUMBER_OF_TASKS_FOR_HOMEWORK = 1;
+//	protected static final int MAX_DIFFERENCE_IN_MONTHS_FROM_OPENING_TO_CLOSING_OF_HOMEWORK = 6;
+//	protected static final int HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO = 126;
+//	protected static final int HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM = 32;
+//	protected static final int HOMEWORK_HEADING_MAX_LENGTH = 40;
+//	protected static final int HOMEWORK_HEADING_MIN_LENGTH = 5;
+//	protected static final int READ_1024_BYTES = 1024;
+//	protected static final int READ_FILE_END = -1;
+//	protected static final int LENGTH_OF_CYPHERED_PASSWORD = 32;
+//	protected static final String EMAIL_VALIDATION = "^(.+)@(.+)$";
+//	protected static final int MAX_LENGTH_OF_PASSWORD = 15;
+//	protected static final int MIN_LENGTH_OF_PASSWORD = 6;
+//	protected static final int ASCII_TABLE_VALUE_OF_z = 122;
+//	protected static final int ASCII_TABLE_VALUE_OF_a = 97;
+//	protected static final int ASCII_TABLE_VALUE_OF_DOT = 46;
+//	protected static final int ASCII_TABLE_VALUE_OF_Z = 90;
+//	protected static final int ASCII_TABLE_VALUE_OF_A = 65;
+//	protected static final int MAX_LENGTH_USERNAME = 15;
+//	protected static final int MIN_LENGTH_USERNAME = 6;
+//	protected static final String SAVE_DIR = "/Users/Stela/Desktop/imagesIttalentsHomework";
 	@RequestMapping(value="/DoesUserExist",method = RequestMethod.GET)
 	protected void checkIfUserAlreadyExists(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String chosenStudentUsername = request.getParameter("chosenStudentUsername").trim();
@@ -30,12 +74,12 @@ public class ValidationsController {
 			if(ValidationsDAO.getInstance().isUsernameUnique(chosenStudentUsername)){//if its unique id is not in DB
 				return;
 			}else{
-				response.setStatus(200);
+				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 			}
 		} catch (UserException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-			response.setStatus(500);
+			response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
 		}
 	}
 	
@@ -49,21 +93,21 @@ public class ValidationsController {
 			try {
 				Group chosenGroup = GroupDAO.getInstance().getGroupById(chosenGroupId);
 				if (GroupDAO.getInstance().isUserAlreadyInGroup(chosenGroup, chosenStudentUsername)) {
-					response.setStatus(400);
+					response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 				} else {
-					response.setStatus(200);
+					response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 				}
 			} catch (GroupException e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
-				response.setStatus(500);
+				response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
 			} catch (UserException e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
-				response.setStatus(500);
+				response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
 			} 
 		} else {
-			response.setStatus(403);
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 	
@@ -74,17 +118,17 @@ public class ValidationsController {
 		String groupName = request.getParameter("name").trim();
 		try {
 			if(ValidationsDAO.getInstance().isGroupNameUnique(groupName)){
-				response.setStatus(200);
+				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 			}else{
-				response.setStatus(400);
+				response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 			}
 		} catch (GroupException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-			response.setStatus(500);	
+			response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);	
 		}
 		}else{
-			response.setStatus(403);
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 	
@@ -99,20 +143,20 @@ public class ValidationsController {
 			int wantedGroupNameId = GroupDAO.getInstance().getGroupIdByGroupName(groupName);
 
 			if(ValidationsDAO.getInstance().isGroupNameUnique(groupName)){
-				response.setStatus(200);
+				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 			}else{
 				if(wantedGroupNameId == currGroupId){
-					response.setStatus(200);
+					response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 				}else{
-					response.setStatus(400);
+					response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 				}
 			}
 		} catch (GroupException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-			response.setStatus(500);	
+			response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);	
 		}}else{
-			response.setStatus(403);
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 	
@@ -123,16 +167,16 @@ public class ValidationsController {
 		if(user.isTeacher()){
 		String groupName = request.getParameter("name").trim();
 		if(isLengthGroupNameValid(groupName) && areCharactersGroupNameValid(groupName)){
-			response.setStatus(200);
+			response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 		}else{
-			response.setStatus(400);
+			response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 		}
 		}else{
-			response.setStatus(403);
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 	private boolean isLengthGroupNameValid(String groupName) {
-		if (groupName.length() >= 5 && groupName.length() <= 20) {
+		if (groupName.length() >= IValidationsDAO.MIN_SIZE_OF_GROUP_NAME && groupName.length() <= IValidationsDAO.MAX_SIZE_OF_GROUP_NAME) {
 			return true;
 		}
 		return false;
@@ -140,7 +184,7 @@ public class ValidationsController {
 
 	private boolean areCharactersGroupNameValid(String groupName) {
 		for(int i = 0; i < groupName.length(); i++){
-			if(!(((int)groupName.charAt(i) >= 32 && (int)groupName.charAt(i) <= 126))){
+			if(!(((int)groupName.charAt(i) >= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM && (int)groupName.charAt(i) <= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO))){
 				return false;
 			}
 		}
@@ -151,23 +195,23 @@ public class ValidationsController {
 	protected void isHomeworkClosingTimeValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if(user.isTeacher()){
-		String opens = request.getParameter("opens").replace("/", "-");
-		String closes = request.getParameter("closes").replace("/", "-");
+		String opens = request.getParameter("opens").replace("/", "-").trim();
+		String closes = request.getParameter("closes").replace("/", "-").trim();
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 			LocalDateTime openingDateTime = LocalDateTime.parse(opens, formatter);
 			LocalDateTime closingDateTime = LocalDateTime.parse(closes, formatter);
 			long diffInMonths = ChronoUnit.MONTHS.between(openingDateTime, closingDateTime);
 			if (closingDateTime.isAfter(LocalDateTime.now()) && closingDateTime.isAfter(openingDateTime)
-					&& diffInMonths < 6) {
-				response.setStatus(200);
+					&& diffInMonths < IValidationsDAO.MAX_DIFFERENCE_IN_MONTHS_FROM_OPENING_TO_CLOSING_OF_HOMEWORK) {
+				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 			} else {
-				response.setStatus(400);
+				response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 			}
 		} catch (NumberFormatException e) {
-			response.setStatus(400);
+			response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 		}}else{
-			response.setStatus(403);
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 	
@@ -179,15 +223,15 @@ public class ValidationsController {
 			String heading = request.getParameter("heading").trim();
 			try {
 				if (ValidationsDAO.getInstance().isHomeworkHeadingUnique(heading)) {
-					response.setStatus(200);
+					response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 				} else {
-					response.setStatus(400);
+					response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 				}
 			} catch (GroupException e) {
-				response.setStatus(500);
+				response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
 			}
 		} else {
-			response.setStatus(403);
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 	
@@ -197,15 +241,15 @@ public class ValidationsController {
 		if(user.isTeacher()){
 		String heading = request.getParameter("heading").trim();
 		if(isLengthHomeworkHeadingValid(heading) && areCharactersHomeworkHeadingValid(heading)){
-			response.setStatus(200);
+			response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 		}else{
-			response.setStatus(400);
+			response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 		}}else{
-			response.setStatus(403);
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 	private boolean isLengthHomeworkHeadingValid(String heading) {
-		if (heading.length() >= 5 && heading.length() <= 40) {
+		if (heading.length() >= IValidationsDAO.HOMEWORK_HEADING_MIN_LENGTH && heading.length() <= IValidationsDAO.HOMEWORK_HEADING_MAX_LENGTH) {
 			return true;
 		}
 		return false;
@@ -213,7 +257,7 @@ public class ValidationsController {
 
 	private boolean areCharactersHomeworkHeadingValid(String heading) {
 		for(int i = 0; i < heading.length(); i++){
-			if(!(((int)heading.charAt(i) >= 32 && (int)heading.charAt(i) <= 126))){
+			if(!(((int)heading.charAt(i) >= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM && (int)heading.charAt(i) <= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO))){
 				return false;
 			}
 		}
@@ -225,22 +269,22 @@ public class ValidationsController {
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if(user.isTeacher()){
-		String opens = request.getParameter("opens").replace("/", "-");
+		String opens = request.getParameter("opens").replace("/", "-").trim();
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
 			LocalDateTime openingTime = LocalDateTime.parse(opens, formatter);
 			LocalDate openingDate = openingTime.toLocalDate();
-			if (openingDate.isAfter(LocalDate.now().minusDays(1))
-					&& openingDate.isBefore(LocalDate.now().plusMonths(6).minusDays(1))) {
-				response.setStatus(200);
+			if (openingDate.isAfter(LocalDate.now().minusDays(IValidationsDAO.MINUS_ONE_DAY))
+					&& openingDate.isBefore(LocalDate.now().plusMonths(IValidationsDAO.MAX_DIFFERENCE_IN_MONTHS_FROM_OPENING_TO_CLOSING_OF_HOMEWORK).minusDays(IValidationsDAO.MINUS_ONE_DAY))) {
+				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 			} else {
-				response.setStatus(400);
+				response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 			}
 		} catch (NumberFormatException e) {
-			response.setStatus(400);
+			response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 		}}else{
-			response.setStatus(403);
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 	
@@ -249,8 +293,8 @@ public class ValidationsController {
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.isTeacher()) {
-			String opens = request.getParameter("opens").trim().replace("/", "-");
-			String closes = request.getParameter("closes").trim().replace("/", "-");
+			String opens = request.getParameter("opens").trim().replace("/", "-").trim();
+			String closes = request.getParameter("closes").trim().replace("/", "-").trim();
 			HomeworkDetails currHd = (HomeworkDetails) request.getSession().getAttribute("currHomework");
 			try {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -258,20 +302,20 @@ public class ValidationsController {
 				LocalDateTime closingDateTime = LocalDateTime.parse(closes, formatter);
 				long diffInMonths = ChronoUnit.MONTHS.between(openingDateTime, closingDateTime);
 				if (closingDateTime.equals(currHd.getClosingTime())) {
-					response.setStatus(200);
+					response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 				} else {
 					if (closingDateTime.isAfter(LocalDateTime.now()) && closingDateTime.isAfter(openingDateTime)
-							&& diffInMonths < 6) {
-						response.setStatus(200);
+							&& diffInMonths < IValidationsDAO.MAX_DIFFERENCE_IN_MONTHS_FROM_OPENING_TO_CLOSING_OF_HOMEWORK) {
+						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 					} else {
-						response.setStatus(400);
+						response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 					}
 				}
 			} catch (NumberFormatException e) {
-				response.setStatus(400);
+				response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 			}
 		}else{
-			response.setStatus(403);
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 
@@ -284,15 +328,15 @@ public class ValidationsController {
 			HomeworkDetails currHd = (HomeworkDetails) request.getSession().getAttribute("currHomework");
 			try {
 				if (currHd.getHeading().equals(heading) || ValidationsDAO.getInstance().isHomeworkHeadingUnique(heading)) {
-					response.setStatus(200);
+					response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 				} else {
-					response.setStatus(400);
+					response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 				}
 			} catch (GroupException e) {
-				response.setStatus(500);
+				response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
 			}
 		} else {
-			response.setStatus(403);
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 	@RequestMapping(value="/IsHomeworkUpdateHeadingValid",method = RequestMethod.GET)
@@ -301,17 +345,17 @@ public class ValidationsController {
 		if (user.isTeacher()) {
 			String heading = request.getParameter("heading").trim();
 			if (isLengthHomeworkUpdateHeadingValid(heading) && areCharactersHomeworkUpdateHeadingValid(heading)) {
-				response.setStatus(200);
+				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 			} else {
-				response.setStatus(400);
+				response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 			}
 		} else {
-			response.setStatus(403);
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 
 	private boolean isLengthHomeworkUpdateHeadingValid(String heading) {
-		if (heading.length() >= 5 && heading.length() <= 40) {
+		if (heading.length() >= IValidationsDAO.HOMEWORK_HEADING_MIN_LENGTH && heading.length() <= IValidationsDAO.HOMEWORK_HEADING_MAX_LENGTH) {
 			return true;
 		}
 		return false;
@@ -319,7 +363,7 @@ public class ValidationsController {
 
 	private boolean areCharactersHomeworkUpdateHeadingValid(String heading) {
 		for(int i = 0; i < heading.length(); i++){
-			if(!(((int)heading.charAt(i) >= 32 && (int)heading.charAt(i) <= 126))){
+			if(!(((int)heading.charAt(i) >= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM && (int)heading.charAt(i) <= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO))){
 				return false;
 			}
 		}
@@ -329,7 +373,7 @@ public class ValidationsController {
 	
 	@RequestMapping(value="/IsHomeworkUpdateOpeningTimeValid",method = RequestMethod.GET)
 	protected void isHomeworkUpdateOpeningTimeValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-			String opens = request.getParameter("opens").replace("/", "-");
+			String opens = request.getParameter("opens").replace("/", "-").trim();
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.isTeacher()) {
 			HomeworkDetails currHd = (HomeworkDetails) request.getSession().getAttribute("currHomework");
@@ -338,20 +382,20 @@ public class ValidationsController {
 				LocalDateTime openingTime = LocalDateTime.parse(opens, formatter);
 				LocalDate openingDate = openingTime.toLocalDate();
 				if (openingTime.equals(currHd.getOpeningTime())) {
-					response.setStatus(200);
+					response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 				} else {
-					if (openingDate.isAfter(LocalDate.now().minusDays(1))
-							&& openingDate.isBefore(LocalDate.now().plusMonths(6).minusDays(1))) {
-						response.setStatus(200);
+					if (openingDate.isAfter(LocalDate.now().minusDays(IValidationsDAO.MINUS_ONE_DAY))
+							&& openingDate.isBefore(LocalDate.now().plusMonths(IValidationsDAO.MAX_DIFFERENCE_IN_MONTHS_FROM_OPENING_TO_CLOSING_OF_HOMEWORK).minusDays(IValidationsDAO.MINUS_ONE_DAY))) {
+						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 					} else {
-						response.setStatus(400);
+						response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 					}
 				}
 			} catch (NumberFormatException e) {
-				response.setStatus(400);
+				response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 			}
 		} else {
-			response.setStatus(403);
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 	
@@ -360,14 +404,14 @@ public class ValidationsController {
 		
 		String password = request.getParameter("password").trim();
 		if(isLengthPasswordValid(password) && areCharactersPasswordValid(password)){
-			response.setStatus(200);
+			response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 		}else{
-			response.setStatus(400);
+			response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 		}
 	}
 
 	private boolean isLengthPasswordValid(String password) {
-		if (password.length() >= 6 && password.length() <= 15) {
+		if (password.length() >= IValidationsDAO.MIN_LENGTH_OF_PASSWORD && password.length() <= IValidationsDAO.MAX_LENGTH_OF_PASSWORD) {
 			return true;
 		}
 		return false;
@@ -375,7 +419,7 @@ public class ValidationsController {
 
 	private boolean areCharactersPasswordValid(String password) {
 		for(int i = 0; i < password.length(); i++){
-			if(!(((int)password.charAt(i) >= 48 && (int)password.charAt(i) <= 57) || ((int)password.charAt(i) >= 65 && (int)password.charAt(i) <= 90) || ((int)password.charAt(i) >= 97 && (int)password.charAt(i) <= 122))){
+			if(!(((int)password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO && (int)password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE) || ((int)password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A && (int)password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z) || ((int)password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a && (int)password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z))){
 				return false;
 			}
 		}
@@ -392,12 +436,12 @@ public class ValidationsController {
 		} catch (UserException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-			response.setStatus(500);
+			response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
 		}
 		if (isUnique) {
-			response.setStatus(200);
+			response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 		} else {
-			response.setStatus(400);
+			response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 		}
 	}
 	
@@ -405,14 +449,14 @@ public class ValidationsController {
 	protected void isUsernameValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username").trim();
 		if(isLengthUsernameValid(username) && areCharactersUsernameValid(username)){
-			response.setStatus(200);
+			response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 		}else{
-			response.setStatus(400);
+			response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 		}
 	}
 
 	private boolean isLengthUsernameValid(String username) {
-		if (username.length() >= 6 && username.length() <= 15) {
+		if (username.length() >= IValidationsDAO.MIN_LENGTH_USERNAME && username.length() <= IValidationsDAO.MAX_LENGTH_USERNAME) {
 			return true;
 		}
 		return false;
@@ -420,7 +464,7 @@ public class ValidationsController {
 
 	private boolean areCharactersUsernameValid(String username) {
 		for(int i = 0; i < username.length(); i++){
-			if(!(((int)username.charAt(i) >= 48 && (int)username.charAt(i) <= 57) || ((int)username.charAt(i) >= 65 && (int)username.charAt(i) <= 90) || ((int)username.charAt(i) >= 97 && (int)username.charAt(i) <= 122))){
+			if(!(((int)username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO && (int)username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE) || ((int)username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A && (int)username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z) || ((int)username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a && (int)username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z) || (int) username.charAt(i) == IValidationsDAO.ASCII_TABLE_VALUE_OF_DOT)){
 				return false;
 			}
 		}
@@ -435,18 +479,18 @@ public class ValidationsController {
 		try {
 			areUsernamePasswordValid = ValidationsDAO.getInstance().doesUserExistInDB(username, password);
 			if(areUsernamePasswordValid){
-				response.setStatus(200);
+				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 			}else{
-				response.setStatus(400);
+				response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 			}
 		} catch (UserException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-			response.setStatus(500);
+			response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
 		} catch (NoSuchAlgorithmException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-			response.setStatus(500);
+			response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
 		}	
 	}
 

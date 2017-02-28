@@ -28,6 +28,18 @@
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
+	<nav class="breadcrumb-nav">
+	<ul class="breadcrumb">
+<li><a href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span></span>
+		</span></li>
+		<li><a href="http://localhost:8080/MyProject/SeeGroups">See groups</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span></span>
+		</span></li>
+		
+		</ul></nav>
 	<div id="image">
 		<img src="images/logo-black.png" class="img-rounded" width="380" height="236">
 	</div>

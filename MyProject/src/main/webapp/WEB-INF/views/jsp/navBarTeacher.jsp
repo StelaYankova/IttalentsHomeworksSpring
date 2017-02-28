@@ -16,36 +16,9 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
  
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
-
-<!-- Latest compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
-<!--<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
-
-<script type="text/javascript" src="http://www.datejs.com/build/date.js"></script>
-
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
-	<link rel="stylesheet"
-	href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
-	<link rel="stylesheet"
-	href="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.css">
-
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
-
-<script
-	src="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.js"></script>
--->	
-
-<!-- Optional theme -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>   
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
  <link rel="stylesheet" type="text/css"
 	href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">

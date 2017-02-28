@@ -5,26 +5,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!--  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
-
-
-
-
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<!-- Latest compiled and minified JavaScript -->
-
-<!--   <script src="http://cdn.jsdelivr.net/timepicker.js/latest/timepicker.min.js"></script>
-<link href="http://cdn.jsdelivr.net/timepicker.js/latest/timepicker.min.css" rel="stylesheet"/>  -->
-<!-- <link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.1/jquery.timepicker.min.css"></link>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.1/jquery.timepicker.min.js"></script> -->
-
-
-<!-- Updated stylesheet url -->
-
-	
-	
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 </head>
@@ -56,6 +36,17 @@
 <body>
 
  	<%@ include file="navBarTeacher.jsp"%>
+ 	<nav class="breadcrumb-nav">
+	<ul class="breadcrumb">
+<li><a href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span></span>
+		</span></li>
+		<li><a href="http://localhost:8080/MyProject/AddHomework">Add homework</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span>&nbsp;</span>
+		</span></li>
+		</ul></nav>
  	<c:if test="${not empty invalidFields}">
 		<c:if test="${not invalidFields}">
 			<div class="alert alert-success">
@@ -89,7 +80,7 @@
 					<input type="text" class="form-control" name="name"
 						value="${nameTry}" placeholder="Enter heading" maxlength = "40"
 						data-toggle="popover" data-placement="bottom" data-trigger="focus"
-						data-content="Size of heading - 5 to 40 symbols. Valid inputs are numbers and letters (large and small)" />
+						data-content="Size of heading - 5 to 40 symbols. Valid inputs are numbers and letters (large and small)" required/>
 						<c:if test="${not empty validHeading}">
 						<c:if test="${not validHeading}">
 							<p id="nameMsg" class="input-invalid">Invalid heading</p>
@@ -162,7 +153,7 @@
 					<input type="number" min="0" max="41" maxlength = "2" class="form-control"
 						name="numberOfTasks" placeholder="Enter number of tasks" 
 						value="${numberOfTasksTry}" data-toggle="popover" data-placement="bottom" data-trigger="focus"
-						data-content="From 1 to 40"  required />
+						data-content="From 1 to 40" required/>
 						<c:if test="${not empty validTasks}">
 
 						<c:if test="${not validTasks}">
@@ -187,7 +178,6 @@
 					<p id="fileMsg" class="input-invalid"></p>
 				</div>
 			</div>
-			<!--  <div class="multiselect"><div class="selectBox" onclick="showCheckboxes()">-->
 			<br>
 			<div class="form-group">
 				<label class="control-label col-sm-6">Groups</label>
@@ -332,7 +322,6 @@ $
 								isNumberOfTasksValid = false;
 							}else{
 								if((numberOfTasks < 1) || (numberOfTasks > 40)){
-									console.log(12)
 									document.getElementById("numberOfTasksMsg").append(
 									"Min = 1 max = 40");
 									isNumberOfTasksValid = false;
@@ -399,9 +388,8 @@ $
 																	.getElementById(
 																			"nameMsg")
 																	.append(
-																			"Homework with this heading already exists!");
-															console
-																	.log("invalid heading")
+																			"Homework with this heading already exists");
+														
 														}
 													});
 										},
@@ -440,7 +428,7 @@ $
 											document
 													.getElementById("opensMsg")
 													.append(
-															"Opening time is not valid - the earliest point can be today and max 6 minus day months from now");
+															"Opening time is not valid - the earliest point can be today and the latest - 6 months from now");
 											console.log("invalid opens")
 										}
 									});
@@ -485,7 +473,7 @@ $
 								document
 										.getElementById("numberOfTasksMsg")
 										.append(
-												"Number of tasks- between 1 and 40");
+												"Number of tasks - between 1 and 40");
 								console.log("invalid numberOfTasks")
 							}
 
@@ -495,18 +483,11 @@ $
 									$("#fileMsg").empty();
 								}
 								document.getElementById("fileMsg").append(
-										"File format-pdf, maxSize - 20MB");
-								console.log("invalid file")
+										"Valid file format - pdf, maximal size - 20MB");
 							}
 							$(document)
 									.ajaxStop(
 											function() {
-												console.log(isClosesValid);
-												console.log(isOpensValid);
-												console.log(isNameValid);
-												console
-														.log(isNumberOfTasksValid);
-												console.log(isFileValid);
 												if ((isNameUnique === true
 														&& isNameValid === true
 														&& isOpensValid === true

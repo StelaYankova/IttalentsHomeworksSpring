@@ -6,12 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
-  -->
 <title>Insert title here</title>
 </head>
 <style>
@@ -26,6 +21,7 @@
 }
 .input-invalid{
 	color:red;
+	text-align: center;
 }
 #formAddGroup {
 	position: absolute;
@@ -38,6 +34,21 @@
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
+	<nav class="breadcrumb-nav">
+	<ul class="breadcrumb">
+<li><a href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span></span>
+		</span></li>
+		<li><a href="http://localhost:8080/MyProject/SeeGroups">See groups</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span></span>
+		</span></li>
+		<li><a href="http://localhost:8080/MyProject/UpdateGroupServlet">Update group</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span></span>
+		</span></li>
+		</ul></nav>
 	<c:if test="${not empty sessionScope.invalidFields}">
 		<c:if test="${not sessionScope.invalidFields}">
 			<div class="alert alert-success">
@@ -70,7 +81,7 @@
 				<label class="control-label col-sm-6">Name</label>
 				<div class="col-sm-6">
 					<input type="text" name="groupName" maxlength="20" placeholder="Enter name" data-toggle="popover" class="form-control" value = "${sessionScope.currGroup.name}" data-placement="bottom" data-trigger="focus" maxlength="20"
-						data-content="Size of name - 4 to 15 symbols. Valid inputs are numbers and letters (large and small)" />
+						data-content="Size of name - 4 to 15 symbols. Valid inputs are numbers and letters (large and small)" required/>
 					<c:if test="${not empty sessionScope.validName}">
 						<c:if test="${not sessionScope.validName}">
 							<p id="nameMsg" class="input-invalid">Invalid name</p>
@@ -155,7 +166,6 @@
 		if(name == ""){
 			isNameValid = false;
 		}
-		console.log(name)
 		if((isNameValid === false) || (name.length < 4 && name.length > 15)){
 
 			if (!$('#nameMsg').is(':empty')) {
@@ -197,27 +207,21 @@
 						isNameValid = false;
 						document.getElementById("nameMsg").append(
 								"name is not valid");
-						console.log("invalid name")
-
 					}
 				});
 				},
 			error : function(data) {				
-				console.log(5)
-
 				if (!$('#nameMsg').is(':empty')) {
 					$("#nameMsg").empty();
 				}
 				isNameValid = false;
 				document.getElementById("nameMsg").append(
 						"Group with this name already exists");
-				console.log("invalid heading")
 			}
 		});
 		$( document ).ajaxStop(function() {
 			
 	if((isNameValid === true)){
-		console.log(6)
 		document.getElementById("updateGroupForm").submit();
 	}else{
 		return false;

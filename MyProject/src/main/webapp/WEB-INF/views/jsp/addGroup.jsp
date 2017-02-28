@@ -6,13 +6,6 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
-<!-- <link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
-
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script> -->
 
 <title>Insert title here</title>
 </head>
@@ -37,14 +30,30 @@
 
 .input-invalid {
 	color: red;
+	text-align: center;
 }
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
+	<nav class="breadcrumb-nav">
+	<ul class="breadcrumb">
+<li><a href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span></span>
+		</span></li>
+		<li><a href="http://localhost:8080/MyProject/SeeGroups">See groups</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span></span>
+		</span></li>
+		<li><a href="http://localhost:8080/MyProject/AddGroupServlet">Create group</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span></span>
+		</span></li>
+		</ul></nav>
 	<c:if test="${not empty invalidFields}">
 		<c:if test="${not invalidFields}">
 			<div class="alert alert-success">
-				<strong>Success!</strong> Indicates a successful or positive action.
+				The new group has been added successfully
 			</div>
 		</c:if>
 	</c:if>
@@ -53,10 +62,7 @@
 	</div>
 
 	<div id="formAddGroup" align="right">
-		
 		<form action="./AddGroupServlet" method="POST" id="addGroupForm">
-		
-		
 			<label
 				style="position: absolute; left: 290px; text-decoration: underline;">New
 				group</label> <br> <br> <br>
@@ -69,8 +75,7 @@
 			</c:if>
 			<c:if test="${not empty emptyFields}">
 				<c:if test="${emptyFields}">
-					<p style="text-align: center" class="input-invalid">You cannot
-						have empty fields</p>
+					<p style="text-align: center" class="input-invalid">Empty fields</p>
 				</c:if>
 			</c:if>
 			<div class="form-group">
@@ -79,10 +84,10 @@
 					<input type="text" name="groupName" class="form-control"
 						placeholder="Enter name" data-toggle="popover" value = "${nameTry}"
 						data-placement="bottom" data-trigger="focus" maxlength="20"
-						data-content="Size of name - 4 to 15 symbols. Valid inputs are numbers and letters (large and small)" required/>
+						data-content="Size of name - 4 to 15 symbols. Valid inputs are numbers and letters (large and small)." required/>
 					<c:if test="${not empty validName}">
 						<c:if test="${not validName}">
-							<p id="nameMsg" class="input-invalid">Invalid name</p>
+							<p id="nameMsg" class="input-invalid">Name is not valid</p>
 						</c:if>
 						<c:if test="${not empty uniqueName}">
 							<c:if test="${validName}">
@@ -93,7 +98,6 @@
 						</c:if>
 					</c:if>
 					<p id="nameMsg" class="input-invalid"></p>
-
 				</div>
 			</div>
 			<br>
@@ -147,13 +151,13 @@
 		if(name == ""){
 			isNameValid = false;
 		}
-		if((isNameValid === false) || (name.length < 4 && name.length > 15)){
+		if((isNameValid === false) || (name.length < 4 || name.length > 15)){
 
 			if (!$('#nameMsg').is(':empty')) {
 				$("#nameMsg").empty();
 			}
 			document.getElementById("nameMsg").append(
-					"Invalid symbols or length");
+					"Invalid size of name");
 			
 			return false;
 		}
@@ -187,7 +191,7 @@
 						}
 						isNameValid = false;
 						document.getElementById("nameMsg").append(
-								"name is not valid");
+								"Name is not valid");
 					}
 				});
 				},

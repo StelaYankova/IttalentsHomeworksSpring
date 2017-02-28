@@ -5,8 +5,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 </head>
@@ -48,6 +46,21 @@ label {
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
+	<nav class="breadcrumb-nav">
+	<ul class="breadcrumb">
+<li><a href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span></span>
+		</span></li>
+		<li><a href="http://localhost:8080/MyProject/GetStudentsScoresServlet">See student's scores</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span></span>
+		</span></li>
+		<li><a href="http://localhost:8080/MyProject/GetCurrHomeworkOfStudent">Current chosen homework</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span>&nbsp;</span>
+		</span></li>
+		</ul></nav>
 	<div id="image">
 		<img src="images/logo-black.png" class="img-rounded" width="380" height="236">
 	</div>
@@ -89,7 +102,7 @@ label {
 				<label><b>Teacher grade:</b></label>
 				<div class="col-xs-2">
 					<input type="number" class="form-control" min=0 max=100 id="grade"
-						value="${sessionScope.currHomework.teacherGrade }" name="grade" />
+						value="${sessionScope.currHomework.teacherGrade}" name="grade" />
 				</div>
 			</div>
 			<br> <br>

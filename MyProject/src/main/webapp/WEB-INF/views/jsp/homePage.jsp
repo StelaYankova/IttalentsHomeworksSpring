@@ -7,6 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+
 </head>
 <style>
 body {
@@ -18,21 +19,22 @@ body {
 	-o-background-size: cover;
 	
     background-size:100% 87vh;
+    
 }
 </style>
 <body>
-	 <%@ include file="navBarHomeRegisterPage.jsp"%> 
-
-	<c:if test="${not empty sessionScope.sessionDestroyed}">
-		<c:if test="sessionDestroyed">
-			<script>
+	 <%@ include file="navBarHomeRegisterPage.jsp"%>
+	
+		<c:if test="${not empty sessionScope.sessionDestroyed}">
+			<c:if test="sessionDestroyed">
+				<script>
 				alert("Session has expired!");
 			</script>
+			</c:if>
 		</c:if>
-	</c:if>
 
-	<c:if test="${not empty sessionScope.sessionDestroyed}">
-		<c:remove var="sessionDestroyed" scope="session" />
-	</c:if>
+		<c:if test="${not empty sessionScope.sessionDestroyed}">
+			<c:remove var="sessionDestroyed" scope="session" />
+		</c:if>
 </body>
 </html>

@@ -346,7 +346,6 @@ public class TestDAO {
 	public void test24updateGroup() throws GroupException, UserException, ValidationException{
 		String name = "newName";
 		Group updatedGroup = new Group(group1.getId(), name);
-		//TODO 
 		//curr t - user2
 		ArrayList<Teacher> currTeachers = GroupDAO.getInstance().getTeachersOfGroup(group1);
 		updatedGroup.setTeachers(currTeachers);
@@ -355,7 +354,6 @@ public class TestDAO {
 			currTeachersIds.add(t.getId());
 		}
 		//wished t
-		
 		ArrayList<Integer> wishedTeachersIds = new ArrayList<>();
 		wishedTeachersIds.add(user2ToAddToGroupUpdate1.getId());
 		wishedTeachersIds.add(user2ToAddToGroupUpdate2.getId());
@@ -397,7 +395,6 @@ public class TestDAO {
 	
 	@Test
 	public void test25doesUserExistInDB() throws UserException, NoSuchAlgorithmException{
-		System.out.println(user1.getPassword());
 		boolean doesExists = ValidationsDAO.getInstance().doesUserExistInDB(user1.getUsername(), "newPass123");
 		assertEquals(true, doesExists);
 	}

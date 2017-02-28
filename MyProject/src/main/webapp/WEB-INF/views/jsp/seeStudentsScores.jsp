@@ -6,14 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<!-- <link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
-
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script> -->
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
 <title>Insert title here</title>
 </head>
 <style>
@@ -47,24 +40,52 @@
 }
 </style>
 <body>
-<%@ include file="navBarTeacher.jsp"%>
-<div id="image">
-		<img src="images/logo-black.png" class="img-rounded" width="380" height="236">
+	<%@ include file="navBarTeacher.jsp"%>
+	<c:if test="${sessionScope.isTeacher == false}">
+			<nav class="breadcrumb-nav">
+	<ul class="breadcrumb">
+<li><a href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span></span>
+		</span></li>
+		<li><a href="http://localhost:8080/MyProject/GetStudentsScoresServlet">Your scores</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span>&nbsp;</span>
+		</span></li>
+		</ul></nav>
+		</c:if>
+		<c:if test="${sessionScope.isTeacher == true}">
+			<nav class="breadcrumb-nav">
+	<ul class="breadcrumb">
+<li><a href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span></span>
+		</span></li>
+		<li><a href="http://localhost:8080/MyProject/GetStudentsScoresServlet">See student's scores</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span>&nbsp;</span>
+		</span></li>
+		</ul></nav>
+		</c:if>
+	<div id="image">
+		<img src="images/logo-black.png" class="img-rounded" width="380"
+			height="236">
 	</div>
-	Choose group: <select id =  "chosenGroup" class="selectpicker">
-<option value="null">-</option>
- <c:if test="${sessionScope.isTeacher == false}">
-<c:forEach var="group" items="${user.groups}" >
-	 <option value="${group.id}"><c:out value="${group.name}"></c:out></option>
- </c:forEach>
- </c:if>
-  <c:if test="${sessionScope.isTeacher == true}">
-<c:forEach var="group" items="${applicationScope.allGroups}" >
-	 <option value="${group.id}"><c:out value="${group.name}"></c:out></option>
- </c:forEach>
- </c:if>
-</select>
-<div id="divTable">
+	Choose group:
+	<select id="chosenGroup" class="selectpicker">
+		<option value="null">-</option>
+		<c:if test="${sessionScope.isTeacher == false}">
+			<c:forEach var="group" items="${user.groups}">
+				<option value="${group.id}"><c:out value="${group.name}"></c:out></option>
+			</c:forEach>
+		</c:if>
+		<c:if test="${sessionScope.isTeacher == true}">
+			<c:forEach var="group" items="${applicationScope.allGroups}">
+				<option value="${group.id}"><c:out value="${group.name}"></c:out></option>
+			</c:forEach>
+		</c:if>
+	</select>
+	<div id="divTable">
 		<table id="resultTable" border="1"
 			class="table table-striped table-bordered table-hover dataTables_wrapper form-inline dt-bootstrap"
 			style="width: 60%">
@@ -78,14 +99,12 @@
 				</tr>
 			</thead>
 			<tbody class="wrapword">
-			
+
 			</tbody>
 		</table>
 	</div>
-	<ul id = "listOfStudentsOfGroup" class="editable wrapwordLink" style = "visibility:hidden;z-index :1;height:300px; 
-	width:18%;
-	overflow:hidden; 
-	overflow-y:scroll;overflow-x:scroll;"></ul>
+	<ul id="listOfStudentsOfGroup" class="editable wrapwordLink"
+		style="visibility: hidden; z-index: 1; height: 300px; width: 18%; overflow: hidden; overflow-y: scroll; overflow-x: scroll;"></ul>
 	<script>
 var table = $('#resultTable').DataTable({
 	"aoColumnDefs" : [ {
@@ -134,7 +153,6 @@ function seeHomeworks(e,e1){
 						var closes = response[i].closes;
 						var closesRep = closes.replace("T", " ");
 						var hasStudentGivenMinOneTask = response[i].hasStudentGivenMinOneTask;
-						console.log(hasStudentGivenMinOneTask)
 					
 							if(hasStudentGivenMinOneTask===true){
 								var rowNode = table.row

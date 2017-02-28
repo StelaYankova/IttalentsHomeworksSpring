@@ -5,12 +5,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<!--  <link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
-
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>-->
 	
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
@@ -49,6 +43,17 @@
 </style>
 <body>
 <%@ include file="navBarTeacher.jsp"%>
+	<nav class="breadcrumb-nav">
+	<ul class="breadcrumb">
+<li><a href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span></span>
+		</span></li>
+		<li><a href="http://localhost:8080/MyProject/SeeHomeworksServlet">See/Update homeworks</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span>&nbsp;</span>
+		</span></li>
+		</ul></nav>
 <div id="image">
 		<img src="images/logo-black.png" class="img-rounded" width="380" height="236">
 	</div>
@@ -159,29 +164,6 @@ Choose group: <select id = "chosenGroup" class="selectpicker">
 			}
 				
 		}
-		/*error:function (data){
-		    console.log(data)
-			if(data.status == 200){
-				alert("Session has expired");
-		    	 window.location.href = data.redirect; 
-		    }else{
-		    	<c:if test="${empty sessionScope.user}">
-				console.log("expired")
-					alert('session expired!');
-				
-		</c:if>
-		    	//alert("Something went wrong, code: " + xhr.status + " " + xhr.message)
-		    //var err = eval("(" + xhr.responseText + ")");
-  alert("code: " + xhr.status + " " + xhr.responseText);
-		             // Take action, referencing xhr.responseText as needed.
-		    }
-		} ,*/
-		/*error: function(response){
-			//console.log(18)
-			alert("Session has expired");
-			 window.location.href = './index'; 
-		}*/
-		
 	});
 	});});
 	

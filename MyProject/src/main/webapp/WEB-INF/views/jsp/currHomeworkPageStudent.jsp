@@ -5,8 +5,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 </head>
@@ -36,8 +34,45 @@ position: absolute;
 <body>
 
 	<%@ include file="navBarStudent.jsp"%>
-<div id="image">
-		<img src="images/logo-black.png" class="img-rounded" width="380" height="236">
+	<nav class="breadcrumb-nav">
+	<ul class="breadcrumb">
+		<li><a href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span></span>
+		</span></li>
+		<c:if test="${not empty sessionScope.throughtScores}">
+
+			<c:if test="${sessionScope.throughtScores == 0}">
+			<li><a
+					href="http://localhost:8080/MyProject/GetHomeworksOfGroupsServlet">Homeworks
+						of chosen group</a> <span class="divider"> <span
+						class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
+				</span></li>
+			</c:if>
+			<c:if test="${sessionScope.throughtScores == 1}">
+			<li><a href="http://localhost:8080/MyProject/SeeScoresServlet">Your
+						scores</a> <span class="divider"> <span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
+			</c:if>
+		</c:if>
+		<c:if test="${ empty sessionScope.throughtScores}">
+			<c:if test="${ empty sessionScope.throughtGroups}">
+				<li><a href="http://localhost:8080/MyProject/SeeScoresServlet">Your
+						scores</a> <span class="divider"> <span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
+			</c:if>
+		</c:if>
+		<li><a href="http://localhost:8080/MyProject/GetHomeworkServlet">Current
+				chosen homework</a> <span class="divider"> <span
+				class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
+		</span></li>
+	</ul>
+	</nav>
+	<div id="image">
+		<img src="images/logo-black.png" class="img-rounded" width="380"
+			height="236">
 	</div>
 	<div id="pageContent">
 		<br>
@@ -138,13 +173,15 @@ position: absolute;
 	<c:if test="${not empty sessionScope.currTaskSolution}">
 		<c:remove var="currTaskSolution" scope="session" />
 	</c:if>
+	<%-- <c:if test="${not empty sessionScope.throughtScores}">
+		<c:remove var="throughtScores" scope="session" />
+	</c:if> --%>
 	
 	<script>
 	document.getElementById("currTaskSolution").addEventListener("change", saveChangedText);
 	
 	function saveChangedText(){
 		var taskNum = sessionStorage.getItem("currTask");
-		console.log('currTask is ' + taskNum)
 		var text = document.getElementById("currTaskSolution").value;
 		$.ajax({
 			url: './SaveChangedSolutionText',
@@ -153,11 +190,7 @@ position: absolute;
 				"taskNum" : taskNum,
 				"text" : text
 			},
-			success : function(response){
-				console.log("YES");
-			},
 			error : function(data){
-				console.log("NO");
 				if(data.status == 400){
 					alert("File cannot be empty and should be smaller than 1 MB");
 					document.getElementById("currTaskSolution").value = sessionStorage.getItem("currTaskSolution");
@@ -181,9 +214,7 @@ position: absolute;
 				$("#currTaskSolution").html(response.solution);
 				document.getElementById("taskUpload").style.visibility = "visible";
 				document.getElementById("currTaskSolution").style.visibility = "visible";
-				console.log(uploaded)
 				if(uploaded === "-"){
-					console.log(uploaded)
 					document.getElementById("currTaskSolution").disabled = true;
 				}
 				sessionStorage.setItem("currTask", taskNum);
@@ -200,9 +231,7 @@ position: absolute;
 			}
 			
 			 var size = (document.forms["uploadSolutionForm"]["file"].files[0].size/1024/1024).toFixed(2);
-			console.log(size)
 			if(size > 1){
-				console.log(false)
 				return false;
 			}
 			return true;
@@ -222,7 +251,6 @@ position: absolute;
 			}
 			document.getElementById("fileMsg").append(
 			"File format-java, maxSize - 1MB");
-			console.log("invalid file")
 		}
 		$( document ).ajaxStop(function() {
 

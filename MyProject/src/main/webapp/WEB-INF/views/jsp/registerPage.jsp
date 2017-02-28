@@ -165,7 +165,6 @@
 			.submit(
 					function(e) {
 						e.preventDefault();
-						console.log(23)
 						var username = document.forms["registerForm"]["username"].value;
 						var password = document.forms["registerForm"]["password"].value;
 						var repeatedPassword = document.forms["registerForm"]["repeatedPassword"].value;
@@ -268,10 +267,7 @@
 																		"usernameMsg")
 																.append(
 																		"Username is not valid");
-														console
-																.log("invalid username")
-
-													}
+														}
 												});
 									},
 									error : function(data) {
@@ -306,7 +302,6 @@
 								isPasswordValid = false;
 								document.getElementById("passwordMsg").append(
 										"Password is not valid");
-								console.log("invalid pass")
 							}
 						});
 

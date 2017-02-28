@@ -16,7 +16,11 @@ import javax.servlet.http.HttpSession;
 @WebFilter("/*")
 public class LoginFilter implements Filter {
 
-    @Override
+    private static final int IS_IMAGE_END = 16;
+	private static final int IS_IMAGE_BEG = 10;
+	protected static final int UNAUTORIZED_STATUS_CODE = 401;
+
+	@Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws ServletException, IOException {    
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
@@ -37,14 +41,17 @@ public class LoginFilter implements Filter {
         boolean loginRequest6 = request.getRequestURI().equals(loginURI6);
         boolean loginRequest7 = request.getRequestURI().equals(loginURI7);
         boolean loginRequest8 = request.getRequestURI().equals(loginURI8);
-      
-		if (loggedIn || loginRequest || loginRequest2 || loginRequest1 || loginRequest5 || loginRequest6 || loginRequest7 || loginRequest8) {
+        boolean isImage = false;
+        if(request.getRequestURI().length() >= 16){
+        	isImage = request.getRequestURI().substring(IS_IMAGE_BEG, IS_IMAGE_END).equals("/image");
+        }
+		if (loggedIn || loginRequest || loginRequest2 || loginRequest1 || loginRequest5 || loginRequest6 || loginRequest7 || loginRequest8 || isImage) {
 			chain.doFilter(request, response);
 		} else {
 			if(!isAjax((HttpServletRequest) req)){
 				response.sendRedirect(loginURI);
 			}else{
-				response.setStatus(401);
+				response.setStatus(UNAUTORIZED_STATUS_CODE);
 			}
 		}
 	}
@@ -56,12 +63,10 @@ public class LoginFilter implements Filter {
 		// TODO Auto-generated method stub
 		
 	}
-
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
 		
 	}
 
-    // ...
 }

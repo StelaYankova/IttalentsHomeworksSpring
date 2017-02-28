@@ -370,8 +370,7 @@ public class UserDAO implements IUserDAO {
 			throws UserException, ValidationException {
 		Connection con = manager.getConnection();
 
-		if ((!ValidationsDAO.getInstance().isGradeTooLong(teacherGrade))
-				&& ValidationsDAO.getInstance().isGradeValueValid(teacherGrade)) {
+		if (ValidationsDAO.getInstance().isGradeValueValid(teacherGrade)) {
 			try {
 				PreparedStatement ps = con.prepareStatement(SET_TEACHER_GRADE_TO_HOMEWORK);
 				ps.setInt(1, teacherGrade);

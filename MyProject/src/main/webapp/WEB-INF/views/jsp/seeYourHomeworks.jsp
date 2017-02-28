@@ -33,6 +33,17 @@
 </style>
 <body>
 	<%@ include file="navBarStudent.jsp"%>
+	<nav class="breadcrumb-nav">
+	<ul class="breadcrumb">
+<li><a href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span></span>
+		</span></li>
+		<li><a href="http://localhost:8080/MyProject/GetHomeworksOfGroupsServlet">Homeworks of chosen group</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span>&nbsp;</span>
+		</span></li>
+		</ul></nav>
 <div id = "image">
      <img src="images/logo-black.png" class="img-rounded" width="380" height="236"> 
 	</div>
@@ -49,7 +60,7 @@
 		</thead>
 			<tbody class="wrapword">
 				<c:forEach var="homework"
-					items="${currHomeworksOfGroup}">
+					items="${sessionScope.currHomeworksOfGroup}">
 					<tr>
 						<td><form action="./GetHomeworkServlet" method="GET">
 							<input type="hidden" name="id" value='${homework.id}'>

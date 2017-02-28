@@ -25,7 +25,7 @@ import com.IttalentsHomeworks.model.User;
 public class GroupDAO implements IGroupDAO {
 
 	private static final String DOES_STUDENT_ALREADY_HAVE_HOMEWORK = "SELECT * FROM IttalentsHomeworks.User_has_homework WHERE user_id = ? AND homework_id = ?;";
-	private static final String SAVE_PATH = "/Users/Stela/Desktop/imagesIttalentsHomework";
+//	private static final String SAVE_PATH = "/Users/Stela/Desktop/imagesIttalentsHomework";
 	private static final String GET_HOMEWORK_DETAILS_BY_ID = "SELECT id,heading,opens,closes,num_of_tasks,tasks_pdf FROM IttalentsHomeworks.Homework WHERE id = ?;";
 	private static final String CHANGE_GROUP_NAME = "UPDATE IttalentsHomeworks.Groups SET group_name = ? WHERE id = ?;";
 	private static final String REMOVE_HOMEWORK_DETAILS = "DELETE FROM IttalentsHomeworks.Homework WHERE id = ?";
@@ -398,8 +398,6 @@ public class GroupDAO implements IGroupDAO {
 		}
 	}
 
-	// TODO pri update da gledam hem dali e unikalno, no ako e kato minaloto mu
-	// nqma problem
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -740,7 +738,7 @@ public class GroupDAO implements IGroupDAO {
 				currGroups.add(GroupDAO.getInstance().getGroupById(id));
 			}
 			ps.execute();
-			File fileTasks = new File(SAVE_PATH + File.separator + homeworkDetails.getTasksFile());
+			File fileTasks = new File(IValidationsDAO.SAVE_DIR + File.separator + homeworkDetails.getTasksFile());
 			if (fileTasks.exists()) {
 				fileTasks.delete();
 			}
@@ -749,29 +747,17 @@ public class GroupDAO implements IGroupDAO {
 					for (int i = 0; i < homeworkDetails.getNumberOfTasks(); i++) {
 						String fileName = "hwId" + homeworkDetails.getId() + "userId" + s.getId() + "taskNum" + i
 								+ ".java";
-						File fileStudentTasks = new File(SAVE_PATH + File.separator + fileName);
+						File fileStudentTasks = new File(IValidationsDAO.SAVE_DIR + File.separator + fileName);
 						if (fileStudentTasks.exists()) {
 							fileStudentTasks.delete();
 						}
 					}
 				}
 			}
-			// con.commit();
 		} catch (SQLException e) {
-			/*
-			 * try { con.rollback(); } catch (SQLException e1) {
-			 */
 			throw new GroupException("Something went wrong with removing homework details rollback..");
 
-			// }
-			// throw new GroupException("Something went wrong with removing
-			// homework details..");
-		} /*
-			 * finally{ try { con.setAutoCommit(true); } catch (SQLException e)
-			 * { throw new GroupException(
-			 * "Something went wrong with removing homework details rollback.."
-			 * ); } }
-			 */
+		} 
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.ServletException;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.IttalentsHomeworks.DAO.GroupDAO;
+import com.IttalentsHomeworks.DAO.IValidationsDAO;
 import com.IttalentsHomeworks.DAO.UserDAO;
 import com.IttalentsHomeworks.DAO.ValidationsDAO;
 import com.IttalentsHomeworks.Exceptions.GroupException;
@@ -56,10 +58,10 @@ public class UserController {
 				jsonGroups.add(obj);
 			}
 			response.setContentType("application/json");
-			response.setStatus(200);
+			response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 			response.getWriter().write(jsonGroups.toString());
 		} else {
-			response.setStatus(403);
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 
@@ -150,6 +152,9 @@ public class UserController {
 		User user = null;
 		String username = request.getParameter("username").trim();
 		String password = request.getParameter("password").trim();
+		Stack<String> navPath = new Stack<>();
+		navPath.push("Home");
+		request.getSession().setAttribute("navPath", navPath);
 		if (isThereEmptyFieldLogin(username, password)) {
 			request.getSession().setAttribute("invalidField", true);
 		} else {
@@ -312,7 +317,7 @@ public class UserController {
 	}
 
 	private boolean isLengthValidUsernameRegister(String username) {
-		if (username.length() >= 6 && username.length() <= 15) {
+		if (username.length() >= IValidationsDAO.MIN_LENGTH_USERNAME && username.length() <= IValidationsDAO.MAX_LENGTH_USERNAME) {
 			return true;
 		}
 		return false;
@@ -324,9 +329,9 @@ public class UserController {
 
 	private boolean areCharactersValidUsernameRegister(String username) {
 		for (int i = 0; i < username.length(); i++) {
-			if (!(((int) username.charAt(i) >= 48 && (int) username.charAt(i) <= 57)
-					|| ((int) username.charAt(i) >= 65 && (int) username.charAt(i) <= 90)
-					|| ((int) username.charAt(i) >= 97 && (int) username.charAt(i) <= 122))) {
+			if (!(((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO && (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
+					|| ((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A && (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
+					|| ((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a && (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z)) || ((int) username.charAt(i) == IValidationsDAO.ASCII_TABLE_VALUE_OF_DOT)) {
 				return false;
 			}
 		}
@@ -334,7 +339,7 @@ public class UserController {
 	}
 
 	private boolean isLengthValidPassRegister(String password) {
-		if (password.length() >= 6 && password.length() <= 15) {
+		if (password.length() >= IValidationsDAO.MIN_LENGTH_OF_PASSWORD && password.length() <= IValidationsDAO.MAX_LENGTH_OF_PASSWORD) {
 			return true;
 		}
 		return false;
@@ -342,9 +347,9 @@ public class UserController {
 
 	private boolean areCharactersValidPassRegister(String password) {
 		for (int i = 0; i < password.length(); i++) {
-			if (!(((int) password.charAt(i) >= 48 && (int) password.charAt(i) <= 57)
-					|| ((int) password.charAt(i) >= 65 && (int) password.charAt(i) <= 90)
-					|| ((int) password.charAt(i) >= 97 && (int) password.charAt(i) <= 122))) {
+			if (!(((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO && (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
+					|| ((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A && (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
+					|| ((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a && (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z))) {
 				return false;
 			}
 		}
@@ -352,7 +357,7 @@ public class UserController {
 	}
 
 	private boolean isEmailValidRegister(String email) {
-		String regex = "^(.+)@(.+)$";
+		String regex = IValidationsDAO.EMAIL_VALIDATION;
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher((CharSequence) email);
 		return matcher.matches();
@@ -377,6 +382,7 @@ public class UserController {
 	protected String seeScoresServlet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
+		request.getSession().setAttribute("throughtScores", 1);
 		if (!user.isTeacher()) {
 			return "yourScores";
 		}
@@ -408,7 +414,7 @@ public class UserController {
 		} else {
 			// password valid
 			boolean isPassValid = false;
-			if(password.length() != 32){
+			if(password.length() != IValidationsDAO.LENGTH_OF_CYPHERED_PASSWORD){
 				if (isPasswordValidUpdateProfile(password)) {
 					isPassValid = true;
 				}
@@ -465,7 +471,7 @@ public class UserController {
 	}
 
 	private boolean isLengthValidPassUpdateProfile(String password) {
-		if (password.length() >= 6 && password.length() <= 15) {
+		if (password.length() >= IValidationsDAO.MIN_LENGTH_OF_PASSWORD && password.length() <= IValidationsDAO.MAX_LENGTH_OF_PASSWORD) {
 			return true;
 		}
 		return false;
@@ -473,9 +479,9 @@ public class UserController {
 
 	private boolean areCharactersValidPassUpdateProfile(String password) {
 		for (int i = 0; i < password.length(); i++) {
-			if (!(((int) password.charAt(i) >= 48 && (int) password.charAt(i) <= 57)
-					|| ((int) password.charAt(i) >= 65 && (int) password.charAt(i) <= 90)
-					|| ((int) password.charAt(i) >= 97 && (int) password.charAt(i) <= 122))) {
+			if (!(((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO && (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
+					|| ((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A && (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
+					|| ((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a && (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z))) {
 				return false;
 			}
 		}

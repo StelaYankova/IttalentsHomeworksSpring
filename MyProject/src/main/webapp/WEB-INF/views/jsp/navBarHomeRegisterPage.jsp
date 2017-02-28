@@ -19,6 +19,7 @@
 	
 </head>
 <style>
+
 .input-invalid-login{
 position:absolute;
 top:30px;
@@ -165,8 +166,6 @@ float:left;
 
 	var username = document.forms["signInForm"]["username"].value;
 	var password = document.forms["signInForm"]["password"].value;
-	console.log(username)
-	console.log(password)
 
 	if (!$('#usernamePasswordMsg').is(':empty')) {
 		$("#usernamePasswordMsg").empty();

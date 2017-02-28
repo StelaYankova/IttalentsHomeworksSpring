@@ -8,15 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
-
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
- -->
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <title>Insert title here</title>
 </head>
 <style>
@@ -49,6 +41,21 @@
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
+		<nav class="breadcrumb-nav">
+	<ul class="breadcrumb">
+<li><a href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span></span>
+		</span></li>
+		<li><a href="http://localhost:8080/MyProject/SeeHomeworksServlet">See/Update homeworks</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text">
+		</span></li>
+		<li><a href="http://localhost:8080/MyProject/UpdateHomeworkServlet?chosenHomework=${sessionScope.currHomework.id}">Update homework</a>
+			<span class="divider"> <span class="accesshide "><span
+					class="arrow_text"></span>&nbsp;</span>
+		</span></li>
+		</ul></nav>
 	<c:if test="${not empty sessionScope.invalidFields}">
 		<c:if test="${not sessionScope.invalidFields}">
 			<div class="alert alert-success">
@@ -91,10 +98,12 @@
 				</c:if>
 
 			</c:if>
+						<c:if test="${not empty sessionScope.emptyFields}">
+			
 			<c:if test="${sessionScope.emptyFields}">
 				<p class="input-invalid" style="width: 250px; text-align: left">You
 					cannot have empty fields</p>
-			</c:if>
+			</c:if></c:if>
 			<div class="form-group">
 				<label class="control-label col-sm-6">Heading</label>
 				<div class="col-sm-6">
@@ -131,7 +140,7 @@
 							class="form-control" id="opens" name="opens"
 							placeholder="Enter opening time" data-toggle="popover"
 							data-placement="bottom" data-trigger="focus"
-							data-content="From today max 6 months from now" required /> <span
+							data-content="From today max 6 months from now"  required/> <span
 							class="input-group-addon"> <span
 							class="glyphicon glyphicon-calendar"></span>
 						</span>
@@ -159,7 +168,7 @@
 							class="form-control" id="closes" name="closes"
 							placeholder="Enter closing time" data-toggle="popover"
 							data-placement="bottom" data-trigger="focus"
-							data-content="Max 6 months after opening time" required /> <span
+							data-content="Max 6 months after opening time"  required/> <span
 							class="input-group-addon"> <span
 							class="glyphicon glyphicon-calendar"></span>
 						</span>
@@ -181,11 +190,11 @@
 			<div class="form-group">
 				<label class="control-label col-sm-6">Number of tasks</label>
 				<div class="col-sm-6">
-					<input type="number" min="0" class="form-control"
+					<input type="number" min="1" class="form-control"
 						name="numberOfTasks"
 						value='${sessionScope.currHomework.numberOfTasks}' maxlength="2"
 						data-toggle="popover" data-placement="bottom" data-trigger="focus"
-						data-content="From 1 to 40" required />
+						data-content="From 1 to 40"  required/>
 					<c:if test="${not empty sessionScope.validTasks}">
 
 						<c:if test="${not sessionScope.validTasks}">
@@ -200,7 +209,7 @@
 			<div class="form-group">
 				<label class="control-label col-sm-6">Tasks</label>
 				<div class="col-sm-6">
-					<input type="file" accept="application/pdf" name="file">
+					<input type="file" accept="application/pdf" name="file" >
 					
 					<c:if test="${not empty sessionScope.validFile}">
 
@@ -309,9 +318,7 @@
 			}
 			
 			 var size = (document.forms["updateHomeworkForm"]["file"].files[0].size/1024/1024).toFixed(2);
-			console.log(size)
 			if(size > 20){
-				console.log(false)
 				return false;
 			}
 			return true;
@@ -367,7 +374,6 @@
 					isNumberOfTasksValid = false;
 				}else{
 					if((numberOfTasks < 1) || (numberOfTasks > 40)){
-						console.log(12)
 						document.getElementById("numberOfTasksMsg").append(
 						"Min = 1 max = 40");
 						isNumberOfTasksValid = false;
@@ -392,7 +398,6 @@
 						"heading" : name
 					},
 					success : function(response) {
-						console.log(99)
 						if (!$('#nameMsg').is(':empty')) {
 							$("#nameMsg").empty();
 							isNameValid = true;
@@ -404,7 +409,6 @@
 								"heading" : name
 							},
 							success : function(response) {
-								console.log(99)
 								if (!$('#nameMsg').is(':empty')) {
 									$("#nameMsg").empty();
 									isNameUnique = true;
@@ -418,7 +422,6 @@
 								isNameUnique = false;
 								document.getElementById("nameMsg").append(
 										"Homework with this heading already exist");
-								console.log("invalid heading")
 							}
 						});
 					},
@@ -429,7 +432,6 @@
 						isNameValid = false;
 						document.getElementById("nameMsg").append(
 								"Heading is not valid");
-						console.log("invalid heading")
 					}
 				});
 				
@@ -452,7 +454,6 @@
 						isOpensValid = false;
 						document.getElementById("opensMsg").append(
 								"Opening time is not valid - the earliest point can be a day ago");
-						console.log("invalid opens")
 					}
 				});
 				$.ajax({
@@ -475,7 +476,6 @@
 						isClosesValid = false;
 						document.getElementById("closesMsg").append(
 								"Closing time is not valid - closing time must be after opening time (max 6 months after)");
-						console.log("invalid opens")
 					}
 				});
 				
@@ -491,7 +491,6 @@
 					isNumberOfTasksValid = false;
 					document.getElementById("numberOfTasksMsg").append(
 							"Number of tasks- between 1 and 40");
-					console.log("invalid numberOfTasks")
 				}
 				if(file != ""){
 				isFileValid = false;
@@ -503,7 +502,6 @@
 					}
 					document.getElementById("fileMsg").append(
 					"File format-pdf, maxSize - 20MB");
-					console.log("invalid file")
 				}
 				}
 				$( document ).ajaxStop(function() {

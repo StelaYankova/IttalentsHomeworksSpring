@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.IttalentsHomeworks.DAO.GroupDAO;
+import com.IttalentsHomeworks.DAO.IValidationsDAO;
 import com.IttalentsHomeworks.DAO.UserDAO;
 import com.IttalentsHomeworks.DAO.ValidationsDAO;
 import com.IttalentsHomeworks.Exceptions.GroupException;
@@ -25,7 +26,6 @@ import com.google.gson.JsonObject;
 
 @Controller
 public class GroupController {
- 
 
 	@RequestMapping(value = "/AddGroupServlet", method = RequestMethod.GET)
 	protected String addGroupGet(HttpServletRequest request, HttpServletResponse response)
@@ -50,6 +50,7 @@ public class GroupController {
 			request.setAttribute("selectedTeachersUsernameTry", selectedTeachersUsername);
 
 			boolean isNameUnique = false;
+			
 			if (isThereEmptyField(groupName)) {
 				request.setAttribute("emptyFields", true);
 			} else {
@@ -138,7 +139,7 @@ public class GroupController {
 	}
 
 	private boolean isLengthValid(String groupName) {
-		if (groupName.length() >= 5 && groupName.length() <= 20) {
+		if (groupName.length() >= IValidationsDAO.MIN_SIZE_OF_GROUP_NAME && groupName.length() <= IValidationsDAO.MAX_SIZE_OF_GROUP_NAME) {
 			return true;
 		}
 		return false;
@@ -146,7 +147,7 @@ public class GroupController {
 
 	private boolean areCharactersValid(String groupName) {
 		for (int i = 0; i < groupName.length(); i++) {
-			if (!(((int) groupName.charAt(i) >= 32 && (int) groupName.charAt(i) <= 126))) {
+			if (!(((int) groupName.charAt(i) >= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM && (int) groupName.charAt(i) <= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO))) {
 				return false;
 			}
 		}
@@ -247,16 +248,14 @@ public class GroupController {
 	public boolean isStudentAlreadyInGroup(int groupId, String username) throws GroupException, UserException {
 		Group chosenGroup;
 		chosenGroup = GroupDAO.getInstance().getGroupById(groupId);
-	//	com.IttalentsHomeworks.model.User chosenStudent = UserDAO.getInstance().getUserByUsername(username);
 		if (GroupDAO.getInstance().isUserAlreadyInGroup(chosenGroup, username)) {
 			return true;
 		}
 		return false;
-
 	}
 
 	private boolean isThereEmptyField(String groupIdString, String username) {
-		if (groupIdString.equals("null") || (groupIdString.equals("")) || (username.equals("")) || username == null) {
+		if (groupIdString.trim().equals("") || (username.equals("")) || username == null) {
 			return true;
 		}
 		return false;
@@ -311,21 +310,21 @@ public class GroupController {
 							}
 							array.add(obj);
 						}
-						response.setStatus(200);
+						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 						response.getWriter().write(array.toString());
 					} catch (GroupException | UserException e) {
 						System.out.println(e.getMessage());
 						e.printStackTrace();
-						response.setStatus(500);
+						response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
 					} catch (IOException e) {
 						System.out.println(e.getMessage());
 						e.printStackTrace();
-						response.setStatus(500);
+						response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
 					}
 				}
 			}
 		}else{
-			response.setStatus(403);
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 
@@ -364,15 +363,15 @@ public class GroupController {
 					String studentUsername = request.getParameter("chosenStudentUsername").trim();
 					Student chosenStudent = (Student) UserDAO.getInstance().getUserByUsername(studentUsername);
 					GroupDAO.getInstance().removeUserFromGroup(chosenGroup, chosenStudent.getId());
-					response.setStatus(200);
+					response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 				} catch (GroupException | UserException e) {
 					System.out.println(e.getMessage());
 					e.printStackTrace();
-					response.setStatus(500);
+					response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
 				}
 			}
 		}else{
-			response.setStatus(403);
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 
@@ -396,9 +395,9 @@ public class GroupController {
 			if (request.getParameter("groupId") != null) {
 				int length = request.getParameter("groupId").length();
 				String number = request.getParameter("groupId");
-				if (length > 0 && length < 10) {
+				if (length > IValidationsDAO.MIN_SIZE_OF_INTEGER && length < IValidationsDAO.MAX_SIZE_OF_INTEGER) {
 					for (int i = 0; i < length; i++) {
-						if ((char) number.charAt(i) < 48 || (char) number.charAt(i) > 57) {
+						if ((int) number.charAt(i) < IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO || (int) number.charAt(i) > IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE) {
 							return "pageNotFound";
 						}
 					}
@@ -440,6 +439,7 @@ public class GroupController {
 			String newGroupName = request.getParameter("groupName").trim();
 			String[] selectedTeachersUsername = request.getParameterValues("teachers");
 			ArrayList<Integer> allSelectedTeachers = new ArrayList<>();
+			
 			try {
 				if (selectedTeachersUsername != null) {
 					for (int i = 0; i < selectedTeachersUsername.length; i++) {
@@ -527,7 +527,7 @@ public class GroupController {
 	}
 
 	private boolean isGroupNameLengthValidUpdateGroup(String groupName) {
-		if (groupName.length() >= 5 && groupName.length() <= 20) {
+		if (groupName.length() >= IValidationsDAO.MIN_SIZE_OF_GROUP_NAME && groupName.length() <= IValidationsDAO.MAX_SIZE_OF_GROUP_NAME) {
 			return true;
 		}
 		return false;
@@ -535,7 +535,7 @@ public class GroupController {
 
 	private boolean areGroupNameCharactersValidUpdateGroup(String groupName) {
 		for (int i = 0; i < groupName.length(); i++) {
-			if (!(((int) groupName.charAt(i) >= 32 && (int) groupName.charAt(i) <= 126))) {
+			if (!(((int) groupName.charAt(i) >= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM && (int) groupName.charAt(i) <= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO))) {
 				return false;
 			}
 		}
