@@ -59,7 +59,7 @@ public class HomeworkController {
 	}
 
 	@RequestMapping(value = "/AddHomework", method = RequestMethod.POST)
-	protected String addHomeworkPost(HttpServletRequest request, @RequestParam(value = "file") MultipartFile file1,
+	protected String addHomeworkPost(HttpServletRequest request, @RequestParam(value = "file") MultipartFile fileUploaded,
 			HttpServletResponse response) throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.isTeacher()) {
@@ -67,7 +67,7 @@ public class HomeworkController {
 			String[] selectedGroups = request.getParameterValues("groups");
 			String opens = request.getParameter("opens").replace("/", "-").trim();
 			String closes = request.getParameter("closes").replace("/", "-").trim();
-			MultipartFile filePart = file1;
+			MultipartFile filePart = fileUploaded;
 			String numberOfTasksString = request.getParameter("numberOfTasks").trim();
 			request.setAttribute("nameTry", heading);
 			request.setAttribute("opensTry", opens.replace("-", "/"));
@@ -808,7 +808,7 @@ public class HomeworkController {
 			String opens = request.getParameter("opens").trim().replace("/", "-");
 			String closes = request.getParameter("closes").trim().replace("/", "-");
 			String numberOfTasksString = request.getParameter("numberOfTasks").trim();
-			File file = null;
+			File newFile = null;
 			
 			boolean isFileNameChanged = false;
 
@@ -880,15 +880,15 @@ public class HomeworkController {
 							&& isClosingTimeValid == true && areTasksValid == true && areGroupsValid == true
 							&& isFileValid == true) {
 						fileName = "hwName" + heading + ".pdf";
-						file = new File(IValidationsDAO.SAVE_DIR + File.separator + fileName);
-						File file1 = null;
-						if (!file.exists()) {
+						newFile = new File(IValidationsDAO.SAVE_DIR + File.separator + fileName);
+						File oldFile = null;
+						if (!newFile.exists()) {
 							isFileNameChanged = true;
 							String oldNameOfFile;
 							oldNameOfFile = ((HomeworkDetails) GroupDAO.getInstance()
 									.getHomeworkDetailsById(homeworkDetailsId)).getHeading();
-							file1 = new File(IValidationsDAO.SAVE_DIR + File.separator + "hwName" + oldNameOfFile + ".pdf");
-							Files.copy(file1.toPath(), file.toPath());
+							oldFile = new File(IValidationsDAO.SAVE_DIR + File.separator + "hwName" + oldNameOfFile + ".pdf");
+							Files.copy(oldFile.toPath(), newFile.toPath());
 						}
 						if (filePart.getSize() != 0) {
 							isFileValid = true;
@@ -920,7 +920,7 @@ public class HomeworkController {
 						// if its ok
 						OutputStream out = null;
 						InputStream filecontent = null;
-						out = new FileOutputStream(file, true);
+						out = new FileOutputStream(newFile, true);
 						filecontent = filePart.getInputStream();
 						int read = 0;
 						final byte[] bytes = new byte[1024];
@@ -933,8 +933,8 @@ public class HomeworkController {
 						ArrayList<Group> allGroups = GroupDAO.getInstance().getAllGroups();
 						request.getServletContext().setAttribute("allGroups", allGroups);
 						request.getSession().setAttribute("invalidFields", false);
-						if (file1 != null) {
-							file1.delete();
+						if (oldFile != null) {
+							oldFile.delete();
 						}
 						
 						out.flush();
@@ -943,8 +943,8 @@ public class HomeworkController {
 				}
 			} catch (GroupException | UserException e) {
 				if(isFileNameChanged){
-				if(file.exists()){
-					file.delete();
+				if(newFile.exists()){
+					newFile.delete();
 				}
 				}
 				System.out.println(e.getMessage());
@@ -953,8 +953,8 @@ public class HomeworkController {
 			} catch (ValidationException e) {
 				if(isFileNameChanged){
 
-				if(file.exists()){
-					file.delete();
+				if(newFile.exists()){
+					newFile.delete();
 				}
 				}
 				request.getSession().setAttribute("invalidFields", true);
@@ -1206,7 +1206,7 @@ public class HomeworkController {
 	}
 
 	@RequestMapping(value = "/UploadSolutionServlet", method = RequestMethod.POST)
-	protected String uploadSolution(HttpServletRequest request, @RequestParam(value = "file") MultipartFile file1,
+	protected String uploadSolution(HttpServletRequest request, @RequestParam(value = "file") MultipartFile fileUploaded,
 			HttpServletResponse response) throws ServletException, IOException {
 		int taskNum = Integer.parseInt(request.getParameter("taskNum")) - 1;
 		Homework homework = (Homework) request.getSession().getAttribute("currHomework");
@@ -1222,7 +1222,7 @@ public class HomeworkController {
 				fileSaveDir.mkdir();
 			}
 			String fileName = " ";
-			MultipartFile file = file1;
+			MultipartFile file = fileUploaded;
 			if (!isFileEmptyUploadSolution(file)) {
 				if (!isSizeValidUploadSolution(file)) {
 					request.getSession().setAttribute("wrongSize", true);

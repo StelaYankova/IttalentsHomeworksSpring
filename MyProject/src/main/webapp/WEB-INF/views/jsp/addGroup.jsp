@@ -6,20 +6,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
 <title>Insert title here</title>
 </head>
 <style>
-.alert {
-	position: absolute;
-	top: 81px;
-	width: 100%;
-}
-#image {
-	position: relative;
-	left: 850px;
-}
-
 #formAddGroup {
 	position: absolute;
 	left: 60px;
@@ -27,87 +16,85 @@
 	background-color: #ffffff;
 	width: 500px;
 }
-
-.input-invalid {
-	color: red;
-	text-align: center;
-}
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
-	<nav class="breadcrumb-nav">
-	<ul class="breadcrumb">
-<li><a href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
-			<span class="divider"> <span class="accesshide "><span
-					class="arrow_text"></span></span>
-		</span></li>
-		<li><a href="http://localhost:8080/MyProject/SeeGroups">See groups</a>
-			<span class="divider"> <span class="accesshide "><span
-					class="arrow_text"></span></span>
-		</span></li>
-		<li><a href="http://localhost:8080/MyProject/AddGroupServlet">Create group</a>
-			<span class="divider"> <span class="accesshide "><span
-					class="arrow_text"></span></span>
-		</span></li>
-		</ul></nav>
-	<c:if test="${not empty invalidFields}">
-		<c:if test="${not invalidFields}">
-			<div class="alert alert-success">
-				The new group has been added successfully
-			</div>
+	<div id="pageWrapper">
+		<nav class="breadcrumb-nav">
+			<ul class="breadcrumb">
+				<li><a
+					href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+					<span class="divider"> <span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
+				<li><a href="http://localhost:8080/MyProject/SeeGroups">See
+						groups</a> <span class="divider"> <span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
+				<li><a href="http://localhost:8080/MyProject/AddGroupServlet">Create
+						group</a> <span class="divider"> <span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
+			</ul>
+		</nav>
+		<c:if test="${not empty invalidFields}">
+			<c:if test="${not invalidFields}">
+				<div class="alert alert-success">
+					<strong>Success!</strong> Group has been added successfully
+				</div>
+			</c:if>
 		</c:if>
-	</c:if>
-	<div id="image">
-		<img src="images/logo-black.png" class="img-rounded" width="380" height="236">
-	</div>
-
-	<div id="formAddGroup" align="right">
-		<form action="./AddGroupServlet" method="POST" id="addGroupForm">
-			<label
-				style="position: absolute; left: 290px; text-decoration: underline;">New
-				group</label> <br> <br> <br>
-			<c:if test="${not empty invalidFields}">
-				<c:if test="${invalidFields}">
-					<p style="text-align: center" class="input-invalid">Invalid
-						fields</p>
+		<div id="image">
+			<img src="images/logo-black.png" class="img-rounded" width="380"
+				height="236">
+		</div>
+		<div id="formAddGroup" align="right">
+			<form action="./AddGroupServlet" method="POST" id="addGroupForm">
+				<label
+					style="position: absolute; left: 290px; text-decoration: underline;">New
+					group</label> <br> <br> <br>
+				<c:if test="${not empty invalidFields}">
+					<c:if test="${invalidFields}">
+						<p class="input-invalid-or-empty">Invalid fields</p>
+					</c:if>
 				</c:if>
-
-			</c:if>
-			<c:if test="${not empty emptyFields}">
-				<c:if test="${emptyFields}">
-					<p style="text-align: center" class="input-invalid">Empty fields</p>
+				<c:if test="${not empty emptyFields}">
+					<c:if test="${emptyFields}">
+						<p class="input-invalid-or-empty">Empty fields</p>
+					</c:if>
 				</c:if>
-			</c:if>
-			<div class="form-group">
-				<label class="control-label col-sm-6">Name</label>
-				<div class="col-sm-6">
-					<input type="text" name="groupName" class="form-control"
-						placeholder="Enter name" data-toggle="popover" value = "${nameTry}"
-						data-placement="bottom" data-trigger="focus" maxlength="20"
-						data-content="Size of name - 4 to 15 symbols. Valid inputs are numbers and letters (large and small)." required/>
-					<c:if test="${not empty validName}">
-						<c:if test="${not validName}">
-							<p id="nameMsg" class="input-invalid">Name is not valid</p>
-						</c:if>
-						<c:if test="${not empty uniqueName}">
-							<c:if test="${validName}">
-								<c:if test="${not uniqueName}">
-									<p id="nameMsg" class="input-invalid">Name already exists</p>
+				<div class="form-group">
+					<label class="control-label col-sm-6">Name</label>
+					<div class="col-sm-6">
+						<input type="text" name="groupName" class="form-control"
+							placeholder="Enter name" data-toggle="popover" value="${nameTry}"
+							data-placement="bottom" data-trigger="focus" maxlength="20"
+							data-content="Size of name - 4 to 15 symbols. Valid inputs are numbers and letters (large and small)."
+							required />
+						<c:if test="${not empty validName}">
+							<c:if test="${not validName}">
+								<p id="nameMsg" class="input-invalid">Name is not valid</p>
+							</c:if>
+							<c:if test="${not empty uniqueName}">
+								<c:if test="${validName}">
+									<c:if test="${not uniqueName}">
+										<p id="nameMsg" class="input-invalid">Name already exists</p>
+									</c:if>
 								</c:if>
 							</c:if>
 						</c:if>
-					</c:if>
-					<p id="nameMsg" class="input-invalid"></p>
+						<p id="nameMsg" class="input-invalid"></p>
+					</div>
 				</div>
-			</div>
-			<br>
-			<div class="form-group">
-				<label class="control-label col-sm-6">Teachers</label>
-				<div class="col-sm-6">
-					<select class="selectpicker" multiple name="teachers">
-						<c:forEach items="${applicationScope.allTeachers}" var="teacher">
+				<br>
+				<div class="form-group">
+					<label class="control-label col-sm-6">Teachers</label>
+					<div class="col-sm-6">
+						<select class="selectpicker" multiple name="teachers">
+							<c:forEach items="${applicationScope.allTeachers}" var="teacher">
 								<c:set var="isTeacherInGroupTry" value="false"></c:set>
-								<c:forEach items="${selectedTeachersUsernameTry}" var="teacherUsername">
+								<c:forEach items="${selectedTeachersUsernameTry}"
+									var="teacherUsername">
 									<c:if test="${teacher.username eq teacherUsername}">
 										<c:set var="isTeacherInGroupTry" value="true"></c:set>
 									</c:if>
@@ -120,49 +107,43 @@
 									<option value="${teacher.username}">
 										<c:out value="${teacher.username}"></c:out></option>
 								</c:if>
-						</c:forEach>
-					</select>
-					<c:if test="${not empty allTeachersExist}">
-								<c:if test="${not allTeachersExist}">
-									<p id="allTeachersExistMsg" class="input-invalid">Not all teachers exist</p>
-								</c:if>
-					</c:if>
-					
+							</c:forEach>
+						</select>
+						<c:if test="${not empty allTeachersExist}">
+							<c:if test="${not allTeachersExist}">
+								<p id="allTeachersExistMsg" class="input-invalid">Not all
+									teachers exist</p>
+							</c:if>
+						</c:if>
+					</div>
 				</div>
-			</div>
-			<br> <br> <br> <br>
-			<div class="form-group">
-				<div class="col-sm-offset-3 col-sm-2" style="left: 290px">
-
-					<input style="align: right" type="submit" class="btn btn-default"
-						value="Save">
+				<br> <br> <br> <br>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-sm-2" style="left: 290px">
+						<input style="align: right" type="submit" class="btn btn-default"
+							value="Save">
+					</div>
 				</div>
-			</div>
-		</form>
+			</form>
+		</div>
 	</div>
-	
 	<script>
 	$('#addGroupForm').submit(function(e) {
 		e.preventDefault();
-
 		var name = document.forms["addGroupForm"]["groupName"].value;
-
 		var isNameValid = true;
 		if(name == ""){
 			isNameValid = false;
 		}
 		if((isNameValid === false) || (name.length < 4 || name.length > 15)){
-
 			if (!$('#nameMsg').is(':empty')) {
 				$("#nameMsg").empty();
 			}
 			document.getElementById("nameMsg").append(
 					"Invalid size of name");
-			
 			return false;
 		}
 		$.ajax({
-
 			url : './IsGroupNameUnique',
 			type : 'GET',
 			data : {
@@ -201,15 +182,14 @@
 				}
 				isNameValid = false;
 				document.getElementById("nameMsg").append(
-						"Group with this name already exists");
+						"Name already exists");
 			}
 		});
-		$( document ).ajaxStop(function() {
-			
-	if((isNameValid === true)){
-		document.getElementById("addGroupForm").submit();
-	}
-	});
+		$( document ).ajaxStop(function() {	
+			if((isNameValid === true)){
+				document.getElementById("addGroupForm").submit();
+			}
+		});
 	});
 	$(document).ready(function() {
 		$('[data-toggle="popover"]').popover();
@@ -230,7 +210,6 @@
 	        }
 	      });
 	    });
-	
 </script>
 </body>
 </html>

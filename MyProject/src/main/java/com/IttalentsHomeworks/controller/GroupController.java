@@ -162,14 +162,14 @@ public class GroupController {
 	}
 
 	private boolean doAllTeachersExist(String[] selectedTeachersUsername, ArrayList<String> allTeachersUsernames) {
-		boolean doAllExist = true;
+		boolean doAllTeachersExist = true;
 		for (int i = 0; i < selectedTeachersUsername.length;) {
 			if (!(allTeachersUsernames.contains(selectedTeachersUsername[i++]))) {
-				doAllExist = false;
+				doAllTeachersExist = false;
 				break;
 			}
 		}
-		return doAllExist;
+		return doAllTeachersExist;
 	}
 
 	@RequestMapping(value = "/AddStudentToGroupServlet", method = RequestMethod.GET)

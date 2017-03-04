@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -17,6 +17,7 @@
  
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>   
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
@@ -26,7 +27,28 @@
 	src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
 </head>
 <style>
-
+ .input-invalid-or-empty{
+ 	color: red;
+	text-align: left;
+ }
+.input-invalid {
+	color: red;
+	text-align: center;
+}
+.alert {
+	position: absolute;
+	top: 81px;
+	width: 100%;
+}
+#image {
+	position: absolute;
+	margin-left: 1000px;
+	margin-right: 20px;
+	margin-top: -60px;
+}
+.invalidData {
+	color: red;
+}
 .footerText{
 	color:white;
 }
@@ -57,8 +79,8 @@ float:left;
   display: inline-block;
 
 }
- .footer {
-   position: absolute;
+  .footer {
+  position: absolute;
   position: fixed;
     bottom: 0;
     height: 60px;
@@ -66,7 +88,7 @@ float:left;
      width: 100%;
      overflow: hidden; /* will contain if #first is longer than #second */
      z-index:1;
-  }
+  } 
 .navbar {
 	background-color: #2E71AC;
 	border-color: #2e6da4;
@@ -90,7 +112,8 @@ float:left;
 </style>
 <body>
 	
-	<div class="footer">
+	<footer class="footer">
+	
 		<div id="footerTextPosition1">
 			<p class="footerText">
 				Address:<br>bul. "Bulgaria" 69, 1404 Sofia
@@ -106,7 +129,8 @@ float:left;
 				Phone:<br> 088xxxxxxx
 			</p>
 		</div>
-	</div>
+		
+	</footer>
 
 	<nav class="navbar navbar-inverse">
 	<div class="container-fluid">

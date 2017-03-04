@@ -14,65 +14,49 @@
 .ui-helper-hidden-accessible {
 	display: none;
 }
-.alert {
-	position: absolute;
-	top: 81px;
-	width: 100%;
-}
-.input-invalid{
-	color:red;
-}
+
 ul.ui-autocomplete {
 	list-style-type: none;
 	text-decoration: none;
 }
 
-#image {
+#addStudentButton {
 	position: relative;
-	left: 850px;
-}
-
-#pageContent {
-	position: absolute;
-	top: 150px;
-	left: 30px;
-	width: 60%;
-}
-
-#addStudentButton{
-position: relative;
 	top: 10px;
 }
+
 .form-group {
 	width: 30%
 }
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
-	<nav class="breadcrumb-nav">
-	<ul class="breadcrumb">
-<li><a href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
-			<span class="divider"> <span class="accesshide "><span
-					class="arrow_text"></span></span>
-		</span></li>
-		<li><a href="http://localhost:8080/MyProject/AddStudentToGroupServlet">Add or remove student</a>
-			<span class="divider"> <span class="accesshide "><span
-					class="arrow_text"></span>&nbsp;</span>
-		</span></li>
-		</ul></nav>
-<c:if test="${not empty sessionScope.invalidFields}">
-		<c:if test="${not sessionScope.invalidFields}">
-			<div class="alert alert-success"  id = "alert">
-				<strong>Success!</strong> Indicates a successful or positive action.
-			</div>
+	<div id="pageWrapper">
+		<nav class="breadcrumb-nav">
+			<ul class="breadcrumb">
+				<li><a
+					href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+					<span class="divider"> <span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
+				<li><a
+					href="http://localhost:8080/MyProject/AddStudentToGroupServlet">Add
+						or remove student</a> <span class="divider"> <span
+						class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
+				</span></li>
+			</ul>
+		</nav>
+		<c:if test="${not empty sessionScope.invalidFields}">
+			<c:if test="${not sessionScope.invalidFields}">
+				<div class="alert alert-success" id="alert">
+					<strong>Success!</strong> Student has been added successfully
+				</div>
+			</c:if>
 		</c:if>
-	</c:if>
-	<div id="image">
-		<img src="images/logo-black.png" class="img-rounded" width="380" height="236">
-	</div>
-	<div id="pageContent">
-												
-
+		<div id="image">
+			<img src="images/logo-black.png" class="img-rounded" width="380"
+				height="236">
+		</div>
 		<div class="ui-widget">
 			<form action="./AddStudentToGroupServlet" method="POST"
 				class="form-inline" id="addStudentToGroupForm">
@@ -84,8 +68,7 @@ position: relative;
 				</c:if>
 				<c:if test="${not empty sessionScope.emptyFields}">
 					<c:if test="${sessionScope.emptyFields}">
-						<p style="text-align: left" class="input-invalid">You cannot
-							have empty fields</p>
+						<p style="text-align: left" class="input-invalid">Empty fields</p>
 					</c:if>
 				</c:if>
 				<c:if test="${not empty sessionScope.doesStudentExist}">
@@ -104,15 +87,12 @@ position: relative;
 				</c:if>
 				<p id="groupMsg" class="input-invalid"></p>
 				<p id="studentMsg" class="input-invalid"></p>
-
 				<c:if test="${not empty sessionScope.validGroups}">
-
 					<c:if test="${not sessionScope.validGroups}">
-						<p id="groupsMsg" class="input-invalid">Invalid group</p>
+						<p id="groupsMsg" class="input-invalid">Group does not exist</p>
 					</c:if>
 				</c:if>
 				<div class="form-group">
-
 					<label class="control-label col-sm-8">Choose group:</label> <select
 						id="chosenGroup" name="chosenGroup" class="selectpicker" required>
 						<option value="">-</option>
@@ -120,140 +100,147 @@ position: relative;
 							<option value="${group.id}"><c:out value="${group.name}"></c:out></option>
 						</c:forEach>
 					</select>
-
 				</div>
 				<div class="form-group" id="studentSearch">
 					<label class="control-label col-sm-8">Choose student:</label> <input
 						id="searchStudents" name="selectedStudent" class="form-control"
 						value="${sessionScope.chosenUsernameTry}" required />
 				</div>
-
 				<button type="submit" id="addStudentButton"
 					class="btn btn-default btn-md">
 					<span class="glyphicon glyphicon-plus">Add</span>
 				</button>
 			</form>
 		</div>
-		<br>
-		<br>
+		<br> <br>
 		<ul id="listOfStudentsOfGroup" class="editable list-group"
 			style="visibility: hidden; z-index: 1; height: 300px; width: 35%; overflow: hidden; overflow-y: scroll; overflow-x: scroll;"></ul>
+		<c:if test="${not empty sessionScope.invalidFields}">
+			<c:remove var="invalidFields" scope="session" />
+		</c:if>
+		<c:if test="${not empty sessionScope.emptyFields}">
+			<c:remove var="emptyFields" scope="session" />
+		</c:if>
+		<c:if test="${not empty sessionScope.doesStudentExist}">
+			<c:remove var="doesStudentExist" scope="session" />
+		</c:if>
+		<c:if test="${not empty sessionScope.isStudentInGroup}">
+			<c:remove var="isStudentInGroup" scope="session" />
+		</c:if>
+		<c:if test="${not empty sessionScope.validGroups}">
+			<c:remove var="validGroups" scope="session" />
+		</c:if>
+		<c:if test="${not empty sessionScope.chosenUsernameTry}">
+			<c:remove var="chosenUsernameTry" scope="session" />
+		</c:if>
 	</div>
-<c:if test="${not empty sessionScope.invalidFields}">
-<c:remove var="invalidFields" scope="session" />
-</c:if>
-<c:if test="${not empty sessionScope.emptyFields}">
-<c:remove var="emptyFields" scope="session" />
-</c:if>
-<c:if test="${not empty sessionScope.doesStudentExist}">
-<c:remove var="doesStudentExist" scope="session" />
-</c:if>
-<c:if test="${not empty sessionScope.isStudentInGroup}">
-<c:remove var="isStudentInGroup" scope="session" />
-</c:if>
-<c:if test="${not empty sessionScope.validGroups}">
-<c:remove var="validGroups" scope="session" />
-</c:if>
-<c:if test="${not empty sessionScope.chosenUsernameTry}">
-<c:remove var="chosenUsernameTry" scope="session" />
-</c:if>
-	
-	
 </body>
 <script>
+	$('#addStudentToGroupForm')
+			.submit(
+					function(e) {
+						e.preventDefault();
+						var chosenGroupId = document.forms["addStudentToGroupForm"]["chosenGroup"].value;
+						var chosenStudentUsername = document.forms["addStudentToGroupForm"]["selectedStudent"].value;
+						var doesUserExist = true;
+						var chosenStudentUsernameAlreadyInGroup = true;
+						var chosenStudentUsernameEmpty = false;
+						var chosenGroupEmpty = false;
+						if (chosenGroupId == '') {
+							chosenGroupEmpty = true;
+						}
+						if (!$('#alert').is(':empty')) {
+							$("#alert").remove();
+						}
+						if (!$('#groupMsg').is(':empty')) {
+							$("#groupMsg").empty();
+						}
+						if (!$('#studentMsg').is(':empty')) {
+							$("#studentMsg").empty();
+						}
+						if (chosenGroupEmpty === true) {
+							document.getElementById("groupMsg").append(
+									"Choose group first");
+							return false;
+						}
+						if (!chosenStudentUsername) {
+							chosenStudentUsernameEmpty = true;
+						}
+						if (chosenStudentUsernameEmpty === true) {
+							document.getElementById("groupMsg").append(
+									"Student is empty");
+							return false;
+						}
+						$
+								.ajax({
+									url : './DoesUserExist',
+									type : 'GET',
+									data : {
+										"chosenStudentUsername" : chosenStudentUsername
+									},
+									success : function(response) {
+										if (!$('#studentMsg').is(':empty')) {
+											$("#studentMsg").empty();
+											doesUserExist = true;
+										}
+										$
+												.ajax({
+													url : './IsChosenStudentAlreadyInGroup',
+													type : 'GET',
+													data : {
+														"chosenGroupId" : chosenGroupId,
+														"chosenStudentUsername" : chosenStudentUsername
+													},
+													success : function(response) {
 
-$('#addStudentToGroupForm').submit(function(e) {
-	e.preventDefault();
-	var chosenGroupId = document.forms["addStudentToGroupForm"]["chosenGroup"].value;
-	var chosenStudentUsername = document.forms["addStudentToGroupForm"]["selectedStudent"].value;
-		
-	var doesUserExist = true;
-	var chosenStudentUsernameAlreadyInGroup = true;
-	var chosenStudentUsernameEmpty = false;
-	var chosenGroupEmpty = false;
+														if (!$('#studentMsg')
+																.is(':empty')) {
+															$("#studentMsg")
+																	.empty();
+														}
+														chosenStudentUsernameAlreadyInGroup = false;
+													},
+													error : function(data) {
+														if (!$('#studentMsg')
+																.is(':empty')) {
+															$("#studentMsg")
+																	.empty();
+														}
+														chosenStudentUsernameAlreadyInGroup = true;
+														document
+																.getElementById(
+																		"studentMsg")
+																.append(
+																		"Student is already in group");
+													}
+												});
+									},
+									error : function(data) {
+										if (!$('#studentMsg').is(':empty')) {
+											$("#studentMsg").empty();
+										}
+										doesUserExist = false;
+										document
+												.getElementById("studentMsg")
+												.append(
+														"Student does not exist");
+									}
+								});
+						$(document)
+								.ajaxStop(
+										function() {
+											if (chosenStudentUsernameAlreadyInGroup === false
+													&& doesUserExist === true) {
 
-	if(chosenGroupId == ''){	
-		chosenGroupEmpty = true;
-	}
-
-	if (!$('#alert').is(':empty')) {
-		$("#alert").remove();
-	}
-	if (!$('#groupMsg').is(':empty')) {
-		$("#groupMsg").empty();
-	}
-	if (!$('#studentMsg').is(':empty')) {
-		$("#studentMsg").empty();
-	}
-	if(chosenGroupEmpty === true){
-		document.getElementById("groupMsg").append(
-				"Choose group first");
-		return false;
-	}
-	if(!chosenStudentUsername){
-		chosenStudentUsernameEmpty = true;
-	}
-	
-	if(chosenStudentUsernameEmpty === true){
-		document.getElementById("groupMsg").append(
-				"Student is empty");
-		return false;
-	}
-	$.ajax({
-		url : './DoesUserExist',
-		type : 'GET',
-		data : {
-			"chosenStudentUsername":chosenStudentUsername
-		},
-		success : function(response) {
-			if (!$('#studentMsg').is(':empty')) {
-				$("#studentMsg").empty();
-				doesUserExist = true;
-			}
-			$.ajax({
-				url : './IsChosenStudentAlreadyInGroup',
-				type : 'GET',
-				data : {
-					"chosenGroupId" : chosenGroupId,
-					"chosenStudentUsername":chosenStudentUsername
-				},
-				success : function(response) {
-					
-					if (!$('#studentMsg').is(':empty')) {
-						$("#studentMsg").empty();
-					}
-						chosenStudentUsernameAlreadyInGroup = false;
-				},
-				error : function(data) {
-					if (!$('#studentMsg').is(':empty')) {
-						$("#studentMsg").empty();
-					}
-					chosenStudentUsernameAlreadyInGroup = true;
-					document.getElementById("studentMsg").append(
-							"Student is already in group");
-				}
-			});
-		},
-		error : function(data) {				
-			if (!$('#studentMsg').is(':empty')) {
-				$("#studentMsg").empty();
-			}
-	doesUserExist = false;
-			document.getElementById("studentMsg").append(
-					"Student does not exist");
-		}
-	});
-
-	$( document ).ajaxStop(function() {
-if(chosenStudentUsernameAlreadyInGroup === false && doesUserExist === true){
-	
-	document.getElementById("addStudentToGroupForm").submit();
-}});
-});
-
-	
+												document
+														.getElementById(
+																"addStudentToGroupForm")
+														.submit();
+											}
+										});
+					});
 	function areYouSureRemove(e, username, groupId) {
-		if (confirm("Do you really want to do this?")) {
+		if (confirm("Are you sure, that you want to remove this student from the group?")) {
 			$.ajax({
 				type : 'POST',
 				url : "./RemoveStudentFromGroup",
@@ -267,11 +254,7 @@ if(chosenStudentUsernameAlreadyInGroup === false && doesUserExist === true){
 					}
 					getStudents(groupId);
 					$(".input-invalid").empty();
-					
-					
-					alert('Student is removed successfully')
-					
-
+					alert('Student has been removed successfully!')
 				}
 			});
 		} else {
@@ -280,11 +263,8 @@ if(chosenStudentUsernameAlreadyInGroup === false && doesUserExist === true){
 	}
 
 	$(document).ready(function() {
-
-		
 		$('#chosenGroup').change(function(event) {
 			document.getElementById("searchStudents").value = "";
-
 			if (!$('#listOfStudentsOfGroup').is(':empty')) {
 				$("#listOfStudentsOfGroup").empty();
 			}
@@ -299,7 +279,6 @@ if(chosenStudentUsernameAlreadyInGroup === false && doesUserExist === true){
 			<c:forEach items="${applicationScope.allStudents}" var="student">
 			availableTags.push('${student.username}');
 			</c:forEach>
-
 			$("#searchStudents").autocomplete({
 				source : availableTags,
 				messages : {
@@ -340,9 +319,7 @@ if(chosenStudentUsernameAlreadyInGroup === false && doesUserExist === true){
 						}
 					}
 				});
-
 	}
-
 	function selectOption(index) {
 		document.getElementById("chosenGroup").options.selectedIndex = index;
 	}

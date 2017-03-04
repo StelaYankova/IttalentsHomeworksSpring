@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -10,25 +10,22 @@
 <title>Insert title here</title>
 </head>
 <style>
-#image{
-	position:absolute;
-	   left: 850px;
-	
-}
 </style>
 <body>
 	<%@ include file="navBarStudent.jsp"%>
-	<nav class="breadcrumb-nav">
-	<ul class="breadcrumb">
-		<li><a href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
-			<span class="divider"> <span class="accesshide "><span
-					class="arrow_text"></span>&nbsp;</span>
-		</span></li>
-		
-	</ul>
-	</nav>
-	<div id = "image">
-     <img src="images/logo-black.png" class="img-rounded" width="380" height="236"> 
+	<div id="pageWrapper">
+		<nav class="breadcrumb-nav">
+		<ul class="breadcrumb">
+			<li><a href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
+				<span class="divider"> <span class="accesshide "><span
+						class="arrow_text"></span>&nbsp;</span>
+			</span></li>
+		</ul>
+		</nav>
+		<div id="image">
+			<img src="images/logo-black.png" class="img-rounded" width="380"
+				height="236">
+		</div>
 	</div>
 	<!--<br>
 	<br>

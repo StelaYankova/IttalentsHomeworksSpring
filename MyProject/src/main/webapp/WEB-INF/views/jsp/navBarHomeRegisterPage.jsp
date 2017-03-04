@@ -19,6 +19,42 @@
 	
 </head>
 <style>
+/* body{
+  
+    margin-bottom: 70px;
+   clear: both;
+} */
+#pageWrapper{
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-bottom: 50px;
+}
+.input-invalid {
+	color: red;
+	text-align: center;
+}
+.alert {
+	position: absolute;
+	top: 81px;
+	width: 100%;
+}
+#image {
+	position: absolute;
+	margin-left: 1000px;
+	margin-right: 20px;
+	margin-top: -60px;
+}
+
+.footer{
+   position: absolute;
+  position: fixed;
+    bottom: 0;
+    height: 60px;
+ background-color:  #404040;
+     width: 100%;
+     overflow: hidden; /* will contain if #first is longer than #second */
+     z-index:1;
+}
 
 .input-invalid-login{
 position:absolute;
@@ -56,16 +92,7 @@ float:left;
   display: inline-block;
 
 }
-.footer {
-    position: absolute;
-    position: fixed;
-    bottom: 0;
-    height: 60px;
-    background-color: #404040;
-    width: 100%;
-    overflow: hidden;
-    z-index: 1;
-}
+
 .navbar {
 	background-color: #2E71AC;
 	border-color: #2e6da4;
@@ -99,11 +126,11 @@ float:left;
 				Email:<br> info@ittalents.bg
 			</p>
 		</div>
-		<div id="footerTextPosition3">
+		<!-- <div id="footerTextPosition3">
 			<p class="footerText">
 				Phone:<br> 088xxxxxxx
 			</p>
-		</div>
+		</div> -->
 	</div>
 
 	<nav class="navbar navbar-inverse">
@@ -142,8 +169,11 @@ float:left;
 					</div>
 				</li>
 				<div class="container">
-					<li><a href="./RegisterServlet" style="color: #9d9d9d"><span
-							class="glyphicon glyphicon-log-in btn-sm"></span>Register here</a></li>
+					<li>
+						<a href="./RegisterServlet" style="color: #9d9d9d">
+							<span class="glyphicon glyphicon-log-in btn-sm"></span>Register here
+						</a>
+					</li>
 				</div>
 			</ul>
 		</div>

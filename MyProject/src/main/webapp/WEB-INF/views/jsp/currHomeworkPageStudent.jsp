@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-    
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -10,71 +10,57 @@
 </head>
 <style>
 #textareaComment {
-    max-width: 30%;
+	max-width: 30%;
 }
-#currTaskSolution {
-    max-width: 50%;
-}
-#invalidData{
-	color:red;
-}
-#image {
-	position: absolute;
-	left: 850px;
-/* } */
-#pageContent{
-position: absolute;
-	left: 50px;
-	padding:10px;
-   padding-bottom:60px; 
 
+#currTaskSolution {
+	max-width: 50%;
 }
 
 </style>
 <body>
-
 	<%@ include file="navBarStudent.jsp"%>
-	<nav class="breadcrumb-nav">
-	<ul class="breadcrumb">
-		<li><a href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
-			<span class="divider"> <span class="accesshide "><span
-					class="arrow_text"></span></span>
-		</span></li>
-		<c:if test="${not empty sessionScope.throughtScores}">
+	<div id="pageWrapper">
+		<nav class="breadcrumb-nav">
+		<ul class="breadcrumb">
+			<li><a href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
+				<span class="divider"> <span class="accesshide "><span
+						class="arrow_text"></span></span>
+			</span></li>
+			<c:if test="${not empty sessionScope.throughtScores}">
 
-			<c:if test="${sessionScope.throughtScores == 0}">
-			<li><a
-					href="http://localhost:8080/MyProject/GetHomeworksOfGroupsServlet">Homeworks
-						of chosen group</a> <span class="divider"> <span
-						class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
-				</span></li>
+				<c:if test="${sessionScope.throughtScores == 0}">
+					<li><a
+						href="http://localhost:8080/MyProject/GetHomeworksOfGroupsServlet">Homeworks
+							of chosen group</a> <span class="divider"> <span
+							class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
+					</span></li>
+				</c:if>
+				<c:if test="${sessionScope.throughtScores == 1}">
+					<li><a href="http://localhost:8080/MyProject/SeeScoresServlet">Your
+							scores</a> <span class="divider"> <span class="accesshide "><span
+								class="arrow_text"></span></span>
+					</span></li>
+				</c:if>
 			</c:if>
-			<c:if test="${sessionScope.throughtScores == 1}">
-			<li><a href="http://localhost:8080/MyProject/SeeScoresServlet">Your
-						scores</a> <span class="divider"> <span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
+			<c:if test="${ empty sessionScope.throughtScores}">
+				<c:if test="${ empty sessionScope.throughtGroups}">
+					<li><a href="http://localhost:8080/MyProject/SeeScoresServlet">Your
+							scores</a> <span class="divider"> <span class="accesshide "><span
+								class="arrow_text"></span></span>
+					</span></li>
+				</c:if>
 			</c:if>
-		</c:if>
-		<c:if test="${ empty sessionScope.throughtScores}">
-			<c:if test="${ empty sessionScope.throughtGroups}">
-				<li><a href="http://localhost:8080/MyProject/SeeScoresServlet">Your
-						scores</a> <span class="divider"> <span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
-			</c:if>
-		</c:if>
-		<li><a href="http://localhost:8080/MyProject/GetHomeworkServlet">Current
-				chosen homework</a> <span class="divider"> <span
-				class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
-		</span></li>
-	</ul>
-	</nav>
-	<div id="image">
-		<img src="images/logo-black.png" class="img-rounded" width="380"
-			height="236">
-	</div>
-	<div id="pageContent">
+			<li><a href="http://localhost:8080/MyProject/GetHomeworkServlet">Current
+					chosen homework</a> <span class="divider"> <span
+					class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
+			</span></li>
+		</ul>
+		</nav>
+		<div id="image">
+			<img src="images/logo-black.png" class="img-rounded" width="380"
+				height="236">
+		</div>
 		<br>
 		<form style="display: inline" action="./ReadHomeworkServlet"
 			method="GET">
@@ -116,22 +102,15 @@ position: absolute;
 						<c:if test="${sessionScope.hasUploadTimeCome == 'true'}">
 							<form action="./UploadSolutionServlet" method="POST"
 								enctype="multipart/form-data" id="uploadSolutionForm">
-
 								<input type="hidden" value="${i}" name="taskNum"><input
 									type="file" accept="application/java" size="50" name="file"
-									id="file">
-								<!--   <button class="btn btn-default btn-xs" type="Submit">Upload
-									solution</button>-->
-								<input type="submit" class="btn btn-default btn-xs"
-									value="Upload
+									id="file"> <input type="submit"
+									class="btn btn-default btn-xs" value="Upload
 									solution">
-
-
 							</form>
-							<div id="invalidData">
+							<div class="invalidData">
 								<c:if test="${sessionScope.currTaskUpload+1 == i}">
 									<p id="fileMsg" class="input-invalid"></p>
-
 									<c:if test="${sessionScope.wrongContentType == true}">You can upload only .java files</c:if>
 									<c:if test="${sessionScope.wrongSize == true}">You can upload only files up to 1 MB</c:if>
 								</c:if>
@@ -140,7 +119,6 @@ position: absolute;
 					</c:if>
 				</div>
 			</c:forEach>
-
 			<br> <br>
 			<c:if test="${sessionScope.hasUploadTimeCome == 'true'}">
 				<div id="taskUpload" style="visibility: hidden"></div>
@@ -173,107 +151,113 @@ position: absolute;
 	<c:if test="${not empty sessionScope.currTaskSolution}">
 		<c:remove var="currTaskSolution" scope="session" />
 	</c:if>
-	<%-- <c:if test="${not empty sessionScope.throughtScores}">
-		<c:remove var="throughtScores" scope="session" />
-	</c:if> --%>
-	
 	<script>
-	document.getElementById("currTaskSolution").addEventListener("change", saveChangedText);
-	
-	function saveChangedText(){
-		var taskNum = sessionStorage.getItem("currTask");
-		var text = document.getElementById("currTaskSolution").value;
-		$.ajax({
-			url: './SaveChangedSolutionText',
-			type : 'POST',
-			data : {
-				"taskNum" : taskNum,
-				"text" : text
-			},
-			error : function(data){
-				if(data.status == 400){
-					alert("File cannot be empty and should be smaller than 1 MB");
-					document.getElementById("currTaskSolution").value = sessionStorage.getItem("currTaskSolution");
-				}
-			}
-		})
-	}
-	
-	function seeTaskSolution(taskNum){
-		$.ajax({
-			url : './ReadJavaFileServlet',
-			data : {
-				"taskNum" : taskNum
-			},
-			type : 'GET',
-			dataType: 'json',
-			success : function(response) {
-				var uploaded = response.uploadedOn;
-				var uploadedRep = uploaded.replace("T", " ");
-				$("#taskUpload").html("<br><br><br><br>Task " + taskNum + " uploaded on: " + uploadedRep);
-				$("#currTaskSolution").html(response.solution);
-				document.getElementById("taskUpload").style.visibility = "visible";
-				document.getElementById("currTaskSolution").style.visibility = "visible";
-				if(uploaded === "-"){
-					document.getElementById("currTaskSolution").disabled = true;
-				}
-				sessionStorage.setItem("currTask", taskNum);
-				sessionStorage.setItem("currTaskSolution", response.solution);
-			}
-		});
-	}
-	 function isFileValidCheck() {
+		document.getElementById("currTaskSolution").addEventListener("change",
+				saveChangedText);
+		function saveChangedText() {
+			var taskNum = sessionStorage.getItem("currTask");
+			var text = document.getElementById("currTaskSolution").value;
+			$
+					.ajax({
+						url : './SaveChangedSolutionText',
+						type : 'POST',
+						data : {
+							"taskNum" : taskNum,
+							"text" : text
+						},
+						error : function(data) {
+							if (data.status == 400) {
+								alert("File cannot be empty and should be smaller than 1MB");
+								document.getElementById("currTaskSolution").value = sessionStorage
+										.getItem("currTaskSolution");
+							}
+						}
+					})
+		}
+		function seeTaskSolution(taskNum) {
+			$
+					.ajax({
+						url : './ReadJavaFileServlet',
+						data : {
+							"taskNum" : taskNum
+						},
+						type : 'GET',
+						dataType : 'json',
+						success : function(response) {
+							var uploaded = response.uploadedOn;
+							var uploadedRep = uploaded.replace("T", " ");
+							$("#taskUpload").html(
+									"<br><br><br><br>Task " + taskNum
+											+ " uploaded on: " + uploadedRep);
+							$("#currTaskSolution").html(response.solution);
+							document.getElementById("taskUpload").style.visibility = "visible";
+							document.getElementById("currTaskSolution").style.visibility = "visible";
+							if (uploaded === "-") {
+								document.getElementById("currTaskSolution").disabled = true;
+							}
+							sessionStorage.setItem("currTask", taskNum);
+							sessionStorage.setItem("currTaskSolution",
+									response.solution);
+						}
+					});
+		}
+		function isFileValidCheck() {
 			var file = document.forms["uploadSolutionForm"]["file"].value;
 			var val = file.toLowerCase();
 			var regex = new RegExp("(.*?)\.(java)$");
 			if (!(regex.test(val))) {
 				return false;
 			}
-			
-			 var size = (document.forms["uploadSolutionForm"]["file"].files[0].size/1024/1024).toFixed(2);
-			if(size > 1){
+			var size = (document.forms["uploadSolutionForm"]["file"].files[0].size / 1024 / 1024)
+					.toFixed(2);
+			if (size > 1) {
 				return false;
 			}
 			return true;
 		}
-	 
-	$('#uploadSolutionForm').submit(function(e) {
-		e.preventDefault();
-		var file = document.forms["uploadSolutionForm"]["file"].value;
-		if(file == ""){
-			isFileValid = false;
-			return false;
-		}
-		var isFileValid = isFileValidCheck();
-		if(!isFileValid){
-			if (!$('#fileMsg').is(':empty')) {
-				$("#fileMsg").empty();
-			}
-			document.getElementById("fileMsg").append(
-			"File format-java, maxSize - 1MB");
-		}
-		$( document ).ajaxStop(function() {
 
-		if(isFileValid === true){
-			document.getElementById("uploadSolutionForm").submit();
-		}
+		$('#uploadSolutionForm')
+				.submit(
+						function(e) {
+							e.preventDefault();
+							var file = document.forms["uploadSolutionForm"]["file"].value;
+							if (file == "") {
+								isFileValid = false;
+								return false;
+							}
+							var isFileValid = isFileValidCheck();
+							if (!isFileValid) {
+								if (!$('#fileMsg').is(':empty')) {
+									$("#fileMsg").empty();
+								}
+								document.getElementById("fileMsg").append(
+										"File format-java, maxSize - 1MB");
+							}
+							$(document).ajaxStop(
+									function() {
+
+										if (isFileValid === true) {
+											document.getElementById(
+													"uploadSolutionForm")
+													.submit();
+										}
+									});
+						});
+		$(function() {
+			$.ajaxSetup({
+				statusCode : {
+					401 : function() {
+						location.href = '/MyProject/index';
+					},
+					403 : function() {
+						location.href = '/MyProject/forbiddenPage';
+					},
+					500 : function() {
+						location.href = '/MyProject/exceptionPage';
+					}
+				}
+			});
 		});
-	});
-	$(function () {
-	      $.ajaxSetup({
-	        statusCode: {
-	          401: function () {
-	            location.href = '/MyProject/index';
-	          },
-	          403: function () {
-		            location.href = '/MyProject/forbiddenPage';
-		      },
-		      500: function(){
-		    	  location.href = '/MyProject/exceptionPage';
-		      }
-	        }
-	      });
-	    });
 	</script>
 </body>
 </html>

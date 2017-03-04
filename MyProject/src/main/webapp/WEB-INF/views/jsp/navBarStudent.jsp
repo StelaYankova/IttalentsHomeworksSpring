@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -21,7 +21,39 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
 </head>
 <style>
-
+#pageWrapper{
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-bottom: 50px;
+}
+.input-invalid {
+	color: red;
+	text-align: center;
+}
+.alert {
+	position: absolute;
+	top: 81px;
+	width: 100%;
+}
+#image {
+	position: absolute;
+	margin-left: 1000px;
+	margin-right: 20px;
+	margin-top: -60px;
+}
+.invalidData {
+	color: red;
+}
+.wrapword {
+	white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+	white-space: -webkit-pre-wrap; /*Chrome & Safari */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	white-space: pre-wrap; /* css-3 */
+	word-wrap: break-word; /* Internet Explorer 5.5+ */
+	word-break: break-all;
+	white-space: normal;
+}
 .footerText{
 	color:white;
 }
@@ -145,8 +177,6 @@ function seeGroups() {
 		success : function(response) {
 			for ( var i in response) {
 				$('#groups').append(
-						/*"<li><a href = '#' style = 'background-color: #2E71AC;border-color: #2e6da4; color: #9d9d9d' ><form action = './GetHomeworksOfGroupsServlet' method = 'GET'><input type = 'hidden' name = 'groupId' value = "+response[i].id+"><button type = 'button' style ='padding: 0;border: none;background: none; color: #9d9d9d'>"
-								+ response[i].name + "</button></form></a></li>");*/
 						"<li><form action = './GetHomeworksOfGroupsServlet' method = 'GET' style='background-color:#2E71AC'><input type = 'hidden' name = 'groupId' value = "+response[i].id+"><button class='btn btn-link' type = 'submit' style ='padding: 0;border: none;background: #2E71AC; color: #9d9d9d'>"
 						+ response[i].name + "</button></form></li>");
 			}
