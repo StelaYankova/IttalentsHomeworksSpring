@@ -36,7 +36,6 @@ public interface IValidationsDAO {
 	 static final int HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM = 32;
 	 static final int HOMEWORK_HEADING_MAX_LENGTH = 40;
 	 static final int HOMEWORK_HEADING_MIN_LENGTH = 5;
-	 static final int LENGTH_OF_CYPHERED_PASSWORD = 32;
 	 static final String EMAIL_VALIDATION = "^(.+)@(.+)$";
 	 static final int MAX_LENGTH_OF_PASSWORD = 15;
 	 static final int MIN_LENGTH_OF_PASSWORD = 6;
@@ -123,6 +122,6 @@ public interface IValidationsDAO {
 	
 	public String encryptPass(String pass) throws NoSuchAlgorithmException;
 
-	boolean isPasswordUpdateValid(String password);
+	boolean isPasswordUpdateValid(String password, String formerPass);
 
 }

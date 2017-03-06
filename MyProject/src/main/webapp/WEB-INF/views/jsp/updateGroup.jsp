@@ -20,7 +20,7 @@
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
-	<div id="pageWrapper">
+	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
@@ -39,6 +39,8 @@
 				</span></li>
 			</ul>
 		</nav>
+	</div>
+	<div id="pageWrapper">
 		<c:if test="${not empty sessionScope.invalidFields}">
 			<c:if test="${not sessionScope.invalidFields}">
 				<div class="alert alert-success">
@@ -46,12 +48,8 @@
 				</div>
 			</c:if>
 		</c:if>
-		<div id="image">
-			<img src="images/logo-black.png" class="img-rounded" width="380"
-				height="236">
-		</div>
 		<div id="formAddGroup" align="right">
-			<form action="./UpdateGroupServlet" method="POST"
+			<form action="http://localhost:8080/MyProject/UpdateGroupServlet" method="POST"
 				id="updateGroupForm">
 				<label
 					style="position: absolute; left: 290px; text-decoration: underline;">Update
@@ -161,7 +159,7 @@
 			return false;
 		}
 		$.ajax({
-			url : './IsGroupNameUniqueUpdate',
+			url : 'http://localhost:8080/MyProject/IsGroupNameUniqueUpdate',
 			type : 'GET',
 			data : {
 				"name" : name
@@ -172,7 +170,7 @@
 					isNameValid = true;
 				}
 				$.ajax({
-					url : './IsGroupNameValid',
+					url : 'http://localhost:8080/MyProject/IsGroupNameValid',
 					type : 'GET',
 					data : {
 						"name" : name

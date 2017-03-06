@@ -50,7 +50,7 @@ public interface IUserDAO {
 
 	void setTimeOfUploadOfTask(HomeworkDetails hd, Student st, int taskNum, LocalDateTime timeOfUpload) throws UserException;
 
-	void updateUser(User u) throws UserException, ValidationException, NoSuchAlgorithmException;
+	void updateUser(User user, String formerPass)  throws UserException, ValidationException, NoSuchAlgorithmException;
 
 	Student getStudentsByUsername(String string) throws UserException;
 

@@ -26,25 +26,29 @@
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
-	<div id="pageWrapper">
+	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
 					href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
-					<span class="divider"> <span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
+					<span class="divider"><span
+						class="glyphicon glyphicon-menu-right">︎</span> <span
+						class="accesshide "><span class="arrow_text"></span></span> </span></li>
 				<li><a
 					href="http://localhost:8080/MyProject/SeeHomeworksServlet">See/Update
 						homeworks</a> <span class="divider"> <span class="accesshide "><span
-							class="arrow_text"> </span></span></span></li>
+							class="arrow_text"><span
+								class="glyphicon glyphicon-menu-right"></span> </span></span></span></li>
 				<li><a
 					href="http://localhost:8080/MyProject/UpdateHomeworkServlet?chosenHomework=${sessionScope.currHomework.id}">Update
 						homework</a> <span class="divider"> <span class="accesshide "><span
-							class="arrow_text"></span>&nbsp;</span>
+							class="arrow_text"></span><span
+							class="glyphicon glyphicon-menu-right"></span></span>
 				</span></li>
 			</ul>
 		</nav>
+	</div>
+	<div id="pageWrapper">
 		<c:if test="${not empty sessionScope.invalidFields}">
 			<c:if test="${not sessionScope.invalidFields}">
 				<div class="alert alert-success">
@@ -52,12 +56,8 @@
 				</div>
 			</c:if>
 		</c:if>
-		<div id="image">
-			<img src="images/logo-black.png" class="img-rounded" width="300"
-				height="200">
-		</div>
 		<div style="position: absolute; top: 260px; left: 230px; z-index: 1;">
-			<form action="./ReadHomeworkServlet" method="GET" style="">
+			<form action="http://localhost:8080/MyProject/ReadHomeworkServlet" method="GET" style="">
 				<input type='hidden' value='${sessionScope.currHomework.tasksFile}'
 					name='fileName'>
 				<button class='btn btn-link btn-xs' type='submit'>
@@ -67,7 +67,7 @@
 			</form>
 		</div>
 		<div id="formUpdate" align="right">
-			<form action="./RemoveHomeworkDetails" method="POST">
+			<form action="http://localhost:8080/MyProject/RemoveHomeworkDetails" method="POST">
 				<div class="form-group">
 					<div class="col-sm-offset-3 col-sm-2" style="left: 290px">
 						<button type="submit"
@@ -76,7 +76,7 @@
 					</div>
 				</div>
 			</form>
-			<form action="./UpdateHomeworkServlet" method="POST"
+			<form action="http://localhost:8080/MyProject/UpdateHomeworkServlet" method="POST"
 				enctype="multipart/form-data" id="updateHomeworkForm">
 				<label
 					style="position: absolute; left: 290px; text-decoration: underline;">Update
@@ -357,7 +357,7 @@
 							}
 							$
 									.ajax({
-										url : './IsHomeworkUpdateHeadingValid',
+										url : 'http://localhost:8080/MyProject/IsHomeworkUpdateHeadingValid',
 										type : 'GET',
 										data : {
 											"heading" : name
@@ -369,7 +369,7 @@
 											}
 											$
 													.ajax({
-														url : './IsHomeworkUpdateHeadingIsRepeated',
+														url : 'http://localhost:8080/MyProject/IsHomeworkUpdateHeadingIsRepeated',
 														type : 'GET',
 														data : {
 															"heading" : name
@@ -413,7 +413,7 @@
 										}
 									});
 							$.ajax({
-								url : './IsHomeworkUpdateOpeningTimeValid',
+								url : 'http://localhost:8080/MyProject/IsHomeworkUpdateOpeningTimeValid',
 								type : 'GET',
 								data : {
 									"opens" : opens
@@ -435,7 +435,7 @@
 							});
 							$
 									.ajax({
-										url : './IsHomeworkUpdateClosingTimeValid',
+										url : 'http://localhost:8080/MyProject/IsHomeworkUpdateClosingTimeValid',
 										type : 'GET',
 										data : {
 											"opens" : opens,

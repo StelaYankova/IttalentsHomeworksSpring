@@ -14,95 +14,62 @@
 }
 
 #formUpdateProfile {
-	margin-right: 250px;
-	margin-left: 250px;
-	margin-top: 90px;
-	/* position: absolute; */
-	/* left: 60px;
-	top: 220px; */
-	background-color: #ffffff;
-	/* 	width: 500px;
- */
-	/* 	border: 1px solid black;
- */
-}
-
-#inputFields {
-	/* 	align: center;
- */ /* margin-left: 30px;
-	margin-right: 30px; */
-	margin-left: 120px;
-	margin-right: 120px;
-	/*  	border:1px solid black;
- */
-	margin: 10 auto;
-}
-
-.navPath {
-	margin-right: 700px;
-	margin-left: 50px;
-	margin-top: 60px;
+	margin: 0 auto;
+	margin-top: 80px;
+	width: 40%;
 }
 </style>
 <body>
+	<c:if test="${not empty invalidFields}">
+		<c:if test="${not invalidFields}">
+			<div class="alert alert-success">
+				<strong>Success!</strong> Your profile has been updated successfully
+			</div>
+		</c:if>
+	</c:if>
 	<c:if test="${sessionScope.isTeacher == false}">
 		<%@ include file="navBarStudent.jsp"%>
 	</c:if>
 	<c:if test="${sessionScope.isTeacher == true}">
 		<%@ include file="navBarTeacher.jsp"%>
 	</c:if>
-	<div id="pageWrapper">
-		<c:if test="${sessionScope.isTeacher == false}">
-			<div class="navPath">
-				<nav class="breadcrumb-nav">
-					<ul class="breadcrumb">
-						<li><a
-							href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
-							<span class="divider"> <span class="accesshide "><span
-									class="arrow_text"></span></span>
-						</span></li>
-						<li><a
-							href="http://localhost:8080/MyProject/UpdateYourProfileServlet">Your
-								profile</a> <span class="divider"> <span class="accesshide "><span
-									class="arrow_text"></span>&nbsp;</span>
-						</span></li>
-					</ul>
-				</nav>
-			</div>
-		</c:if>
-		<c:if test="${sessionScope.isTeacher == true}">
-			<div class="navPath">
-				<nav class="breadcrumb-nav">
-					<ul class="breadcrumb">
-						<li><a
-							href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
-							<span class="divider"> <span class="accesshide "><span
-									class="arrow_text"></span></span>
-						</span></li>
-						<li><a
-							href="http://localhost:8080/MyProject/UpdateYourProfileServlet">Your
-								profile</a> <span class="divider"> <span class="accesshide "><span
-									class="arrow_text"></span>&nbsp;</span>
-						</span></li>
-					</ul>
-				</nav>
-			</div>
-		</c:if>
-		<c:if test="${not empty invalidFields}">
-			<c:if test="${not invalidFields}">
-				<div class="alert alert-success">
-					<strong>Success!</strong> Your profile has been updated
-					successfully
-				</div>
-			</c:if>
-		</c:if>
-		<div id="image">
-			<img src="images/logo-black.png" class="img-rounded" width="240"
-				height="150">
+	<c:if test="${sessionScope.isTeacher == false}">
+		<div class="navPath">
+			<nav class="breadcrumb-nav">
+				<ul class="breadcrumb">
+					<li><a
+						href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
+						<span class="divider"> <span class="accesshide "><span
+								class="arrow_text"></span></span>
+					</span></li>
+					<li><a
+						href="http://localhost:8080/MyProject/UpdateYourProfileServlet">Your
+							profile</a> <span class="divider"> <span class="accesshide "><span
+								class="arrow_text"></span>&nbsp;</span>
+					</span></li>
+				</ul>
+			</nav>
 		</div>
+	</c:if>
+	<c:if test="${sessionScope.isTeacher == true}">
+		<div class="navPath">
+			<nav class="breadcrumb-nav">
+				<ul class="breadcrumb">
+					<li><a
+						href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+						<span class="divider"><span class="accesshide "><span
+								class="arrow_text"></span></span> </span></li>
+					<li><a
+						href="http://localhost:8080/MyProject/UpdateYourProfileServlet">Your
+							profile</a> <span class="divider"><span class="accesshide "><span
+								class="arrow_text"></span></span> </span></li>
+				</ul>
+			</nav>
+		</div>
+	</c:if>
+	<div id="pageWrapper">
 		<div id="formUpdateProfile" align="center">
-			<label style="text-decoration: underline;">Update profile</label> <br>
-			<br> <br>
+			<legend style="text-align: left">Update profile</legend>
 			<c:if test="${not empty invalidFields}">
 				<c:if test="${invalidFields}">
 					<p class="input-invalid-or-empty">Invalid fields</p>
@@ -111,18 +78,18 @@
 			<c:if test="${emptyFields}">
 				<p class="input-invalid-or-empty">Empty fields</p>
 			</c:if>
-			<form action="./UpdateYourProfileServlet" method="POST"
+			<form action="http://localhost:8080/MyProject/UpdateYourProfileServlet" method="POST"
 				id="updateForm" name="updateForm" class="form-horizontal">
 				<div id="inputFields">
-					<div class="form-group" style="text-align: center">
-						<label class="control-label col-sm-6">Username</label>
-						<div class="col-sm-6">
+					<div class="form-group">
+						<label class="control-label col-sm-4" style="padding-right: 30px;">Username:</label>
+						<div class="col-sm-3">
 							<c:out value="${sessionScope.user.username}"></c:out>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-6">Password</label>
-						<div class="col-sm-6">
+						<label class="control-label col-sm-4" style="padding-right: 30px;">Password:</label>
+						<div class="col-sm-7">
 							<input type="password" class="form-control"
 								value="${sessionScope.user.password}" name="password"
 								placeholder="Enter password" maxlength="15"
@@ -131,7 +98,6 @@
 								data-content="Size of password - 6 to 15 symbols. Valid inputs are numbers and letters (large and small)"
 								required />
 							<c:if test="${not empty validPass}">
-
 								<c:if test="${not validPass}">
 									<p id="passwordMsg" class="input-invalid">Password is not
 										valid</p>
@@ -140,9 +106,10 @@
 							<p id="passwordMsg" class="input-invalid"></p>
 						</div>
 					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-6">Repeat new password</label>
-						<div class="col-sm-6">
+					<div class="form-group ">
+						<label class="control-label col-sm-4" style="padding-right: 30px;">Repeat
+							password:</label>
+						<div class="col-sm-7">
 							<input type="password" class="form-control"
 								placeholder="Repeat password"
 								value="${sessionScope.user.password}" maxlength="15"
@@ -157,8 +124,8 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-6">Email</label>
-						<div class="col-sm-6">
+						<label class="control-label col-sm-4" style="padding-right: 30px;">Email:</label>
+						<div class="col-sm-7">
 							<input type="email" class="form-control"
 								placeholder="Enter email" value="${sessionScope.user.email}"
 								name="email" required />
@@ -172,15 +139,23 @@
 					</div>
 					<br>
 					<div class="form-group">
-						<div class="col-sm-offset-3 col-sm-2" style="left: 290px">
-							<input style="align: right" type="submit" class="btn btn-default"
-								value="Register">
+						<div class="col-md-offset-7 col-sm-5">
+							<input
+								style="margin-right: 30px; background-color: #2E71AC; color: #ffffff"
+								type="submit" class=" form-control btn btn-default"
+								value="Update">
 						</div>
 					</div>
 				</div>
 			</form>
 		</div>
 	</div>
+	<c:if test="${not empty invalidFields}">
+		<c:remove var="invalidFields" scope="session" />
+	</c:if>
+	<c:if test="${not empty emptyFields}">
+		<c:remove var="emptyFields" scope="session" />
+	</c:if>
 </body>
 <script>
 	function checkIsEmailValid() {
@@ -239,7 +214,7 @@
 							if (password.length !== 32) {
 								$
 										.ajax({
-											url : './IsPasswordValid',
+											url : 'http://localhost:8080/MyProject/IsPasswordValid',
 											type : 'GET',
 											data : {
 												"password" : password

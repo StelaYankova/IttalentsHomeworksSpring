@@ -499,9 +499,9 @@ public class ValidationsDAO implements IValidationsDAO{
 	}
 
 	@Override
-	public boolean isPasswordUpdateValid(String pass) {
+	public boolean isPasswordUpdateValid(String pass, String formerPass) {
 		boolean isPasswordValid = true;
-		if (pass.length() != ValidationsDAO.LENGTH_OF_CYPHERED_PASSWORD) {
+		if (!pass.equals(formerPass)) {
 			if (pass.length() >= ValidationsDAO.MIN_LENGTH_OF_PASSWORD && pass.length() <= ValidationsDAO.MAX_LENGTH_OF_PASSWORD) {
 				for (int i = 0; i < pass.length(); i++) {
 					if (!(((int) pass.charAt(i) >= ValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO && (int) pass.charAt(i) <= ValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)

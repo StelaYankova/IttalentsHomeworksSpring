@@ -3,87 +3,64 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
-<html>
+<html lang="en"
+	class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<!--<![endif]-->
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<title>Insert title here</title>
+<!-- <base href="http://ittalents.bg/">
+ --><meta charset="utf-8">
+<!-- <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ --><title>IT Talents</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <style>
+#footer {
+	position: fixed;
+	hight: 20px;
+	bottom: 0px;
+	background-color: #2E71AC;
+ 	margin-left: 0px;
+  width:100%;}
+ .title{
+ 	padding-top:10px;
+ 	color:#ffffff;
+ }
+ .description{
+ 	color:blue;
+ }
 </style>
 <body>
-	<%@ include file="navBarStudent.jsp"%>
-	<div id="pageWrapper">
-		<nav class="breadcrumb-nav">
-		<ul class="breadcrumb">
-			<li><a href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
-				<span class="divider"> <span class="accesshide "><span
-						class="arrow_text"></span>&nbsp;</span>
-			</span></li>
-		</ul>
-		</nav>
-		<div id="image">
-			<img src="images/logo-black.png" class="img-rounded" width="380"
-				height="236">
-		</div>
-	</div>
-	<!--<br>
-	<br>
-	<a href = "./LogoutServlet"> Logout </a>
-	<a href = "./UpdateYourProfileServlet">Your profile</a>
-	<button onclick="seeGroups()">Your groups:</button>
-	<form action = "./SeeScoresServlet" method = "GET">
-		<button type = "submit">Your scores</button>
-	</form>
-	<div id="groups">
-	</div>
-	<div id = "homeworks">
-	</div>
-	<script>
-		function seeGroups() {
-			if(!$('#groups').is(':empty') ) {
-				$( "#groups" ).empty();
-			}
-			$.ajax({
-				url : './GetGroupsOfUserServlet',
-				type : 'GET',
-				dataType : 'json',
-				success : function(response) {
-					for ( var i in response) {
-						$('#groups').append(
-								"<button id = 'response[i].id' onclick = 'seeHomeworks("
-										+ response[i].id + ")'>"
-										+ response[i].name + "</button>");
-					}
-				}
-			});
-		}
-
-		function seeHomeworks(groupId) {
-			if(!$('#homeworks').is(':empty') ) {
-				$( "#homeworks" ).empty();
-			}
-			console.log(groupId);
-			$.ajax({
-				url : './GetHomeworksOfGroupsServlet',
-				type : 'GET',
-				dataType : 'json',
-				data : {
-					groupId : groupId
-				},
-				success : function(response) {
-					for ( var h in response) {
-						var id = response[h].id;console.log(id)
-						$('#homeworks').append('<br><form action = "./GetHomeworkServlet" method = "GET"><input type = "hidden" name = "id" value = ' +id + '><button type = "submit">' + response[h].heading + '</form>');
-						homeworkId = id;
-						$('#homeworks').append(
-								'  ' + response[h].timeLeft + ' days left');
-
-					}
-
-				}
-			});
-		}
-	</script>-->
+				<%@ include file="navBarStudent.jsp"%>
+			
+				<!-- <div id="footer" class="row">
+					<div class="footer">
+					<div class = "row">
+						<div class="col-sm-3">
+							<img src="http://ittalents.bg/images/logo-white.png" height="70px" width="auto" alt="logo">
+						</div>
+						<div class="col-sm-9">
+							<div class="col-sm-6 col-xs-6 contact col-md-4">
+								<div class="title">София 1404, Infinity Tower<br>
+									бул. България 69, ет.14</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="title">Телефон</div>
+								<div class="description">
+									08xx xxx xxx
+								</div>
+							</div>
+				<div class="col-sm-4">
+					<div class="title">Email</div>
+					<div class="description">
+						info@ittalents.bg
+					</div>
+				</div></div></div>
+				
+					</div></div> -->
+					
 </body>
 </html>

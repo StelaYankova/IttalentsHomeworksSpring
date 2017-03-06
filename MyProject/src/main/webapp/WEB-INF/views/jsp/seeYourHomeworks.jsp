@@ -18,24 +18,23 @@
 </style>
 <body>
 	<%@ include file="navBarStudent.jsp"%>
-	<div id="pageWrapper">
+	<div class="navPath">
 		<nav class="breadcrumb-nav">
-		<ul class="breadcrumb">
-			<li><a href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
-				<span class="divider"> <span class="accesshide "><span
-						class="arrow_text"></span></span>
-			</span></li>
-			<li><a
-				href="http://localhost:8080/MyProject/GetHomeworksOfGroupsServlet">Homeworks
-					of chosen group</a> <span class="divider"> <span
-					class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
-			</span></li>
-		</ul>
+			<ul class="breadcrumb">
+				<li><a
+					href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
+					<span class="divider"> <span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
+				<li><a
+					href="http://localhost:8080/MyProject/GetHomeworksOfGroupsServlet">Homeworks
+						of chosen group</a> <span class="divider"> <span
+						class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
+				</span></li>
+			</ul>
 		</nav>
-		<div id="image">
-			<img src="images/logo-black.png" class="img-rounded" width="380"
-				height="236">
-		</div>
+	</div>
+	<div id="pageWrapper">
 		<br>
 		<div id="divTable">
 			<table border="1"
@@ -51,7 +50,7 @@
 					<c:forEach var="homework"
 						items="${sessionScope.currHomeworksOfGroup}">
 						<tr>
-							<td><form action="./GetHomeworkServlet" method="GET">
+							<td><form action="http://localhost:8080/MyProject/GetHomeworkServlet" method="GET">
 									<input type="hidden" name="id" value='${homework.id}'>
 									<button type="submit" class="btn btn-link">
 										<c:out value="${homework.heading}" />
@@ -68,6 +67,8 @@
 			</table>
 		</div>
 	</div>
+						<%@ include file="footer.jsp"%>
+	
 </body>
 <script>
 	$(document).ready(function() {

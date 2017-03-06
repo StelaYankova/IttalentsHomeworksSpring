@@ -7,7 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script
@@ -16,14 +16,10 @@
 	href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8"
 	src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
-	
+	 -->
 </head>
-<style>
-body{
-  
-    margin-bottom: 70px;
-   clear: both;
-}
+<!-- <style>
+
 #pageWrapper{
 	margin-left: 20px;
 	margin-right: 20px;
@@ -38,6 +34,13 @@ body{
 	top: 81px;
 	width: 100%;
 }
+#image {
+	position: absolute;
+	margin-left: 1000px;
+	margin-right: 20px;
+	margin-top: -60px;
+}
+
 .footer{
    position: absolute;
   position: fixed;
@@ -88,11 +91,19 @@ float:left;
 
 .navbar {
 	background-color: #2E71AC;
-	border-color: #2e6da4;
+/* 	border-color: #2e6da4;
+ */		margin-bottom: 0px;
+	
 }
 .container{
 	    text-align: right;
-	
+		padding-left:150px;
+		padding-right:50px;
+}
+.header-menu {
+    float: left;
+    line-height: 26px;
+    margin-left:10px;
 }
 #formFields {
 	top: 110px;
@@ -106,9 +117,21 @@ float:left;
 }
 
 .navbar {min-height:28px !important;}
-</style>
+#formContainer{
+	padding-left:200px;
+}
+.navbar-header{
+	z-index:1;
+}
+#img-href{
+	position:absolute;
+	z-index:1;
+}
+</style> -->
 <body>
-	<div class="footer">
+					<%@ include file="footer.jsp"%>
+
+	<!-- <div class="footer">
 		<div id="footerTextPosition1">
 			<p class="footerText">
 				Address:<br>bul. "Bulgaria" 69, 1404 Sofia
@@ -119,32 +142,32 @@ float:left;
 				Email:<br> info@ittalents.bg
 			</p>
 		</div>
-		<!-- <div id="footerTextPosition3">
+		<div id="footerTextPosition3">
 			<p class="footerText">
 				Phone:<br> 088xxxxxxx
 			</p>
-		</div> -->
-	</div>
+		</div> 
+	</div>-->
 
-	<nav class="navbar navbar-inverse" >
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="homePage.jsp"
-					style="padding-top: 30px"> ITTalents Homework System</a>
+	<nav class="navbar navbar-inverse" style = "background-color:none">
+		<div class="container-fluid" style = "background-color:none">
+			<div class="navbar-header" style = "background-color:none; z-index:1">
+				<a class="navbar-brand" href="http://localhost:8080/MyProject/index"
+					style="padding-top: 30px; padding-left:80px;"> <img id = "img-href" src = "http://ittalents.bg/images/logo-white.png" height = "70px" width="auto"></a>
 			</div>
-			<ul class="nav navbar-nav navbar-right">
+			<ul class="nav navbar-nav navbar-right header-menu"  >
+			
 				<li>
+				
 					<div class="container">
 						<form class="form-inline" action="http://localhost:8080/MyProject/LoginServlet" method="POST"
 							name="signInForm" id="signInForm">
-							<div class="form-group">
-								<label>Username:</label> <input type="text"
-									class=" form-control input-sm" maxlength="15"
-									value="${sessionScope.usernameTry}" name="username"  required/>
+							<div class="form-group"><input type="text"
+									class=" form-control input-md" maxlength="15"
+									value="${sessionScope.usernameTry}" placeholder = "Username" name="username"  required/>
 							</div>
-							<div class="form-group">
-								<label>Password:</label> <input type="password"
-									class="form-control input-sm" value="${sessionScope.passwordTry}"
+							<div class="form-group"><input type="password"
+									class="form-control input-md" placeholder = "Password" value="${sessionScope.passwordTry}"
 									maxlength="15" name="password"  required/>
 							</div>
 							<input style="align: right" type="submit"
@@ -180,6 +203,7 @@ float:left;
 	<c:if test="${not empty sessionScope.passwordTry}">
 		<c:remove var="passwordTry" scope="session" />
 	</c:if>
+	
 </body>
 <script>
 	$('#signInForm')

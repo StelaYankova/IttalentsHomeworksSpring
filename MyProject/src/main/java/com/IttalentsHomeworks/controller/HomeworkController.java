@@ -19,6 +19,7 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -394,68 +395,134 @@ public class HomeworkController {
 		}
 		return "forbiddenPage";
 	}
-
-	@RequestMapping(value = "/GetHomeworksOfGroupsServlet", method = RequestMethod.GET)
-	protected String getHomeworksOfGroups(HttpServletRequest request, HttpServletResponse response)
+	
+	@RequestMapping(value = { "/GetHomeworksOfGroupsServlet" }, method = RequestMethod.GET)
+	protected String getHomeworksOfGroupsNoGroupIdInUrl(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User userTry = (User) request.getSession().getAttribute("user");
 		request.getSession().setAttribute("throughtScores", 0);
-
 		if (!userTry.isTeacher()) {
 			User user = (User) request.getSession().getAttribute("user");
-			String groupChosen = request.getParameter("groupId");
-			if(groupChosen != null){
-				int length = request.getParameter("groupId").length();
-				String number = request.getParameter("groupId");
+			String groupChosen = request.getSession().getAttribute("chosenGroup").toString();
+			if (groupChosen != null) {
+				int length = groupChosen.length();
+				String number = groupChosen;
 				if (length > IValidationsDAO.MIN_SIZE_OF_INTEGER && length < IValidationsDAO.MAX_SIZE_OF_INTEGER) {
 					for (int i = 0; i < length; i++) {
-						if ((int) number.charAt(i) < IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO || (int) number.charAt(i) > IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE) {
+						if ((int) number.charAt(i) < IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO
+								|| (int) number.charAt(i) > IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE) {
 							return "pageNotFound";
 						}
 					}
-				}else{
+				} else {
 					return "pageNotFound";
 				}
-			try {
-				int groupId = Integer.parseInt(groupChosen);
-				boolean doesUserHaveGroup = false;
-				Group group = null;
-				for (Group g : user.getGroups()) {
-					if (g.getId() == groupId) {
-						group = g;
-						doesUserHaveGroup = true;
-						break;
+				try {
+					int groupId = Integer.parseInt(groupChosen);
+					boolean doesUserHaveGroup = false;
+					Group group = null;
+					for (Group g : user.getGroups()) {
+						if (g.getId() == groupId) {
+							group = g;
+							doesUserHaveGroup = true;
+							break;
+						}
 					}
+					if (doesUserHaveGroup) {
+						ArrayList<HomeworkDetails> homeworks = new ArrayList<>();
+						for (HomeworkDetails h : group.getHomeworks()) {
+							long days = LocalDateTime.now().until(h.getClosingTime(), ChronoUnit.DAYS);
+							HomeworkDetails currHd = new HomeworkDetails(h.getHeading(), h.getOpeningTime(),
+									h.getClosingTime(), h.getNumberOfTasks(), h.getTasksFile());
+							currHd.setDaysLeft((int) days);
+							currHd.setId(GroupDAO.getInstance().getHomeworkDetailsId(currHd));
+							homeworks.add(currHd);
+						}
+						request.getSession().setAttribute("chosenGroup", groupId);
+						request.getSession().setAttribute("currHomeworksOfGroup", homeworks);
+					} else {
+
+						return "forbiddenPage";
+					}
+				} catch (GroupException e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+					return "exception";
 				}
-				if(doesUserHaveGroup){
-				ArrayList<HomeworkDetails> homeworks = new ArrayList<>();
-				for (HomeworkDetails h : group.getHomeworks()) {
-					long days = LocalDateTime.now().until(h.getClosingTime(), ChronoUnit.DAYS);
-					HomeworkDetails currHd = new HomeworkDetails(h.getHeading(), h.getOpeningTime(), h.getClosingTime(),
-							h.getNumberOfTasks(), h.getTasksFile());
-					currHd.setDaysLeft((int) days);
-					currHd.setId(GroupDAO.getInstance().getHomeworkDetailsId(currHd));
-					homeworks.add(currHd);
-				}
-				request.getSession().setAttribute("chosenGroup", groupId);
-				request.getSession().setAttribute("currHomeworksOfGroup", homeworks);
-				}else{
-					
-					return "forbiddenPage";
-				}
-			} catch (GroupException e) {
-				System.out.println(e.getMessage());
-				e.printStackTrace();
-				return "exception";
-			}
-			
-			return "seeYourHomeworks";
-		}else{
-			if(request.getSession().getAttribute("chosenGroup") != null){
+
 				return "seeYourHomeworks";
+			} else {
+				if (request.getSession().getAttribute("chosenGroup") != null) {
+					return "seeYourHomeworks";
+				}
+				return "pageNotFound";
 			}
-			return "pageNotFound";
 		}
+		return "forbiddenPage";
+	}
+
+	@RequestMapping(value = { "/GetHomeworksOfGroupsServlet/{groupIdUrl}" }, method = RequestMethod.GET)
+	protected String getHomeworksOfGroups(@PathVariable(value = "groupIdUrl") final String groupIdUrl,
+			HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		User userTry = (User) request.getSession().getAttribute("user");
+		request.getSession().setAttribute("throughtScores", 0);
+		System.out.println("The id : " + groupIdUrl);
+		if (!userTry.isTeacher()) {
+			User user = (User) request.getSession().getAttribute("user");
+			String groupChosen = groupIdUrl;
+			if (groupChosen != null) {
+				int length = groupIdUrl.length();
+				String number = groupIdUrl;
+				if (length > IValidationsDAO.MIN_SIZE_OF_INTEGER && length < IValidationsDAO.MAX_SIZE_OF_INTEGER) {
+					for (int i = 0; i < length; i++) {
+						if ((int) number.charAt(i) < IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO
+								|| (int) number.charAt(i) > IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE) {
+							return "pageNotFound";
+						}
+					}
+				} else {
+					return "pageNotFound";
+				}
+				try {
+					int groupId = Integer.parseInt(groupChosen);
+					boolean doesUserHaveGroup = false;
+					Group group = null;
+					for (Group g : user.getGroups()) {
+						if (g.getId() == groupId) {
+							group = g;
+							doesUserHaveGroup = true;
+							break;
+						}
+					}
+					if (doesUserHaveGroup) {
+						ArrayList<HomeworkDetails> homeworks = new ArrayList<>();
+						for (HomeworkDetails h : group.getHomeworks()) {
+							long days = LocalDateTime.now().until(h.getClosingTime(), ChronoUnit.DAYS);
+							HomeworkDetails currHd = new HomeworkDetails(h.getHeading(), h.getOpeningTime(),
+									h.getClosingTime(), h.getNumberOfTasks(), h.getTasksFile());
+							currHd.setDaysLeft((int) days);
+							currHd.setId(GroupDAO.getInstance().getHomeworkDetailsId(currHd));
+							homeworks.add(currHd);
+						}
+						request.getSession().setAttribute("chosenGroup", groupId);
+						request.getSession().setAttribute("currHomeworksOfGroup", homeworks);
+					} else {
+
+						return "forbiddenPage";
+					}
+				} catch (GroupException e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+					return "exception";
+				}
+
+				return "seeYourHomeworks";
+			} else {
+				if (request.getSession().getAttribute("chosenGroup") != null) {
+					return "seeYourHomeworks";
+				}
+				return "pageNotFound";
+			}
 		}
 		return "forbiddenPage";
 	}

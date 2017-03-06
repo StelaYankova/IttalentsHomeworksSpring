@@ -25,24 +25,23 @@
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
-	<div id="pageWrapper">
+	<div class="navPath">
 		<nav class="breadcrumb-nav">
-		<ul class="breadcrumb">
-			<li><a href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
-				<span class="divider"> <span class="accesshide "><span
-						class="arrow_text"></span></span>
-			</span></li>
-			<li><a
-				href="http://localhost:8080/MyProject/SeeHomeworksServlet">See/Update
-					homeworks</a> <span class="divider"> <span class="accesshide "><span
-						class="arrow_text"></span>&nbsp;</span>
-			</span></li>
-		</ul>
+			<ul class="breadcrumb">
+				<li><a
+					href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+					<span class="divider"> <span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
+				<li><a
+					href="http://localhost:8080/MyProject/SeeHomeworksServlet">See/Update
+						homeworks</a> <span class="divider"> <span class="accesshide "><span
+							class="arrow_text"></span>&nbsp;</span>
+				</span></li>
+			</ul>
 		</nav>
-		<div id="image">
-			<img src="images/logo-black.png" class="img-rounded" width="380"
-				height="236">
-		</div>
+	</div>
+	<div id="pageWrapper">
 		<input type="hidden" id="refresh" value="no">
 		<c:if test="${not empty invalidFields}">
 			<c:if test="${not invalidFields}">
@@ -119,7 +118,7 @@
 														":selected").val();
 												$
 														.ajax({
-															url : './seeHomeworksOfGroupServlet',
+															url : 'http://localhost:8080/MyProject/seeHomeworksOfGroupServlet',
 															type : 'GET',
 															cache : false,
 															data : {
@@ -163,7 +162,7 @@
 																										+ "</button>",
 																								opensRep,
 																								closesRep,
-																								"<form action = './UpdateHomeworkServlet' method = 'GET'><input type = 'hidden' name = 'chosenHomework' value = "+response[i].id +"><button type = 'submit' style = 'color:black' class='btn btn-link'>Change</button></form>" ])
+																								"<form action = 'http://localhost:8080/MyProject/UpdateHomeworkServlet' method = 'GET'><input type = 'hidden' name = 'chosenHomework' value = "+response[i].id +"><button type = 'submit' style = 'color:black' class='btn btn-link'>Change</button></form>" ])
 																				.draw()
 																				.node();
 																	} else {
@@ -179,7 +178,7 @@
 																										+ "</button>",
 																								opensRep,
 																								closesRep,
-																								"<form action = './UpdateHomeworkServlet' method = 'GET'><input type = 'hidden' name = 'chosenHomework' value = "+response[i].id +"><button type = 'submit' class='btn btn-link' style = 'color:black'>Change</button></form>" ])
+																								"<form action = 'http://localhost:8080/MyProject/UpdateHomeworkServlet' method = 'GET'><input type = 'hidden' name = 'chosenHomework' value = "+response[i].id +"><button type = 'submit' class='btn btn-link' style = 'color:black'>Change</button></form>" ])
 																				.draw()
 																				.node();
 																	}
@@ -198,7 +197,7 @@
 			}
 			$
 					.ajax({
-						url : './getAllStudentsOfGroupServlet',
+						url : 'http://localhost:8080/MyProject/getAllStudentsOfGroupServlet',
 						type : 'GET',
 						data : {
 							"chosenGroupId" : groupId,
@@ -214,7 +213,7 @@
 								if (hasStudentGivenMinOneTask == true) {
 									$('#listOfStudentsOfGroup')
 											.append(
-													"<li><form action = './GetHomeworkOfStudentServlet'><input type = 'hidden' name = 'id' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'submit' class='btn btn-link'>"
+													"<li><form action = 'http://localhost:8080/MyProject/GetHomeworkOfStudentServlet'><input type = 'hidden' name = 'id' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'submit' class='btn btn-link'>"
 															+ response[i].username
 															+ "</button></form></li>");
 									document
@@ -222,7 +221,7 @@
 								} else {
 									$('#listOfStudentsOfGroup')
 											.append(
-													"<li><form action = './GetHomeworkOfStudentServlet'><input type = 'hidden' name = 'id' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'button' style= 'color:#620062' class='btn btn-link'>"
+													"<li><form action = 'http://localhost:8080/MyProject/GetHomeworkOfStudentServlet'><input type = 'hidden' name = 'id' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'button' style= 'color:#620062' class='btn btn-link'>"
 															+ response[i].username
 															+ "</button></form></li>");
 									document
@@ -239,26 +238,6 @@
 		$(document).ready(function(e) {
 			selectOption(0);
 		});
-		/*for(var i in response){
-		
-		var row = $("<tr>");
-		
-		if(groupId === 'allGroups'){
-			row.append($("<td><button type = 'submit' onclick = 'chooseGroupFirst()'>" +response[i].heading + "</button></td>")) 
-			.append($("<td>"+ response[i].opens+"</td>"))
-		     .append($("<td>" +response[i].closes+"</td>"))
-		     .append($("<form action = './UpdateHomeworkServlet' method = 'GET'><input type = 'hidden' name = 'chosenHomework' value = "+response[i].id +"><button type = 'submit'>Change</button></form>"))
-		  $("#resultTable").append(row);
-		
-		}else{
-		row.append($("<td><button type = 'submit' onclick = 'chooseStudent(" + response[i].id +"," + groupId +")'>" +response[i].heading + "</button></td>")) 
-			.append($("<td>"+ response[i].opens+"</td>"))
-		     .append($("<td>" +response[i].closes+"</td>"))
-		     .append($("<form action = './UpdateHomeworkServlet' method = 'GET'><input type = 'hidden' name = 'chosenHomework' value = "+response[i].id +"><button type = 'submit'>Change</button></form>"))
-		  $("#resultTable").append(row);
-		}
-		}*/
-		//});
 		$(function() {
 			$.ajaxSetup({
 				statusCode : {

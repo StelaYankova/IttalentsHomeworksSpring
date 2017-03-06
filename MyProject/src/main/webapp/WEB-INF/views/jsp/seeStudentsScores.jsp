@@ -25,43 +25,43 @@
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
-	<div id="pageWrapper">
-		<c:if test="${sessionScope.isTeacher == false}">
+	<c:if test="${sessionScope.isTeacher == false}">
+		<div class="navPath">
 			<nav class="breadcrumb-nav">
-			<ul class="breadcrumb">
-				<li><a
-					href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
-					<span class="divider"> <span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
-				<li><a
-					href="http://localhost:8080/MyProject/GetStudentsScoresServlet">Your
-						scores</a> <span class="divider"> <span class="accesshide "><span
-							class="arrow_text"></span>&nbsp;</span>
-				</span></li>
-			</ul>
+				<ul class="breadcrumb">
+					<li><a
+						href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
+						<span class="divider"> <span class="accesshide "><span
+								class="arrow_text"></span></span>
+					</span></li>
+					<li><a
+						href="http://localhost:8080/MyProject/GetStudentsScoresServlet">Your
+							scores</a> <span class="divider"> <span class="accesshide "><span
+								class="arrow_text"></span>&nbsp;</span>
+					</span></li>
+				</ul>
 			</nav>
-		</c:if>
-		<c:if test="${sessionScope.isTeacher == true}">
-			<nav class="breadcrumb-nav">
-			<ul class="breadcrumb">
-				<li><a
-					href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
-					<span class="divider"> <span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
-				<li><a
-					href="http://localhost:8080/MyProject/GetStudentsScoresServlet">See
-						student's scores</a> <span class="divider"> <span
-						class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
-				</span></li>
-			</ul>
-			</nav>
-		</c:if>
-		<div id="image">
-			<img src="images/logo-black.png" class="img-rounded" width="380"
-				height="236">
 		</div>
+	</c:if>
+	<c:if test="${sessionScope.isTeacher == true}">
+		<div class="navPath">
+			<nav class="breadcrumb-nav">
+				<ul class="breadcrumb">
+					<li><a
+						href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+						<span class="divider"> <span class="accesshide "><span
+								class="arrow_text"></span></span>
+					</span></li>
+					<li><a
+						href="http://localhost:8080/MyProject/GetStudentsScoresServlet">See
+							student's scores</a> <span class="divider"> <span
+							class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
+					</span></li>
+				</ul>
+			</nav>
+		</div>
+	</c:if>
+	<div id="pageWrapper">
 		Choose group: <select id="chosenGroup" class="selectpicker">
 			<option value="null">-</option>
 			<c:if test="${sessionScope.isTeacher == false}">
@@ -127,7 +127,7 @@
 			var studentId = e1;
 			$
 					.ajax({
-						url : './SeeAllHomeworksOfStudentByGroupServlet',
+						url : 'http://localhost:8080/MyProject/SeeAllHomeworksOfStudentByGroupServlet',
 						type : 'GET',
 						data : {
 							"groupId" : groupId,
@@ -154,7 +154,7 @@
 												.add(
 
 														[
-																"<form action = './GetHomeworkOfStudentServlet' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button type = 'submit' class = 'btn btn-link'>"
+																"<form action = 'http://localhost:8080/MyProject/GetHomeworkOfStudentServlet' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button type = 'submit' class = 'btn btn-link'>"
 																		+ response[i].heading
 																		+ "</button></form>",
 																opensRep,
@@ -167,7 +167,7 @@
 										var rowNode = table.row
 												.add(
 														[
-																"<form action = './GetHomeworkOfStudentServlet' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button style= 'color:#620062' type = 'button' class = 'btn btn-link'>"
+																"<form action = 'http://localhost:8080/MyProject/GetHomeworkOfStudentServlet' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button style= 'color:#620062' type = 'button' class = 'btn btn-link'>"
 																		+ response[i].heading
 																		+ "</button></form>",
 																opensRep,
@@ -196,7 +196,7 @@
 							var groupId = $(this).find(":selected").val();
 							$
 									.ajax({
-										url : './getAllStudentsOfGroupServlet',
+										url : 'http://localhost:8080/MyProject/getAllStudentsOfGroupServlet',
 										type : 'GET',
 										data : {
 											"chosenGroupId" : groupId
@@ -240,15 +240,6 @@
 				}
 			});
 		});
-		/*var row = $("<tr>");
-		 row.append($("<td><form action = './GetHomeworkOfStudentServlet' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button type = 'submit'>" + response[i].heading +"</button></form></td>"))
-		 .append($("<td>"+ response[i].opens+"</td>"))
-		 .append($("<td>" +response[i].closes+"</td>"))
-		 .append($("<td>"+ response[i].teacherScore+"/100</td>"))
-		 .append($("<td>" +response[i].teacherComment+"</td>"));
-		
-
-		 $("#resultTable").append(row);*/
 	</script>
 </body>
 </html>

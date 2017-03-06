@@ -17,27 +17,26 @@
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
-	<div id="pageWrapper">
+	<div class="navPath">
 		<nav class="breadcrumb-nav">
-		<ul class="breadcrumb">
-			<li><a href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
-				<span class="divider"> <span class="accesshide "><span
-						class="arrow_text"></span></span>
-			</span></li>
-			<li><a href="http://localhost:8080/MyProject/SeeGroups">See
-					groups</a> <span class="divider"> <span class="accesshide "><span
-						class="arrow_text"></span></span>
-			</span></li>
-		</ul>
+			<ul class="breadcrumb">
+				<li><a
+					href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+					<span class="divider"> <span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
+				<li><a href="http://localhost:8080/MyProject/SeeGroups">See
+						groups</a> <span class="divider"> <span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
+			</ul>
 		</nav>
-		<div id="image">
-			<img src="images/logo-black.png" class="img-rounded" width="380"
-				height="236">
-		</div>
+	</div>
+	<div id="pageWrapper">
 		<br> <label
 			style="position: absolute; left: 290px; text-decoration: underline;">All
 			groups</label> <br> <br>
-		<form action="./AddGroupServlet" method="GET">
+		<form action="http://localhost:8080/MyProject/AddGroupServlet" method="GET">
 			<button id="createButtonPosition"
 				class="glyphicon glyphicon-plus btn-primary btn btn-xs"
 				type="submit">Create group</button>
@@ -56,13 +55,13 @@
 				<tbody>
 					<c:forEach var="group" items="${applicationScope.allGroups}">
 						<tr>
-							<td><form action="./UpdateGroupServlet" method="GET">
+							<td><form action="http://localhost:8080/MyProject/UpdateGroupServlet" method="GET">
 									<input type="hidden" name="groupId" value="${group.id}">
 									<button class="btn btn-link" type="submit">
 										<c:out value="${group.name}"></c:out>
 									</button>
 								</form>
-							<td><form action="./RemoveGroupServlet" method="POST"
+							<td><form action="http://localhost:8080/MyProject/RemoveGroupServlet" method="POST"
 									id="removeGroupForm">
 									<input type="hidden" name="groupId" value="${group.id}">
 									<button type="submit"

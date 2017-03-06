@@ -31,7 +31,7 @@ ul.ui-autocomplete {
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
-	<div id="pageWrapper">
+	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
@@ -46,6 +46,8 @@ ul.ui-autocomplete {
 				</span></li>
 			</ul>
 		</nav>
+	</div>
+	<div id="pageWrapper">
 		<c:if test="${not empty sessionScope.invalidFields}">
 			<c:if test="${not sessionScope.invalidFields}">
 				<div class="alert alert-success" id="alert">
@@ -53,12 +55,8 @@ ul.ui-autocomplete {
 				</div>
 			</c:if>
 		</c:if>
-		<div id="image">
-			<img src="images/logo-black.png" class="img-rounded" width="380"
-				height="236">
-		</div>
 		<div class="ui-widget">
-			<form action="./AddStudentToGroupServlet" method="POST"
+			<form action="http://localhost:8080/MyProject/AddStudentToGroupServlet" method="POST"
 				class="form-inline" id="addStudentToGroupForm">
 				<c:if test="${not empty sessionScope.invalidFields}">
 					<c:if test="${sessionScope.invalidFields}">
@@ -173,7 +171,7 @@ ul.ui-autocomplete {
 						}
 						$
 								.ajax({
-									url : './DoesUserExist',
+									url : 'http://localhost:8080/MyProject/DoesUserExist',
 									type : 'GET',
 									data : {
 										"chosenStudentUsername" : chosenStudentUsername
@@ -185,7 +183,7 @@ ul.ui-autocomplete {
 										}
 										$
 												.ajax({
-													url : './IsChosenStudentAlreadyInGroup',
+													url : 'http://localhost:8080/MyProject/IsChosenStudentAlreadyInGroup',
 													type : 'GET',
 													data : {
 														"chosenGroupId" : chosenGroupId,
@@ -243,7 +241,7 @@ ul.ui-autocomplete {
 		if (confirm("Are you sure, that you want to remove this student from the group?")) {
 			$.ajax({
 				type : 'POST',
-				url : "./RemoveStudentFromGroup",
+				url : "http://localhost:8080/MyProject/RemoveStudentFromGroup",
 				data : {
 					"chosenStudentUsername" : username,
 					"chosenGroupId" : groupId
@@ -292,7 +290,7 @@ ul.ui-autocomplete {
 	function getStudents(groupId) {
 		$
 				.ajax({
-					url : './getAllStudentsOfGroupServlet',
+					url : 'http://localhost:8080/MyProject/getAllStudentsOfGroupServlet',
 					type : 'GET',
 					data : {
 						"chosenGroupId" : groupId

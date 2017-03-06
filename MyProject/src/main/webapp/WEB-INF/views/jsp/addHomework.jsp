@@ -9,7 +9,6 @@
 <title>Insert title here</title>
 </head>
 <style>
-
 #formAddHomework {
 	position: absolute;
 	left: 60px;
@@ -20,7 +19,7 @@
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
-	<div id="pageWrapper">
+	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
@@ -34,6 +33,8 @@
 				</span></li>
 			</ul>
 		</nav>
+	</div>
+	<div id="pageWrapper">
 		<c:if test="${not empty invalidFields}">
 			<c:if test="${not invalidFields}">
 				<div class="alert alert-success">
@@ -41,12 +42,8 @@
 				</div>
 			</c:if>
 		</c:if>
-		<div id="image">
-			<img src="images/logo-black.png" class="img-rounded" width="380"
-				height="236">
-		</div>
 		<div id="formAddHomework" align="right">
-			<form action="./AddHomework" method="POST"
+			<form action="http://localhost:8080/MyProject/AddHomework" method="POST"
 				enctype="multipart/form-data" id="addHomeworkForm">
 				<label
 					style="position: absolute; left: 290px; text-decoration: underline;">Add
@@ -192,7 +189,7 @@
 						<p id="groupsMsg" class="input-invalid"></p>
 					</div>
 				</div>
-				
+
 				<div class="form-group">
 					<div class="col-sm-offset-3 col-sm-2" style="left: 360px">
 						<br> <input style="align: right" type="submit"
@@ -200,7 +197,7 @@
 					</div>
 				</div>
 			</form>
-		</div>		
+		</div>
 	</div>
 	<script type="text/javascript">
 
@@ -320,7 +317,7 @@
 
 							$
 									.ajax({
-										url : './IsHomeworkHeadingValid',
+										url : 'http://localhost:8080/MyProject/IsHomeworkHeadingValid',
 										type : 'GET',
 										data : {
 											"heading" : name
@@ -333,7 +330,7 @@
 											}
 											$
 													.ajax({
-														url : './IsHomeworkHeadingUnique',
+														url : 'http://localhost:8080/MyProject/IsHomeworkHeadingUnique',
 														type : 'GET',
 														data : {
 															"heading" : name
@@ -378,7 +375,7 @@
 										}
 									});
 							$.ajax({
-								url : './IsHomeworkOpeningTimeValid',
+								url : 'http://localhost:8080/MyProject/IsHomeworkOpeningTimeValid',
 								type : 'GET',
 								data : {
 									"opens" : opens
@@ -401,7 +398,7 @@
 							});
 							$
 									.ajax({
-										url : './IsHomeworkClosingTimeValid',
+										url : 'http://localhost:8080/MyProject/IsHomeworkClosingTimeValid',
 										type : 'GET',
 										data : {
 											"opens" : opens,

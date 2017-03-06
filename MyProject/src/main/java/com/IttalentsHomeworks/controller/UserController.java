@@ -414,12 +414,14 @@ public class UserController {
 		} else {
 			// password valid
 			boolean isPassValid = false;
-			if(password.length() != IValidationsDAO.LENGTH_OF_CYPHERED_PASSWORD){
+			if(!password.equals(user.getPassword())){
 				if (isPasswordValidUpdateProfile(password)) {
 					isPassValid = true;
 				}
 			} else {
 				isPassValid = true;
+				request.setAttribute("invalidFields", false);
+				return "updateProfile";
 			}
 			request.setAttribute("validPass", isPassValid);
 			// repeatedPass
@@ -442,7 +444,7 @@ public class UserController {
 				}
 				newUser.setId(userId);
 				try {
-					UserDAO.getInstance().updateUser(newUser);
+					UserDAO.getInstance().updateUser(newUser, user.getPassword());
 					request.setAttribute("invalidFields", false);
 					String encryptedPassword = ValidationsDAO.getInstance().encryptPass(password);
 					newUser.setPassword(encryptedPassword);

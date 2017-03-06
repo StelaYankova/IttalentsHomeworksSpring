@@ -10,32 +10,35 @@
 <title>Insert title here</title>
 </head>
 <style>
-#formRegister {
+.form-group {
+	margin-left: 60px auto;
+}
+/* #formRegister {
 	position: absolute;
 	left: 60px;
 	top: 220px;
 	background-color: #ffffff;
 	width: 500px;
 }
+ */
+#formRegister {
+	margin: 0 auto;
+ 	margin-top: 100px;
+ 	width: 40%;
+}
 </style>
 <body>
-	<%@ include file="navBarHomeRegisterPage.jsp"%>
-	<div id="pageWrapper">
-		<c:if test="${not empty invalidFields}">
-			<c:if test="${not invalidFields}">
-				<div class="alert alert-success">
-					<strong>Success!</strong> Your have registered successfully
-				</div>
-			</c:if>
+	<%@ include file="navBarHomePage.jsp"%>
+	<c:if test="${not empty invalidFields}">
+		<c:if test="${not invalidFields}">
+			<div class="alert alert-success">
+				<strong>Success!</strong> Your have registered successfully
+			</div>
 		</c:if>
-		<div id="image">
-			<img src="images/logo-black.png" class="img-rounded" width="380"
-				height="236">
-		</div>
+	</c:if>
+	<div id="pageWrapper">
 		<div id="formRegister" align="center">
-			<label class="control-label col-sm-16"
-				style="position: absolute; left: 290px; text-decoration: underline;">Registration</label>
-			<br> <br> <br>
+			<legend style="text-align: left">Registration</legend>
 			<c:if test="${not empty invalidFields}">
 				<c:if test="${invalidFields}">
 					<p class="input-invalid-or-empty">Invalid fields</p>
@@ -45,10 +48,11 @@
 				<p class="input-invalid-or-empty">Empty fields</p>
 			</c:if>
 			<form class="form-horizontal" name="registerForm" id="registerForm"
-				action="./RegisterServlet" method="POST">
+				action="http://localhost:8080/MyProject/RegisterServlet" method="POST">
 				<div class="form-group">
-					<label for="username" class="control-label col-sm-6">Username:</label>
-					<div class="col-sm-6">
+					<label for="username" class="control-label col-sm-4"
+						style="padding-right: 30px;">Username:</label>
+					<div class="col-sm-7">
 						<input type="text" class="form-control"
 							placeholder="Enter username" name="username" maxlength="15"
 							value="${userTry.username}" data-toggle="popover"
@@ -75,8 +79,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="password" class="control-label col-sm-6">Password:</label>
-					<div class="col-sm-6">
+					<label for="password" class="control-label col-sm-4"
+						style="padding-right: 30px;">Password:</label>
+					<div class="col-sm-7">
 						<input type="password" class="form-control" maxlength="15"
 							name="password" value="${userTry.password }"
 							placeholder="Enter password" data-toggle="popover"
@@ -93,8 +98,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="repeatedPassword" class="control-label col-sm-6">Password:</label>
-					<div class="col-sm-6">
+					<label for="repeatedPassword" class="control-label col-sm-4"
+						style="padding-right: 30px;">Repeat password:</label>
+					<div class="col-sm-7">
 						<input type="password" class="form-control" maxlength="15"
 							name="repeatedPassword" placeholder="Repeat password"
 							value="${userTry.repeatedPassword }" />
@@ -108,8 +114,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="email" class="control-label col-sm-6">Email:</label>
-					<div class="col-sm-6">
+					<label for="email" class="control-label col-sm-4"
+						style="padding-right: 30px;">Email:</label>
+					<div class="col-sm-7">
 						<input type="email" class="form-control" name="email" id="email"
 							placeholder="Enter email" maxlength="40" value="${userTry.email}"
 							required />
@@ -122,12 +129,11 @@
 					</div>
 				</div>
 				<br>
-				<br>
-				<br>
-				<br>
 				<div class="form-group">
-					<div class="col-sm-offset-3 col-sm-2" style="left: 290px">
-						<input style="align: right" type="submit" class="btn btn-default"
+					<div class="col-md-offset-7 col-sm-5">
+						<input
+							style="margin-right: 30px; background-color: #2E71AC; color: #ffffff"
+							type="submit" class=" form-control btn btn-default"
 							value="Register">
 					</div>
 				</div>
@@ -208,7 +214,7 @@
 						}
 						$
 								.ajax({
-									url : './IsUsernameUniqueServlet',
+									url : 'http://localhost:8080/MyProject/IsUsernameUniqueServlet',
 									type : 'GET',
 									data : {
 										"username" : username
@@ -220,7 +226,7 @@
 										}
 										$
 												.ajax({
-													url : './IsUsernameValid',
+													url : 'http://localhost:8080/MyProject/IsUsernameValid',
 													type : 'GET',
 													data : {
 														"username" : username
@@ -260,7 +266,7 @@
 									}
 								});
 						$.ajax({
-							url : './IsPasswordValid',
+							url : 'http://localhost:8080/MyProject/IsPasswordValid',
 							type : 'GET',
 							data : {
 								"password" : password

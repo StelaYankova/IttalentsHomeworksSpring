@@ -15,11 +15,12 @@
 	top: 220px;
 	background-color: #ffffff;
 	width: 500px;
+	margin: 0 auto;
 }
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
-	<div id="pageWrapper">
+	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
@@ -37,6 +38,8 @@
 				</span></li>
 			</ul>
 		</nav>
+	</div>
+	<div id="pageWrapper">
 		<c:if test="${not empty invalidFields}">
 			<c:if test="${not invalidFields}">
 				<div class="alert alert-success">
@@ -44,15 +47,13 @@
 				</div>
 			</c:if>
 		</c:if>
-		<div id="image">
-			<img src="images/logo-black.png" class="img-rounded" width="380"
-				height="236">
-		</div>
 		<div id="formAddGroup" align="right">
-			<form action="./AddGroupServlet" method="POST" id="addGroupForm">
-				<label
+			<form action="http://localhost:8080/MyProject/AddGroupServlet" method="POST" id="addGroupForm">
+				<!-- <label
 					style="position: absolute; left: 290px; text-decoration: underline;">New
-					group</label> <br> <br> <br>
+					group</label> <br> <br> <br> -->
+								<legend style="text-align: left">Add Group</legend>
+					
 				<c:if test="${not empty invalidFields}">
 					<c:if test="${invalidFields}">
 						<p class="input-invalid-or-empty">Invalid fields</p>
@@ -64,8 +65,8 @@
 					</c:if>
 				</c:if>
 				<div class="form-group">
-					<label class="control-label col-sm-6">Name</label>
-					<div class="col-sm-6">
+					<label class="control-label col-sm-4">Name:</label>
+					<div class="col-sm-7">
 						<input type="text" name="groupName" class="form-control"
 							placeholder="Enter name" data-toggle="popover" value="${nameTry}"
 							data-placement="bottom" data-trigger="focus" maxlength="20"
@@ -88,8 +89,8 @@
 				</div>
 				<br>
 				<div class="form-group">
-					<label class="control-label col-sm-6">Teachers</label>
-					<div class="col-sm-6">
+					<label class="control-label col-sm-4">Teachers:</label>
+					<div class="col-sm-7">
 						<select class="selectpicker" multiple name="teachers">
 							<c:forEach items="${applicationScope.allTeachers}" var="teacher">
 								<c:set var="isTeacherInGroupTry" value="false"></c:set>
@@ -118,10 +119,18 @@
 					</div>
 				</div>
 				<br> <br> <br> <br>
-				<div class="form-group">
+				<!-- <div class="form-group">
 					<div class="col-sm-offset-3 col-sm-2" style="left: 290px">
 						<input style="align: right" type="submit" class="btn btn-default"
 							value="Save">
+					</div>
+				</div> -->
+				<div class="form-group">
+					<div class="col-md-offset-7 col-sm-5">
+						<input
+							style="margin-right: 30px; background-color: #2E71AC; color: #ffffff"
+							type="submit" class=" form-control btn btn-default"
+							value="Register">
 					</div>
 				</div>
 			</form>
@@ -144,7 +153,7 @@
 			return false;
 		}
 		$.ajax({
-			url : './IsGroupNameUnique',
+			url : 'http://localhost:8080/MyProject/IsGroupNameUnique',
 			type : 'GET',
 			data : {
 				"name" : name
@@ -155,7 +164,7 @@
 					isNameValid = true;
 				}
 				$.ajax({
-					url : './IsGroupNameValid',
+					url : 'http://localhost:8080/MyProject/IsGroupNameValid',
 					type : 'GET',
 					data : {
 						"name" : name

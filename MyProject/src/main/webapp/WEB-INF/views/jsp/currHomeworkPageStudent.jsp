@@ -16,53 +16,55 @@
 #currTaskSolution {
 	max-width: 50%;
 }
-
 </style>
 <body>
 	<%@ include file="navBarStudent.jsp"%>
-	<div id="pageWrapper">
+	<div class="navPath">
 		<nav class="breadcrumb-nav">
-		<ul class="breadcrumb">
-			<li><a href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
-				<span class="divider"> <span class="accesshide "><span
-						class="arrow_text"></span></span>
-			</span></li>
-			<c:if test="${not empty sessionScope.throughtScores}">
+			<ul class="breadcrumb">
+				<li><a
+					href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
+					<span class="divider"> <span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
+				<c:if test="${not empty sessionScope.throughtScores}">
 
-				<c:if test="${sessionScope.throughtScores == 0}">
-					<li><a
-						href="http://localhost:8080/MyProject/GetHomeworksOfGroupsServlet">Homeworks
-							of chosen group</a> <span class="divider"> <span
-							class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
-					</span></li>
+					<c:if test="${sessionScope.throughtScores == 0}">
+						<li><a
+							href="http://localhost:8080/MyProject/GetHomeworksOfGroupsServlet">Homeworks
+								of chosen group</a> <span class="divider"> <span
+								class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
+						</span></li>
+					</c:if>
+					<c:if test="${sessionScope.throughtScores == 1}">
+						<li><a
+							href="http://localhost:8080/MyProject/SeeScoresServlet">Your
+								scores</a> <span class="divider"> <span class="accesshide "><span
+									class="arrow_text"></span></span>
+						</span></li>
+					</c:if>
 				</c:if>
-				<c:if test="${sessionScope.throughtScores == 1}">
-					<li><a href="http://localhost:8080/MyProject/SeeScoresServlet">Your
-							scores</a> <span class="divider"> <span class="accesshide "><span
-								class="arrow_text"></span></span>
-					</span></li>
+				<c:if test="${ empty sessionScope.throughtScores}">
+					<c:if test="${ empty sessionScope.throughtGroups}">
+						<li><a
+							href="http://localhost:8080/MyProject/SeeScoresServlet">Your
+								scores</a> <span class="divider"> <span class="accesshide "><span
+									class="arrow_text"></span></span>
+						</span></li>
+					</c:if>
 				</c:if>
-			</c:if>
-			<c:if test="${ empty sessionScope.throughtScores}">
-				<c:if test="${ empty sessionScope.throughtGroups}">
-					<li><a href="http://localhost:8080/MyProject/SeeScoresServlet">Your
-							scores</a> <span class="divider"> <span class="accesshide "><span
-								class="arrow_text"></span></span>
-					</span></li>
-				</c:if>
-			</c:if>
-			<li><a href="http://localhost:8080/MyProject/GetHomeworkServlet">Current
-					chosen homework</a> <span class="divider"> <span
-					class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
-			</span></li>
-		</ul>
+				<li><a
+					href="http://localhost:8080/MyProject/GetHomeworkServlet">Current
+						chosen homework</a> <span class="divider"> <span
+						class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
+				</span></li>
+			</ul>
 		</nav>
-		<div id="image">
-			<img src="images/logo-black.png" class="img-rounded" width="380"
-				height="236">
-		</div>
+	</div>
+	<div id="pageWrapper">
+
 		<br>
-		<form style="display: inline" action="./ReadHomeworkServlet"
+		<form style="display: inline" action="http://localhost:8080/MyProject/ReadHomeworkServlet"
 			method="GET">
 			<input type='hidden'
 				value='${sessionScope.currHomework.homeworkDetails.tasksFile}'
@@ -100,7 +102,7 @@
 					</button>
 					<c:if test="${sessionScope.hasUploadTimePassed == 'false'}">
 						<c:if test="${sessionScope.hasUploadTimeCome == 'true'}">
-							<form action="./UploadSolutionServlet" method="POST"
+							<form action="http://localhost:8080/MyProject/UploadSolutionServlet" method="POST"
 								enctype="multipart/form-data" id="uploadSolutionForm">
 								<input type="hidden" value="${i}" name="taskNum"><input
 									type="file" accept="application/java" size="50" name="file"
@@ -159,7 +161,7 @@
 			var text = document.getElementById("currTaskSolution").value;
 			$
 					.ajax({
-						url : './SaveChangedSolutionText',
+						url : 'http://localhost:8080/MyProject/SaveChangedSolutionText',
 						type : 'POST',
 						data : {
 							"taskNum" : taskNum,
@@ -177,7 +179,7 @@
 		function seeTaskSolution(taskNum) {
 			$
 					.ajax({
-						url : './ReadJavaFileServlet',
+						url : 'http://localhost:8080/MyProject/ReadJavaFileServlet',
 						data : {
 							"taskNum" : taskNum
 						},

@@ -332,7 +332,7 @@ public class TestDAO {
 	@Test
 	public void test23updateUser() throws UserException, GroupException, NoSuchAlgorithmException, ValidationException{
 		User updatedUser = new Student(user1.getUsername(), "newPass123", "newPass123","newEmail@abv.bg");
-		UserDAO.getInstance().updateUser(updatedUser);
+		UserDAO.getInstance().updateUser(updatedUser, user1.getPassword());
 		
 		User newUser = UserDAO.getInstance().getUserByUsername(user1.getUsername());
 

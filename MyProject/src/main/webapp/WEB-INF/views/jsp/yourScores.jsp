@@ -18,23 +18,22 @@
 </style>
 <body>
 	<%@ include file="navBarStudent.jsp"%>
-	<div id="pageWrapper">
+	<div class="navPath">
 		<nav class="breadcrumb-nav">
-		<ul class="breadcrumb">
-			<li><a href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
-				<span class="divider"> <span class="accesshide "><span
-						class="arrow_text"></span></span>
-			</span></li>
-			<li><a href="http://localhost:8080/MyProject/SeeScoresServlet">Your
-					scores</a> <span class="divider"> <span class="accesshide "><span
-						class="arrow_text"></span>&nbsp;</span>
-			</span></li>
-		</ul>
+			<ul class="breadcrumb">
+				<li><a
+					href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
+					<span class="divider"> <span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
+				<li><a href="http://localhost:8080/MyProject/SeeScoresServlet">Your
+						scores</a> <span class="divider"> <span class="accesshide "><span
+							class="arrow_text"></span>&nbsp;</span>
+				</span></li>
+			</ul>
 		</nav>
-		<div id="image">
-			<img src="images/logo-black.png" class="img-rounded" width="380"
-				height="236">
-		</div>
+	</div>
+	<div id="pageWrapper">
 		Choose a group: <select id="selectGroup" class="selectpicker">
 			<option value="null">-</option>
 			<option value="allGroups">All groups</option>
@@ -98,7 +97,7 @@
 														.html('');
 												$
 														.ajax({
-															url : './SeeYourHomeworksByGroup',
+															url : 'http://localhost:8080/MyProject/SeeYourHomeworksByGroup',
 															data : {
 																"selectedGroupId" : $(
 																		this)
@@ -134,7 +133,7 @@
 																	var rowNode = table.row
 																			.add(
 																					[
-																							"<form action = './GetHomeworkServlet' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><button class='btn btn-link' type = 'submit'>"
+																							"<form action = 'http://localhost:8080/MyProject/GetHomeworkServlet' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><button class='btn btn-link' type = 'submit'>"
 																									+ response[i].heading
 																									+ "</button></form>",
 																							opensRep,

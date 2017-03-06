@@ -30,7 +30,7 @@ label {
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
-	<div id="pageWrapper">
+	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
@@ -50,12 +50,10 @@ label {
 				</span></li>
 			</ul>
 		</nav>
-		<div id="image">
-			<img src="images/logo-black.png" class="img-rounded" width="380"
-				height="236">
-		</div>
+	</div>
+	<div id="pageWrapper">
 		<br>
-		<form style="display: inline" action="./ReadHomeworkServlet"
+		<form style="display: inline" action="http://localhost:8080/MyProject/ReadHomeworkServlet"
 			method="GET">
 			<input type='hidden'
 				value='${sessionScope.currHomework.homeworkDetails.tasksFile}'
@@ -79,7 +77,7 @@ label {
 				have empty fields and maximal grade is 100</p>
 		</c:if>
 		<br>
-		<form action="./UpdateTeacherGradeAndCommentServlet" method="POST"
+		<form action="http://localhost:8080/MyProject/UpdateTeacherGradeAndCommentServlet" method="POST"
 			id="UpdateTeacherGradeAndCommentForm">
 			<div class="block">
 				<label><b>Teacher grade:</b></label>
@@ -203,7 +201,7 @@ label {
 		function seeTaskSolution(taskNum) {
 			$
 					.ajax({
-						url : './ReadJavaFileServlet',
+						url : 'http://localhost:8080/MyProject/ReadJavaFileServlet',
 						data : {
 							"taskNum" : taskNum,
 						},

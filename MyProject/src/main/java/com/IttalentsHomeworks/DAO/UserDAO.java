@@ -511,12 +511,12 @@ public class UserDAO implements IUserDAO {
 	 * model.User)
 	 */
 	@Override
-	public void updateUser(User user) throws UserException, ValidationException, NoSuchAlgorithmException {
+	public void updateUser(User user, String formerPass) throws UserException, ValidationException, NoSuchAlgorithmException {
 		int id = UserDAO.getInstance().getUserIdByUsername(user.getUsername());
 		Connection con = manager.getConnection();
 		if (!(ValidationsDAO.getInstance().updateUserAreThereEmptyFields(user.getPassword(), user.getRepeatedPassword(),
 				user.getEmail())) && ValidationsDAO.getInstance().isEmailValid(user.getEmail())
-				&& ValidationsDAO.getInstance().isPasswordUpdateValid(user.getPassword()) && ValidationsDAO.getInstance()
+				&& ValidationsDAO.getInstance().isPasswordUpdateValid(user.getPassword(), formerPass) && ValidationsDAO.getInstance()
 						.isRepeatedPasswordValid(user.getPassword(), user.getRepeatedPassword())) {
 			try {
 				PreparedStatement ps = con.prepareStatement(UPDATE_USER_PROFILE);
@@ -527,6 +527,8 @@ public class UserDAO implements IUserDAO {
 				}
 				ps.setString(2, user.getEmail().trim());
 				ps.setInt(3, id);
+				System.out.println("We will update with: ");
+				System.out.println(user.getPassword());
 				ps.executeUpdate();
 			} catch (SQLException e) {
 				throw new UserException("Something went wrong with updating user..");
