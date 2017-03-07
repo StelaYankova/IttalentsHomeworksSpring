@@ -12,16 +12,34 @@
 <title>Insert title here</title>
 </head>
 <style>
-#formUpdate {
+/* #formUpdate {
 	position: absolute;
 	left: 60px;
 	top: 220px;
 	background-color: #ffffff;
 	width: 500px;
+} */
+#formUpdate {
+	margin: 0 auto;
+	margin-top: 80px;
+	width: 42%;
 }
 
 .multiselect {
 	width: 200px;
+}
+
+#removeHomeworkForm {
+	position: absolute;
+	width: 10%;
+	left: 818px;
+	top: 199px;
+}
+
+#downloadHomeworkForm {
+	position: absolute;
+	left: 540px;
+	top: 205px;
 }
 </style>
 <body>
@@ -32,55 +50,58 @@
 				<li><a
 					href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
 					<span class="divider"><span
-						class="glyphicon glyphicon-menu-right">︎</span> <span
 						class="accesshide "><span class="arrow_text"></span></span> </span></li>
 				<li><a
 					href="http://localhost:8080/MyProject/SeeHomeworksServlet">See/Update
 						homeworks</a> <span class="divider"> <span class="accesshide "><span
-							class="arrow_text"><span
-								class="glyphicon glyphicon-menu-right"></span> </span></span></span></li>
+							class="arrow_text"></span></span></span></li>
 				<li><a
 					href="http://localhost:8080/MyProject/UpdateHomeworkServlet?chosenHomework=${sessionScope.currHomework.id}">Update
 						homework</a> <span class="divider"> <span class="accesshide "><span
-							class="arrow_text"></span><span
-							class="glyphicon glyphicon-menu-right"></span></span>
+							class="arrow_text"></span></span>
 				</span></li>
 			</ul>
 		</nav>
 	</div>
-	<div id="pageWrapper">
-		<c:if test="${not empty sessionScope.invalidFields}">
+	<c:if test="${not empty sessionScope.invalidFields}">
 			<c:if test="${not sessionScope.invalidFields}">
-				<div class="alert alert-success">
+				<div class="alert alertAllPages alert-success">
 					<strong>Success!</strong> Homework has been updated successfully
 				</div>
 			</c:if>
 		</c:if>
-		<div style="position: absolute; top: 260px; left: 230px; z-index: 1;">
-			<form action="http://localhost:8080/MyProject/ReadHomeworkServlet" method="GET" style="">
+	<div id="pageWrapper">
+		<div id = "downloadHomeworkForm">
+			<form action="http://localhost:8080/MyProject/ReadHomeworkServlet"
+				method="GET" style="">
 				<input type='hidden' value='${sessionScope.currHomework.tasksFile}'
 					name='fileName'>
-				<button class='btn btn-link btn-xs' type='submit'>
-					<b><i><c:out
-								value="${sessionScope.currHomework.heading }.pdf" /></i></b>
+				 <button class='btn btn-link btn-xs' type='submit'><u>download tasks</u>
+					<%-- <c:out
+								value="download <u>here</u>" escapeXml="true"/> --%>
+					<%-- <b><i><c:out
+								value="${sessionScope.currHomework.heading }.pdf" /></i></b> --%>
 				</button>
 			</form>
 		</div>
+		<form action="http://localhost:8080/MyProject/RemoveHomeworkDetails"
+			method="POST" id = "removeHomeworkForm" >
+			<!-- <div class="form-group"> -->
+<!-- 				<div class="col-sm-offset-3 col-sm-2" style="left: 290px">
+ -->					<button type="submit"
+						class="glyphicon glyphicon-remove btn btn-default btn-xs"
+						onclick="javascript:return confirm('Are you sure you want to remove this homework permanently?')"></button>
+<!-- 				</div>
+ --><!-- 			</div>
+ -->		</form>
 		<div id="formUpdate" align="right">
-			<form action="http://localhost:8080/MyProject/RemoveHomeworkDetails" method="POST">
-				<div class="form-group">
-					<div class="col-sm-offset-3 col-sm-2" style="left: 290px">
-						<button type="submit"
-							class="glyphicon glyphicon-remove btn btn-default btn-xs"
-							onclick="javascript:return confirm('Are you sure you want to remove this homework permanently?')"></button>
-					</div>
-				</div>
-			</form>
-			<form action="http://localhost:8080/MyProject/UpdateHomeworkServlet" method="POST"
-				enctype="multipart/form-data" id="updateHomeworkForm">
-				<label
-					style="position: absolute; left: 290px; text-decoration: underline;">Update
-					homework</label> <br> <br> <br>
+		
+			<legend style="text-align: left">Update homework</legend>
+
+			<form action="http://localhost:8080/MyProject/UpdateHomeworkServlet"
+				method="POST" enctype="multipart/form-data" id="updateHomeworkForm">
+
+
 				<c:if test="${not empty sessionScope.invalidFields}">
 					<c:if test="${sessionScope.invalidFields}">
 						<p class="input-invalid-or-empty">Invalid fields</p>
@@ -92,8 +113,8 @@
 					</c:if>
 				</c:if>
 				<div class="form-group">
-					<label class="control-label col-sm-6">Heading</label>
-					<div class="col-sm-6">
+					<label class="control-label col-sm-4" style="padding-right: 30px;">Heading:</label>
+					<div class="col-sm-7">
 						<input type="text" class="form-control" name="name"
 							value='${sessionScope.currHomework.heading}' maxlength="40"
 							data-toggle="popover" data-placement="bottom"
@@ -117,9 +138,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<br> <label class="control-label col-sm-6">Opening
-						time</label>
-					<div class='col-sm-6'>
+					<br> <label class="control-label col-sm-4"
+						style="padding-right: 30px;">Opening time:</label>
+					<div class='col-sm-7'>
 						<div class='input-group date' id='datetimepicker6'>
 							<input type='text'
 								value="${sessionScope.currHomework.openingTime}"
@@ -141,9 +162,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<br> <label class="control-label col-sm-6">Closing
-						time</label>
-					<div class='col-sm-6'>
+					<br> <label class="control-label col-sm-4"
+						style="padding-right: 30px;">Closing time:</label>
+					<div class='col-sm-7'>
 						<div class='input-group date' id='datetimepicker7'>
 							<input type='text'
 								value="${sessionScope.currHomework.closingTime}"
@@ -164,10 +185,11 @@
 						<p id="closesMsg" class="input-invalid"></p>
 					</div>
 				</div>
-				<br>
+
 				<div class="form-group">
-					<label class="control-label col-sm-6">Number of tasks</label>
-					<div class="col-sm-6">
+					<label class="control-label col-sm-4" style="padding-right: 30px;">Number
+						of tasks:</label>
+					<div class="col-sm-7">
 						<input type="number" min="1" class="form-control"
 							name="numberOfTasks"
 							value='${sessionScope.currHomework.numberOfTasks}' maxlength="2"
@@ -182,26 +204,12 @@
 						<p id="numberOfTasksMsg" class="input-invalid"></p>
 					</div>
 				</div>
-				<br>
 				<div class="form-group">
-					<label class="control-label col-sm-6">Tasks</label>
-					<div class="col-sm-6">
-						<input type="file" accept="application/pdf" name="file">
-						<c:if test="${not empty sessionScope.validFile}">
-							<c:if test="${not sessionScope.validFile}">
-								<p id="fileMsg" class="input-invalid">Valid file format -
-									pdf, maximal size - 20MB</p>
-							</c:if>
-						</c:if>
-						<p id="fileMsg" class="input-invalid"></p>
-					</div>
-				</div>
-				<br>
-				<div class="form-group">
-					<label class="control-label col-sm-6">Groups</label>
-					<div class="col-sm-6">
-						<select class="selectpicker" multiple name="groups" id="groups"
-							required>
+					<br> <br> <label class="control-label col-sm-4"
+						style="padding-right: 30px;">Groups:</label>
+					<div class="col-sm-7">
+						<select class="selectpicker form-control" data-width="101%"
+							multiple name="groups" id="groups" class="form-control" required>
 							<c:forEach items="${applicationScope.allGroups}" var="group">
 								<c:set var="isHwInGroup" value="false"></c:set>
 								<c:forEach items="${group.homeworks}" var="homework">
@@ -229,9 +237,26 @@
 				</div>
 				<br> <br>
 				<div class="form-group">
-					<div class="col-sm-offset-3 col-sm-2" style="left: 290px">
-						<input style="align: right" type="submit" class="btn btn-default"
-							value="Save">
+					<br> <label class="control-label col-sm-4"
+						style="padding-right: 30px;">Tasks:</label>
+					<div class="col-sm-7 ">
+						<input type="file" accept="application/pdf" name="file">
+						<c:if test="${not empty sessionScope.validFile}">
+							<c:if test="${not sessionScope.validFile}">
+								<p id="fileMsg" class="input-invalid">Valid file format -
+									pdf, maximal size - 20MB</p>
+							</c:if>
+						</c:if>
+						<p id="fileMsg" class="input-invalid"></p>
+					</div>
+				</div>
+				<br>
+				<legend></legend>
+				<div class="form-group">
+					<div class="col-md-offset-4 col-sm-5">
+						<input style="background-color: #2E71AC; color: #ffffff"
+							type="submit" class=" form-control btn btn-default"
+							value="Update">
 					</div>
 				</div>
 			</form>

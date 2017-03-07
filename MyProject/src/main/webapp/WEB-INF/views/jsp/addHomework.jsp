@@ -9,13 +9,19 @@
 <title>Insert title here</title>
 </head>
 <style>
-#formAddHomework {
+/* #formAddHomework {
 	position: absolute;
 	left: 60px;
 	top: 220px;
 	background-color: #ffffff;
 	width: 600px;
+} */
+#formAddHomework {
+	margin: 0 auto;
+	margin-top: 80px;
+	width: 42%;
 }
+
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
@@ -34,20 +40,23 @@
 			</ul>
 		</nav>
 	</div>
-	<div id="pageWrapper">
-		<c:if test="${not empty invalidFields}">
+	<c:if test="${not empty invalidFields}">
 			<c:if test="${not invalidFields}">
-				<div class="alert alert-success">
+				<div class="alert alertAllPages alert-success">
 					<strong>Success!</strong> Homework has been added successfully
 				</div>
 			</c:if>
 		</c:if>
+	<div id="pageWrapper">
+		
 		<div id="formAddHomework" align="right">
+					<legend style="text-align: left">Add homework</legend>
+		
 			<form action="http://localhost:8080/MyProject/AddHomework" method="POST"
 				enctype="multipart/form-data" id="addHomeworkForm">
-				<label
+				<!-- <label
 					style="position: absolute; left: 290px; text-decoration: underline;">Add
-					homework</label> <br> <br> <br>
+					homework</label> <br> <br> <br> -->
 				<c:if test="${not empty invalidFields}">
 					<c:if test="${invalidFields}">
 						<p class="input-invalid-or-empty">Invalid fields</p>
@@ -57,8 +66,8 @@
 					<p class="input-invalid-or-empty">Empty fields</p>
 				</c:if>
 				<div class="form-group">
-					<label class="control-label col-sm-6">Name</label>
-					<div class="col-sm-6">
+					<label class="control-label col-sm-4" style="padding-right: 30px;">Heading:</label>
+					<div class="col-sm-7">
 						<input type="text" class="form-control" name="name"
 							value="${nameTry}" placeholder="Enter heading" maxlength="40"
 							data-toggle="popover" data-placement="bottom"
@@ -82,9 +91,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<br> <label class="control-label col-sm-6">Opening
-						time</label>
-					<div class='col-sm-6'>
+					<br> <label class="control-label col-sm-4" style="padding-right: 30px;">Opening
+						time:</label>
+					<div class='col-sm-7'>
 						<div class='input-group date' id='datetimepicker6'>
 							<input type='text' value="${opensTry}" class="form-control"
 								id="opens" name="opens" placeholder="Enter opening time"
@@ -105,9 +114,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<br> <label class="control-label col-sm-6">Closing
-						time</label>
-					<div class='col-sm-6'>
+					<br> <label class="control-label col-sm-4" style="padding-right: 30px;">Closing
+						time:</label>
+					<div class='col-sm-7'>
 						<div class='input-group date' id='datetimepicker7'>
 							<input type='text' value="${closesTry}" data-toggle="popover"
 								data-placement="bottom" data-trigger="focus"
@@ -128,9 +137,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<br> <label class="control-label col-sm-6">Number of
-						tasks</label>
-					<div class="col-sm-6">
+					<br> <label class="control-label col-sm-4" style="padding-right: 30px;">Number of
+						tasks:</label>
+					<div class="col-sm-7">
 						<input type="number" min="0" max="41" maxlength="2"
 							class="form-control" name="numberOfTasks"
 							placeholder="Enter number of tasks" value="${numberOfTasksTry}"
@@ -145,24 +154,12 @@
 						<p id="numberOfTasksMsg" class="input-invalid"></p>
 					</div>
 				</div>
-				<div class="form-group">
-					<br> <label class="control-label col-sm-6">Tasks</label>
-					<div class="col-sm-6">
-						<input type="file" accept="application/pdf" name="file" required />
-						<c:if test="${not empty validFile}">
-							<c:if test="${not validFile}">
-								<p id="fileMsg" class="input-invalid">Valid file format -
-									pdf, maximal size - 20MB</p>
-							</c:if>
-						</c:if>
-						<p id="fileMsg" class="input-invalid"></p>
-					</div>
-				</div>
+				
 				<br>
 				<div class="form-group">
-					<label class="control-label col-sm-6">Groups</label>
-					<div class="col-sm-6">
-						<select class="selectpicker" multiple name="groups" id="groups"
+					<label class="control-label col-sm-4" style="padding-right: 30px;">Groups</label>
+					<div class="col-sm-7">
+						<select class="selectpicker form-control" data-width="101%" multiple name="groups" id="groups"
 							required>
 							<c:forEach items="${applicationScope.allGroups}" var="group">
 								<c:set var="isGroupSelected" value="false"></c:set>
@@ -189,13 +186,34 @@
 						<p id="groupsMsg" class="input-invalid"></p>
 					</div>
 				</div>
-
+<div class="form-group">
+					<br> <label class="control-label col-sm-4" style="padding-right: 30px;">Tasks:</label>
+					<div class="col-sm-7">
+						<input type="file" accept="application/pdf" name="file" required />
+						<c:if test="${not empty validFile}">
+							<c:if test="${not validFile}">
+								<p id="fileMsg" class="input-invalid">Valid file format -
+									pdf, maximal size - 20MB</p>
+							</c:if>
+						</c:if>
+						<p id="fileMsg" class="input-invalid"></p>
+					</div>
+				</div>
+				<br>
+				<legend></legend>
 				<div class="form-group">
+					<div class="col-md-offset-4 col-sm-5">
+						<input style="background-color: #2E71AC; color: #ffffff"
+							type="submit" class=" form-control btn btn-default"
+							value="Add">
+					</div>
+				</div>
+				<!-- <div class="form-group">
 					<div class="col-sm-offset-3 col-sm-2" style="left: 360px">
 						<br> <input style="align: right" type="submit"
 							class="btn btn-default" value="Save">
 					</div>
-				</div>
+				</div> -->
 			</form>
 		</div>
 	</div>

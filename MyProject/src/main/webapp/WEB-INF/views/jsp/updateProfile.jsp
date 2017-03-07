@@ -16,13 +16,13 @@
 #formUpdateProfile {
 	margin: 0 auto;
 	margin-top: 80px;
-	width: 40%;
+	width: 42%;
 }
 </style>
 <body>
 	<c:if test="${not empty invalidFields}">
 		<c:if test="${not invalidFields}">
-			<div class="alert alert-success">
+			<div class="alert alertAllPages alert-success">//alerta da e izvan wrappera!
 				<strong>Success!</strong> Your profile has been updated successfully
 			</div>
 		</c:if>
@@ -137,16 +137,17 @@
 							<p id="emailMsg" class="input-invalid"></p>
 						</div>
 					</div>
-					<br>
+					<br><legend></legend>
 					<div class="form-group">
-						<div class="col-md-offset-7 col-sm-5">
+						<div class="col-md-offset-4 col-sm-5">
 							<input
-								style="margin-right: 30px; background-color: #2E71AC; color: #ffffff"
+								style="/* margin-right: 30px;  */background-color: #2E71AC; color: #ffffff"
 								type="submit" class=" form-control btn btn-default"
 								value="Update">
 						</div>
 					</div>
 				</div>
+				
 			</form>
 		</div>
 	</div>
@@ -170,6 +171,7 @@
 			.submit(
 					function(e) {
 						e.preventDefault();
+						var currPassword = '${sessionScope.user.password}';
 						var password = document.forms["updateForm"]["password"].value;
 						var repeatedPassword = document.forms["updateForm"]["repeatedPassword"].value;
 						var email = document.forms["updateForm"]["email"].value;
@@ -211,7 +213,7 @@
 							} else {
 								isRepeatedPasswordValid = true;
 							}
-							if (password.length !== 32) {
+							if (password !== currPassword) {
 								$
 										.ajax({
 											url : 'http://localhost:8080/MyProject/IsPasswordValid',
@@ -251,7 +253,7 @@
 									$("#emailMsg").empty();
 								}
 							}
-							if (password.length !== 32) {
+							if (password !== currPassword) {console.log(1)
 								$(document)
 										.ajaxStop(
 												function() {
@@ -263,7 +265,7 @@
 																.submit();
 													}
 												});
-							} else {
+							} else {console.log(3)
 								if ((isPasswordValid === true
 										&& isRepeatedPasswordValid === true && isEmailValid === true)) {
 									document.getElementById("updateForm")

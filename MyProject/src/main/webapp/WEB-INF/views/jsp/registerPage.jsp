@@ -31,12 +31,12 @@
 	<%@ include file="navBarHomePage.jsp"%>
 	<c:if test="${not empty invalidFields}">
 		<c:if test="${not invalidFields}">
-			<div class="alert alert-success">
+			<div class="alert alertRegisterPage alert-success">
 				<strong>Success!</strong> Your have registered successfully
 			</div>
 		</c:if>
 	</c:if>
-	<div id="pageWrapper">
+	<div id="pageWrapperRegister">
 		<div id="formRegister" align="center">
 			<legend style="text-align: left">Registration</legend>
 			<c:if test="${not empty invalidFields}">

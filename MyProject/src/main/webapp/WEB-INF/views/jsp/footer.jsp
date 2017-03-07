@@ -4,14 +4,15 @@
 <meta charset="utf-8">
 <title>IT Talents</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script> 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<!-- <script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8"
@@ -30,21 +31,9 @@
 
 </head>
 <style>
-#pageWrapper {
-	margin-left: 20px;
-	margin-right: 20px;
-	margin-bottom: 50px;
-}
-
 .input-invalid {
 	color: red;
 	text-align: center;
-}
-
-.alert {
-	position: absolute;
-	top: 81px;
-	width: 100%;
 }
 
 #image {
@@ -74,9 +63,8 @@
 
 .navbar {
 	background-color: #2E71AC;
-	/* 	border-color: #2e6da4;
- */
 	margin-bottom: 0px;
+		min-height: 80px !important;
 }
 
 .container {
@@ -101,25 +89,25 @@
 	padding-top: 6px !important;
 	height: 20px;
 }
-
+.navbar-header {
+	z-index: 1;
+}
+/* 
 .navbar {
 	min-height: 28px !important;
-}
+} */
 
 #formContainer {
 	padding-left: 200px;
 }
 
-.navbar-header {
-	z-index: 1;
-}
 
 #img-href {
 	position: absolute;
 	z-index: 1;
 }
 
-#pageWrapper {
+#pageWrapperRegister {
 	margin-top: -10px;
 	margin-left: 170px;
 	margin-right: 170px;
@@ -131,32 +119,16 @@
 	text-align: left;
 }
 
-.input-invalid {
-	color: red;
-	text-align: center;
-}
-
 .breadcrumb>li+li:before {
 	color: #333;
 	content: "\3E" /* Hex code for > */
 }
 
-.alert {
-	position: absolute;
-	top: 81px;
-	width: 100%;
-}
+
 
 .invalidData {
 	color: red;
 }
-.navbar {
-	background-color: #2E71AC;
-	margin-bottom: 0px;
-	/* 	border-color: /* #2e6da4 #00BFFF;
- */
-}
-
 .container {
 	text-align: right;
 }
@@ -167,12 +139,9 @@
 	width: 500px;
 }
 
-.navbar-nav>li>a, .navbar-brand {
-	padding-top: 6px !important;
-	height: 20px;
-}
-
 .navbar {
+background-color: #2E71AC;
+	margin-bottom: 0px;
 	min-height: 80px !important;
 }
 
@@ -181,23 +150,18 @@
 	margin-right: 20px;
 	margin-bottom: 50px;
 }
-
-.input-invalid {
-	color: red;
-	text-align: center;
-}
-
-.alert {
+ 
+.alertAllPages {
 	position: absolute;
 	margin-top: 35px;
 	top: 81px;
 	width: 100%;
 }
-
-.invalidData {
-	color: red;
+.alertRegisterPage {
+	position: absolute;
+	top: 81px;
+	width: 100%;
 }
-
 .wrapword {
 	white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
 	white-space: -webkit-pre-wrap; /*Chrome & Safari */
@@ -207,54 +171,11 @@
 	word-wrap: break-word; /* Internet Explorer 5.5+ */
 	word-break: break-all;
 	white-space: normal;
-} /* 
-.footerText{
-	color:white;
 }
-
-#footerTextPosition1{
-	posistion:absolute;
-		margin-left:15%;
-		margin-top:1%;
-float:left;		   
-		
-		
-}
-#footerTextPosition2{
-	posistion:absolute;
-		margin-left:30%;
-		margin-top:1%;		
-		float:left;
-		    overflow: hidden; /* if you don't want #second to wrap below #first 
-}
-#footerTextPosition3{
-	posistion:absolute;
-		margin-left:45%;
-		margin-top:1%;		
-		
-float:left;	
-}
-#footerTextPosition3,#footerTextPosition2,#footerTextPosition1{
-  display: inline-block;
-
-} */
-/*  .footer {
-  position: absolute;
-  position: fixed;
-    bottom: 0;
-    height: 60px;
- background-color:  #404040;
-     width: 100%;
-     overflow: hidden; /* will contain if #first is longer than #second 
-     z-index:1;
-  } */
-.navbar {
+/* .navbar {
 	background-color: #2E71AC;
-	/* 	border-color: #2e6da4;
-
- */
 	margin-bottom: 0px;
-}
+} */
 
 .container {
 	text-align: right;
@@ -264,20 +185,6 @@ float:left;
 	top: 110px;
 	right: 0;
 	width: 500px;
-}
-
-.navbar-nav>li>a, .navbar-brand {
-	padding-top: 6px !important;
-	height: 20px;
-}
-
-.breadcrumb>li+li:before {
-	color: #333;
-	content: "\3E" /* Hex code for > */
-}
-
-.navbar {
-	min-height: 80px !important;
 }
 
 .navbar-inverse {
@@ -308,6 +215,7 @@ float:left;
     padding-top: 2px;
     padding-bottom: 2px;
 }
+
 </style> 
 <body>
 <div class = "">

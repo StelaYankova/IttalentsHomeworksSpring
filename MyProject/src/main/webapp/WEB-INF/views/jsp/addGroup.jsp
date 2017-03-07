@@ -9,13 +9,18 @@
 <title>Insert title here</title>
 </head>
 <style>
-#formAddGroup {
+/* #formAddGroup {
 	position: absolute;
 	left: 60px;
 	top: 220px;
 	background-color: #ffffff;
 	width: 500px;
 	margin: 0 auto;
+} */
+#formAddGroup {
+	margin: 0 auto;
+ 	margin-top: 80px;
+ 	width: 40%;
 }
 </style>
 <body>
@@ -39,20 +44,22 @@
 			</ul>
 		</nav>
 	</div>
-	<div id="pageWrapper">
-		<c:if test="${not empty invalidFields}">
+	<c:if test="${not empty invalidFields}">
 			<c:if test="${not invalidFields}">
-				<div class="alert alert-success">
+				<div class="alert alertAllPages alert-success">
 					<strong>Success!</strong> Group has been added successfully
 				</div>
 			</c:if>
 		</c:if>
+	<div id="pageWrapper">
+		
 		<div id="formAddGroup" align="right">
+		<legend style="text-align: left">Add Group</legend>
 			<form action="http://localhost:8080/MyProject/AddGroupServlet" method="POST" id="addGroupForm">
 				<!-- <label
 					style="position: absolute; left: 290px; text-decoration: underline;">New
 					group</label> <br> <br> <br> -->
-								<legend style="text-align: left">Add Group</legend>
+								
 					
 				<c:if test="${not empty invalidFields}">
 					<c:if test="${invalidFields}">
@@ -65,7 +72,7 @@
 					</c:if>
 				</c:if>
 				<div class="form-group">
-					<label class="control-label col-sm-4">Name:</label>
+					<label class="control-label col-sm-4" style="padding-right: 30px;">Name:</label>
 					<div class="col-sm-7">
 						<input type="text" name="groupName" class="form-control"
 							placeholder="Enter name" data-toggle="popover" value="${nameTry}"
@@ -89,9 +96,9 @@
 				</div>
 				<br>
 				<div class="form-group">
-					<label class="control-label col-sm-4">Teachers:</label>
-					<div class="col-sm-7">
-						<select class="selectpicker" multiple name="teachers">
+					<label class="control-label col-sm-4" style="padding-right: 30px;">Teachers:</label>
+					<div class="col-sm-7" >
+						<select class="selectpicker form-control" data-width="101%"  multiple name="teachers" >
 							<c:forEach items="${applicationScope.allTeachers}" var="teacher">
 								<c:set var="isTeacherInGroupTry" value="false"></c:set>
 								<c:forEach items="${selectedTeachersUsernameTry}"
@@ -125,14 +132,15 @@
 							value="Save">
 					</div>
 				</div> -->
-				<div class="form-group">
-					<div class="col-md-offset-7 col-sm-5">
-						<input
-							style="margin-right: 30px; background-color: #2E71AC; color: #ffffff"
-							type="submit" class=" form-control btn btn-default"
-							value="Register">
+				<legend></legend>
+					<div class="form-group">
+						<div class="col-md-offset-4 col-sm-5">
+							<input
+								style="/* margin-right: 30px;  */background-color: #2E71AC; color: #ffffff"
+								type="submit" class=" form-control btn btn-default"
+								value="Add">
+						</div>
 					</div>
-				</div>
 			</form>
 		</div>
 	</div>

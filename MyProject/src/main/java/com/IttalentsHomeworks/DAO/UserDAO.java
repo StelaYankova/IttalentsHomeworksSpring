@@ -245,13 +245,13 @@ public class UserDAO implements IUserDAO {
 							.getGroupsOfUser(UserDAO.getInstance().getUserIdByUsername(username));
 					if (UserDAO.getInstance().isUserATeacher(userId)) {
 						u = new Teacher(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
-								rs.getBoolean(5), groupsOfUser);
+								groupsOfUser);
 					} else {
 						int id = UserDAO.getInstance().getUserIdByUsername(username);
 						ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(id);
 						u = new Student(rs.getInt(1), rs.getString(2)
 								, rs.getString(3), rs.getString(4),
-								rs.getBoolean(5), groupsOfUser, homeworksOfStudent);
+								 groupsOfUser, homeworksOfStudent);
 					}
 				}
 			} catch (SQLException e) {
@@ -520,15 +520,13 @@ public class UserDAO implements IUserDAO {
 						.isRepeatedPasswordValid(user.getPassword(), user.getRepeatedPassword())) {
 			try {
 				PreparedStatement ps = con.prepareStatement(UPDATE_USER_PROFILE);
-				if(user.getPassword().length() == 32){//it is already encryptet
+				if(user.getPassword().equals(formerPass)){//it is already encryptet
 					ps.setString(1, user.getPassword());
 				}else{
 					ps.setString(1, ValidationsDAO.getInstance().encryptPass(user.getPassword().trim()));
 				}
 				ps.setString(2, user.getEmail().trim());
 				ps.setInt(3, id);
-				System.out.println("We will update with: ");
-				System.out.println(user.getPassword());
 				ps.executeUpdate();
 			} catch (SQLException e) {
 				throw new UserException("Something went wrong with updating user..");
@@ -550,7 +548,7 @@ public class UserDAO implements IUserDAO {
 			if (rs.next()) {
 				int id = UserDAO.getInstance().getUserIdByUsername(username);
 				ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(id);
-				u = new Student(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(5), null,
+				u = new Student(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), null,
 						homeworksOfStudent);
 			}
 		} catch (SQLException e) {
@@ -627,7 +625,7 @@ public class UserDAO implements IUserDAO {
 			st = (Statement) con.createStatement();
 			ResultSet rs = st.executeQuery(GET_ALL_TEACHERS);
 			while (rs.next()) {
-				allTeachers.add(new Teacher(rs.getInt(1), rs.getString(2), rs.getString(4), rs.getBoolean(5)));
+				allTeachers.add(new Teacher(rs.getInt(1), rs.getString(2), rs.getString(4)));
 			}
 		} catch (SQLException e) {
 			throw new UserException("Something went wrong with getting all teachers..");
@@ -644,7 +642,7 @@ public class UserDAO implements IUserDAO {
 			st = (Statement) con.createStatement();
 			ResultSet rs = st.executeQuery(GET_ALL_STUDENTS);
 			while (rs.next()) {
-				allStudents.add(new Student(rs.getInt(1), rs.getString(2), rs.getString(4), rs.getBoolean(5)));
+				allStudents.add(new Student(rs.getInt(1), rs.getString(2), rs.getString(4)));
 			}
 		} catch (SQLException e) {
 			throw new UserException("Something went wrong with getting all students..");
@@ -663,11 +661,11 @@ public class UserDAO implements IUserDAO {
 			if (rs.next()) {
 				ArrayList<Group> groupsOfUser = UserDAO.getInstance().getGroupsOfUser(userId);
 				if (UserDAO.getInstance().isUserATeacher(userId)) {
-					u = new Teacher(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(5),
+					u = new Teacher(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), 
 							groupsOfUser);
 				} else {
 					ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(userId);
-					u = new Student(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(5),
+					u = new Student(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), 
 							groupsOfUser, homeworksOfStudent);
 				}
 			}

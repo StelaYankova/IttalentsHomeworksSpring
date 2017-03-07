@@ -421,8 +421,7 @@ public class UserController {
 			} else {
 				isPassValid = true;
 				request.setAttribute("invalidFields", false);
-				return "updateProfile";
-			}
+			}System.out.println(3);
 			request.setAttribute("validPass", isPassValid);
 			// repeatedPass
 			boolean isRepeatedPassValid = false;
@@ -436,7 +435,8 @@ public class UserController {
 				isEmailValid = true;
 			}
 			request.setAttribute("validEmail", isEmailValid);
-			if (isPassValid == true && isRepeatedPassValid == true && isEmailValid == true) {
+			if (isPassValid == true && isRepeatedPassValid == true && isEmailValid == true) {System.out.println(5);
+				
 				if (user.isTeacher()) {
 					newUser = new Teacher(username, password, repeatedPassword, email);
 				} else {
@@ -446,8 +446,10 @@ public class UserController {
 				try {
 					UserDAO.getInstance().updateUser(newUser, user.getPassword());
 					request.setAttribute("invalidFields", false);
-					String encryptedPassword = ValidationsDAO.getInstance().encryptPass(password);
-					newUser.setPassword(encryptedPassword);
+					if(!password.equals(user.getPassword())){
+						String encryptedPassword = ValidationsDAO.getInstance().encryptPass(password);
+						newUser.setPassword(encryptedPassword);
+					}
 					request.getSession().setAttribute("user", newUser);
 				} catch (UserException e) {
 					System.out.println(e.getMessage());

@@ -528,7 +528,7 @@ public class HomeworkController {
 	}
 
 	@RequestMapping(value = "/ReadHomeworkServlet", method = RequestMethod.GET)
-	protected String readHomework(HttpServletRequest request, HttpServletResponse response)
+	protected void readHomework(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		String fileName = request.getParameter("fileName").trim();
@@ -557,9 +557,10 @@ public class HomeworkController {
 				responseOutputStream.write(bytes);
 			}
 			fileInputStream.close();
-			return "currHomeworkPageStudent";
+		//	return "currHomeworkPageStudent";
 		}
-		return "forbiddenPage";
+		//return "forbiddenPage";
+		response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 	}
 	
 	@RequestMapping(value = "/SaveChangedSolutionText", method = RequestMethod.POST)

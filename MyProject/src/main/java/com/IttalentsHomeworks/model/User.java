@@ -9,7 +9,7 @@ public abstract class User {
 	private String password;
 	private String repeatedPassword;
 	private String email;
-	private boolean isTeacher;
+	protected boolean isTeacher;
 	ArrayList<Group> groups;
 	
 

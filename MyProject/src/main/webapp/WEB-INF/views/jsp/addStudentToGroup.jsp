@@ -11,8 +11,34 @@
 <title>Insert title here</title>
 </head>
 <style>
+#studentSearch {
+	width: 18%;
+}
+
 .ui-helper-hidden-accessible {
 	display: none;
+}
+
+.form-group {
+	padding-right: 50px;
+	width: 25%;
+}
+#listOfStudentsOfGroupHeading{
+visibility: hidden;
+	margin-left: 340px;
+	margin-top: 130px;
+}
+
+#listOfStudentsOfGroup {
+	visibility: hidden;
+	margin-left: 281px;
+	margin-top: 25px;
+	z-index: 1;
+	height: 300px;
+	width: 25%;
+	overflow: hidden;
+	overflow-y: scroll;
+	overflow-x: scroll;
 }
 
 ul.ui-autocomplete {
@@ -20,14 +46,25 @@ ul.ui-autocomplete {
 	text-decoration: none;
 }
 
-#addStudentButton {
-	position: relative;
-	top: 10px;
+/*  #addStudentButton {
+	position: absolute;
+	
+	left: 400px;	top: 160px;
+	
+} */
+#addStudentToGroupDiv {
+	position: absolute;
+	width: 100%;
+	margin-left: 300px;
+	margin-top: 60px;
+	margin-right: 200px;
+	/*  	width: 40%;
+ */
 }
-
-.form-group {
-	width: 30%
-}
+/*  #addStudentToGroupForm{
+		margin-right: 20px;
+	
+} */
 </style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
@@ -47,17 +84,19 @@ ul.ui-autocomplete {
 			</ul>
 		</nav>
 	</div>
-	<div id="pageWrapper">
-		<c:if test="${not empty sessionScope.invalidFields}">
+	<c:if test="${not empty sessionScope.invalidFields}">
 			<c:if test="${not sessionScope.invalidFields}">
-				<div class="alert alert-success" id="alert">
+				<div class="alert alertAllPages alert-success" id="alert">
 					<strong>Success!</strong> Student has been added successfully
 				</div>
 			</c:if>
 		</c:if>
-		<div class="ui-widget">
-			<form action="http://localhost:8080/MyProject/AddStudentToGroupServlet" method="POST"
-				class="form-inline" id="addStudentToGroupForm">
+	<div id="pageWrapper">
+	<div id="addStudentToGroupDiv">
+		<div class="ui-widget" >
+			<form
+				action="http://localhost:8080/MyProject/AddStudentToGroupServlet"
+				method="POST" class="form-inline" id="addStudentToGroupForm">
 				<c:if test="${not empty sessionScope.invalidFields}">
 					<c:if test="${sessionScope.invalidFields}">
 						<p style="text-align: left" class="input-invalid">Invalid
@@ -83,16 +122,17 @@ ul.ui-autocomplete {
 						</c:if>
 					</c:if>
 				</c:if>
-				<p id="groupMsg" class="input-invalid"></p>
-				<p id="studentMsg" class="input-invalid"></p>
 				<c:if test="${not empty sessionScope.validGroups}">
 					<c:if test="${not sessionScope.validGroups}">
 						<p id="groupsMsg" class="input-invalid">Group does not exist</p>
 					</c:if>
 				</c:if>
-				<div class="form-group">
-					<label class="control-label col-sm-8">Choose group:</label> <select
-						id="chosenGroup" name="chosenGroup" class="selectpicker" required>
+				<p id="groupMsg" class="input-invalid"></p>
+				<p id="studentMsg" class="input-invalid"></p>
+				<div class="form-group" style = "padding-top: 2px; ">
+				
+					<label class="control-label col-sm-9" style="padding-right: 30px;" >Choose group:</label> <select
+						id="chosenGroup" name="chosenGroup" class="selectpicker form-control" required>
 						<option value="">-</option>
 						<c:forEach var="group" items="${applicationScope.allGroups}">
 							<option value="${group.id}"><c:out value="${group.name}"></c:out></option>
@@ -100,19 +140,31 @@ ul.ui-autocomplete {
 					</select>
 				</div>
 				<div class="form-group" id="studentSearch">
-					<label class="control-label col-sm-8">Choose student:</label> <input
+					<label class="control-label col-sm-13">Choose student:</label> <input
 						id="searchStudents" name="selectedStudent" class="form-control"
 						value="${sessionScope.chosenUsernameTry}" required />
 				</div>
-				<button type="submit" id="addStudentButton"
-					class="btn btn-default btn-md">
-					<span class="glyphicon glyphicon-plus">Add</span>
-				</button>
+				<!-- <div class="form-group"> id="addStudentButton"
+						<div class="col-md-offset-1 col-sm-1">
+
+					<button type="submit" class="btn btn-default btn-md">
+						<span class="glyphicon glyphicon-plus">Add</span>
+					</button></div>
+				</div> -->
+				<div class="form-group" style = "padding-top: 21px; ">
+							<input
+								style="background-color: #2E71AC; color: #ffffff"
+								type="submit" class=" form-control btn btn-default"
+								value="Add">
+					</div>
 			</form>
-		</div>
+		</div></div>
 		<br> <br>
-		<ul id="listOfStudentsOfGroup" class="editable list-group"
-			style="visibility: hidden; z-index: 1; height: 300px; width: 35%; overflow: hidden; overflow-y: scroll; overflow-x: scroll;"></ul>
+		<div id="listOfStudentsOfGroupHeading">
+		</div>
+		<div id="listOfStudentsOfGroup">
+			<ul class="editable list-group"></ul>
+		</div>
 		<c:if test="${not empty sessionScope.invalidFields}">
 			<c:remove var="invalidFields" scope="session" />
 		</c:if>
@@ -250,6 +302,9 @@ ul.ui-autocomplete {
 					if (!$('#listOfStudentsOfGroup').is(':empty')) {
 						$("#listOfStudentsOfGroup").empty();
 					}
+					if (!$('#listOfStudentsOfGroupHeading').is(':empty')) {
+						$("#listOfStudentsOfGroupHeading").empty();
+					}
 					getStudents(groupId);
 					$(".input-invalid").empty();
 					alert('Student has been removed successfully!')
@@ -265,6 +320,13 @@ ul.ui-autocomplete {
 			document.getElementById("searchStudents").value = "";
 			if (!$('#listOfStudentsOfGroup').is(':empty')) {
 				$("#listOfStudentsOfGroup").empty();
+				document.getElementById('listOfStudentsOfGroup').style.visibility = 'hidden';
+
+			}
+			if (!$('#listOfStudentsOfGroupHeading').is(':empty')) {
+				$("#listOfStudentsOfGroupHeading").empty();
+				document.getElementById('listOfStudentsOfGroupHeading').style.visibility = 'hidden';
+
 			}
 			if (!$('#alert').is(':empty')) {
 				$("#alert").remove();
@@ -311,11 +373,19 @@ ul.ui-autocomplete {
 													+ groupId
 													+ "\")' ><span  class='badge glyphicon glyphicon-remove'>"
 													+ " "
-													+ "</span></button></li>")
-							document.getElementById('listOfStudentsOfGroup').style.visibility = 'visible';
+													+ "</span></button></li>");
+						}
+						document.getElementById('listOfStudentsOfGroup').style.visibility = 'visible';
+						if ($('#listOfStudentsOfGroup').is(':empty')) {
+							document.getElementById('listOfStudentsOfGroupHeading').append('There are no students in this group.');
+							
+						}else{
+							document.getElementById('listOfStudentsOfGroupHeading').append('Students in chosen group:');
 
 						}
+						document.getElementById('listOfStudentsOfGroupHeading').style.visibility = 'visible';
 					}
+					
 				});
 	}
 	function selectOption(index) {

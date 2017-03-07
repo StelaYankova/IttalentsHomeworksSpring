@@ -10,12 +10,17 @@
 <title>Insert title here</title>
 </head>
 <style>
-#formAddGroup {
+/* #formAddGroup {
 	position: absolute;
 	left: 60px;
 	top: 220px;
 	background-color: #ffffff;
 	width: 500px;
+} */
+#formAddGroup {
+	margin: 0 auto;
+	margin-top: 80px;
+	width: 42%;
 }
 </style>
 <body>
@@ -40,20 +45,23 @@
 			</ul>
 		</nav>
 	</div>
-	<div id="pageWrapper">
-		<c:if test="${not empty sessionScope.invalidFields}">
+	<c:if test="${not empty sessionScope.invalidFields}">
 			<c:if test="${not sessionScope.invalidFields}">
-				<div class="alert alert-success">
+				<div class="alert alertAllPages alert-success">
 					<strong>Success!</strong> Group has been updated successfully
 				</div>
 			</c:if>
 		</c:if>
+	<div id="pageWrapper">
+		
 		<div id="formAddGroup" align="right">
+				<legend style="text-align: left">Update Group</legend>
+		
 			<form action="http://localhost:8080/MyProject/UpdateGroupServlet" method="POST"
 				id="updateGroupForm">
-				<label
+				<!-- <label
 					style="position: absolute; left: 290px; text-decoration: underline;">Update
-					group</label> <br> <br> <br>
+					group</label> <br> <br> <br> -->
 				<c:if test="${not empty sessionScope.invalidFields}">
 					<c:if test="${sessionScope.invalidFields}">
 						<p class="input-invalid-or-empty">Invalid fields</p>
@@ -65,9 +73,9 @@
 					</c:if>
 				</c:if>
 				<div class="form-group">
-					<label class="control-label col-sm-6">Name</label>
-					<div class="col-sm-6">
-						<input type="text" name="groupName" maxlength="20"
+					<label class="control-label col-sm-4" style="padding-right: 30px;">Name:</label>
+					<div class="col-sm-7">
+						<input type="text" class="form-control" name="groupName" maxlength="20"
 							placeholder="Enter name" data-toggle="popover"
 							class="form-control" value="${sessionScope.currGroup.name}"
 							data-placement="bottom" data-trigger="focus" maxlength="20"
@@ -90,9 +98,9 @@
 				</div>
 				<br>
 				<div class="form-group">
-					<label class="control-label col-sm-6">Teachers</label>
-					<div class="col-sm-6">
-						<select class="selectpicker" multiple name="teachers">
+					<label class="control-label col-sm-4" style="padding-right: 30px;">Teachers</label>
+					<div class="col-sm-7">
+						<select class="selectpicker form-control" multiple name="teachers">
 							<c:forEach items="${applicationScope.allTeachers}" var="teacher">
 								<c:set var="isTeacherInGroup" value="false"></c:set>
 								<c:forEach items="${teacher.groups}" var="group">
@@ -118,12 +126,21 @@
 						</c:if>
 					</div>
 				</div>
-				<br> <br>
-				<div class="form-group">
+				<br><br>
+				<!-- <div class="form-group">
 					<div class="col-sm-offset-3 col-sm-2" style="left: 290px">
 						<button style="align: right" type="submit" class="btn btn-default">Save</button>
 					</div>
-				</div>
+				</div> -->
+				<legend></legend>
+					<div class="form-group">
+						<div class="col-md-offset-4 col-sm-5">
+							<input
+								style="/* margin-right: 30px;  */background-color: #2E71AC; color: #ffffff"
+								type="submit" class=" form-control btn btn-default"
+								value="Update">
+						</div>
+					</div>
 			</form>
 		</div>
 		<c:if test="${not empty sessionScope.invalidFields}">

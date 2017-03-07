@@ -105,7 +105,7 @@ public class GroupDAO implements IGroupDAO {
 			ps.setInt(1, group.getId());
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				teachersOfGroup.add(new Teacher(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getBoolean(4)));
+				teachersOfGroup.add(new Teacher(rs.getInt(1), rs.getString(2), rs.getString(3)));
 			}
 		} catch (SQLException e) {
 			throw new GroupException("Something went wrong with checking the teaches of a group..");
@@ -133,7 +133,7 @@ public class GroupDAO implements IGroupDAO {
 				Student currStudent = (Student) UserDAO.getInstance().getStudentsByUsername(rs.getString(2));
 				ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance()
 						.getHomeworksOfStudent(currStudent.getId());
-				studentsOfGroup.add(new Student(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getBoolean(4),
+				studentsOfGroup.add(new Student(rs.getInt(1), rs.getString(2), rs.getString(3), 
 						homeworksOfStudent));
 			}
 		} catch (SQLException e) {
