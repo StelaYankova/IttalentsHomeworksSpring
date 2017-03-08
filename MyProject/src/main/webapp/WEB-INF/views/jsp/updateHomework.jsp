@@ -100,7 +100,7 @@
 
 			<form action="http://localhost:8080/MyProject/UpdateHomeworkServlet"
 				method="POST" enctype="multipart/form-data" id="updateHomeworkForm">
-
+				
 
 				<c:if test="${not empty sessionScope.invalidFields}">
 					<c:if test="${sessionScope.invalidFields}">
