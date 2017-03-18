@@ -7,35 +7,30 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<link href="<c:url value="css/seeYourHomeworksCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+
 </head>
-<style>
-#divTable {
-	position: absolute;
-	top: 150px;
-	left: 20px;
-	width: 50%;
-}
-</style>
 <body>
 	<%@ include file="navBarStudent.jsp"%>
 	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
+					href="./GetMainPageStudent">Home</a>
 					<span class="divider"> <span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
-				<li><a
-					href="http://localhost:8080/MyProject/GetHomeworksOfGroupsServlet">Homeworks
-						of chosen group</a> <span class="divider"> <span
+				<li><c:out
+						value="${sessionScope.chosenGroupName}" ></c:out><span class="divider"> <span
 						class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
 				</span></li>
 			</ul>
 		</nav>
 	</div>
 	<div id="pageWrapper">
-		<br>
+			<h4 id = "pageTitle"><b><u>Your homeworks</u></b></h4>
+	
 		<div id="divTable">
 			<table border="1"
 				class="table table-striped table-bordered table-hover"
@@ -50,7 +45,7 @@
 					<c:forEach var="homework"
 						items="${sessionScope.currHomeworksOfGroup}">
 						<tr>
-							<td><form action="http://localhost:8080/MyProject/GetHomeworkServlet" method="GET">
+							<td><form action="./GetHomeworkServlet" method="GET">
 									<input type="hidden" name="id" value='${homework.id}'>
 									<button type="submit" class="btn btn-link">
 										<c:out value="${homework.heading}" />
@@ -67,7 +62,6 @@
 			</table>
 		</div>
 	</div>
-						<%@ include file="footer.jsp"%>
 	
 </body>
 <script>
@@ -81,12 +75,15 @@
 			} ],
 			"dom" : '<"top"l>rt<"bottom"ip><"clear">',
 			"aoColumns" : [ {
-				sWidth : '4%'
+				sWidth : '1%'
 			}, {
-				sWidth : '4%'
+				sWidth : '3%'
 			}, ],
 			"lengthMenu" : [ 5, 8 ],
-			"bDestroy" : true
+			"bDestroy" : true,
+			"bPaginate" : false,
+			"ordering": false,
+			"bInfo": false
 		});
 	});
 	$(function() {
@@ -97,6 +94,8 @@
 				},
 				403 : function() {
 					location.href = '/MyProject/forbiddenPage';
+				},404 : function(){
+					location.href = '/MyProject/pageNotFoundPage';
 				},
 				500 : function() {
 					location.href = '/MyProject/exceptionPage';

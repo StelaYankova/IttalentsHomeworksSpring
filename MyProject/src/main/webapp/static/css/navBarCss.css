@@ -1,0 +1,76 @@
+@CHARSET "UTF-8";
+
+#signInButton{
+	align: right;
+}
+a.navbar-brand{
+	padding-top: 30px;
+	 padding-left:80px;
+}
+.input-invalid-login {
+	position: absolute;
+	top: 30px;
+	right: 270px;
+	color: red;
+}
+
+.navbar {
+	background-color: #2E71AC ;
+	margin-bottom: 0px;
+	min-height: 80px !important;
+}
+
+.header-menu {
+	float: left;
+	line-height: 26px;
+	margin-left: 10px;
+}
+
+.navbar-nav>li>a, .navbar-brand {
+	padding-top: 6px !important;
+	height: 20px;
+}
+
+.navbar-header {
+	z-index: 1;
+}
+
+#img-href {
+	position: absolute;
+	z-index: 1;
+}
+ #signInForm{
+	margin-top:0px;
+	margin-left: 820px;
+}
+.input-invalid-login{
+	margin-top:22px;
+} 
+#registerPageButton {
+	text-align: right;
+	padding-left: 1050px;
+	top: -8px;
+	color: #9d9d9d;  
+}
+
+.wrapword {
+	white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+	white-space: -webkit-pre-wrap; /*Chrome & Safari */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	white-space: pre-wrap; /* css-3 */
+	word-wrap: break-word; /* Internet Explorer 5.5+ */
+	word-break: break-all;
+	white-space: normal;
+}
+
+/* #formFields {
+	top: 110px;
+	right: 0;
+	width: 500px;
+} */
+/* 
+#formContainer {
+	padding-left: 200px;
+} */
+ 

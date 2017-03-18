@@ -261,7 +261,7 @@ public class TestDAO {
 	}
 	
 	@Test
-	public void test21addTeacherGrade() throws UserException, ValidationException{
+	public void test21addTeacherGrade() throws UserException, ValidationException, GroupException{
 		ArrayList<Homework> homeworksOfStudentByGroup = UserDAO.getInstance().getHomeworksOfStudentByGroup(user1.getId(), group1);
 		assertEquals(0, homeworksOfStudentByGroup.get(0).getTeacherGrade());
 		UserDAO.getInstance().setTeacherGrade(hd, user1.getId(), 12);

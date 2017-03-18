@@ -7,38 +7,25 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/addGroupCss.css" />" rel="stylesheet">
 </head>
-<style>
-/* #formAddGroup {
-	position: absolute;
-	left: 60px;
-	top: 220px;
-	background-color: #ffffff;
-	width: 500px;
-	margin: 0 auto;
-} */
-#formAddGroup {
-	margin: 0 auto;
- 	margin-top: 80px;
- 	width: 40%;
-}
-</style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
 	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+					href="./GetMainPageTeacher">Home</a>
 					<span class="divider"> <span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
-				<li><a href="http://localhost:8080/MyProject/SeeGroups">See
+				<li><a href="./SeeGroups">See
 						groups</a> <span class="divider"> <span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
-				<li><a href="http://localhost:8080/MyProject/AddGroupServlet">Create
-						group</a> <span class="divider"> <span class="accesshide "><span
+				<li>Create
+						group<span class="divider"> <span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 			</ul>
@@ -53,14 +40,9 @@
 		</c:if>
 	<div id="pageWrapper">
 		
-		<div id="formAddGroup" align="right">
-		<legend style="text-align: left">Add Group</legend>
-			<form action="http://localhost:8080/MyProject/AddGroupServlet" method="POST" id="addGroupForm">
-				<!-- <label
-					style="position: absolute; left: 290px; text-decoration: underline;">New
-					group</label> <br> <br> <br> -->
-								
-					
+		<div id="formAddGroup">
+		<legend>Add Group</legend>
+			<form action="./AddGroupServlet" method="POST" id="addGroupForm">
 				<c:if test="${not empty invalidFields}">
 					<c:if test="${invalidFields}">
 						<p class="input-invalid-or-empty">Invalid fields</p>
@@ -72,7 +54,7 @@
 					</c:if>
 				</c:if>
 				<div class="form-group">
-					<label class="control-label col-sm-4" style="padding-right: 30px;">Name:</label>
+					<label class="control-label col-sm-4">Name:</label>
 					<div class="col-sm-7">
 						<input type="text" name="groupName" class="form-control"
 							placeholder="Enter name" data-toggle="popover" value="${nameTry}"
@@ -96,7 +78,7 @@
 				</div>
 				<br>
 				<div class="form-group">
-					<label class="control-label col-sm-4" style="padding-right: 30px;">Teachers:</label>
+					<label class="control-label col-sm-4">Teachers:</label>
 					<div class="col-sm-7" >
 						<select class="selectpicker form-control" data-width="101%"  multiple name="teachers" >
 							<c:forEach items="${applicationScope.allTeachers}" var="teacher">
@@ -126,17 +108,11 @@
 					</div>
 				</div>
 				<br> <br> <br> <br>
-				<!-- <div class="form-group">
-					<div class="col-sm-offset-3 col-sm-2" style="left: 290px">
-						<input style="align: right" type="submit" class="btn btn-default"
-							value="Save">
-					</div>
-				</div> -->
 				<legend></legend>
 					<div class="form-group">
 						<div class="col-md-offset-4 col-sm-5">
 							<input
-								style="/* margin-right: 30px;  */background-color: #2E71AC; color: #ffffff"
+								id = "addButton"
 								type="submit" class=" form-control btn btn-default"
 								value="Add">
 						</div>
@@ -161,7 +137,7 @@
 			return false;
 		}
 		$.ajax({
-			url : 'http://localhost:8080/MyProject/IsGroupNameUnique',
+			url : './IsGroupNameUnique',
 			type : 'GET',
 			data : {
 				"name" : name
@@ -172,7 +148,7 @@
 					isNameValid = true;
 				}
 				$.ajax({
-					url : 'http://localhost:8080/MyProject/IsGroupNameValid',
+					url : './IsGroupNameValid',
 					type : 'GET',
 					data : {
 						"name" : name
@@ -221,6 +197,9 @@
 	          403: function () {
 		            location.href = '/MyProject/forbiddenPage';
 		      },
+		      404 : function(){
+					location.href = '/MyProject/pageNotFoundPage';
+				},
 		      500: function(){
 		    	  location.href = '/MyProject/exceptionPage';
 		      }

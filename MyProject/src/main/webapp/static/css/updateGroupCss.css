@@ -1,0 +1,20 @@
+@CHARSET "UTF-8";
+
+#formUpdateGroup {
+	margin: 0 auto;
+	padding-top: 80px;
+	width: 42%;
+}
+
+legend{
+	text-align: left;
+}
+
+.control-label.col-sm-4{
+	padding-right: 30px;
+}
+
+#updateGroupButton {
+	background-color: #2E71AC;
+	color: #ffffff
+}

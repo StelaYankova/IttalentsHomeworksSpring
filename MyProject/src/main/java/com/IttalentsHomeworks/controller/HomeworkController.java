@@ -1,12 +1,19 @@
 package com.IttalentsHomeworks.controller;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -19,11 +26,13 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
+
 import com.IttalentsHomeworks.DAO.GroupDAO;
 import com.IttalentsHomeworks.DAO.IValidationsDAO;
 import com.IttalentsHomeworks.DAO.UserDAO;
@@ -333,11 +342,14 @@ public class HomeworkController {
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.isTeacher()) {
+			if(request.getSession().getAttribute("currHomework") == null || request.getSession().getAttribute("chosenGroupName") == null || request.getSession().getAttribute("currStudentUsername")==null){
+				return "pageNotFound";
+			}
 			return "homeworkOfStudent";
 		}
 		return "forbiddenPage";
 	}
-
+//TODO optimize code
 	@RequestMapping(value = "/GetHomeworkServlet", method = RequestMethod.GET)
 	protected String getHomework(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -375,6 +387,7 @@ public class HomeworkController {
 					homework = new Homework(h.getTeacherGrade(), h.getTeacherComment(), h.getTasks(),
 							h.getHomeworkDetails());
 					doesUserHaveHomework = true;
+					
 					break;
 				}
 			}
@@ -390,15 +403,59 @@ public class HomeworkController {
 			}
 			request.getSession().setAttribute("hasUploadTimePassed", hasUploadTimePassed);
 			request.getSession().setAttribute("hasUploadTimeCome", hasUploadTimeCome);
+			String gName = null;
+			boolean doesCurrentGroupContainChosenHomework = false;
+			if(request.getSession().getAttribute("chosenGroup") != null){
+			int chosenGroupId = (int) request.getSession().getAttribute("chosenGroup");
+			Group chosenGroup;
+				try {
+					chosenGroup = GroupDAO.getInstance().getGroupById(chosenGroupId);
+					for (HomeworkDetails h : chosenGroup.getHomeworks()) {
+						if (h.getId() == homeworkId) {
+							doesCurrentGroupContainChosenHomework = true;
+							break;
+						}
+					}
+					if (!doesCurrentGroupContainChosenHomework) {
+						for (Group g : user.getGroups()) {
+							for (HomeworkDetails h : g.getHomeworks()) {
+								if (h.getId() == homeworkId) {
+									gName = g.getName();
+									break;
+								}
+							}
+						}
+						request.getSession().setAttribute("chosenGroupName", gName);
+					} else {
+						request.getSession().setAttribute("chosenGroupName", chosenGroup.getName());
+			}
+			} catch (GroupException | UserException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return "currHomeworkPageStudent";
+		}else{
+			for (Group g : user.getGroups()) {
+				for (HomeworkDetails h : g.getHomeworks()) {
+					if (h.getId() == homeworkId) {
+						gName = g.getName();
+						break;
+					}
+				}
+			}
+			request.getSession().setAttribute("chosenGroupName", gName);
+			return "currHomeworkPageStudent";
+
 		}
+			}
 		}
 		return "forbiddenPage";
 	}
 	
-	@RequestMapping(value = { "/GetHomeworksOfGroupsServlet" }, method = RequestMethod.GET)
+	//@RequestMapping(value = { "/GetHomeworksOfGroupsServlet" }, method = RequestMethod.GET)
 	protected String getHomeworksOfGroupsNoGroupIdInUrl(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println("BABABAB");
 		User userTry = (User) request.getSession().getAttribute("user");
 		request.getSession().setAttribute("throughtScores", 0);
 		if (!userTry.isTeacher()) {
@@ -438,6 +495,10 @@ public class HomeworkController {
 							currHd.setId(GroupDAO.getInstance().getHomeworkDetailsId(currHd));
 							homeworks.add(currHd);
 						}
+						Group group1 = GroupDAO.getInstance().getGroupById(groupId);
+						System.out.println(group1.getName() + " IUGYUFTYUYGUHIJL:");
+						request.getSession().setAttribute("chosenGroupName", group1.getName());
+
 						request.getSession().setAttribute("chosenGroup", groupId);
 						request.getSession().setAttribute("currHomeworksOfGroup", homeworks);
 					} else {
@@ -448,6 +509,9 @@ public class HomeworkController {
 					System.out.println(e.getMessage());
 					e.printStackTrace();
 					return "exception";
+				} catch (UserException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 				return "seeYourHomeworks";
@@ -461,16 +525,22 @@ public class HomeworkController {
 		return "forbiddenPage";
 	}
 
-	@RequestMapping(value = { "/GetHomeworksOfGroupsServlet/{groupIdUrl}" }, method = RequestMethod.GET)
-	protected String getHomeworksOfGroups(@PathVariable(value = "groupIdUrl") final String groupIdUrl,
+	@RequestMapping(value = { "/GetHomeworksOfGroupsServlet" }, method = RequestMethod.GET)
+//	@ResponseBody
+	protected String getHomeworksOfGroups(@RequestParam(value = "id", required=false) String groupIdUrl,
 			HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("MABABAB");
+	System.out.println(groupIdUrl);
+	System.out.println(request.getSession().getAttribute("chosenGroup"));
 		User userTry = (User) request.getSession().getAttribute("user");
 		request.getSession().setAttribute("throughtScores", 0);
-		System.out.println("The id : " + groupIdUrl);
+//		System.out.println("The id : " + groupIdUrl);
 		if (!userTry.isTeacher()) {
 			User user = (User) request.getSession().getAttribute("user");
+			System.out.println(groupIdUrl);
+			if(groupIdUrl != null && groupIdUrl.trim() != ""){
 			String groupChosen = groupIdUrl;
-			if (groupChosen != null) {
+//			if (groupChosen != null) {
 				int length = groupIdUrl.length();
 				String number = groupIdUrl;
 				if (length > IValidationsDAO.MIN_SIZE_OF_INTEGER && length < IValidationsDAO.MAX_SIZE_OF_INTEGER) {
@@ -505,6 +575,8 @@ public class HomeworkController {
 							homeworks.add(currHd);
 						}
 						request.getSession().setAttribute("chosenGroup", groupId);
+						Group g = GroupDAO.getInstance().getGroupById(groupId);
+						request.getSession().setAttribute("chosenGroupName", g.getName());
 						request.getSession().setAttribute("currHomeworksOfGroup", homeworks);
 					} else {
 
@@ -514,55 +586,86 @@ public class HomeworkController {
 					System.out.println(e.getMessage());
 					e.printStackTrace();
 					return "exception";
+				} catch (UserException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-
+//			}else{
+//				return "seeYourHomeworks";
+////			}
 				return "seeYourHomeworks";
 			} else {
 				if (request.getSession().getAttribute("chosenGroup") != null) {
 					return "seeYourHomeworks";
 				}
-				return "pageNotFound";
+				return "pageNotFound";//pageNotFound
 			}
 		}
 		return "forbiddenPage";
 	}
 
+	//TODO fix ajax validations (after fix hw name)
 	@RequestMapping(value = "/ReadHomeworkServlet", method = RequestMethod.GET)
 	protected void readHomework(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
-		String fileName = request.getParameter("fileName").trim();
-		String homeworkName = fileName.substring(READ_HOMEWORK_GET_NAME_FROM_INDEX, fileName.length() - READ_HOMEWORK_GET_NAME_TO_INDEX);
-		boolean canUserAccessHomeworkTasks = false;
-		if (!user.isTeacher()) {
-			for (Group g : user.getGroups()) {
-				for (HomeworkDetails hd : g.getHomeworks()) {
-					if (hd.getHeading().equals(homeworkName)) {
+		if (request.getParameter("fileName") != null) {
+			if (!request.getParameter("fileName").trim().equals("")) {
+				String fileName = request.getParameter("fileName").trim();
+				System.out.println(!fileName.equals("") && fileName.length() >= 5);
+				if (!fileName.equals("") && fileName.length() >= 5) {
+					
+					String homeworkName = fileName.substring(READ_HOMEWORK_GET_NAME_FROM_INDEX,
+							fileName.length() - READ_HOMEWORK_GET_NAME_TO_INDEX);
+					boolean canUserAccessHomeworkTasks = false;
+					if (!user.isTeacher()) {
+						for (Group g : user.getGroups()) {
+							for (HomeworkDetails hd : g.getHomeworks()) {
+								if (hd.getHeading().equals(homeworkName)) {
+									canUserAccessHomeworkTasks = true;
+									break;
+								}
+							}
+						}
+					} else {
 						canUserAccessHomeworkTasks = true;
-						break;
 					}
+					if (canUserAccessHomeworkTasks) {
+						File file = new File(IValidationsDAO.SAVE_DIR + File.separator + fileName);
+						if (!file.exists()) {
+							response.setStatus(404);
+							return;
+						}
+
+						response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
+						response.setContentLength((int) file.length());
+						FileInputStream fileInputStream = new FileInputStream(file);
+						OutputStream responseOutputStream = response.getOutputStream();
+						int bytes;
+						while ((bytes = fileInputStream.read()) != -1) {
+							responseOutputStream.write(bytes);
+						}
+						fileInputStream.close();
+					}else{
+						response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
+						return;
+					}
+				} else {
+					response.setStatus(404);
+					return;
 				}
+				
+			} else {
+				response.setStatus(404);
+				return;
 			}
 		} else {
-			canUserAccessHomeworkTasks = true;
+			response.setStatus(404);
+			return;
 		}
-		if (canUserAccessHomeworkTasks) {
-			File file = new File(IValidationsDAO.SAVE_DIR + File.separator + fileName);
-			response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
-			response.setContentLength((int) file.length());
-			FileInputStream fileInputStream = new FileInputStream(file);
-			OutputStream responseOutputStream = response.getOutputStream();
-			int bytes;
-			while ((bytes = fileInputStream.read()) != -1) {
-				responseOutputStream.write(bytes);
-			}
-			fileInputStream.close();
-		//	return "currHomeworkPageStudent";
-		}
-		//return "forbiddenPage";
-		response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
+		
 	}
-	
+	//TODO do I need validations here (post + ajax)
 	@RequestMapping(value = "/SaveChangedSolutionText", method = RequestMethod.POST)
 	protected void changeSolutionText(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		User user = (User) request.getSession().getAttribute("user");
@@ -573,8 +676,10 @@ public class HomeworkController {
 		String fileName = IValidationsDAO.SAVE_DIR + File.separator + "hwId" + homeworkDetails.getId() + "userId" + user.getId()
 		+ "taskNum" + taskNum + ".java";
 		if(text.trim().length() > IValidationsDAO.MIN_NUMBER_OF_CHARACTERS_SOLUTION_TASK && text.length() < IValidationsDAO.MAX_NUMBER_OF_CHARACTERS_SOLUTION_TASK_1_MB){
-		 PrintStream out = new PrintStream(new FileOutputStream(fileName));
-		    out.print(text);
+			Writer out = new BufferedWriter(new OutputStreamWriter(
+				    new FileOutputStream(fileName), "UTF-8"));		 
+			out.write(text);
+			System.out.println(text);
 		    out.flush();
 		    out.close();
 		    response.setStatus(IValidationsDAO.SUCCESS_STATUS);
@@ -583,12 +688,15 @@ public class HomeworkController {
 		}
 		
 	}
-	
+	//TODO is it bad to have so many if-else
 	@RequestMapping(value = "/ReadJavaFileServlet", method = RequestMethod.GET)
 	protected void readJavaFile(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		int taskNum = Integer.parseInt(request.getParameter("taskNum")) - 1;
+		if(request.getParameter("taskNum") != null && !request.getParameter("taskNum").trim().equals("")){
+		if(ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("taskNum").trim())){
+		int taskNum = Integer.parseInt(request.getParameter("taskNum").trim()) - 1;
 		User user = (User) request.getSession().getAttribute("user");
+		if(request.getSession().getAttribute("currHomework") != null){
 		Homework homework = (Homework) request.getSession().getAttribute("currHomework");
 		HomeworkDetails homeworkDetails = homework.getHomeworkDetails();
 		String fileName = null;
@@ -603,11 +711,13 @@ public class HomeworkController {
 		File f = new File(fileName);
 		String strLine = "";
 		if (f.exists()) {
-				strLine = new String(Files.readAllBytes(Paths.get(fileName)));
+				strLine = new String(Files.readAllBytes(Paths.get(fileName)),
+				        StandardCharsets.ISO_8859_1);
 		} else {
 			strLine = "Solution is not uploaded yet.";
 		}
 		JsonObject obj = new JsonObject();
+		if(homework.getTasks().size() > taskNum && taskNum >= 0){
 		Task task = homework.getTasks().get(taskNum);
 		if (strLine.equals("Solution is not uploaded yet.")) {
 			obj.addProperty("uploadedOn", "-");
@@ -618,6 +728,26 @@ public class HomeworkController {
 		}
 		response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 		response.getWriter().write(obj.toString());
+					} else {
+						System.out.println(taskNum);
+						System.out.println(homework.getTasks().size());
+						response.setStatus(404);
+						return;
+
+					}
+		}else{
+			response.setStatus(404);
+			return;
+		}
+		
+		}else{
+			response.setStatus(404);
+			return;
+		}
+		}else{
+			response.setStatus(404);
+			return;
+		}
 	}
 
 	@RequestMapping(value = "/RemoveHomeworkDetails", method = RequestMethod.POST)
@@ -646,23 +776,25 @@ public class HomeworkController {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.isTeacher()) {
 			try {
-				int groupId = Integer.parseInt(request.getParameter("groupId"));
-
-				int studentId = Integer.parseInt(request.getParameter("studentId"));
+				if(request.getParameter("groupId") != null && !request.getParameter("groupId").trim().equals("") && request.getParameter("studentId") != null && !request.getParameter("studentId").trim().equals("")){
+				if(ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("groupId").trim()) && ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("studentId").trim())){
+				int groupId = Integer.parseInt(request.getParameter("groupId").trim());
+				int studentId = Integer.parseInt(request.getParameter("studentId").trim());
 				Group selectedGroup = null;
 				JsonArray array = new JsonArray();
 				ArrayList<HomeworkDetails> homeworkDetailsByGroup = new ArrayList<>();
 				selectedGroup = GroupDAO.getInstance().getGroupById(groupId);
+				if(selectedGroup != null){
+
 				homeworkDetailsByGroup.addAll(GroupDAO.getInstance().getHomeworkDetailsOfGroup(selectedGroup));
-
 				boolean hasStudentGivenMinOneTask = false;
-
 				for (HomeworkDetails hd : homeworkDetailsByGroup) {
 					JsonObject obj = new JsonObject();
 					obj.addProperty("heading", hd.getHeading());
 					obj.addProperty("id", hd.getId());
 					obj.addProperty("opens", hd.getOpeningTime().toString());
 					obj.addProperty("closes", hd.getClosingTime().toString());
+					if(UserDAO.getInstance().getUserById(studentId) != null){
 					for (Homework h : UserDAO.getInstance().getHomeworksOfStudentByGroup(studentId, selectedGroup)) {
 						if (hd.getId() == h.getHomeworkDetails().getId()) {
 							int grade = h.getTeacherGrade();
@@ -681,20 +813,37 @@ public class HomeworkController {
 							break;
 						}
 					}
+					}else{
+						response.setStatus(404);return;
+					}
 					array.add(obj);
+				}
+				}else{
+					response.setStatus(404);return;
 				}
 				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 				response.getWriter().write(array.toString());
+				}else{
+					response.setStatus(404);
+					return;
+				}
+				}else{
+					response.setStatus(404);
+					return;
+				}
 			} catch (GroupException | UserException e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
 				response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
+			} catch (ValidationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		} else {
-			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);return;
 		}
 	}
-
+//NONO
 	@RequestMapping(value = "/seeHomeworksOfGroupServlet", method = RequestMethod.GET)
 	protected void seeHomeworksOfGroupServlet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -780,10 +929,12 @@ public class HomeworkController {
 
 							}
 						}
+						//request.getSession().setAttribute("chosenGroup", request.getParameter("selectedGroupId"));
 						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 						response.getWriter().write(array.toString());
 					} else {
 						int selectedGroupId = Integer.parseInt(request.getParameter("selectedGroupId"));
+						request.getSession().setAttribute("chosenGroup", selectedGroupId);
 						selectedGroup = GroupDAO.getInstance().getGroupById(selectedGroupId);
 						homeworkDetailsByGroup.addAll(GroupDAO.getInstance().getHomeworkDetailsOfGroup(selectedGroup));
 						for (HomeworkDetails hd : homeworkDetailsByGroup) {
@@ -811,6 +962,9 @@ public class HomeworkController {
 					System.out.println(e.getMessage());
 					e.printStackTrace();
 					response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
+				} catch (ValidationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		} else {
@@ -1274,14 +1428,14 @@ public class HomeworkController {
 	}
 
 	@RequestMapping(value = "/UploadSolutionServlet", method = RequestMethod.POST)
-	protected String uploadSolution(HttpServletRequest request, @RequestParam(value = "file") MultipartFile fileUploaded,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void uploadSolution(HttpServletRequest request,
+			HttpServletResponse response ,@RequestParam("datafile") MultipartFile uploadfile) throws ServletException, IOException {
+		
 		int taskNum = Integer.parseInt(request.getParameter("taskNum")) - 1;
 		Homework homework = (Homework) request.getSession().getAttribute("currHomework");
 		HomeworkDetails homeworkDetails = homework.getHomeworkDetails();
 		User user = (User) request.getSession().getAttribute("user");
 		if (!user.isTeacher()) {
-
 			String savePath = IValidationsDAO.SAVE_DIR;
 
 			// creates the save directory if it does not exists
@@ -1290,7 +1444,7 @@ public class HomeworkController {
 				fileSaveDir.mkdir();
 			}
 			String fileName = " ";
-			MultipartFile file = fileUploaded;
+			MultipartFile file =uploadfile;
 			if (!isFileEmptyUploadSolution(file)) {
 				if (!isSizeValidUploadSolution(file)) {
 					request.getSession().setAttribute("wrongSize", true);
@@ -1314,15 +1468,18 @@ public class HomeworkController {
 							}
 							System.out.println(e.getMessage());
 							e.printStackTrace();
-							return "exception";
+						//	return "exception";
+							response.setStatus(500);
 						}
 					}
 				}
 			}
 			request.getSession().setAttribute("currTaskUpload", taskNum);
-			return "redirect:/GetHomeworkPageServlet";
+			//return "redirect:/GetHomeworkPageServlet";
+			response.setStatus(200);
 		} else {
-			return "forbiddenPage";
+			//return "forbiddenPage";
+			response.setStatus(403);
 		}
 	}
 

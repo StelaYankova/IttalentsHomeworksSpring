@@ -1,0 +1,23 @@
+@CHARSET "UTF-8";
+
+#divTable {
+    padding-top: 150px;
+	   margin: 0 auto;
+   	visibility:hidden;
+    
+}
+#select{
+	position: absolute;
+	margin-top: 40px;
+	margin-left: 60px;
+	width: 80%;
+}
+
+#pageTitle{
+	text-align:center;
+}
+
+#divTable{
+	width: 60%;
+	margin: 0 auto;
+}

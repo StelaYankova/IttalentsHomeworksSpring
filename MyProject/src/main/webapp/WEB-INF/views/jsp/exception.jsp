@@ -6,20 +6,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="<c:url value="css/exceptionCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+
 <title>Insert title here</title>
 </head>
-<style>
-body {
-	background:
-		url("http://localhost:8080/MyProject/images/exception.png")
-		no-repeat center center fixed;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	
-    background-size:100% 87vh;
-}
-</style>
 <body>
 	<c:if test="${sessionScope.isTeacher == false}">
 		<%@ include file="navBarStudent.jsp"%>

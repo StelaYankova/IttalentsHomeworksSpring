@@ -25,6 +25,7 @@ public class LoginFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
         HttpSession session = request.getSession(false);
+        System.out.println("IN");
         String loginURI = request.getContextPath() + "/index";
         String loginURI3 = request.getContextPath() + "/LoginServlet";
         String loginURI4 = request.getContextPath() + "/RegisterServlet";
@@ -42,15 +43,27 @@ public class LoginFilter implements Filter {
         boolean loginRequest7 = request.getRequestURI().equals(loginURI7);
         boolean loginRequest8 = request.getRequestURI().equals(loginURI8);
         boolean isImage = false;
+        boolean isStylesheet = false;
+        System.out.println("0000000");
+        System.out.println(request.getRequestURI());
+        if(request.getRequestURI().length() >= 5){
+            System.out.println(request.getRequestURI().substring(request.getRequestURI().length()-4, request.getRequestURI().length()));
+
+        	isStylesheet = request.getRequestURI().substring(request.getRequestURI().length()-4, request.getRequestURI().length()).equals(".css");
+        }
         if(request.getRequestURI().length() >= 16){
         	isImage = request.getRequestURI().substring(IS_IMAGE_BEG, IS_IMAGE_END).equals("/image");
         }
-		if (loggedIn || loginRequest || loginRequest2 || loginRequest1 || loginRequest5 || loginRequest6 || loginRequest7 || loginRequest8 || isImage) {
+		if (loggedIn || loginRequest || loginRequest2 || loginRequest1 || loginRequest5 || loginRequest6 || loginRequest7 || loginRequest8 || isImage || isStylesheet) {
+			System.out.println("WIll filter to " + request.getRequestURI());
 			chain.doFilter(request, response);
 		} else {
+			System.out.println("WIll not filter");
 			if(!isAjax((HttpServletRequest) req)){
+				System.out.println("WIll not filter 1");
 				response.sendRedirect(loginURI);
 			}else{
+				System.out.println("WIll not filter2");
 				response.setStatus(UNAUTORIZED_STATUS_CODE);
 			}
 		}

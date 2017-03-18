@@ -7,34 +7,22 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-</head>
-<style>
-/* #formAddHomework {
-	position: absolute;
-	left: 60px;
-	top: 220px;
-	background-color: #ffffff;
-	width: 600px;
-} */
-#formAddHomework {
-	margin: 0 auto;
-	margin-top: 80px;
-	width: 42%;
-}
+<link href="<c:url value="css/addHomeworkCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 
-</style>
+</head>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
 	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+					href="./GetMainPageTeacher">Home</a>
 					<span class="divider"> <span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
-				<li><a href="http://localhost:8080/MyProject/AddHomework">Add
-						homework</a> <span class="divider"> <span class="accesshide "><span
+				<li>Add
+						homework<span class="divider"> <span class="accesshide "><span
 							class="arrow_text"></span>&nbsp;</span>
 				</span></li>
 			</ul>
@@ -49,14 +37,11 @@
 		</c:if>
 	<div id="pageWrapper">
 		
-		<div id="formAddHomework" align="right">
-					<legend style="text-align: left">Add homework</legend>
+		<div id="formAddHomework" >
+					<legend>Add homework</legend>
 		
-			<form action="http://localhost:8080/MyProject/AddHomework" method="POST"
+			<form action="./AddHomework" method="POST"
 				enctype="multipart/form-data" id="addHomeworkForm">
-				<!-- <label
-					style="position: absolute; left: 290px; text-decoration: underline;">Add
-					homework</label> <br> <br> <br> -->
 				<c:if test="${not empty invalidFields}">
 					<c:if test="${invalidFields}">
 						<p class="input-invalid-or-empty">Invalid fields</p>
@@ -66,7 +51,7 @@
 					<p class="input-invalid-or-empty">Empty fields</p>
 				</c:if>
 				<div class="form-group">
-					<label class="control-label col-sm-4" style="padding-right: 30px;">Heading:</label>
+					<label class="control-label col-sm-4" >Heading:</label>
 					<div class="col-sm-7">
 						<input type="text" class="form-control" name="name"
 							value="${nameTry}" placeholder="Enter heading" maxlength="40"
@@ -91,7 +76,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<br> <label class="control-label col-sm-4" style="padding-right: 30px;">Opening
+					<br> <label class="control-label col-sm-4">Opening
 						time:</label>
 					<div class='col-sm-7'>
 						<div class='input-group date' id='datetimepicker6'>
@@ -114,7 +99,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<br> <label class="control-label col-sm-4" style="padding-right: 30px;">Closing
+					<br> <label class="control-label col-sm-4">Closing
 						time:</label>
 					<div class='col-sm-7'>
 						<div class='input-group date' id='datetimepicker7'>
@@ -137,7 +122,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<br> <label class="control-label col-sm-4" style="padding-right: 30px;">Number of
+					<br> <label class="control-label col-sm-4">Number of
 						tasks:</label>
 					<div class="col-sm-7">
 						<input type="number" min="0" max="41" maxlength="2"
@@ -157,7 +142,7 @@
 				
 				<br>
 				<div class="form-group">
-					<label class="control-label col-sm-4" style="padding-right: 30px;">Groups</label>
+					<label class="control-label col-sm-4">Groups</label>
 					<div class="col-sm-7">
 						<select class="selectpicker form-control" data-width="101%" multiple name="groups" id="groups"
 							required>
@@ -187,7 +172,7 @@
 					</div>
 				</div>
 <div class="form-group">
-					<br> <label class="control-label col-sm-4" style="padding-right: 30px;">Tasks:</label>
+					<br> <label class="control-label col-sm-4">Tasks:</label>
 					<div class="col-sm-7">
 						<input type="file" accept="application/pdf" name="file" required />
 						<c:if test="${not empty validFile}">
@@ -201,19 +186,13 @@
 				</div>
 				<br>
 				<legend></legend>
-				<div class="form-group">
+				<div class="form-group" >
 					<div class="col-md-offset-4 col-sm-5">
-						<input style="background-color: #2E71AC; color: #ffffff"
-							type="submit" class=" form-control btn btn-default"
+						<input 
+							type="submit" id = "addButton" class=" form-control btn btn-default"
 							value="Add">
 					</div>
 				</div>
-				<!-- <div class="form-group">
-					<div class="col-sm-offset-3 col-sm-2" style="left: 360px">
-						<br> <input style="align: right" type="submit"
-							class="btn btn-default" value="Save">
-					</div>
-				</div> -->
 			</form>
 		</div>
 	</div>
@@ -335,7 +314,7 @@
 
 							$
 									.ajax({
-										url : 'http://localhost:8080/MyProject/IsHomeworkHeadingValid',
+										url : './IsHomeworkHeadingValid',
 										type : 'GET',
 										data : {
 											"heading" : name
@@ -348,7 +327,7 @@
 											}
 											$
 													.ajax({
-														url : 'http://localhost:8080/MyProject/IsHomeworkHeadingUnique',
+														url : './IsHomeworkHeadingUnique',
 														type : 'GET',
 														data : {
 															"heading" : name
@@ -393,7 +372,7 @@
 										}
 									});
 							$.ajax({
-								url : 'http://localhost:8080/MyProject/IsHomeworkOpeningTimeValid',
+								url : './IsHomeworkOpeningTimeValid',
 								type : 'GET',
 								data : {
 									"opens" : opens
@@ -416,7 +395,7 @@
 							});
 							$
 									.ajax({
-										url : 'http://localhost:8080/MyProject/IsHomeworkClosingTimeValid',
+										url : './IsHomeworkClosingTimeValid',
 										type : 'GET',
 										data : {
 											"opens" : opens,
@@ -487,6 +466,8 @@
 					},
 					403 : function() {
 						location.href = '/MyProject/forbiddenPage';
+					},404 : function(){
+						location.href = '/MyProject/pageNotFoundPage';
 					},
 					500 : function() {
 						location.href = '/MyProject/exceptionPage';

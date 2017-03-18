@@ -28,7 +28,7 @@ public interface IUserDAO {
 
 	ArrayList<Group> getGroupsOfUser(int userId) throws UserException, GroupException;
 
-	ArrayList<Homework> getHomeworksOfStudentByGroup(int sId, Group g) throws UserException;
+	ArrayList<Homework> getHomeworksOfStudentByGroup(int sId, Group g) throws UserException, GroupException, ValidationException;
 
 	ArrayList<Task> getTasksOfHomeworkOfStudent(int userId, HomeworkDetails hd) throws UserException;
 

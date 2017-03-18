@@ -10,54 +10,25 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<link href="<c:url value="css/updateHomeworkCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+
 </head>
-<style>
-/* #formUpdate {
-	position: absolute;
-	left: 60px;
-	top: 220px;
-	background-color: #ffffff;
-	width: 500px;
-} */
-#formUpdate {
-	margin: 0 auto;
-	margin-top: 80px;
-	width: 42%;
-}
-
-.multiselect {
-	width: 200px;
-}
-
-#removeHomeworkForm {
-	position: absolute;
-	width: 10%;
-	left: 818px;
-	top: 199px;
-}
-
-#downloadHomeworkForm {
-	position: absolute;
-	left: 540px;
-	top: 205px;
-}
-</style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
 	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+					href="./GetMainPageTeacher">Home</a>
 					<span class="divider"><span
 						class="accesshide "><span class="arrow_text"></span></span> </span></li>
 				<li><a
-					href="http://localhost:8080/MyProject/SeeHomeworksServlet">See/Update
-						homeworks</a> <span class="divider"> <span class="accesshide "><span
+					href="./SeeHomeworksServlet">See/Update homeworks</a> <span class="divider"> <span class="accesshide "><span
 							class="arrow_text"></span></span></span></li>
-				<li><a
-					href="http://localhost:8080/MyProject/UpdateHomeworkServlet?chosenHomework=${sessionScope.currHomework.id}">Update
-						homework</a> <span class="divider"> <span class="accesshide "><span
+				<li><%-- <a
+					href="./UpdateHomeworkServlet?chosenHomework=${sessionScope.currHomework.id}"> --%>Update
+						homework<span class="divider"> <span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 			</ul>
@@ -72,8 +43,8 @@
 		</c:if>
 	<div id="pageWrapper">
 		<div id = "downloadHomeworkForm">
-			<form action="http://localhost:8080/MyProject/ReadHomeworkServlet"
-				method="GET" style="">
+			<form action="./ReadHomeworkServlet"
+				method="GET">
 				<input type='hidden' value='${sessionScope.currHomework.tasksFile}'
 					name='fileName'>
 				 <button class='btn btn-link btn-xs' type='submit'><u>download tasks</u>
@@ -84,21 +55,17 @@
 				</button>
 			</form>
 		</div>
-		<form action="http://localhost:8080/MyProject/RemoveHomeworkDetails"
+		<form action="./RemoveHomeworkDetails"
 			method="POST" id = "removeHomeworkForm" >
-			<!-- <div class="form-group"> -->
-<!-- 				<div class="col-sm-offset-3 col-sm-2" style="left: 290px">
- -->					<button type="submit"
+							<button type="submit"
 						class="glyphicon glyphicon-remove btn btn-default btn-xs"
 						onclick="javascript:return confirm('Are you sure you want to remove this homework permanently?')"></button>
-<!-- 				</div>
- --><!-- 			</div>
- -->		</form>
+	</form>
 		<div id="formUpdate" align="right">
 		
-			<legend style="text-align: left">Update homework</legend>
+			<legend>Update homework</legend>
 
-			<form action="http://localhost:8080/MyProject/UpdateHomeworkServlet"
+			<form action="./UpdateHomeworkServlet"
 				method="POST" enctype="multipart/form-data" id="updateHomeworkForm">
 				
 
@@ -113,7 +80,7 @@
 					</c:if>
 				</c:if>
 				<div class="form-group">
-					<label class="control-label col-sm-4" style="padding-right: 30px;">Heading:</label>
+					<label class="control-label col-sm-4">Heading:</label>
 					<div class="col-sm-7">
 						<input type="text" class="form-control" name="name"
 							value='${sessionScope.currHomework.heading}' maxlength="40"
@@ -138,8 +105,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<br> <label class="control-label col-sm-4"
-						style="padding-right: 30px;">Opening time:</label>
+					<br> <label class="control-label col-sm-4">Opening time:</label>
 					<div class='col-sm-7'>
 						<div class='input-group date' id='datetimepicker6'>
 							<input type='text'
@@ -162,8 +128,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<br> <label class="control-label col-sm-4"
-						style="padding-right: 30px;">Closing time:</label>
+					<br> <label class="control-label col-sm-4">Closing time:</label>
 					<div class='col-sm-7'>
 						<div class='input-group date' id='datetimepicker7'>
 							<input type='text'
@@ -187,7 +152,7 @@
 				</div>
 
 				<div class="form-group">
-					<label class="control-label col-sm-4" style="padding-right: 30px;">Number
+					<label class="control-label col-sm-4">Number
 						of tasks:</label>
 					<div class="col-sm-7">
 						<input type="number" min="1" class="form-control"
@@ -205,8 +170,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<br> <br> <label class="control-label col-sm-4"
-						style="padding-right: 30px;">Groups:</label>
+					<br> <br> <label class="control-label col-sm-4">Groups:</label>
 					<div class="col-sm-7">
 						<select class="selectpicker form-control" data-width="101%"
 							multiple name="groups" id="groups" class="form-control" required>
@@ -237,8 +201,7 @@
 				</div>
 				<br> <br>
 				<div class="form-group">
-					<br> <label class="control-label col-sm-4"
-						style="padding-right: 30px;">Tasks:</label>
+					<br> <label class="control-label col-sm-4">Tasks:</label>
 					<div class="col-sm-7 ">
 						<input type="file" accept="application/pdf" name="file">
 						<c:if test="${not empty sessionScope.validFile}">
@@ -254,7 +217,7 @@
 				<legend></legend>
 				<div class="form-group">
 					<div class="col-md-offset-4 col-sm-5">
-						<input style="background-color: #2E71AC; color: #ffffff"
+						<input id = "updateHomeworkButton"
 							type="submit" class=" form-control btn btn-default"
 							value="Update">
 					</div>
@@ -382,7 +345,7 @@
 							}
 							$
 									.ajax({
-										url : 'http://localhost:8080/MyProject/IsHomeworkUpdateHeadingValid',
+										url : './IsHomeworkUpdateHeadingValid',
 										type : 'GET',
 										data : {
 											"heading" : name
@@ -394,7 +357,7 @@
 											}
 											$
 													.ajax({
-														url : 'http://localhost:8080/MyProject/IsHomeworkUpdateHeadingIsRepeated',
+														url : './IsHomeworkUpdateHeadingIsRepeated',
 														type : 'GET',
 														data : {
 															"heading" : name
@@ -438,7 +401,7 @@
 										}
 									});
 							$.ajax({
-								url : 'http://localhost:8080/MyProject/IsHomeworkUpdateOpeningTimeValid',
+								url : './IsHomeworkUpdateOpeningTimeValid',
 								type : 'GET',
 								data : {
 									"opens" : opens
@@ -460,7 +423,7 @@
 							});
 							$
 									.ajax({
-										url : 'http://localhost:8080/MyProject/IsHomeworkUpdateClosingTimeValid',
+										url : './IsHomeworkUpdateClosingTimeValid',
 										type : 'GET',
 										data : {
 											"opens" : opens,
@@ -537,6 +500,8 @@
 					},
 					403 : function() {
 						location.href = '/MyProject/forbiddenPage';
+					},404 : function(){
+						location.href = '/MyProject/pageNotFoundPage';
 					},
 					500 : function() {
 						location.href = '/MyProject/exceptionPage';

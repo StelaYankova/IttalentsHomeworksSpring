@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -278,12 +279,20 @@ public class GroupController {
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.isTeacher()) {
-			String groupIdStr = request.getParameter("chosenGroupId");
+			if(request.getParameter("chosenGroupId") != null){
+			String groupIdStr = request.getParameter("chosenGroupId").trim();
 			if (!groupIdStr.equals("allGroups")) {
-				if (!(groupIdStr.equals("null"))) {
+				if (!(groupIdStr.equals(""))) {	
+					if(!ValidationsDAO.getInstance().isStringValidInteger(groupIdStr)){
+						response.setStatus(404);
+						return;
+					}
 					int groupId = Integer.parseInt((String) request.getParameter("chosenGroupId"));
 					try {
 						Group selectedGroup = GroupDAO.getInstance().getGroupById(groupId);
+						if(selectedGroup != null){
+							request.getSession().setAttribute("chosenGroupName", selectedGroup.getName());
+
 						ArrayList<Student> allStudentsOfGroup = GroupDAO.getInstance()
 								.getStudentsOfGroup(selectedGroup);
 						JsonArray array = new JsonArray();
@@ -293,9 +302,11 @@ public class GroupController {
 							obj.addProperty("id", student.getId());
 							obj.addProperty("username", student.getUsername());
 							if (request.getParameter("homeworkId") != null) {
+								if(ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("homeworkId"))){
 								int chosenHomeworkId = Integer.parseInt(request.getParameter("homeworkId"));
 								HomeworkDetails chosenHomework = null;
 								chosenHomework = GroupDAO.getInstance().getHomeworkDetailsById(chosenHomeworkId);
+								if(chosenHomework != null){
 								for (Task t : UserDAO.getInstance().getTasksOfHomeworkOfStudent(student.getId(),
 										chosenHomework)) {
 									hasStudentGivenMinOneTask = false;
@@ -307,11 +318,22 @@ public class GroupController {
 									}
 									obj.addProperty("hasStudentGivenMinOneTask", hasStudentGivenMinOneTask);
 								}
+								
+							}else{
+								response.setStatus(404);return;
+							}
+								}else{
+									response.setStatus(404);return;
+								}
 							}
 							array.add(obj);
 						}
 						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 						response.getWriter().write(array.toString());
+						
+						}else{
+							response.setStatus(404);
+						}
 					} catch (GroupException | UserException e) {
 						System.out.println(e.getMessage());
 						e.printStackTrace();
@@ -321,13 +343,71 @@ public class GroupController {
 						e.printStackTrace();
 						response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
 					}
+				}else{
+					response.setStatus(404);
 				}
+			
+			}
+			}else{
+				response.setStatus(404);
 			}
 		}else{
 			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
-
+	@RequestMapping(value = "/getAllStudentsOfGroupRemoveStudent", method = RequestMethod.GET)
+	protected void getAllStudentsOfGroupRemoveStudent(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user.isTeacher()) {
+			if(request.getParameter("chosenGroupId") != null){
+			String groupIdStr = request.getParameter("chosenGroupId").trim();
+			if (!groupIdStr.equals("allGroups")) {
+				if (!(groupIdStr.equals(""))) {
+					if(!ValidationsDAO.getInstance().isStringValidInteger(groupIdStr)){
+						response.setStatus(404);
+						return;
+					}
+					int groupId = Integer.parseInt((String) request.getParameter("chosenGroupId"));
+					try {
+						Group selectedGroup = GroupDAO.getInstance().getGroupById(groupId);
+						if(selectedGroup != null){
+						ArrayList<Student> allStudentsOfGroup = GroupDAO.getInstance()
+								.getStudentsOfGroup(selectedGroup);
+						JsonArray array = new JsonArray();
+						for (Student student : allStudentsOfGroup) {
+							JsonObject obj = new JsonObject();
+							obj.addProperty("id", student.getId());
+							obj.addProperty("username", student.getUsername());
+							array.add(obj);
+						}
+						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
+						response.getWriter().write(array.toString());
+						
+						}else{
+							response.setStatus(404);
+						}
+					} catch (GroupException | UserException e) {
+						System.out.println(e.getMessage());
+						e.printStackTrace();
+						response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
+					} catch (IOException e) {
+						System.out.println(e.getMessage());
+						e.printStackTrace();
+						response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
+					}
+				}else{
+					response.setStatus(404);
+				}
+			
+			}
+			}else{
+				response.setStatus(404);
+			}
+		}else{
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
+		}
+	}
 	@RequestMapping(value = "/RemoveGroupServlet", method = RequestMethod.POST)
 	protected String removeGroup(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -341,6 +421,7 @@ public class GroupController {
 				request.getServletContext().removeAttribute("allGroups");
 				ArrayList<Group> allGroupsUpdated = GroupDAO.getInstance().getAllGroups();
 				request.getServletContext().setAttribute("allGroups", allGroupsUpdated);
+				request.getSession().setAttribute("invalidFields", false);
 			} catch (GroupException | UserException e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();

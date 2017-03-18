@@ -1,0 +1,51 @@
+@CHARSET "UTF-8";
+
+#textareaComment {
+	max-width: 30%;
+}
+/* 
+#currTaskSolution {
+	max-width: 50%;
+}
+ */
+#currHomework{
+ width: 40%;
+    float: left; 
+	padding-left:100px;
+	padding-right:20px;
+	padding-top:60px;
+	padding-bottom: 100px;
+}
+.solution{
+ width: 52%;
+    float: left;
+    padding-left: 50px;
+    padding-top: 70px;
+  padding-bottom: 100px;
+}
+
+#teacherComment {
+	overflow-y: scroll;
+	resize: none;
+	width: 330px;
+	height: 150px;
+	border-size: 2px;
+	border-style: groove;
+	font-size: 12px;
+	font-style: italic;
+}
+#divTasks{
+	padding-bottom: 60px;
+}
+#tasksTable td{
+	padding-bottom: 20px;
+}
+
+#seeTaskSolutionButton {
+	color: #fff;
+	background-color: #0086b3;
+}
+
+#currTaskSolution,#taskUpload,#currTaskSolution{
+	visibility: hidden;
+}

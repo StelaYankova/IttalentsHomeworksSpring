@@ -1,0 +1,22 @@
+@CHARSET "UTF-8";
+
+#createButtonPosition {
+    position: absolute;
+    left: 695px;
+    top: 183px;
+}
+
+#pageTitle{
+	text-align: center;
+}
+#divTable{
+	width: 30%;
+	margin:0 auto;
+}
+#updateGroupForm{
+	padding-left:10px;
+}
+#removeGroupForm{
+	float:right;
+	margin-top:-30px;
+}

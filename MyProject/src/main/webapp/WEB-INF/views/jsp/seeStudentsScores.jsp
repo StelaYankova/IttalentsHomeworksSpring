@@ -8,34 +8,23 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-</head>
-<style>
-#listOfStudentsOfGroup {
-	position: absolute;
-	top: 300px;
-	right: 40px;
-}
+<link href="<c:url value="css/seeStudentsScoresCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 
-#divTable {
-	position: absolute;
-	top: 150px;
-	left: 0px;
-	width: 80%
-}
-</style>
+</head>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
 	<c:if test="${sessionScope.isTeacher == false}">
-		<div class="navPath">
+		<div class="navPath" >
 			<nav class="breadcrumb-nav">
-				<ul class="breadcrumb">
+				<ul class="breadcrumb" id = "navPathList">
 					<li><a
-						href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
+						href="./GetMainPageStudent">Home</a>
 						<span class="divider"> <span class="accesshide "><span
 								class="arrow_text"></span></span>
 					</span></li>
 					<li><a
-						href="http://localhost:8080/MyProject/GetStudentsScoresServlet">Your
+						href="./GetStudentsScoresServlet">Your
 							scores</a> <span class="divider"> <span class="accesshide "><span
 								class="arrow_text"></span>&nbsp;</span>
 					</span></li>
@@ -48,13 +37,11 @@
 			<nav class="breadcrumb-nav">
 				<ul class="breadcrumb">
 					<li><a
-						href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+						href="./GetMainPageTeacher">Home</a>
 						<span class="divider"> <span class="accesshide "><span
 								class="arrow_text"></span></span>
 					</span></li>
-					<li><a
-						href="http://localhost:8080/MyProject/GetStudentsScoresServlet">See
-							student's scores</a> <span class="divider"> <span
+					<li>See student's scores<span class="divider"> <span
 							class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
 					</span></li>
 				</ul>
@@ -62,38 +49,46 @@
 		</div>
 	</c:if>
 	<div id="pageWrapper">
-		Choose group: <select id="chosenGroup" class="selectpicker">
-			<option value="null">-</option>
-			<c:if test="${sessionScope.isTeacher == false}">
-				<c:forEach var="group" items="${user.groups}">
-					<option value="${group.id}"><c:out value="${group.name}"></c:out></option>
-				</c:forEach>
-			</c:if>
-			<c:if test="${sessionScope.isTeacher == true}">
-				<c:forEach var="group" items="${applicationScope.allGroups}">
-					<option value="${group.id}"><c:out value="${group.name}"></c:out></option>
-				</c:forEach>
-			</c:if>
-		</select>
-		<div id="divTable">
-			<table id="resultTable" border="1"
-				class="table table-striped table-bordered table-hover dataTables_wrapper form-inline dt-bootstrap"
-				style="width: 60%">
-				<thead class="wrapword">
-					<tr>
-						<td>Heading</td>
-						<td>Opens</td>
-						<td>Closes</td>
-						<td>Teacher score</td>
-						<td>Teacher comment</td>
-					</tr>
-				</thead>
-				<tbody class="wrapword">
-				</tbody>
-			</table>
+		<h4 id = "pageTitle">
+			<b><u>Scores of students</u></b>
+		</h4>
+		<div id="select">
+			Choose group: <select id="chosenGroup" class="selectpicker" data-size="10">
+				<option value="null">-</option>
+				<c:if test="${sessionScope.isTeacher == false}">
+					<c:forEach var="group" items="${user.groups}">
+						<option value="${group.id}"><c:out value="${group.name}"></c:out></option>
+					</c:forEach>
+				</c:if>
+				<c:if test="${sessionScope.isTeacher == true}">
+					<c:forEach var="group" items="${applicationScope.allGroups}">
+						<option value="${group.id}"><c:out value="${group.name}"></c:out></option>
+					</c:forEach>
+				</c:if>
+			</select>
 		</div>
-		<ul id="listOfStudentsOfGroup" class="editable wrapwordLink"
-			style="visibility: hidden; z-index: 1; height: 300px; width: 18%; overflow: hidden; overflow-y: scroll; overflow-x: scroll;"></ul>
+		<div id="currTable">
+			<div id="divTable">
+				<table id="resultTable" border="1"
+					class="table table-striped table-bordered table-hover dataTables_wrapper form-inline dt-bootstrap">
+					<thead class="wrapword">
+						<tr>
+							<td>Heading</td>
+							<!-- <td>Opens</td>
+						<td>Closes</td>
+						 -->
+							<td>Teacher score</td>
+							<td>Teacher comment</td>
+						</tr>
+					</thead>
+					<tbody class="wrapword">
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="list">
+			<ul id="listOfStudentsOfGroup" class="editable"></ul>
+		</div>
 	</div>
 	<script>
 		var table = $('#resultTable').DataTable({
@@ -101,33 +96,45 @@
 				'bSortable' : true,
 				'aTargets' : [ 0, 1, 2 ],
 				'className' : "wrapword",
-				"targets" : [ 0, 1, 2, 3 ]
+				"targets" : [ 0, 1, 2 ]
 
 			} ],
-			"dom" : '<"top"l>rt<"bottom"ip><"clear">',
+			"dom" : '<"top"lp>rt<"clear">',
 			"aoColumns" : [ {
-				sWidth : '14%'
-			}, {
-				sWidth : '14%'
-			}, {
 				sWidth : '14%'
 			}, {
 				sWidth : '18%'
 			}, {
 				sWidth : '22%'
 			} ],
+			"ordering": false,
 			"lengthMenu" : [ 5, 10 ],
 			"bDestroy" : true
 		});
-		function seeHomeworks(e, e1) {
+		function seeHomeworks(groupId, studentId, studentUsername) {
 			if (!$('#resultTable tbody').is(':empty')) {
 				$("#resultTable tbody").empty();
 			}
-			var groupId = e;
-			var studentId = e1;
+			console.log(888)
+
+			var groupId = groupId;
+			var studentId = studentId;
+			var studentUsername = studentUsername;
+			if (!$('li#chosenStudentUsername')
+					.is(':empty')) {
+
+				$("li#chosenStudentUsername")
+						.remove();
+					}
+			 $('.breadcrumb')
+				.append(
+						'<li id = "chosenStudentUsername">'
+								+ studentUsername
+								+ '<span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
+			
 			$
 					.ajax({
-						url : 'http://localhost:8080/MyProject/SeeAllHomeworksOfStudentByGroupServlet',
+						url : './SeeAllHomeworksOfStudentByGroupServlet',
 						type : 'GET',
 						data : {
 							"groupId" : groupId,
@@ -138,11 +145,22 @@
 							if ($(table).find("#tbody").html() !== 0) {
 								$('#resultTable').DataTable().clear().draw();
 							}
+							if (!$.trim(response)) {
+								/* 
+								$('#resultTable tbody').html(
+										'no data available in table'); */
+										alert("There are no homeworks in this group.");
+								document.getElementById('divTable').style.visibility = 'hidden';
+
+							} 
 							for ( var i in response) {
-								if (response === 'null') {
+								/* if (!$.trim(response)) {
+									console.log("no")
 									$('#resultTable tbody').html(
-											'no data available in table');
-								} else {
+											'no data available in tablfe');
+									document.getElementById('resultTable').style.visibility = 'visible';
+
+								} else { */
 									var opens = response[i].opens;
 									var opensRep = opens.replace("T", " ");
 									var closes = response[i].closes;
@@ -154,11 +172,11 @@
 												.add(
 
 														[
-																"<form action = 'http://localhost:8080/MyProject/GetHomeworkOfStudentServlet' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button type = 'submit' class = 'btn btn-link'>"
+																"<form action = './GetHomeworkOfStudentServlet' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button type = 'submit' class = 'btn btn-link'>"
 																		+ response[i].heading
-																		+ "</button></form>",
+																		+ "</button></form>"/* ,
 																opensRep,
-																closesRep,
+																closesRep */,
 																response[i].teacherScore
 																		+ "/100",
 																response[i].teacherComment ])
@@ -167,24 +185,29 @@
 										var rowNode = table.row
 												.add(
 														[
-																"<form action = 'http://localhost:8080/MyProject/GetHomeworkOfStudentServlet' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button style= 'color:#620062' type = 'button' class = 'btn btn-link'>"
+																"<form action = './GetHomeworkOfStudentServlet' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button style= 'color:#620062' type = 'button' class = 'btn btn-link'>"
 																		+ response[i].heading
-																		+ "</button></form>",
+																		+ "</button></form>"/* ,
 																opensRep,
-																closesRep,
+																closesRep */,
 																response[i].teacherScore
 																		+ "/100",
 																response[i].teacherComment ])
 												.draw().node();
+										 								document.getElementById('divTable').style.visibility = 'visible';
+
 									}
-								}
+								}							
 							}
-						}
+
+						//}
 					});
 		}
 		$('#chosenGroup')
 				.change(
 						function(event) {
+							document.getElementById('divTable').style.visibility = 'hidden';
+							document.getElementById('')
 							if (!$('#resultTable tbody').is(':empty')) {
 								$("#resultTable tbody")
 										.html(
@@ -193,10 +216,47 @@
 							if (!$('#listOfStudentsOfGroup').is(':empty')) {
 								$("#listOfStudentsOfGroup").empty();
 							}
+							if (!$('li#chosenStudentUsername')
+									.is(':empty')) {
+
+								$("li#chosenStudentUsername")
+										.remove();
+									}
 							var groupId = $(this).find(":selected").val();
+							if (groupId != 'null') {
+								if (!$('li#chosenGroupName')
+										.is(':empty')) {
+									$("li#chosenGroupName")
+											.remove();
+									var groupName = $(this)
+											.find(
+													":selected")
+											.text();
+									console.log(groupName)
+									 $('.breadcrumb')
+											.append(
+													'<li id = "chosenGroupName">'
+															+ groupName
+															+ '<span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
+							 
+								//	$('#navPathList').append('<li><a href="./GetStudentsScoresServlet">'+groupId+'</a> <span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
+
+								}
+								
+							} else {
+								if (!$('li#chosenGroupName')
+										.is(':empty')) {
+
+									$("li#chosenGroupName")
+											.remove();
+								}
+							}
+								document.getElementById('listOfStudentsOfGroup').style.visibility = 'hidden';
+								//$('#navPathList').append('<li><a href="./GetStudentsScoresServlet">'+groupId+'</a> <span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
+	console.log(4444)
 							$
 									.ajax({
-										url : 'http://localhost:8080/MyProject/getAllStudentsOfGroupServlet',
+										url : './getAllStudentsOfGroupServlet',
 										type : 'GET',
 										data : {
 											"chosenGroupId" : groupId
@@ -210,13 +270,25 @@
 																		+ groupId
 																		+ ","
 																		+ response[i].id
-																		+ ")'>"
+																		 + ","
+																		 +"\"" + response[i].username + "\""
+																		+")'>"
 																		+ response[i].username
 																		+ "</button></li>");
-												document
-														.getElementById('listOfStudentsOfGroup').style.visibility = 'visible';
+												 
 											}
+											if($.trim(response)){
+											 document
+												.getElementById('listOfStudentsOfGroup').style.visibility = 'visible';
+											}else{
+												alert("There are no students in this group.");
+												 document
+													.getElementById('listOfStudentsOfGroup').style.visibility = 'hidden';
+											}
+
 										}
+										
+										
 									});
 						});
 		function selectOption(index) {
@@ -233,6 +305,8 @@
 					},
 					403 : function() {
 						location.href = '/MyProject/forbiddenPage';
+					},404 : function(){
+						location.href = '/MyProject/pageNotFoundPage';
 					},
 					500 : function() {
 						location.href = '/MyProject/exceptionPage';

@@ -124,4 +124,6 @@ public interface IValidationsDAO {
 
 	boolean isPasswordUpdateValid(String password, String formerPass);
 
+	boolean isStringValidInteger(String string);
+
 }

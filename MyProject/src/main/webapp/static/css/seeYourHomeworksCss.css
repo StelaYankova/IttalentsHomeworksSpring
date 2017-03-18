@@ -1,0 +1,13 @@
+@CHARSET "UTF-8";
+
+#divTable {
+	padding-top: 50px;
+}
+
+#pageTitle{
+	text-align:center;
+}
+#divTable{
+	width:40%; 
+	margin: 0 auto;
+}

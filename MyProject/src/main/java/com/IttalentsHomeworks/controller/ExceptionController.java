@@ -4,6 +4,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
+
+import java.nio.file.AccessDeniedException;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,6 +15,16 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 @ControllerAdvice
 public class ExceptionController {
 	
+	@ExceptionHandler(AccessDeniedException.class)
+	public String handle403(Exception ex) {
+		System.out.println("DENIIIIIIED");
+	    return "redirect:/403";
+	}
+	
+	@RequestMapping(value = {"/403"}, method = RequestMethod.GET)
+	public String ForbiddenPage() {
+	    return "forbiddenPage";
+	}
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	public String handleNoGET(Exception ex) {
 	    return "redirect:/404";

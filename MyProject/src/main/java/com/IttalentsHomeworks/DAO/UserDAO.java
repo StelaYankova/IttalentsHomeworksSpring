@@ -160,7 +160,7 @@ public class UserDAO implements IUserDAO {
 	 * IttalentsHomeworks.model.Student, com.IttalentsHomeworks.model.Group)
 	 */
 	@Override
-	public ArrayList<Homework> getHomeworksOfStudentByGroup(int studentId, Group group) throws UserException {
+	public ArrayList<Homework> getHomeworksOfStudentByGroup(int studentId, Group group) throws UserException, ValidationException, GroupException {
 		ArrayList<Homework> homeworksOfStudentByGroup = new ArrayList<>();
 		Connection con = manager.getConnection();
 		try {
@@ -168,6 +168,7 @@ public class UserDAO implements IUserDAO {
 			ps.setInt(1, studentId);
 			ps.setInt(2, group.getId());
 			ResultSet rs = ps.executeQuery();
+			if(UserDAO.getInstance().getUserById(studentId) != null){
 			while (rs.next()) {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 				String openingTimeString = rs.getString(5);
@@ -181,6 +182,9 @@ public class UserDAO implements IUserDAO {
 						hd);
 				homeworksOfStudentByGroup
 						.add(new Homework(rs.getInt(7), rs.getString(8), tasksOfHomeworkOfStudent, hd));
+			}
+			}else{
+				throw new ValidationException("Student does not exist");
 			}
 		} catch (SQLException e) {
 			throw new UserException("Something went wrong with checking the homeworks of a student by group..");

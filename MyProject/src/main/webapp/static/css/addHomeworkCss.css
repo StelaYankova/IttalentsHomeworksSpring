@@ -1,0 +1,21 @@
+@CHARSET "UTF-8";
+
+#formAddHomework {
+	margin: 0 auto;
+ 	padding-top: 80px;
+	width: 45%;
+	text-align: right;
+}
+
+legend{
+	 text-align: left;
+}
+
+.control-label.col-sm-4{
+	padding-right: 30px;
+}
+
+#addButton{
+	background-color: #2E71AC;
+	 color: #ffffff;
+}

@@ -516,4 +516,19 @@ public class ValidationsDAO implements IValidationsDAO{
 		return isPasswordValid;
 	}
 
+	@Override
+	public boolean isStringValidInteger(String string) {
+		if (string.length() > IValidationsDAO.MIN_SIZE_OF_INTEGER
+				&& string.length() < IValidationsDAO.MAX_SIZE_OF_INTEGER) {
+			for (int i = 0; i < string.length(); i++) {
+				if ((int) string.charAt(i) < IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO
+						|| (int) string.charAt(i) > IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE) {
+					return false;
+				}
+			}
+		} else {
+			return false;
+		}
+		return true;
+	}
 }

@@ -1,0 +1,71 @@
+@CHARSET "UTF-8";
+
+#divTable{
+	width:60%;
+}
+.dataTables_wrapper .dataTables_paginate {
+    padding-bottom: 15px;
+    padding-right: 0px;
+    position: relative;
+}
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter,
+	.dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing
+	{
+	color: #333;
+	padding-left: 3px;
+	padding-bottom: 15px;
+	padding-top: 12px;
+}
+
+#listOfStudentsOfGroup {
+	position: absolute;
+	padding-bottom:60px; 
+}
+
+#select {
+	position: absolute;
+	margin-top: 40px;
+	margin-left: 60px;
+	width: 80%;  padding-bottom:60px;  
+}
+
+#divTable {
+	margin-top: 30px;
+	margin-left: 40px;
+	width: 100%;
+	align: center;
+	visibility:hidden; 
+	 padding-bottom:60px;  
+}
+
+#currTable {
+	width: 90%;
+	float: left;
+	padding-left: 70px;
+	padding-top: 60px;
+	 padding-bottom:60px;  
+}
+
+.list {
+	width: 10%;
+	margin-top: 151px;
+	margin-left: 70%;
+	padding-bottom:60px; 
+}
+#pageTitle{
+	text-align: center;
+}
+#divTable{
+	width: 60%;
+}
+#listOfStudentsOfGroup {
+	visibility: hidden;
+	border-style: double;
+	z-index: 1;
+	height: 200px;
+	overflow: hidden;
+	overflow-y: scroll;
+	overflow-x: scroll;
+	padding-bottom:60px;  
+	
+}

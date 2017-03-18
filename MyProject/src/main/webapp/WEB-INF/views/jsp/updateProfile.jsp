@@ -7,22 +7,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<link href="<c:url value="css/updateProfileCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 </head>
-<style>
-.form-group {
-	margin-left: 60px auto;
-}
 
-#formUpdateProfile {
-	margin: 0 auto;
-	margin-top: 80px;
-	width: 42%;
-}
-</style>
 <body>
 	<c:if test="${not empty invalidFields}">
 		<c:if test="${not invalidFields}">
-			<div class="alert alertAllPages alert-success">//alerta da e izvan wrappera!
+			<div class="alert alertAllPages alert-success">
 				<strong>Success!</strong> Your profile has been updated successfully
 			</div>
 		</c:if>
@@ -38,13 +30,12 @@
 			<nav class="breadcrumb-nav">
 				<ul class="breadcrumb">
 					<li><a
-						href="http://localhost:8080/MyProject/GetMainPageStudent">Home</a>
+						href="./GetMainPageStudent">Home</a>
 						<span class="divider"> <span class="accesshide "><span
 								class="arrow_text"></span></span>
 					</span></li>
-					<li><a
-						href="http://localhost:8080/MyProject/UpdateYourProfileServlet">Your
-							profile</a> <span class="divider"> <span class="accesshide "><span
+					<li>Your
+							profile<span class="divider"> <span class="accesshide "><span
 								class="arrow_text"></span>&nbsp;</span>
 					</span></li>
 				</ul>
@@ -56,12 +47,11 @@
 			<nav class="breadcrumb-nav">
 				<ul class="breadcrumb">
 					<li><a
-						href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+						href="./GetMainPageTeacher">Home</a>
 						<span class="divider"><span class="accesshide "><span
 								class="arrow_text"></span></span> </span></li>
-					<li><a
-						href="http://localhost:8080/MyProject/UpdateYourProfileServlet">Your
-							profile</a> <span class="divider"><span class="accesshide "><span
+					<li>Your
+							profile<span class="divider"><span class="accesshide "><span
 								class="arrow_text"></span></span> </span></li>
 				</ul>
 			</nav>
@@ -69,7 +59,7 @@
 	</c:if>
 	<div id="pageWrapper">
 		<div id="formUpdateProfile" align="center">
-			<legend style="text-align: left">Update profile</legend>
+			<legend>Update profile</legend>
 			<c:if test="${not empty invalidFields}">
 				<c:if test="${invalidFields}">
 					<p class="input-invalid-or-empty">Invalid fields</p>
@@ -78,17 +68,17 @@
 			<c:if test="${emptyFields}">
 				<p class="input-invalid-or-empty">Empty fields</p>
 			</c:if>
-			<form action="http://localhost:8080/MyProject/UpdateYourProfileServlet" method="POST"
+			<form action="./UpdateYourProfileServlet" method="POST"
 				id="updateForm" name="updateForm" class="form-horizontal">
 				<div id="inputFields">
 					<div class="form-group">
-						<label class="control-label col-sm-4" style="padding-right: 30px;">Username:</label>
+						<label class="control-label col-sm-4">Username:</label>
 						<div class="col-sm-3">
 							<c:out value="${sessionScope.user.username}"></c:out>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-4" style="padding-right: 30px;">Password:</label>
+						<label class="control-label col-sm-4">Password:</label>
 						<div class="col-sm-7">
 							<input type="password" class="form-control"
 								value="${sessionScope.user.password}" name="password"
@@ -107,7 +97,7 @@
 						</div>
 					</div>
 					<div class="form-group ">
-						<label class="control-label col-sm-4" style="padding-right: 30px;">Repeat
+						<label class="control-label col-sm-4">Repeat
 							password:</label>
 						<div class="col-sm-7">
 							<input type="password" class="form-control"
@@ -124,7 +114,7 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-4" style="padding-right: 30px;">Email:</label>
+						<label class="control-label col-sm-4">Email:</label>
 						<div class="col-sm-7">
 							<input type="email" class="form-control"
 								placeholder="Enter email" value="${sessionScope.user.email}"
@@ -140,8 +130,7 @@
 					<br><legend></legend>
 					<div class="form-group">
 						<div class="col-md-offset-4 col-sm-5">
-							<input
-								style="/* margin-right: 30px;  */background-color: #2E71AC; color: #ffffff"
+							<input id = "updateProfileButton"
 								type="submit" class=" form-control btn btn-default"
 								value="Update">
 						</div>
@@ -216,7 +205,7 @@
 							if (password !== currPassword) {
 								$
 										.ajax({
-											url : 'http://localhost:8080/MyProject/IsPasswordValid',
+											url : './IsPasswordValid',
 											type : 'GET',
 											data : {
 												"password" : password
@@ -285,6 +274,8 @@
 				},
 				403 : function() {
 					location.href = '/MyProject/forbiddenPage';
+				},404 : function(){
+					location.href = '/MyProject/pageNotFoundPage';
 				},
 				500 : function() {
 					location.href = '/MyProject/exceptionPage';

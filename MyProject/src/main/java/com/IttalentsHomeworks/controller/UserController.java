@@ -35,8 +35,10 @@ public class UserController {
 	@RequestMapping(value = "/GetGroupsOfUserServlet", method = RequestMethod.GET)
 	protected void getGroupsOfStudent(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println("TARAM1");
 		User userTry = (User) request.getSession().getAttribute("user");
-		if (!userTry.isTeacher()) {
+		if (!userTry.isTeacher()) {		System.out.println("TARAM2");
+
 			User user = (User) request.getSession().getAttribute("user");
 			ArrayList<Group> groupsOfUser = user.getGroups();
 			JsonArray jsonGroups = new JsonArray();
@@ -55,12 +57,16 @@ public class UserController {
 					homeworks.add(obj1);
 				}
 				obj.add("homeworks", homeworks);
+				System.out.println("TARAM3");
+
 				jsonGroups.add(obj);
 			}
 			response.setContentType("application/json");
-			response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 			response.getWriter().write(jsonGroups.toString());
+			response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 		} else {
+			System.out.println("TARAM4");
+
 			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
@@ -84,12 +90,19 @@ public class UserController {
 						break;
 					}
 				}
+				
+				
 				request.getSession().setAttribute("currHomework", homework);
+				Student chosenStudent = (Student) UserDAO.getInstance().getUserById(studentId);
+				request.getSession().setAttribute("currStudentUsername", chosenStudent.getUsername());
 				return "redirect:./GetCurrHomeworkOfStudent";
 			} catch (UserException e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
 				return "exception";
+			} catch (GroupException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		return "forbiddenPage";
@@ -522,5 +535,10 @@ public class UserController {
 	protected String getExceptionPage(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		return "exception";
+	}
+	@RequestMapping(value = "/pageNotFoundPage", method = RequestMethod.GET)
+	protected String pageNotFoundPage(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		return "pageNotFound";
 	}
 }

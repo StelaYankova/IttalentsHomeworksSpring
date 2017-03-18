@@ -1,0 +1,67 @@
+@CHARSET "UTF-8";
+
+label {
+	display: inline-block;
+	*display: inline; /* for IE7*/
+	zoom: 1; /* for IE7*/
+	float: left;
+	padding-top: 5px;
+	text-align: left;
+	width: 140px;
+}
+​#currHomework{
+ 	width: 40%;
+    float: left;    
+	padding-left:100px;
+	padding-right:20px;
+	padding-top:60px;
+}
+#solution{
+	width: 52%;
+	float: left;
+	padding-left: 50px;
+	padding-top: 70px;
+	padding-bottom: 100px;
+ }
+
+#currTaskSolution {
+	visibility: hidden;
+}
+#currHomework {
+	width: 40%;
+	float: left;
+	padding-left: 100px;
+	padding-right: 20px;
+	padding-top: 60px;
+	padding-bottom: 100px;
+}
+.input-invalid-or-empty{
+	width: 250px;
+}
+
+#textareaComment {
+	overflow-y: scroll;
+	resize: none;
+	width: 330px;
+	height: 150px;
+	border-size: 2px;
+	border-style: groove;
+	font-size: 12px;
+	font-style: italic
+}
+#saveButton{
+	float:left;
+}
+#divTable{
+	padding-bottom: 60px;
+}
+#tasksTable td{
+	padding-bottom: 20px;
+}
+#seeTaskSolutionButton{
+	color: #fff; 
+	background-color: #0086b3;
+}
+#taskUpload{
+	visibility: hidden;
+}

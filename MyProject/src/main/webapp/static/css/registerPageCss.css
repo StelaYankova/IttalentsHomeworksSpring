@@ -1,0 +1,38 @@
+@CHARSET "UTF-8";
+
+
+#formRegister {
+	margin: 0 auto;
+ 	padding-top: 120px;
+ 	width: 40%;
+}
+
+.form-group {
+	margin-left: 60px auto;
+}
+
+
+legend{
+	text-align: left;
+}
+
+.control-label.col-sm-4{
+	padding-right: 30px;
+}
+
+#registerButton {
+	margin-right: 30px;
+	background-color: #2E71AC;
+	color: #ffffff;
+}
+
+
+.alertRegisterPage {
+	position: absolute;
+	top: 81px;
+	width: 100%;
+}
+#registerButton{
+	background-color: #2E71AC;
+	color: #ffffff;
+}

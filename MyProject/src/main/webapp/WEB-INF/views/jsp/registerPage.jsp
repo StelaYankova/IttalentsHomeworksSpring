@@ -6,26 +6,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
 <title>Insert title here</title>
+<link href="<c:url value="css/registerPageCss.css" />" type="text/css" rel="stylesheet">
+<link href="<c:url value="css/generalCss.css" />" type="text/css" rel="stylesheet">
+
 </head>
 <style>
-.form-group {
+/*  .form-group {
 	margin-left: 60px auto;
-}
+} */
 /* #formRegister {
-	position: absolute;
-	left: 60px;
-	top: 220px;
-	background-color: #ffffff;
-	width: 500px;
-}
- */
-#formRegister {
 	margin: 0 auto;
- 	margin-top: 100px;
+ 	padding-top: 100px;
  	width: 40%;
-}
+ 	padding-bottom:150px;
+} */ 
 </style>
 <body>
 	<%@ include file="navBarHomePage.jsp"%>
@@ -38,7 +33,7 @@
 	</c:if>
 	<div id="pageWrapperRegister">
 		<div id="formRegister" align="center">
-			<legend style="text-align: left">Registration</legend>
+			<legend>Registration</legend>
 			<c:if test="${not empty invalidFields}">
 				<c:if test="${invalidFields}">
 					<p class="input-invalid-or-empty">Invalid fields</p>
@@ -48,10 +43,9 @@
 				<p class="input-invalid-or-empty">Empty fields</p>
 			</c:if>
 			<form class="form-horizontal" name="registerForm" id="registerForm"
-				action="http://localhost:8080/MyProject/RegisterServlet" method="POST">
+				action="./RegisterServlet" method="POST">
 				<div class="form-group">
-					<label for="username" class="control-label col-sm-4"
-						style="padding-right: 30px;">Username:</label>
+					<label for="username" class="control-label col-sm-4">Username:</label>
 					<div class="col-sm-7">
 						<input type="text" class="form-control"
 							placeholder="Enter username" name="username" maxlength="15"
@@ -79,8 +73,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="password" class="control-label col-sm-4"
-						style="padding-right: 30px;">Password:</label>
+					<label for="password" class="control-label col-sm-4">Password:</label>
 					<div class="col-sm-7">
 						<input type="password" class="form-control" maxlength="15"
 							name="password" value="${userTry.password }"
@@ -98,8 +91,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="repeatedPassword" class="control-label col-sm-4"
-						style="padding-right: 30px;">Repeat password:</label>
+					<label for="repeatedPassword" class="control-label col-sm-4">Repeat password:</label>
 					<div class="col-sm-7">
 						<input type="password" class="form-control" maxlength="15"
 							name="repeatedPassword" placeholder="Repeat password"
@@ -114,8 +106,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="email" class="control-label col-sm-4"
-						style="padding-right: 30px;">Email:</label>
+					<label for="email" class="control-label col-sm-4">Email:</label>
 					<div class="col-sm-7">
 						<input type="email" class="form-control" name="email" id="email"
 							placeholder="Enter email" maxlength="40" value="${userTry.email}"
@@ -129,10 +120,10 @@
 					</div>
 				</div>
 				<br>
+				<legend></legend>
 				<div class="form-group">
-					<div class="col-md-offset-7 col-sm-5">
-						<input
-							style="margin-right: 30px; background-color: #2E71AC; color: #ffffff"
+						<div class="col-md-offset-4 col-sm-5">
+						<input id = "registerButton"
 							type="submit" class=" form-control btn btn-default"
 							value="Register">
 					</div>
@@ -214,7 +205,7 @@
 						}
 						$
 								.ajax({
-									url : 'http://localhost:8080/MyProject/IsUsernameUniqueServlet',
+									url : './IsUsernameUniqueServlet',
 									type : 'GET',
 									data : {
 										"username" : username
@@ -226,7 +217,7 @@
 										}
 										$
 												.ajax({
-													url : 'http://localhost:8080/MyProject/IsUsernameValid',
+													url : './IsUsernameValid',
 													type : 'GET',
 													data : {
 														"username" : username
@@ -266,7 +257,7 @@
 									}
 								});
 						$.ajax({
-							url : 'http://localhost:8080/MyProject/IsPasswordValid',
+							url : './IsPasswordValid',
 							type : 'GET',
 							data : {
 								"password" : password
@@ -324,6 +315,8 @@
 				},
 				403 : function() {
 					location.href = '/MyProject/forbiddenPage';
+				},404 : function(){
+					location.href = '/MyProject/pageNotFoundPage';
 				},
 				500 : function() {
 					location.href = '/MyProject/exceptionPage';

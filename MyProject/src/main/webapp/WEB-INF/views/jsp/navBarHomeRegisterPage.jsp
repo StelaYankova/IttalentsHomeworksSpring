@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%-- <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 	
@@ -7,6 +7,17 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8"
+	src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
+	 -->
+	 <script src="https://code.jquery.com/jquery-1.12.4.js"></script> 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -16,10 +27,26 @@
 	href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8"
 	src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
-	
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<script
+	src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script>
+	 
 </head>
+ <link href="<c:url value="css/navBarCss.css" />" type="text/css" rel="stylesheet">
+ <link href="<c:url value="css/generalCss.css" />" type="text/css" rel="stylesheet">
+
 <style>
-body{
+/* body{
   
     margin-bottom: 70px;
    clear: both;
@@ -37,15 +64,15 @@ body{
 	position: absolute;
 	top: 81px;
 	width: 100%;
-}
-.footer{
+} */
+/* .footer{
    position: absolute;
   position: fixed;
     bottom: 0;
     height: 60px;
  background-color:  #404040;
      width: 100%;
-     overflow: hidden; /* will contain if #first is longer than #second */
+     overflow: hidden; /* will contain if #first is longer than #second 
      z-index:1;
 }
 
@@ -72,7 +99,7 @@ float:left;
 		margin-left:30%;
 		margin-top:1%;		
 		float:left;
-		    overflow: hidden; /* if you don't want #second to wrap below #first */
+		    overflow: hidden; /* if you don't want #second to wrap below #first 
 }
 #footerTextPosition3{
 	posistion:absolute;
@@ -105,7 +132,7 @@ float:left;
     height: 20px;
 }
 
-.navbar {min-height:28px !important;}
+.navbar {min-height:28px !important;} */
 </style>
 <body>
 	<div class="footer">
@@ -135,7 +162,7 @@ float:left;
 			<ul class="nav navbar-nav navbar-right">
 				<li>
 					<div class="container">
-						<form class="form-inline" action="http://localhost:8080/MyProject/LoginServlet" method="POST"
+						<form class="form-inline" action="./LoginServlet" method="POST"
 							name="signInForm" id="signInForm">
 							<div class="form-group">
 								<label>Username:</label> <input type="text"
@@ -163,7 +190,7 @@ float:left;
 				</li>
 				<div class="container">
 					<li>
-						<a href="http://localhost:8080/MyProject/RegisterServlet" style="color: #9d9d9d">
+						<a href="./RegisterServlet" style="color: #9d9d9d">
 							<span class="glyphicon glyphicon-log-in btn-sm"></span>Register here
 						</a>
 					</li>
@@ -195,7 +222,7 @@ float:left;
 	}
 	
 	$.ajax({
-		url: 'http://localhost:8080/MyProject/ValidateLogin',
+		url: './ValidateLogin',
 		method: 'GET',
 		data:{
 			"username": username,
@@ -219,7 +246,9 @@ float:left;
 	          },
 	          403: function () {
 		            location.href = '/MyProject/forbiddenPage';
-		      },
+		      },404 : function(){
+					location.href = '/MyProject/pageNotFoundPage';
+				},
 		      500: function(){
 		    	  location.href = '/MyProject/exceptionPage';
 		      }
@@ -227,4 +256,4 @@ float:left;
 	      });
 	    });
 </script>
-</html>
+</html> --%>

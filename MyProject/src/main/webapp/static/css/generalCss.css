@@ -1,0 +1,52 @@
+@CHARSET "UTF-8";
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+   margin-bottom: 25px;
+}
+
+.input-invalid {
+	color: red;
+	text-align: center;
+}
+
+.invalidData {
+	color: red;
+}
+
+#pageWrapper {
+	padding-top: 40px;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-bottom:150px;
+}
+
+.alertAllPages {
+	position: absolute;
+	margin-top: 35px;
+	top: 81px;
+	width: 100%;
+}
+
+.wrapword {
+	white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+	white-space: -webkit-pre-wrap; /*Chrome & Safari */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	white-space: pre-wrap; /* css-3 */
+	word-wrap: break-word; /* Internet Explorer 5.5+ */
+	word-break: break-all;
+	white-space: normal;
+}
+
+.input-invalid-or-empty {
+	color: red;
+	text-align: left;
+}
+.breadcrumb>li+li:before {
+    padding: 0 5px;
+    color: #ccc;
+    content: ">"!important;
+}

@@ -6,28 +6,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="<c:url value="css/homeworkOfStudentCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+
 <title>Insert title here</title>
 </head>
-<style>
-#textareaComment {
-	max-width: 40%;
-}
-
-#currTaskSolution {
-	max-width: 50%;
-}
-
-label {
-	display: inline-block;
-	*display: inline; /* for IE7*/
-	zoom: 1; /* for IE7*/
-	float: left;
-	padding-top: 5px;
-	text-align: left;
-	width: 140px;
-}
-​
-</style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
 	<div class="navPath">
@@ -43,107 +26,124 @@ label {
 						student's scores</a> <span class="divider"> <span
 						class="accesshide "><span class="arrow_text"></span></span>
 				</span></li>
-				<li><a
-					href="http://localhost:8080/MyProject/GetCurrHomeworkOfStudent">Current
-						chosen homework</a> <span class="divider"> <span
+				<li><c:out value = "${sessionScope.chosenGroupName}"></c:out><span class="divider"> <span
+						class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
+				</span></li> 
+				<li><c:out value = "${sessionScope.currHomework.homeworkDetails.heading}"></c:out><span class="divider"> <span
+						class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
+				</span></li>
+				<li><c:out value = "${sessionScope.currStudentUsername}"></c:out><span class="divider"> <span
 						class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
 				</span></li>
 			</ul>
 		</nav>
 	</div>
 	<div id="pageWrapper">
-		<br>
-		<form style="display: inline" action="http://localhost:8080/MyProject/ReadHomeworkServlet"
-			method="GET">
-			<input type='hidden'
-				value='${sessionScope.currHomework.homeworkDetails.tasksFile}'
-				name='fileName'>
-			<button class='btn btn-link' style='text-decoration: none'
-				type='submit'>
-				<b><c:out
-						value="${sessionScope.currHomework.homeworkDetails.heading}" /></b>
-			</button>
-		</form>
-		<b><u> - until <c:out
-					value="${sessionScope.currHomework.homeworkDetails.closingTime}" /></u></b>
-		<br> <br>
-		<c:if test="${not empty sessionScope.invalidFields}">
-			<c:if test="${sessionScope.invalidFields}">
-				<p class="input-invalid-or-empty">Invalid fields</p>
-			</c:if>
-		</c:if>
-		<c:if test="${sessionScope.emptyFields}">
-			<p class="input-invalid-or-empty" style="width: 250px">You cannot
-				have empty fields and maximal grade is 100</p>
-		</c:if>
-		<br>
-		<form action="http://localhost:8080/MyProject/UpdateTeacherGradeAndCommentServlet" method="POST"
-			id="UpdateTeacherGradeAndCommentForm">
-			<div class="block">
-				<label><b>Teacher grade:</b></label>
-				<div class="col-xs-2">
-					<input type="number" class="form-control" min=0 max=100 id="grade"
-						value="${sessionScope.currHomework.teacherGrade}" name="grade" />
+		<div id="currHomework">
+		<br>	<div id="downloadHomeworkForm">
+					<form action="./ReadHomeworkServlet" method="GET">
+						<input type='hidden'
+							value='${sessionScope.currHomework.homeworkDetails.tasksFile}'
+							name='fileName'> <strong>You can download tasks
+							<button class='btn btn-link btn-xs' type='submit'>
+								<b>here</b></button>
+						</strong>
+					</form>
 				</div>
-			</div>
-			<br> <br>
-			<c:if test="${not empty sessionScope.GradeTooLong}">
-				<c:if test="${sessionScope.GradeTooLong}">
-					<p id="gradeMsg" class="invalidData">Maximal length of grade -
-						3</p>
+<br>
+			<c:if test="${not empty sessionScope.invalidFields}">
+				<c:if test="${sessionScope.invalidFields}">
+					<p class="input-invalid-or-empty">Invalid fields</p>
 				</c:if>
 			</c:if>
-			<c:if test="${not empty sessionScope.validGrade}">
-				<c:if test="${not sessionScope.validGrade}">
-					<p id="gradeMsg" class="invalidData">Grade - between 1 and 100</p>
-				</c:if>
+			<c:if test="${sessionScope.emptyFields}">
+				<p class="input-invalid-or-empty">You
+					cannot have empty fields and maximal grade is 100</p>
 			</c:if>
-			<p id="gradeMsg" class="invalidData"></p>
-			<div class="block">
-				<br> <label><b>Teacher comment:</b></label>&nbsp;
-				<textarea class="form-control" id="textareaComment" rows="3"
-					maxlength="150" name="comment"><c:out
-						value="${sessionScope.currHomework.teacherComment}"></c:out></textarea>
-				<c:if test="${not empty sessionScope.validComment}">
-
-					<c:if test="${not sessionScope.validComment}">
-						<p id="textareaCommentMsg" class="invalidData">Invalid comment</p>
+			<br>
+			<form action="./UpdateTeacherGradeAndCommentServlet" method="POST"
+				id="UpdateTeacherGradeAndCommentForm" accept-charset="ISO-8859-15">
+				<div class="block">
+					<label><b>Teacher grade:</b></label>
+					<span class="col-sm-4">
+						<input type="number" class="form-control" min=0 max=100 id="grade"
+							value="${sessionScope.currHomework.teacherGrade}" name="grade" />
+					</span>
+				</div>
+				<br> <br>
+				<c:if test="${not empty sessionScope.GradeTooLong}">
+					<c:if test="${sessionScope.GradeTooLong}">
+						<p id="gradeMsg" class="invalidData">Maximal length of grade -
+							3</p>
 					</c:if>
 				</c:if>
-				<p id="textareaCommentMsg" class="invalidData"></p>
-			</div>
+				<c:if test="${not empty sessionScope.validGrade}">
+					<c:if test="${not sessionScope.validGrade}">
+						<p id="gradeMsg" class="invalidData">Grade - between 1 and 100</p>
+					</c:if>
+				</c:if>
+				<p id="gradeMsg" class="invalidData"></p>
+				<div class="block">
+					<br> <label><b>Teacher comment:</b></label>&nbsp;
+					<br>
+					<textarea class="form-control" id="textareaComment"
+						maxlength="150" name="comment"><c:out
+							value="${sessionScope.currHomework.teacherComment}"></c:out></textarea>
+					<c:if test="${not empty sessionScope.validComment}">
+
+						<c:if test="${not sessionScope.validComment}">
+							<p id="textareaCommentMsg" class="invalidData">Invalid
+								comment</p>
+						</c:if>
+					</c:if>
+					<p id="textareaCommentMsg" class="invalidData"></p>
+				</div>
+				<br>
+				<div class="">
+					<input id = "saveButton" type="submit" class="btn btn-default"
+						value="Save">
+				</div>
+			</form>
+<br><br>
+<div id = "divTable">
+			<table id="tasksTable" border="1"
+				class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>
+						<td>Tasks</td>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach var="i" begin="1"
+						end="${sessionScope.currHomework.homeworkDetails.numberOfTasks}">
+						<tr>
+							<td>
+								<button id = "seeTaskSolutionButton" class="btn btn-primary btn-sm"
+									type="submit"
+									onclick="seeTaskSolution('${i}')">
+									<c:out value="Task ${i}" />
+								</button>
+							</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+</div>
+			<!-- <br> <br> <br> -->
+			<div id="taskUpload"></div>
 			<br>
-			<div class="col-sm-offset-3 col-sm-2" style="left: 230px">
-				<input style="align: right" type="submit" class="btn btn-default"
-					value="Save">
-			</div>
-		</form>
-		<br> <br> <br>
-		<c:forEach var="i" begin="1"
-			end="${sessionScope.currHomework.homeworkDetails.numberOfTasks}">
-			<c:if test="${i == 5}">
-				<br>
-				<br>
-			</c:if>
-			<div style='float: left'>
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button type="submit" onclick="seeTaskSolution('${i}')"
-					class="btn btn-primary btn-sm"
-					style="color: #fff; background-color: #0086b3">
-					<c:out value="Task ${i}"></c:out>
-				</button>
-			</div>
-		</c:forEach>
-		<br> <br> <br>
-		<div id="taskUpload" style="visibility: hidden"></div>
-		<br>
-		<textarea id="currTaskSolution" disabled="disabled"
-			style="visibility: hidden" class="form-control" cols="150" rows="25">
+				</div>
+		
+			<div id="solution">
+				<textarea id="currTaskSolution" disabled="disabled"
+					 class="form-control" cols="30" rows="30">
 	</textarea>
-		<c:if test="${not empty sessionScope.invalidFields}">
-			<c:remove var="salary" scope="session" />
-		</c:if>
-		<c:if test="${not empty sessionScope.invalidFields}">
+			</div>
+</div>
+	<c:if test="${not empty sessionScope.invalidFields}">
+		<c:remove var="salary" scope="session" />
+	</c:if>
+	<c:if test="${not empty sessionScope.invalidFields}">
 			<c:remove var="invalidFields" scope="session" />
 		</c:if>
 		<c:if test="${not empty sessionScope.emptyFields}">
@@ -158,7 +158,6 @@ label {
 		<c:if test="${not empty sessionScope.validComment}">
 			<c:remove var="validComment" scope="session" />
 		</c:if>
-	</div>
 	<script>
 		$('#UpdateTeacherGradeAndCommentForm')
 				.submit(
@@ -198,6 +197,31 @@ label {
 								return false;
 							}
 						});
+		$(document).ready(function() {
+			var table = $('#tasksTable').DataTable({
+				"autoWidth" : false,
+
+				"aoColumnDefs" : [ {
+					'bSortable' : false,
+					'aTargets' : [ 0 ],
+					'className' : "wrapword",
+
+					"targets" : [ 0 ]
+				} ],
+				"dom" : '<"top"l>rt<"bottom"ip><"clear">',
+				"aoColumns" : [ {
+					'sWidth' : '140%'
+				} ],
+
+				/* "lengthMenu" : [ 5 ], */
+				"scrollY" : '100vh',
+				"scrollCollapse" : true,
+
+				"bDestroy" : true,
+				"bPaginate" : false,
+				"bInfo" : false
+			});
+		});
 		function seeTaskSolution(taskNum) {
 			$
 					.ajax({
@@ -226,7 +250,10 @@ label {
 						location.href = '/MyProject/index';
 					},
 					403 : function() {
+						console.log(1)
 						location.href = '/MyProject/forbiddenPage';
+					},404 : function(){
+						location.href = '/MyProject/pageNotFoundPage';
 					},
 					500 : function() {
 						location.href = '/MyProject/exceptionPage';

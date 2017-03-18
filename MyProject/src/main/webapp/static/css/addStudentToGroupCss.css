@@ -1,0 +1,42 @@
+@CHARSET "UTF-8";
+
+#studentSearch {
+	width: 18%;
+}
+
+.ui-helper-hidden-accessible {
+	display: none;
+}
+
+.form-group {
+	padding-right: 50px;
+	width: 25%;
+}
+#listOfStudentsOfGroupHeading{
+visibility: hidden;
+	margin-left: 292px;
+ 	margin-top: -10px;
+ 	width: 20.5%;
+    text-align: center;
+ }
+
+#listOfStudentsOfGroup {
+	visibility: hidden;
+	margin-left: 270px;
+	margin-top: 25px;
+	z-index: 1;
+	width: 25%;
+ }
+ul.ui-autocomplete {
+	list-style-type: none;
+	text-decoration: none;
+	
+}
+
+#addStudentToGroupDiv{
+	text-align:center;
+	margin-top:70px;
+}
+.input-invalid-addStudentToGroup{
+	text-align: left;
+}

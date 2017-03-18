@@ -36,7 +36,6 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 		resolver.setDefaultEncoding("utf-8");
 		return resolver;
 	}
-	
 	@Bean
 	public InternalResourceViewResolver getInternalResourceViewResolver(){
 		InternalResourceViewResolver resolver = new InternalResourceViewResolver();

@@ -9,76 +9,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<link href="<c:url value="css/addStudentToGroupCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+
 </head>
-<style>
-#studentSearch {
-	width: 18%;
-}
-
-.ui-helper-hidden-accessible {
-	display: none;
-}
-
-.form-group {
-	padding-right: 50px;
-	width: 25%;
-}
-#listOfStudentsOfGroupHeading{
-visibility: hidden;
-	margin-left: 340px;
-	margin-top: 130px;
-}
-
-#listOfStudentsOfGroup {
-	visibility: hidden;
-	margin-left: 281px;
-	margin-top: 25px;
-	z-index: 1;
-	height: 300px;
-	width: 25%;
-	overflow: hidden;
-	overflow-y: scroll;
-	overflow-x: scroll;
-}
-
-ul.ui-autocomplete {
-	list-style-type: none;
-	text-decoration: none;
-}
-
-/*  #addStudentButton {
-	position: absolute;
-	
-	left: 400px;	top: 160px;
-	
-} */
-#addStudentToGroupDiv {
-	position: absolute;
-	width: 100%;
-	margin-left: 300px;
-	margin-top: 60px;
-	margin-right: 200px;
-	/*  	width: 40%;
- */
-}
-/*  #addStudentToGroupForm{
-		margin-right: 20px;
-	
-} */
-</style>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
 	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+					href="./GetMainPageTeacher">Home</a>
 					<span class="divider"> <span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
-				<li><a
-					href="http://localhost:8080/MyProject/AddStudentToGroupServlet">Add
-						or remove student</a> <span class="divider"> <span
+				<li>Add or remove student<span class="divider"> <span
 						class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
 				</span></li>
 			</ul>
@@ -95,17 +40,17 @@ ul.ui-autocomplete {
 	<div id="addStudentToGroupDiv">
 		<div class="ui-widget" >
 			<form
-				action="http://localhost:8080/MyProject/AddStudentToGroupServlet"
+				action="./AddStudentToGroupServlet"
 				method="POST" class="form-inline" id="addStudentToGroupForm">
 				<c:if test="${not empty sessionScope.invalidFields}">
 					<c:if test="${sessionScope.invalidFields}">
-						<p style="text-align: left" class="input-invalid">Invalid
+						<p class="input-invalid-addStudentToGroup">Invalid
 							fields</p>
 					</c:if>
 				</c:if>
 				<c:if test="${not empty sessionScope.emptyFields}">
 					<c:if test="${sessionScope.emptyFields}">
-						<p style="text-align: left" class="input-invalid">Empty fields</p>
+						<p class="input-invalid-addStudentToGroup">Empty fields</p>
 					</c:if>
 				</c:if>
 				<c:if test="${not empty sessionScope.doesStudentExist}">
@@ -129,9 +74,8 @@ ul.ui-autocomplete {
 				</c:if>
 				<p id="groupMsg" class="input-invalid"></p>
 				<p id="studentMsg" class="input-invalid"></p>
-				<div class="form-group" style = "padding-top: 2px; ">
-				
-					<label class="control-label col-sm-9" style="padding-right: 30px;" >Choose group:</label> <select
+				<div class="form-group" style = "padding-top: 2px; ">				
+					<label class="control-label col-sm-9" style="padding-right: 30px; padding-bottom: 5px;" >Choose group:</label> <select
 						id="chosenGroup" name="chosenGroup" class="selectpicker form-control" required>
 						<option value="">-</option>
 						<c:forEach var="group" items="${applicationScope.allGroups}">
@@ -140,18 +84,11 @@ ul.ui-autocomplete {
 					</select>
 				</div>
 				<div class="form-group" id="studentSearch">
-					<label class="control-label col-sm-13">Choose student:</label> <input
+					<label class="control-label col-sm-13" style = "padding-bottom: 5px;">Choose student:</label> <input
 						id="searchStudents" name="selectedStudent" class="form-control"
 						value="${sessionScope.chosenUsernameTry}" required />
 				</div>
-				<!-- <div class="form-group"> id="addStudentButton"
-						<div class="col-md-offset-1 col-sm-1">
-
-					<button type="submit" class="btn btn-default btn-md">
-						<span class="glyphicon glyphicon-plus">Add</span>
-					</button></div>
-				</div> -->
-				<div class="form-group" style = "padding-top: 21px; ">
+				<div class="form-group" style = "padding-top: 23px; width:5% ">
 							<input
 								style="background-color: #2E71AC; color: #ffffff"
 								type="submit" class=" form-control btn btn-default"
@@ -223,7 +160,7 @@ ul.ui-autocomplete {
 						}
 						$
 								.ajax({
-									url : 'http://localhost:8080/MyProject/DoesUserExist',
+									url : './DoesUserExist',
 									type : 'GET',
 									data : {
 										"chosenStudentUsername" : chosenStudentUsername
@@ -235,7 +172,7 @@ ul.ui-autocomplete {
 										}
 										$
 												.ajax({
-													url : 'http://localhost:8080/MyProject/IsChosenStudentAlreadyInGroup',
+													url : './IsChosenStudentAlreadyInGroup',
 													type : 'GET',
 													data : {
 														"chosenGroupId" : chosenGroupId,
@@ -293,7 +230,7 @@ ul.ui-autocomplete {
 		if (confirm("Are you sure, that you want to remove this student from the group?")) {
 			$.ajax({
 				type : 'POST',
-				url : "http://localhost:8080/MyProject/RemoveStudentFromGroup",
+				url : "./RemoveStudentFromGroup",
 				data : {
 					"chosenStudentUsername" : username,
 					"chosenGroupId" : groupId
@@ -352,7 +289,7 @@ ul.ui-autocomplete {
 	function getStudents(groupId) {
 		$
 				.ajax({
-					url : 'http://localhost:8080/MyProject/getAllStudentsOfGroupServlet',
+					url : './getAllStudentsOfGroupRemoveStudent',
 					type : 'GET',
 					data : {
 						"chosenGroupId" : groupId
@@ -402,6 +339,8 @@ ul.ui-autocomplete {
 				},
 				403 : function() {
 					location.href = '/MyProject/forbiddenPage';
+				},404 : function(){
+					location.href = '/MyProject/pageNotFoundPage';
 				},
 				500 : function() {
 					location.href = '/MyProject/exceptionPage';

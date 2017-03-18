@@ -6,6 +6,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+
 <title>Insert title here</title>
 </head>
 <body>
