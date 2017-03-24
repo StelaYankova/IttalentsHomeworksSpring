@@ -67,8 +67,10 @@
 				</c:if>
 			</select>
 		</div>
+		
 		<div id="currTable">
 			<div id="divTable">
+			
 				<table id="resultTable" border="1"
 					class="table table-striped table-bordered table-hover dataTables_wrapper form-inline dt-bootstrap">
 					<thead class="wrapword">
@@ -84,8 +86,12 @@
 					<tbody class="wrapword">
 					</tbody>
 				</table>
+				<div id = "studentAverageScore">
+				<strong><u>Average score: <span id = "score"></span>/100</u></strong>
+			</div>
 			</div>
 		</div>
+		<h id = "listHeading">Students in chosen group:</h>
 		<div class="list">
 			<ul id="listOfStudentsOfGroup" class="editable"></ul>
 		</div>
@@ -108,15 +114,15 @@
 				sWidth : '22%'
 			} ],
 			"ordering": false,
-			"lengthMenu" : [ 5, 10 ],
+			"lengthMenu" : [ 5, 10, 15 ],
 			"bDestroy" : true
 		});
 		function seeHomeworks(groupId, studentId, studentUsername) {
+			document.getElementById('studentAverageScore').style.visibility = 'hidden';
+
 			if (!$('#resultTable tbody').is(':empty')) {
 				$("#resultTable tbody").empty();
 			}
-			console.log(888)
-
 			var groupId = groupId;
 			var studentId = studentId;
 			var studentUsername = studentUsername;
@@ -146,31 +152,23 @@
 								$('#resultTable').DataTable().clear().draw();
 							}
 							if (!$.trim(response)) {
-								/* 
-								$('#resultTable tbody').html(
-										'no data available in table'); */
 										alert("There are no homeworks in this group.");
-								document.getElementById('divTable').style.visibility = 'hidden';
-
 							} 
+							var averageScore = 0;
+							var numberHomeworks = 0;
 							for ( var i in response) {
-								/* if (!$.trim(response)) {
-									console.log("no")
-									$('#resultTable tbody').html(
-											'no data available in tablfe');
-									document.getElementById('resultTable').style.visibility = 'visible';
-
-								} else { */
 									var opens = response[i].opens;
 									var opensRep = opens.replace("T", " ");
 									var closes = response[i].closes;
 									var closesRep = closes.replace("T", " ");
 									var hasStudentGivenMinOneTask = response[i].hasStudentGivenMinOneTask;
-
+									averageScore += response[i].teacherScore;
+									numberHomeworks += 1;
 									if (hasStudentGivenMinOneTask === true) {
+										
 										var rowNode = table.row
 												.add(
-
+														
 														[
 																"<form action = './GetHomeworkOfStudentServlet' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button type = 'submit' class = 'btn btn-link'>"
 																		+ response[i].heading
@@ -197,17 +195,28 @@
 										 								document.getElementById('divTable').style.visibility = 'visible';
 
 									}
-								}							
+								}
+							var answer = (averageScore/numberHomeworks).toFixed(1);
+							document.getElementById("studentAverageScore").style.visibility = "visible";
+						
+		if (!$('#score').is(':empty')) {
+								$("#score").empty();
 							}
-
-						//}
+							document.getElementById("score").append(answer);
+						}
 					});
 		}
 		$('#chosenGroup')
 				.change(
 						function(event) {
 							document.getElementById('divTable').style.visibility = 'hidden';
+							document.getElementById('studentAverageScore').style.visibility = 'hidden';
+
 							document.getElementById('')
+							if (!$('#score').is(':empty')) {
+								$("#score").empty();
+							}
+							document.getElementById('divTable').style.visibility = 'hidden';
 							if (!$('#resultTable tbody').is(':empty')) {
 								$("#resultTable tbody")
 										.html(
@@ -216,44 +225,38 @@
 							if (!$('#listOfStudentsOfGroup').is(':empty')) {
 								$("#listOfStudentsOfGroup").empty();
 							}
-							if (!$('li#chosenStudentUsername')
-									.is(':empty')) {
+							if (!$('li#chosenStudentUsername').is(':empty')) {
 
-								$("li#chosenStudentUsername")
-										.remove();
-									}
+								$("li#chosenStudentUsername").remove();
+							}
 							var groupId = $(this).find(":selected").val();
 							if (groupId != 'null') {
-								if (!$('li#chosenGroupName')
-										.is(':empty')) {
-									$("li#chosenGroupName")
-											.remove();
-									var groupName = $(this)
-											.find(
-													":selected")
+								if (!$('li#chosenGroupName').is(':empty')) {
+									$("li#chosenGroupName").remove();
+									var groupName = $(this).find(":selected")
 											.text();
 									console.log(groupName)
-									 $('.breadcrumb')
+									$('.breadcrumb')
 											.append(
 													'<li id = "chosenGroupName">'
 															+ groupName
 															+ '<span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
-							 
-								//	$('#navPathList').append('<li><a href="./GetStudentsScoresServlet">'+groupId+'</a> <span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
+
+									//	$('#navPathList').append('<li><a href="./GetStudentsScoresServlet">'+groupId+'</a> <span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
 
 								}
-								
-							} else {
-								if (!$('li#chosenGroupName')
-										.is(':empty')) {
 
-									$("li#chosenGroupName")
-											.remove();
+							} else {
+								if (!$('li#chosenGroupName').is(':empty')) {
+
+									$("li#chosenGroupName").remove();
 								}
 							}
-								document.getElementById('listOfStudentsOfGroup').style.visibility = 'hidden';
-								//$('#navPathList').append('<li><a href="./GetStudentsScoresServlet">'+groupId+'</a> <span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
-	console.log(4444)
+							document.getElementById('listOfStudentsOfGroup').style.visibility = 'hidden';
+							document.getElementById('listHeading').style.visibility = 'hidden';
+
+							//$('#navPathList').append('<li><a href="./GetStudentsScoresServlet">'+groupId+'</a> <span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
+							console.log(4444)
 							$
 									.ajax({
 										url : './getAllStudentsOfGroupServlet',
@@ -270,25 +273,30 @@
 																		+ groupId
 																		+ ","
 																		+ response[i].id
-																		 + ","
-																		 +"\"" + response[i].username + "\""
-																		+")'>"
+																		+ ","
+																		+ "\""
+																		+ response[i].username
+																		+ "\""
+																		+ ")'>"
 																		+ response[i].username
 																		+ "</button></li>");
-												 
+
 											}
-											if($.trim(response)){
-											 document
-												.getElementById('listOfStudentsOfGroup').style.visibility = 'visible';
-											}else{
+											if ($.trim(response)) {
+												document
+														.getElementById('listOfStudentsOfGroup').style.visibility = 'visible';
+												document.getElementById('listHeading').style.visibility = 'visible';
+
+											} else {
 												alert("There are no students in this group.");
-												 document
-													.getElementById('listOfStudentsOfGroup').style.visibility = 'hidden';
+												document
+														.getElementById('listOfStudentsOfGroup').style.visibility = 'hidden';
+												document.getElementById('listHeading').style.visibility = 'hidden';
+
 											}
 
 										}
-										
-										
+
 									});
 						});
 		function selectOption(index) {
@@ -305,7 +313,8 @@
 					},
 					403 : function() {
 						location.href = '/MyProject/forbiddenPage';
-					},404 : function(){
+					},
+					404 : function() {
 						location.href = '/MyProject/pageNotFoundPage';
 					},
 					500 : function() {

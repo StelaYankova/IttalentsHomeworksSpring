@@ -30,7 +30,11 @@ a.navbar-brand{
 	padding-top: 6px !important;
 	height: 20px;
 }
-
+.navbar-inverse .navbar-nav>li>a {
+	 color: #ffffff;
+    padding-left: 22px;
+   /*  font-size:12px; */
+}
 .navbar-header {
 	z-index: 1;
 }
@@ -43,13 +47,21 @@ a.navbar-brand{
 	margin-top:0px;
 	margin-left: 820px;
 }
-.input-invalid-login{
+/* .input-invalid-login{
 	margin-top:22px;
-} 
+}  */
+.input-invalid-login {
+	margin-top:22px;
+    position: absolute;
+    top: 15px;
+    right: 225px;
+    color: red;
+    font-size: 13px;
+}
 #registerPageButton {
 	text-align: right;
-	padding-left: 1050px;
-	top: -8px;
+	padding-left: 1045px;
+	top: -6px;
 	color: #9d9d9d;  
 }
 

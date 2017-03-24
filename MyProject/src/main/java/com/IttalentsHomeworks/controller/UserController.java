@@ -35,10 +35,8 @@ public class UserController {
 	@RequestMapping(value = "/GetGroupsOfUserServlet", method = RequestMethod.GET)
 	protected void getGroupsOfStudent(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("TARAM1");
 		User userTry = (User) request.getSession().getAttribute("user");
-		if (!userTry.isTeacher()) {		System.out.println("TARAM2");
-
+		if (!userTry.isTeacher()) {	
 			User user = (User) request.getSession().getAttribute("user");
 			ArrayList<Group> groupsOfUser = user.getGroups();
 			JsonArray jsonGroups = new JsonArray();
@@ -57,52 +55,58 @@ public class UserController {
 					homeworks.add(obj1);
 				}
 				obj.add("homeworks", homeworks);
-				System.out.println("TARAM3");
-
 				jsonGroups.add(obj);
 			}
 			response.setContentType("application/json");
 			response.getWriter().write(jsonGroups.toString());
 			response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 		} else {
-			System.out.println("TARAM4");
-
 			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
-
+	
 	@RequestMapping(value = "/GetHomeworkOfStudentServlet", method = RequestMethod.GET)
 	protected String getHomeworksOfStudent(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.isTeacher()) {
-			int studentId = Integer.parseInt(request.getParameter("studentId"));
-			int homeworkId = Integer.parseInt(request.getParameter("id"));
-			request.getSession().setAttribute("studentId", studentId);
-			Homework homework = null;
-			ArrayList<Homework> homeworks;
-			try {
-				homeworks = UserDAO.getInstance().getHomeworksOfStudent(studentId);
-				for (Homework h : homeworks) {
-					if (h.getHomeworkDetails().getId() == homeworkId) {
-						homework = new Homework(h.getTeacherGrade(), h.getTeacherComment(), h.getTasks(),
-								h.getHomeworkDetails());
-						break;
+			if (request.getParameter("studentId") != null && !(request.getParameter("studentId").trim().equals(""))
+					&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("studentId").trim())
+					&& request.getParameter("id") != null && !(request.getParameter("id").trim().equals(""))
+					&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("id").trim())) {
+				int studentId = Integer.parseInt(request.getParameter("studentId").trim());
+				int homeworkId = Integer.parseInt(request.getParameter("id").trim());
+				request.getSession().setAttribute("studentId", studentId);
+				Homework homework = null;
+				ArrayList<Homework> homeworks;
+				try {
+					homeworks = UserDAO.getInstance().getHomeworksOfStudent(studentId);
+					for (Homework h : homeworks) {
+						if (h.getHomeworkDetails().getId() == homeworkId) {
+							homework = new Homework(h.getTeacherGrade(), h.getTeacherComment(), h.getTasks(),
+									h.getHomeworkDetails());
+							break;
+						}
 					}
+					Student chosenStudent = (Student) UserDAO.getInstance().getUserById(studentId);
+
+					if(homework == null || chosenStudent == null){
+						return "pageNotFound";
+					}
+					request.getSession().setAttribute("currHomework", homework);
+					request.getSession().setAttribute("currStudentUsername", chosenStudent.getUsername());
+					return "redirect:./GetCurrHomeworkOfStudent";
+				} catch (UserException e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+					return "exception";
+				} catch (GroupException e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+					return "exception";
 				}
-				
-				
-				request.getSession().setAttribute("currHomework", homework);
-				Student chosenStudent = (Student) UserDAO.getInstance().getUserById(studentId);
-				request.getSession().setAttribute("currStudentUsername", chosenStudent.getUsername());
-				return "redirect:./GetCurrHomeworkOfStudent";
-			} catch (UserException e) {
-				System.out.println(e.getMessage());
-				e.printStackTrace();
-				return "exception";
-			} catch (GroupException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} else {
+				return "pageNotFound";
 			}
 		}
 		return "forbiddenPage";
@@ -163,14 +167,11 @@ public class UserController {
 	protected String loginPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = null;
-		String username = request.getParameter("username").trim();
-		String password = request.getParameter("password").trim();
-		Stack<String> navPath = new Stack<>();
-		navPath.push("Home");
-		request.getSession().setAttribute("navPath", navPath);
-		if (isThereEmptyFieldLogin(username, password)) {
+		if (isThereEmptyFieldLogin(request.getParameter("username").trim(), request.getParameter("password").trim())) {
 			request.getSession().setAttribute("invalidField", true);
 		} else {
+			String username = request.getParameter("username").trim();
+			String password = request.getParameter("password").trim();
 			try {
 				if (doesUserLoginExist(username, password)) {
 					user = UserDAO.getInstance().getUserByUsername(username);
@@ -231,10 +232,10 @@ public class UserController {
 	}
 
 	private boolean isThereEmptyFieldLogin(String username, String password) {
-		if (username == null || username == "" || password == null || password == "") {
-			return true;
+		if (username != null && !(username.equals("")) && password != null && !(password.equals(""))) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	@RequestMapping(value = "/LogoutServlet", method = RequestMethod.GET)
@@ -261,16 +262,22 @@ public class UserController {
 	@RequestMapping(value = "/RegisterServlet", method = RequestMethod.POST)
 	protected String register(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String username = request.getParameter("username").trim();
-		String password = request.getParameter("password").trim();
-		String repeatedPassword = request.getParameter("repeatedPassword").trim();
-		String email = request.getParameter("email").trim();
-		User userTry = new Student(username, password, repeatedPassword, email);
-		request.setAttribute("userTry", userTry);
 		// not null
-		if (isThereEmptyFieldRegister(username, password, repeatedPassword, email)) {
+		if (isThereEmptyFieldRegister(request.getParameter("username").trim(), request.getParameter("password").trim(), request.getParameter("repeatedPassword").trim(), request.getParameter("email").trim())) {
 			request.setAttribute("emptyFields", true);
+			String username = (request.getParameter("username") != null) ? (request.getParameter("username").trim()) : ("");
+			String password = (request.getParameter("password") != null) ? (request.getParameter("password").trim()) : ("");
+			String repeatedPassword = (request.getParameter("repeatedPassword") != null) ? (request.getParameter("repeatedPassword").trim()) : ("");
+			String email = (request.getParameter("email") != null) ? (request.getParameter("email").trim()) : ("");
+			User userTry = new Student(username, password, repeatedPassword, email);
+			request.setAttribute("userTry", userTry);
 		} else {
+			String username = request.getParameter("username").trim();
+			String password = request.getParameter("password").trim();
+			String repeatedPassword = request.getParameter("repeatedPassword").trim();
+			String email = request.getParameter("email").trim();
+			User userTry = new Student(username, password, repeatedPassword, email);
+			request.setAttribute("userTry", userTry);
 			// uniqueUsername
 			try {
 				boolean isUsernameUnique = false;
@@ -306,7 +313,6 @@ public class UserController {
 					isEmailValid = true;
 				}
 				request.setAttribute("validEmail", isEmailValid);
-
 				if (isUsernameUnique == true && isUsernameValid == true && isPassValid == true
 						&& isRepeatedPassValid == true && isEmailValid == true) {
 					// we create user
@@ -384,11 +390,11 @@ public class UserController {
 	}
 
 	private boolean isThereEmptyFieldRegister(String username, String password, String repeatedPassword, String email) {
-		if (username == null || username.equals("") || password == null || password.equals("")
-				|| repeatedPassword == null || repeatedPassword.equals("") || email == null || email.equals("")) {
-			return true;
+		if (username != null && !(username.equals("")) && password != null && !(password.equals(""))
+				&& repeatedPassword != null && !(repeatedPassword.equals("")) && email != null && !(email.equals(""))) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	@RequestMapping(value = "/SeeScoresServlet", method = RequestMethod.GET)
@@ -413,19 +419,20 @@ public class UserController {
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		int userId = user.getId();
-		String username = user.getUsername();
-		String password = request.getParameter("password").trim();
-		String repeatedPassword = request.getParameter("repeatedPassword").trim();
-		String email = request.getParameter("email").trim();
-		User userTry = new Student(username, password, repeatedPassword, email);
-		request.setAttribute("userTry", userTry);
+		
 		User newUser = null;
 
 		// empty fields
-		if (isThereEmptyFieldUpdateProfile(password, repeatedPassword, email)) {
+		if (isThereEmptyFieldUpdateProfile(request.getParameter("password").trim(), request.getParameter("repeatedPassword").trim(), request.getParameter("email").trim())) {
 			request.setAttribute("emptyFields", true);
 		} else {
 			// password valid
+			String username = user.getUsername();
+			String password = request.getParameter("password").trim();
+			String repeatedPassword = request.getParameter("repeatedPassword").trim();
+			String email = request.getParameter("email").trim();
+			User userTry = new Student(username, password, repeatedPassword, email);
+			request.setAttribute("userTry", userTry);
 			boolean isPassValid = false;
 			if(!password.equals(user.getPassword())){
 				if (isPasswordValidUpdateProfile(password)) {
@@ -434,7 +441,7 @@ public class UserController {
 			} else {
 				isPassValid = true;
 				request.setAttribute("invalidFields", false);
-			}System.out.println(3);
+			}
 			request.setAttribute("validPass", isPassValid);
 			// repeatedPass
 			boolean isRepeatedPassValid = false;
@@ -448,8 +455,8 @@ public class UserController {
 				isEmailValid = true;
 			}
 			request.setAttribute("validEmail", isEmailValid);
-			if (isPassValid == true && isRepeatedPassValid == true && isEmailValid == true) {System.out.println(5);
-				
+			
+			//if (isPassValid == true && isRepeatedPassValid == true && isEmailValid == true) {
 				if (user.isTeacher()) {
 					newUser = new Teacher(username, password, repeatedPassword, email);
 				} else {
@@ -475,7 +482,7 @@ public class UserController {
 					e.printStackTrace();
 					return "exception";
 				}
-			}
+			//}
 		}
 		return "updateProfile";
 	}
@@ -506,18 +513,18 @@ public class UserController {
 	}
 
 	private boolean isEmailValidUpdateProfile(String email) {
-		String regex = "^(.+)@(.+)$";
+		String regex = IValidationsDAO.EMAIL_VALIDATION;
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher((CharSequence) email);
 		return matcher.matches();
 	}
 
 	private boolean isThereEmptyFieldUpdateProfile(String password, String repeatedPassword, String email) {
-		if (password == null || password.equals("") || repeatedPassword == null || repeatedPassword.equals("")
-				|| email == null || email.equals("")) {
-			return true;
+		if (password != null && !(password.equals(""))
+				&& repeatedPassword != null && !(repeatedPassword.equals("")) && email != null && !(email.equals(""))) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	private boolean arePassAndRepeatedPassEqualUpdateProfile(String pass, String repeatedPass) {

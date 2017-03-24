@@ -7,22 +7,28 @@
 .ui-helper-hidden-accessible {
 	display: none;
 }
-
+.input-invalid-addStudentToGroup {
+    text-align: left;
+    color: red;
+    width: 20%;
+    margin-left: 320px;
+}
 .form-group {
 	padding-right: 50px;
 	width: 25%;
 }
 #listOfStudentsOfGroupHeading{
-visibility: hidden;
-	margin-left: 292px;
- 	margin-top: -10px;
- 	width: 20.5%;
+	    visibility: hidden;
+    position: absolute;
+    margin-left: 291px;
+    margin-top: -10px;
     text-align: center;
+    width: 25%;
  }
 
 #listOfStudentsOfGroup {
 	visibility: hidden;
-	margin-left: 270px;
+	margin-left: 292px;
 	margin-top: 25px;
 	z-index: 1;
 	width: 25%;

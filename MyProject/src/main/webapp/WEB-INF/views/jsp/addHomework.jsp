@@ -35,20 +35,19 @@
 				</div>
 			</c:if>
 		</c:if>
-	<div id="pageWrapper">
-		
+	<div id="pageWrapper">		
 		<div id="formAddHomework" >
 					<legend>Add homework</legend>
 		
 			<form action="./AddHomework" method="POST"
-				enctype="multipart/form-data" id="addHomeworkForm">
+				enctype="multipart/form-data" id="addHomeworkForm"  accept-charset="UTF-8">
 				<c:if test="${not empty invalidFields}">
 					<c:if test="${invalidFields}">
-						<p class="input-invalid-or-empty">Invalid fields</p>
+						<p class="input-invalid-or-empty">You have invalid fields</p>
 					</c:if>
 				</c:if>
 				<c:if test="${emptyFields}">
-					<p class="input-invalid-or-empty">Empty fields</p>
+					<p class="input-invalid-or-empty">You cannot have empty fields</p>
 				</c:if>
 				<div class="form-group">
 					<label class="control-label col-sm-4" >Heading:</label>
@@ -57,8 +56,8 @@
 							value="${nameTry}" placeholder="Enter heading" maxlength="40"
 							data-toggle="popover" data-placement="bottom"
 							data-trigger="focus"
-							data-content="Size of heading - 5 to 40 symbols. Valid inputs are numbers and letters (large and small)"
-							required />
+							data-content="Valid length is from 5 to 40 symbols. Valid inputs are numbers and letters (large and small)"
+							 required/>
 						<c:if test="${not empty validHeading}">
 							<c:if test="${not validHeading}">
 								<p id="nameMsg" class="input-invalid">Heading is not valid</p>
@@ -84,7 +83,7 @@
 								id="opens" name="opens" placeholder="Enter opening time"
 								data-toggle="popover" data-placement="bottom"
 								data-trigger="focus"
-								data-content="From today max 6 months from now" required /> <span
+								data-content="Maximum 6 months from today" class="input-group-addon" required/><span
 								class="input-group-addon"> <span
 								class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -105,9 +104,9 @@
 						<div class='input-group date' id='datetimepicker7'>
 							<input type='text' value="${closesTry}" data-toggle="popover"
 								data-placement="bottom" data-trigger="focus"
-								data-content="Max 6 months after opening time"
+								data-content="Maximum 6 months after opening time"
 								class="form-control" id="closes" name="closes"
-								placeholder="Enter closing time" required /> <span
+								placeholder="Enter closing time"  required/><span
 								class="input-group-addon"> <span
 								class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -125,11 +124,11 @@
 					<br> <label class="control-label col-sm-4">Number of
 						tasks:</label>
 					<div class="col-sm-7">
-						<input type="number" min="0" max="41" maxlength="2"
+						<input type="number" min="1" max="41" maxlength="2"
 							class="form-control" name="numberOfTasks"
 							placeholder="Enter number of tasks" value="${numberOfTasksTry}"
 							data-toggle="popover" data-placement="bottom"
-							data-trigger="focus" data-content="From 1 to 40" required />
+							data-trigger="focus" data-content="From 1 to 40"  required/>
 						<c:if test="${not empty validTasks}">
 							<c:if test="${not validTasks}">
 								<p id="numberOfTasksMsg" class="input-invalid">Number of
@@ -144,7 +143,7 @@
 				<div class="form-group">
 					<label class="control-label col-sm-4">Groups</label>
 					<div class="col-sm-7">
-						<select class="selectpicker form-control" data-width="101%" multiple name="groups" id="groups"
+						<select class="selectpicker form-control" data-width="101%" data-size="7" multiple name="groups" id="groups"
 							required>
 							<c:forEach items="${applicationScope.allGroups}" var="group">
 								<c:set var="isGroupSelected" value="false"></c:set>
@@ -174,7 +173,7 @@
 <div class="form-group">
 					<br> <label class="control-label col-sm-4">Tasks:</label>
 					<div class="col-sm-7">
-						<input type="file" accept="application/pdf" name="file" required />
+						<input type="file" accept="application/pdf" name="file"  required/>
 						<c:if test="${not empty validFile}">
 							<c:if test="${not validFile}">
 								<p id="fileMsg" class="input-invalid">Valid file format -
@@ -223,7 +222,7 @@
 			var size = (document.forms["addHomeworkForm"]["file"].files[0].size / 1024 / 1024)
 					.toFixed(2);
 			console.log(size)
-			if (size > 20) {
+			if (size > 20 || size == 0) {
 				console.log(false)
 				return false;
 			}

@@ -47,31 +47,31 @@
 				id="updateGroupForm">
 				<c:if test="${not empty sessionScope.invalidFields}">
 					<c:if test="${sessionScope.invalidFields}">
-						<p class="input-invalid-or-empty">Invalid fields</p>
+						<p class="input-invalid-or-empty">You have invalid fields</p>
 					</c:if>
 				</c:if>
 				<c:if test="${not empty sessionScope.emptyFields}">
 					<c:if test="${sessionScope.emptyFields}">
-						<p class="input-invalid-or-empty">Empty fields</p>
+						<p class="input-invalid-or-empty">You cannot have empty fields</p>
 					</c:if>
 				</c:if>
 				<div class="form-group">
 					<label class="control-label col-sm-4">Name:</label>
 					<div class="col-sm-7">
-						<input type="text" class="form-control" name="groupName" maxlength="20"
+						<input type="text" class="form-control" name="groupName" maxlength="15"
 							placeholder="Enter name" data-toggle="popover"
 							class="form-control" value="${sessionScope.currGroup.name}"
-							data-placement="bottom" data-trigger="focus" maxlength="20"
-							data-content="Size of name - 4 to 15 symbols. Valid inputs are numbers and letters (large and small)"
+							data-placement="bottom" data-trigger="focus" 
+							data-content="Valid length is from 4 to 15 symbols. Valid inputs are numbers and letters (large and small)"
 							required />
 						<c:if test="${not empty sessionScope.validName}">
 							<c:if test="${not sessionScope.validName}">
-								<p id="nameMsg" class="input-invalid">Name is not valid</p>
+								<p id="nameMsg" class="input-invalid">Group name is not valid</p>
 							</c:if>
 							<c:if test="${not empty sessionScope.uniqueName}">
 								<c:if test="${sessionScope.validName}">
 									<c:if test="${not sessionScope.uniqueName}">
-										<p id="nameMsg" class="input-invalid">Name already exists</p>
+										<p id="nameMsg" class="input-invalid">Group name already exists</p>
 									</c:if>
 								</c:if>
 							</c:if>
@@ -107,8 +107,9 @@
 									teachers exist</p>
 							</c:if>
 						</c:if>
+						<p id="allTeachersExistMsg" class="input-invalid"></p>
 					</div>
-				</div><br> <br> <br> <br>
+				</div><br> <br> <br> 
 				<legend></legend><br>
 					<div class="form-group">
 						<div class="col-md-offset-4 col-sm-5">
@@ -139,16 +140,29 @@
 	$('#updateGroupForm').submit(function(e) {
 		e.preventDefault();
 		var name = document.forms["updateGroupForm"]["groupName"].value;
+		var teachers = document.forms["updateGroupForm"]["teachers"].value;
+		var areTeachersValid = true;
 		var isNameValid = true;
 		if(name == ""){
 			isNameValid = false;
 		}
-		if((isNameValid === false) || (name.length < 4 && name.length > 15)){
+		if(teachers == ""){
+			areTeachersValid = false;
+		}
+		if((isNameValid === false)){
 			if (!$('#nameMsg').is(':empty')) {
 				$("#nameMsg").empty();
 			}
 			document.getElementById("nameMsg").append(
-					"Invalid size of name");
+					"Fill group name");
+			return false;
+		}
+		if(areTeachersValid === false){
+			if (!$('#allTeachersExistMsg').is(':empty')) {
+				$("#allTeachersExistMsg").empty();
+			}
+			document.getElementById("allTeachersExistMsg").append(
+					"Fill teachers");
 			return false;
 		}
 		$.ajax({
@@ -180,7 +194,7 @@
 						}
 						isNameValid = false;
 						document.getElementById("nameMsg").append(
-								"Name is not valid");
+								"Group name is not valid");
 					}
 				});
 				},
@@ -190,7 +204,7 @@
 				}
 				isNameValid = false;
 				document.getElementById("nameMsg").append(
-						"Name already exists");
+						"Group name already exists");
 			}
 		});
 		$( document ).ajaxStop(function() {

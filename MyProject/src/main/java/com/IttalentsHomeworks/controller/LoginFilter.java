@@ -45,8 +45,9 @@ public class LoginFilter implements Filter {
         boolean isImage = false;
         boolean isStylesheet = false;
         System.out.println("0000000");
-        System.out.println(request.getRequestURI());
+        
         if(request.getRequestURI().length() >= 5){
+        	//System.out.println(request.getRequestURL());
             System.out.println(request.getRequestURI().substring(request.getRequestURI().length()-4, request.getRequestURI().length()));
 
         	isStylesheet = request.getRequestURI().substring(request.getRequestURI().length()-4, request.getRequestURI().length()).equals(".css");

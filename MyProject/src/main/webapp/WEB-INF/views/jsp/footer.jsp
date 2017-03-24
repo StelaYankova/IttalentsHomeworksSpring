@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -223,8 +225,8 @@
 			<div class="col-sm-8">
 				<div class="col-sm-6">
 					<div class="title">
-						Bulgaria, Sofia 1404, Infinity Tower<br> bul. Bulgaria 69,
-						fl‚.14
+						Bulgaria, SofiaÂ 1404, Infinity Tower<br> bul. Bulgaria 69,
+						flÂ‚.14
 					</div>
 				</div>
 				<div class="col-sm-3">

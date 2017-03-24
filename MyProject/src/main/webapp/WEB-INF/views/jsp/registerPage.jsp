@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,19 +8,7 @@
 <title>Insert title here</title>
 <link href="<c:url value="css/registerPageCss.css" />" type="text/css" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" type="text/css" rel="stylesheet">
-
 </head>
-<style>
-/*  .form-group {
-	margin-left: 60px auto;
-} */
-/* #formRegister {
-	margin: 0 auto;
- 	padding-top: 100px;
- 	width: 40%;
- 	padding-bottom:150px;
-} */ 
-</style>
 <body>
 	<%@ include file="navBarHomePage.jsp"%>
 	<c:if test="${not empty invalidFields}">
@@ -36,11 +23,11 @@
 			<legend>Registration</legend>
 			<c:if test="${not empty invalidFields}">
 				<c:if test="${invalidFields}">
-					<p class="input-invalid-or-empty">Invalid fields</p>
+					<p class="input-invalid-or-empty">You have invalid fields</p>
 				</c:if>
 			</c:if>
 			<c:if test="${emptyFields}">
-				<p class="input-invalid-or-empty">Empty fields</p>
+				<p class="input-invalid-or-empty">You cannot have empty fields</p>
 			</c:if>
 			<form class="form-horizontal" name="registerForm" id="registerForm"
 				action="./RegisterServlet" method="POST">
@@ -51,7 +38,7 @@
 							placeholder="Enter username" name="username" maxlength="15"
 							value="${userTry.username}" data-toggle="popover"
 							data-placement="bottom" data-trigger="focus"
-							data-content="Size of username - 6 to 15 symbols. Valid inputs are numbers and letters (large and small)"
+							data-content="Valid length is from 6 to 15 symbols. Valid inputs are numbers and letters (large and small)."
 							required />
 						<c:if test="${not empty validUsername}">
 							<c:if test="${not validUsername}">
@@ -79,7 +66,7 @@
 							name="password" value="${userTry.password }"
 							placeholder="Enter password" data-toggle="popover"
 							data-placement="bottom" data-trigger="focus"
-							data-content="Size of password - 6 to 15 symbols. Valid inputs are numbers and letters (large and small)"
+							data-content="Valid length is from 6 to 15 symbols. Valid inputs are numbers and letters (large and small)."
 							required />
 						<c:if test="${not empty validPass}">
 							<c:if test="${not validPass}">
@@ -95,7 +82,7 @@
 					<div class="col-sm-7">
 						<input type="password" class="form-control" maxlength="15"
 							name="repeatedPassword" placeholder="Repeat password"
-							value="${userTry.repeatedPassword }" />
+							value="${userTry.repeatedPassword }" required />
 						<c:if test="${not empty validRepeatedPass}">
 							<c:if test="${not validRepeatedPass}">
 								<p id="repeatedPasswordMsg" class="input-invalid">Repeated
@@ -119,7 +106,6 @@
 						<p id="emailMsg" class="input-invalid"></p>
 					</div>
 				</div>
-				<br>
 				<legend></legend>
 				<div class="form-group">
 						<div class="col-md-offset-4 col-sm-5">

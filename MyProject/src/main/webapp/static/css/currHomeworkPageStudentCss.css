@@ -8,8 +8,14 @@
 	max-width: 50%;
 }
  */
+.input-invalid {
+    padding-top: 12px;
+    margin-bottom: -3px;
+    text-align: left;
+}
+
 #currHomework{
- width: 40%;
+ width: 36%;
     float: left; 
 	padding-left:100px;
 	padding-right:20px;
@@ -20,7 +26,7 @@
  width: 52%;
     float: left;
     padding-left: 50px;
-    padding-top: 70px;
+    padding-top: 75px;
   padding-bottom: 100px;
 }
 
@@ -37,8 +43,15 @@
 #divTasks{
 	padding-bottom: 60px;
 }
+#tasksTable{
+	border-size: 2px;
+	border-style: groove;
+}
 #tasksTable td{
-	padding-bottom: 20px;
+    padding-bottom: 15px;
+    padding-top: 19px;
+    border-size: 2px;
+	border-style: groove;
 }
 
 #seeTaskSolutionButton {
@@ -48,4 +61,8 @@
 
 #currTaskSolution,#taskUpload,#currTaskSolution{
 	visibility: hidden;
+}
+.uploadSolutionButton{
+	float:right;
+	text-decoration:underline;
 }

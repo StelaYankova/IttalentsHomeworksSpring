@@ -62,18 +62,18 @@
 			<legend>Update profile</legend>
 			<c:if test="${not empty invalidFields}">
 				<c:if test="${invalidFields}">
-					<p class="input-invalid-or-empty">Invalid fields</p>
+					<p class="input-invalid-or-empty">You have invalid fields</p>
 				</c:if>
 			</c:if>
 			<c:if test="${emptyFields}">
-				<p class="input-invalid-or-empty">Empty fields</p>
+				<p class="input-invalid-or-empty">You cannot have empty fields</p>
 			</c:if>
 			<form action="./UpdateYourProfileServlet" method="POST"
 				id="updateForm" name="updateForm" class="form-horizontal">
 				<div id="inputFields">
 					<div class="form-group">
 						<label class="control-label col-sm-4">Username:</label>
-						<div class="col-sm-3">
+						<div class="col-sm-3" style="padding-top:7px">
 							<c:out value="${sessionScope.user.username}"></c:out>
 						</div>
 					</div>
@@ -85,8 +85,8 @@
 								placeholder="Enter password" maxlength="15"
 								data-toggle="popover" data-placement="bottom"
 								data-trigger="focus"
-								data-content="Size of password - 6 to 15 symbols. Valid inputs are numbers and letters (large and small)"
-								required />
+								data-content="Valid length is from 6 to 15 symbols. Valid inputs are numbers and letters (large and small)"
+								 required />
 							<c:if test="${not empty validPass}">
 								<c:if test="${not validPass}">
 									<p id="passwordMsg" class="input-invalid">Password is not
@@ -103,7 +103,7 @@
 							<input type="password" class="form-control"
 								placeholder="Repeat password"
 								value="${sessionScope.user.password}" maxlength="15"
-								name="repeatedPassword" required />
+								name="repeatedPassword"  required/>
 							<c:if test="${not empty validRepeatedPass}">
 								<c:if test="${not validRepeatedPass}">
 									<p id="repeatedPasswordMsg" class="input-invalid">Repeated
@@ -118,7 +118,7 @@
 						<div class="col-sm-7">
 							<input type="email" class="form-control"
 								placeholder="Enter email" value="${sessionScope.user.email}"
-								name="email" required />
+								name="email"  required />
 							<c:if test="${not empty validEmail}">
 								<c:if test="${not validEmail}">
 									<p id="emailMsg" class="input-invalid">Email is not valid</p>
@@ -254,7 +254,7 @@
 																.submit();
 													}
 												});
-							} else {console.log(3)
+							} else {
 								if ((isPasswordValid === true
 										&& isRepeatedPasswordValid === true && isEmailValid === true)) {
 									document.getElementById("updateForm")

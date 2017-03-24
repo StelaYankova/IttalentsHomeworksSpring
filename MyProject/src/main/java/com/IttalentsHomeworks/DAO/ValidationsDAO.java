@@ -86,6 +86,8 @@ public class ValidationsDAO implements IValidationsDAO{
 					break;
 				}
 			}
+		}else{
+			isPasswordValid = false;
 		}
 		return isPasswordValid;
 	}
@@ -170,7 +172,7 @@ public class ValidationsDAO implements IValidationsDAO{
 	@Override
 	public boolean areGroupNameCharactersValid(String groupName) {
 		for(int i = 0; i < groupName.length(); i++){
-			if(!(((int)groupName.charAt(i) >= ValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM && (int)groupName.charAt(i) <= ValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO))){
+			if(!(((int)groupName.charAt(i) >= ValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM && (int)groupName.charAt(i) <= ValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO))  || (int) groupName.charAt(i) == 34){
 				return false;
 			}
 		}
@@ -502,15 +504,21 @@ public class ValidationsDAO implements IValidationsDAO{
 	public boolean isPasswordUpdateValid(String pass, String formerPass) {
 		boolean isPasswordValid = true;
 		if (!pass.equals(formerPass)) {
-			if (pass.length() >= ValidationsDAO.MIN_LENGTH_OF_PASSWORD && pass.length() <= ValidationsDAO.MAX_LENGTH_OF_PASSWORD) {
+			if (pass.length() >= ValidationsDAO.MIN_LENGTH_OF_PASSWORD
+					&& pass.length() <= ValidationsDAO.MAX_LENGTH_OF_PASSWORD) {
 				for (int i = 0; i < pass.length(); i++) {
-					if (!(((int) pass.charAt(i) >= ValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO && (int) pass.charAt(i) <= ValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
-							|| ((int) pass.charAt(i) >= ValidationsDAO.ASCII_TABLE_VALUE_OF_A && (int) pass.charAt(i) <= ValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
-							|| ((int) pass.charAt(i) >= ValidationsDAO.ASCII_TABLE_VALUE_OF_a && (int) pass.charAt(i) <= ValidationsDAO.ASCII_TABLE_VALUE_OF_z))) {
+					if (!(((int) pass.charAt(i) >= ValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO
+							&& (int) pass.charAt(i) <= ValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
+							|| ((int) pass.charAt(i) >= ValidationsDAO.ASCII_TABLE_VALUE_OF_A
+									&& (int) pass.charAt(i) <= ValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
+							|| ((int) pass.charAt(i) >= ValidationsDAO.ASCII_TABLE_VALUE_OF_a
+									&& (int) pass.charAt(i) <= ValidationsDAO.ASCII_TABLE_VALUE_OF_z))) {
 						isPasswordValid = false;
 						break;
 					}
 				}
+			} else {
+				isPasswordValid = false;
 			}
 		}
 		return isPasswordValid;

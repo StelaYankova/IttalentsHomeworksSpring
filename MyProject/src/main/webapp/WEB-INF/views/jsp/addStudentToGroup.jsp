@@ -44,24 +44,24 @@
 				method="POST" class="form-inline" id="addStudentToGroupForm">
 				<c:if test="${not empty sessionScope.invalidFields}">
 					<c:if test="${sessionScope.invalidFields}">
-						<p class="input-invalid-addStudentToGroup">Invalid
+						<p class="input-invalid-addStudentToGroup">You have invalid
 							fields</p>
 					</c:if>
 				</c:if>
 				<c:if test="${not empty sessionScope.emptyFields}">
 					<c:if test="${sessionScope.emptyFields}">
-						<p class="input-invalid-addStudentToGroup">Empty fields</p>
+						<p class="input-invalid-addStudentToGroup">You cannot have empty fields</p>
 					</c:if>
 				</c:if>
 				<c:if test="${not empty sessionScope.doesStudentExist}">
 					<c:if test="${not sessionScope.doesStudentExist}">
-						<p id="studentMsg" class="input-invalid">Student does not
+						<p id="studentMsg" class="input-invalid-addStudentToGroup">Student does not
 							exist</p>
 					</c:if>
 					<c:if test="${not empty sessionScope.isStudentInGroup}">
 						<c:if test="${sessionScope.doesStudentExist}">
 							<c:if test="${sessionScope.isStudentInGroup}">
-								<p id="studentMsg" class="input-invalid">Student is already
+								<p id="studentMsg" class="input-invalid-addStudentToGroup">Student is already
 									in group</p>
 							</c:if>
 						</c:if>
@@ -69,15 +69,15 @@
 				</c:if>
 				<c:if test="${not empty sessionScope.validGroups}">
 					<c:if test="${not sessionScope.validGroups}">
-						<p id="groupsMsg" class="input-invalid">Group does not exist</p>
+						<p id="groupsMsg" class="input-invalid-addStudentToGroup">Group does not exist</p>
 					</c:if>
 				</c:if>
-				<p id="groupMsg" class="input-invalid"></p>
-				<p id="studentMsg" class="input-invalid"></p>
+				<p id="groupMsg" class="input-invalid-addStudentToGroup"></p>
+				<p id="studentMsg" class="input-invalid-addStudentToGroup"></p>
 				<div class="form-group" style = "padding-top: 2px; ">				
 					<label class="control-label col-sm-9" style="padding-right: 30px; padding-bottom: 5px;" >Choose group:</label> <select
-						id="chosenGroup" name="chosenGroup" class="selectpicker form-control" required>
-						<option value="">-</option>
+						id="chosenGroup" name="chosenGroup" class="selectpicker form-control" ><!-- required -->
+						<option value="null">-</option>
 						<c:forEach var="group" items="${applicationScope.allGroups}">
 							<option value="${group.id}"><c:out value="${group.name}"></c:out></option>
 						</c:forEach>
@@ -86,7 +86,7 @@
 				<div class="form-group" id="studentSearch">
 					<label class="control-label col-sm-13" style = "padding-bottom: 5px;">Choose student:</label> <input
 						id="searchStudents" name="selectedStudent" class="form-control"
-						value="${sessionScope.chosenUsernameTry}" required />
+						value="${sessionScope.chosenUsernameTry}"  /><!-- required -->
 				</div>
 				<div class="form-group" style = "padding-top: 23px; width:5% ">
 							<input
@@ -123,6 +123,7 @@
 	</div>
 </body>
 <script>
+	
 	$('#addStudentToGroupForm')
 			.submit(
 					function(e) {
@@ -166,6 +167,7 @@
 										"chosenStudentUsername" : chosenStudentUsername
 									},
 									success : function(response) {
+										console.log("LLLLL")
 										if (!$('#studentMsg').is(':empty')) {
 											$("#studentMsg").empty();
 											doesUserExist = true;
@@ -243,7 +245,7 @@
 						$("#listOfStudentsOfGroupHeading").empty();
 					}
 					getStudents(groupId);
-					$(".input-invalid").empty();
+					$(".input-invalid-addStudentToGroup").empty();
 					alert('Student has been removed successfully!')
 				}
 			});
@@ -252,40 +254,57 @@
 		}
 	}
 
-	$(document).ready(function() {
-		$('#chosenGroup').change(function(event) {
-			document.getElementById("searchStudents").value = "";
-			if (!$('#listOfStudentsOfGroup').is(':empty')) {
-				$("#listOfStudentsOfGroup").empty();
-				document.getElementById('listOfStudentsOfGroup').style.visibility = 'hidden';
+	$(document)
+			.ready(
+					function() {
+						$('#chosenGroup')
+								.change(
+										function(event) {
+											document
+													.getElementById("searchStudents").value = "";
+											if (!$('#listOfStudentsOfGroup')
+													.is(':empty')) {
+												$("#listOfStudentsOfGroup")
+														.empty();
+												document
+														.getElementById('listOfStudentsOfGroup').style.visibility = 'hidden';
 
-			}
-			if (!$('#listOfStudentsOfGroupHeading').is(':empty')) {
-				$("#listOfStudentsOfGroupHeading").empty();
-				document.getElementById('listOfStudentsOfGroupHeading').style.visibility = 'hidden';
+											}
+											$(
+													".input-invalid-addStudentToGroup")
+													.empty();
+											if (!$(
+													'#listOfStudentsOfGroupHeading')
+													.is(':empty')) {
+												$(
+														"#listOfStudentsOfGroupHeading")
+														.empty();
+												document
+														.getElementById('listOfStudentsOfGroupHeading').style.visibility = 'hidden';
 
-			}
-			if (!$('#alert').is(':empty')) {
-				$("#alert").remove();
-			}
-			var groupId = $(this).find(":selected").val();
-			getStudents(groupId);
-		});
-		$(function() {
-			var availableTags = new Array();
-			<c:forEach items="${applicationScope.allStudents}" var="student">
-			availableTags.push('${student.username}');
-			</c:forEach>
-			$("#searchStudents").autocomplete({
-				source : availableTags,
-				messages : {
-					noResults : '',
-					results : function() {
-					}
-				}
-			});
-		});
-	});
+											}
+											if (!$('#alert').is(':empty')) {
+												$("#alert").remove();
+											}
+											var groupId = $(this).find(
+													":selected").val();
+											getStudents(groupId);
+										});
+						$(function() {
+							var availableTags = new Array();
+							<c:forEach items="${applicationScope.allStudents}" var="student">
+							availableTags.push('${student.username}');
+							</c:forEach>
+							$("#searchStudents").autocomplete({
+								source : availableTags,
+								messages : {
+									noResults : '',
+									results : function() {
+									}
+								}
+							});
+						});
+					});
 	function getStudents(groupId) {
 		$
 				.ajax({
@@ -314,15 +333,19 @@
 						}
 						document.getElementById('listOfStudentsOfGroup').style.visibility = 'visible';
 						if ($('#listOfStudentsOfGroup').is(':empty')) {
-							document.getElementById('listOfStudentsOfGroupHeading').append('There are no students in this group.');
-							
-						}else{
-							document.getElementById('listOfStudentsOfGroupHeading').append('Students in chosen group:');
+							document.getElementById(
+									'listOfStudentsOfGroupHeading').append(
+									'There are no students in this group.');
+
+						} else {
+							document.getElementById(
+									'listOfStudentsOfGroupHeading').append(
+									'Students in chosen group:');
 
 						}
 						document.getElementById('listOfStudentsOfGroupHeading').style.visibility = 'visible';
 					}
-					
+
 				});
 	}
 	function selectOption(index) {
@@ -339,7 +362,8 @@
 				},
 				403 : function() {
 					location.href = '/MyProject/forbiddenPage';
-				},404 : function(){
+				},
+				404 : function() {
 					location.href = '/MyProject/pageNotFoundPage';
 				},
 				500 : function() {

@@ -2,8 +2,8 @@
 
 #createButtonPosition {
     position: absolute;
-    left: 695px;
-    top: 183px;
+    margin-left: 3px;
+    margin-top: 246px;
 }
 
 #pageTitle{
@@ -12,6 +12,8 @@
 #divTable{
 	width: 30%;
 	margin:0 auto;
+	padding-top: 48px;
+	
 }
 #updateGroupForm{
 	padding-left:10px;

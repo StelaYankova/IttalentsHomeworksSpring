@@ -32,7 +32,7 @@
 	<div id="pageWrapper">
 		<h4 id = "pageTitle"><b><u>Your scores</u></b></h4>
 		<div id = "select" >
-		Choose a group: <select id="selectGroup" class="selectpicker">
+		Choose a group: <select id="selectGroup" class="selectpicker" data-size="5"> 
 			<option value="null">-</option>
 			<option value="allGroups">All groups</option>
 			<c:forEach items="${sessionScope.user.groups}" var="group">
@@ -54,6 +54,9 @@
 				<tbody class=wrapword>
 				</tbody>
 			</table>
+			<div id = "studentAverageScore">
+				<strong><u>Average score: <span id = "score"></span>/100</u></strong>
+			</div>
 		</div>
 		</div>
 	<script>
@@ -88,6 +91,7 @@
 											'change',
 											function() {
 												document.getElementById('divTable').style.visibility = 'hidden';
+												document.getElementById('studentAverageScore').style.visibility = 'hidden';
 												var selected = $(this).find(":selected").val()
 												$('#resultTable tbody')
 												.html('');
@@ -136,7 +140,11 @@
 																			.clear()
 																			.draw();
 																}
+																var averageScore = 0;
+																var numberHomeworks = 0;
 																for ( var i in response) {
+																	averageScore += response[i].teacherScore;
+																	numberHomeworks += 1;
 																	var opens = response[i].opens;
 																	var opensRep = opens
 																			.replace(
@@ -174,6 +182,13 @@
 																	document.getElementById('divTable').style.visibility = 'visible';
 
 																}
+																var answer = (averageScore/numberHomeworks).toFixed(1);
+																document.getElementById("studentAverageScore").style.visibility = "visible";
+															
+											if (!$('#score').is(':empty')) {
+																	$("#score").empty();
+																}
+																document.getElementById("score").append(answer);
 															}
 														});
 											});

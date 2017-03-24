@@ -1,16 +1,18 @@
 @CHARSET "UTF-8";
 
-
+#pageWrapperRegister{
+	padding-bottom: 60px;
+}
 #formRegister {
 	margin: 0 auto;
  	padding-top: 120px;
- 	width: 40%;
+ 	width: 40%; 
+ 	padding-bottom: 60px;
 }
 
 .form-group {
 	margin-left: 60px auto;
 }
-
 
 legend{
 	text-align: left;
@@ -31,8 +33,4 @@ legend{
 	position: absolute;
 	top: 81px;
 	width: 100%;
-}
-#registerButton{
-	background-color: #2E71AC;
-	color: #ffffff;
 }

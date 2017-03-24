@@ -72,7 +72,7 @@ public class ValidationsController {
 		String chosenStudentUsername = request.getParameter("chosenStudentUsername").trim();
 		try {
 			if(ValidationsDAO.getInstance().isUsernameUnique(chosenStudentUsername)){//if its unique id is not in DB
-				return;
+				response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 			}else{
 				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 			}
@@ -176,7 +176,7 @@ public class ValidationsController {
 		}
 	}
 	private boolean isLengthGroupNameValid(String groupName) {
-		if (groupName.length() >= IValidationsDAO.MIN_SIZE_OF_GROUP_NAME && groupName.length() <= IValidationsDAO.MAX_SIZE_OF_GROUP_NAME) {
+		if (groupName.length() >= IValidationsDAO.MIN_SIZE_OF_GROUP_NAME && groupName.length() <= IValidationsDAO.MAX_SIZE_OF_GROUP_NAME ) {
 			return true;
 		}
 		return false;
@@ -184,7 +184,7 @@ public class ValidationsController {
 
 	private boolean areCharactersGroupNameValid(String groupName) {
 		for(int i = 0; i < groupName.length(); i++){
-			if(!(((int)groupName.charAt(i) >= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM && (int)groupName.charAt(i) <= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO))){
+			if(!(((int)groupName.charAt(i) >= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM && (int)groupName.charAt(i) <= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO))  || (int) groupName.charAt(i) == 34){
 				return false;
 			}
 		}
@@ -257,7 +257,7 @@ public class ValidationsController {
 
 	private boolean areCharactersHomeworkHeadingValid(String heading) {
 		for(int i = 0; i < heading.length(); i++){
-			if(!(((int)heading.charAt(i) >= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM && (int)heading.charAt(i) <= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO))){
+			if(!(((int)heading.charAt(i) >= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM && (int)heading.charAt(i) <= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO)) || (int) heading.charAt(i) == 34){
 				return false;
 			}
 		}
@@ -363,7 +363,7 @@ public class ValidationsController {
 
 	private boolean areCharactersHomeworkUpdateHeadingValid(String heading) {
 		for(int i = 0; i < heading.length(); i++){
-			if(!(((int)heading.charAt(i) >= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM && (int)heading.charAt(i) <= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO))){
+			if(!(((int)heading.charAt(i) >= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM && (int)heading.charAt(i) <= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO)) || (int) heading.charAt(i) == 34){
 				return false;
 			}
 		}

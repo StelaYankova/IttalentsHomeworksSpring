@@ -10,26 +10,27 @@ label {
 	width: 140px;
 }
 ​#currHomework{
- 	width: 40%;
+ 	width: 36%;
     float: left;    
 	padding-left:100px;
 	padding-right:20px;
 	padding-top:60px;
 }
 #solution{
-	width: 52%;
-	float: left;
-	padding-left: 50px;
-	padding-top: 70px;
-	padding-bottom: 100px;
+ width: 52%;
+    float: left;
+    padding-left: 50px;
+    padding-top: 75px;
+  padding-bottom: 100px;
  }
 
 #currTaskSolution {
 	visibility: hidden;
 }
 #currHomework {
-	width: 40%;
-	float: left;
+/* 	width: 40%;
+ */ width: 36.5%;
+ 	float: left;
 	padding-left: 100px;
 	padding-right: 20px;
 	padding-top: 60px;
@@ -51,12 +52,24 @@ label {
 }
 #saveButton{
 	float:left;
+		margin-bottom: 60px;
+	
+}
+.invalidData {
+    padding-right: 60px;
 }
 #divTable{
-	padding-bottom: 60px;
+	padding-bottom: 10px;
+}
+#tasksTable{
+	border-size: 2px;
+	border-style: groove;
 }
 #tasksTable td{
-	padding-bottom: 20px;
+	padding-bottom: 15px;
+    padding-top: 19px;
+	border-size: 2px;
+	border-style: groove;
 }
 #seeTaskSolutionButton{
 	color: #fff; 

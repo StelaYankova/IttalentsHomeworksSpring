@@ -14,13 +14,14 @@ public interface IValidationsDAO {
 	static final int MIN_SIZE_OF_INTEGER = 0;
 	 static final int FORBIDDEN_STATUS = 403;
 	 static final int INTERNAL_SERVER_ERROR_STATUS = 500;
+	 static final int UNPROCESSABLE_ENTITY_STATUS = 422;
 	 static final int SUCCESS_STATUS = 200;
 	 static final int GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO = 126;
 	 static final int GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM = 32;
-	 static final int MAX_SIZE_OF_GROUP_NAME = 20;
+	 static final int MAX_SIZE_OF_GROUP_NAME = 15;
 	 static final int MIN_SIZE_OF_GROUP_NAME = 5;
 	 static final int MAX_SIZE_IN_MB_FOR_TASK_SOLUTION = 1;
-	 static final int MAX_LENGTH_OF_COMMENT = 150;
+	 static final int MAX_LENGTH_OF_COMMENT = 250;
 	 static final int MAX_VALUE_OF_GRADE = 100;
 	 static final int MIN_VALUE_OF_GRADE = 0;
 	 static final int MAX_LENGTH_OF_GRADE = 3;

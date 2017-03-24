@@ -39,13 +39,14 @@
  -->		<h4 id = "pageTitle">
 			<b><u>All groups</u></b>
 		</h4>
-		<form action="./AddGroupServlet" method="GET">
-			<button id="createButtonPosition"
-				class="glyphicon glyphicon-plus btn-primary btn btn-xs"
-				type="submit">Create group</button>
-		</form>
+		
 		<br>
 		<div id="divTable">
+		<form action="./AddGroupServlet" method="GET">
+			<button style = "width:366px" id="createButtonPosition"
+				class="glyphicon glyphicon-plus btn-primary btn btn-md"
+				type="submit"><b><font size="3">  Create group</font></b></button>
+		</form>
 			<table id="resultTable" border="1"
 				class="table table-striped table-bordered table-hover">
 				<thead>

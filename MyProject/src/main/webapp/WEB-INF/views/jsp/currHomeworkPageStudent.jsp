@@ -7,8 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="<c:url value="css/currHomeworkPageStudentCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/currHomeworkPageStudentCss.css" />" rel="stylesheet">
 </head>
 <style>
 
@@ -74,16 +74,10 @@
 					</strong>
 				</form>
 			</div>
-			<br> <b>Teacher grade:</b>
-			<c:out value="${sessionScope.currHomework.teacherGrade }" />
-
-			<br> <br> <b>Teacher comment:</b> <br>
-			<br> <label id="teacherComment"><c:out
-					value="${sessionScope.currHomework.teacherComment }" /></label> <br>
-			<br> <br>
+			
 			<!-- </div> -->
-			<div id="id"></div>
-			<table id="tasksTable" border="1"
+ 			<div id="id"></div>
+ 			<table id="tasksTable" 
 				class="table table-striped table-bordered table-hover">
 				<thead>
 					<tr>
@@ -101,21 +95,24 @@
 									<c:out value="Task ${i}" />
 								</button> <c:if test="${sessionScope.hasUploadTimePassed == 'false'}">
 									<c:if test="${sessionScope.hasUploadTimeCome == 'true'}">
-										<form action="./UploadSolutionServlet" method="POST"
+										<form action="./UploadSolutionServlet" method="POST" class = "uploadSolutionButton"
 											enctype="multipart/form-data" id="uploadSolutionForm${i}"
-											onchange="uploadFile('uploadSolutionForm${i}')">
-											<label class="btn btn-default btn-file"> <input
+											onchange="uploadFile('uploadSolutionForm${i}')" accept-charset="UTF-8">
+											<label class="btn btn-sm btn-file" style = "text-decoration:underline"> <input
 												type="hidden" value="${i}" name="taskNum">Upload<input
 												type="file" accept="application/java" size="50"
 												name="datafile" class="hidden"></label>
 										</form>
-										<span class="invalidData">
-											<p id="fileMsguploadSolutionForm${i}" class="input-invalid"></p>
-											<c:if test="${sessionScope.currTaskUpload+1 == i}">
-												<c:if test="${sessionScope.wrongContentType == true}">You can upload only .java files</c:if>
-												<c:if test="${sessionScope.wrongSize == true}">You can upload only files up to 1 MB</c:if>
-											</c:if>
-										</span>
+<!-- 										<span class="invalidData">
+ -->										<%-- <c:if test="${sessionScope.currTaskUpload+1 == i}">
+ 												
+												<p class = "input-invalid wrongFile"><!-- You can upload only .java files u</p>
+												You can upload only files up to 1 MB --></p>
+												
+											</c:if> --%>
+<!-- 										</span>
+ -->										<p id="fileMsguploadSolutionForm${i}" class="input-invalid"></p>
+										
 									</c:if>
 								</c:if>
 							</td>
@@ -123,6 +120,13 @@
 					</c:forEach>
 				</tbody>
 			</table>
+			<br> <b>Teacher grade:</b>
+			<c:out value="${sessionScope.currHomework.teacherGrade }" />
+
+			<br> <br> <b>Teacher comment:</b> <br>
+			<br> <label id="teacherComment"><c:out
+					value="${sessionScope.currHomework.teacherComment }" /></label> <br>
+			<br> <br>
 		</div>
 
 		<div class="solution">
@@ -130,13 +134,13 @@
 				<div id="taskUpload"></div>
 				<c:if test="${sessionScope.hasUploadTimePassed == 'false'}">
 					<textarea id="currTaskSolution"
-						class="form-control" cols="30" rows="30">
+						class="form-control" cols="30" rows="27">
 					</textarea>
 				</c:if>
 				<c:if test="${sessionScope.hasUploadTimePassed == 'true'}">
 					<textarea id="currTaskSolution" disabled="disabled"
 						class="form-control" cols="30"
-						rows="30">
+						rows="27">
 					</textarea>
 				</c:if>
 			</c:if>
@@ -176,6 +180,8 @@ function uploadFile(e){
 		}
 	}
 	oReq.send(formData);return; */
+	
+	
 	console.log("uploadSolutionForm" + e)
 	var file = document.forms[e]["datafile"].value;
 	
@@ -188,8 +194,8 @@ function uploadFile(e){
 		var isFileValid = isFileValidCheck(e);
 		if (!isFileValid) {console.log("fileMsg" + e)
 			document.getElementById("fileMsg"+e).append(
-					"File format-java, maxSize - 1MB");
-		}else{
+					"Valid file format - java, maximal size - 1MB");
+		}else{ 
 		var form = new FormData(document.getElementById(e));
 		console.log(form.get("taskNum"))
 		$.ajax({
@@ -201,6 +207,10 @@ function uploadFile(e){
 			success:function(data){
 				alert("The solution has been added successfully!");
 				seeTaskSolution(form.get("taskNum"));
+			},
+			error:function(data){
+				document.getElementById("fileMsg"+e).append(
+				"Valid file format - java, maximal size - 1MB");
 			}
 		});
 		}
@@ -219,11 +229,11 @@ function uploadFile(e){
 			} ],
 			"dom" : '<"top"l>rt<"bottom"ip><"clear">',
 			"aoColumns" : [ {
-				'sWidth' : '140%'
+				'sWidth' : '12%'
 			} ],
 
 			/* "lengthMenu" : [ 5 ], */
-			"scrollY" : '100vh',
+			"scrollY" : '41vh',
 			"scrollCollapse" : true,
 
 			"bDestroy" : true,
@@ -235,6 +245,7 @@ function uploadFile(e){
 	document.getElementById("currTaskSolution").addEventListener("change",
 			saveChangedText);
 	function saveChangedText() {
+		$('.input-invalid').empty();
 		var taskNum = sessionStorage.getItem("currTask");
 		var text = document.getElementById("currTaskSolution").value;
 		$
@@ -255,6 +266,7 @@ function uploadFile(e){
 				})
 	}
 	function seeTaskSolution(taskNum) {
+		$('.input-invalid').empty();
 		$
 				.ajax({
 					url : './ReadJavaFileServlet',
@@ -292,7 +304,7 @@ function uploadFile(e){
 		}
 		var size = (document.forms[e]["datafile"].files[0].size / 1024 / 1024)
 				.toFixed(2);
-		if (size > 1) {
+		if (size > 1 || size === 0) {
 			return false;
 		}
 		return true;

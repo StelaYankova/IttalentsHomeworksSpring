@@ -66,17 +66,17 @@
 			<legend>Update homework</legend>
 
 			<form action="./UpdateHomeworkServlet"
-				method="POST" enctype="multipart/form-data" id="updateHomeworkForm">
+				method="POST" enctype="multipart/form-data" id="updateHomeworkForm"  accept-charset="UTF-8">
 				
 
 				<c:if test="${not empty sessionScope.invalidFields}">
 					<c:if test="${sessionScope.invalidFields}">
-						<p class="input-invalid-or-empty">Invalid fields</p>
+						<p class="input-invalid-or-empty">You have invalid fields</p>
 					</c:if>
 				</c:if>
 				<c:if test="${not empty sessionScope.emptyFields}">
 					<c:if test="${sessionScope.emptyFields}">
-						<p class="input-invalid-or-empty">Empty fields</p>
+						<p class="input-invalid-or-empty">You cannot have empty fields</p>
 					</c:if>
 				</c:if>
 				<div class="form-group">
@@ -86,9 +86,8 @@
 							value='${sessionScope.currHomework.heading}' maxlength="40"
 							data-toggle="popover" data-placement="bottom"
 							data-trigger="focus"
-							data-content="Size of heading - 5 to 40 symbols. Valid inputs are numbers and letters (large and small)"
-							required />
-						<c:if test="${not empty sessionScope.validHeading}">
+							data-content="Valid length is from 5 to 40 symbols. Valid inputs are numbers and letters (large and small)"
+							 required/><c:if test="${not empty sessionScope.validHeading}">
 							<c:if test="${not sessionScope.validHeading}">
 								<p id="nameMsg" class="input-invalid">Heading is not valid</p>
 							</c:if>
@@ -113,7 +112,7 @@
 								class="form-control" id="opens" name="opens"
 								placeholder="Enter opening time" data-toggle="popover"
 								data-placement="bottom" data-trigger="focus"
-								data-content="From today max 6 months from now" required /> <span
+								data-content="Maximum 6 months from today"  required/><span
 								class="input-group-addon"> <span
 								class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -136,7 +135,7 @@
 								class="form-control" id="closes" name="closes"
 								placeholder="Enter closing time" data-toggle="popover"
 								data-placement="bottom" data-trigger="focus"
-								data-content="Max 6 months after opening time" required /> <span
+								data-content="Maximum 6 months after opening time"  required/><span
 								class="input-group-addon"> <span
 								class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -155,7 +154,7 @@
 					<label class="control-label col-sm-4">Number
 						of tasks:</label>
 					<div class="col-sm-7">
-						<input type="number" min="1" class="form-control"
+						<input type="number" min="1" max = "40" class="form-control"
 							name="numberOfTasks"
 							value='${sessionScope.currHomework.numberOfTasks}' maxlength="2"
 							data-toggle="popover" data-placement="bottom"
@@ -172,8 +171,8 @@
 				<div class="form-group">
 					<br> <br> <label class="control-label col-sm-4">Groups:</label>
 					<div class="col-sm-7">
-						<select class="selectpicker form-control" data-width="101%"
-							multiple name="groups" id="groups" class="form-control" required>
+						<select class="selectpicker form-control" data-size="7" data-width="101%"
+							multiple name="groups" id="groups" class="form-control" required >
 							<c:forEach items="${applicationScope.allGroups}" var="group">
 								<c:set var="isHwInGroup" value="false"></c:set>
 								<c:forEach items="${group.homeworks}" var="homework">
@@ -269,7 +268,7 @@
 			}
 			var size = (document.forms["updateHomeworkForm"]["file"].files[0].size / 1024 / 1024)
 					.toFixed(2);
-			if (size > 20) {
+			if (size > 20 || size == 0) {
 				return false;
 			}
 			return true;
@@ -328,7 +327,7 @@
 							} else {
 								if ((numberOfTasks < 1) || (numberOfTasks > 40)) {
 									document.getElementById("numberOfTasksMsg")
-											.append("Min = 1 max = 40");
+											.append("From 1 to 40");
 									isNumberOfTasksValid = false;
 								}
 							}
@@ -459,7 +458,7 @@
 								document
 										.getElementById("numberOfTasksMsg")
 										.append(
-												"Number of tasks- between 1 and 40");
+												"From 1 to 40");
 							}
 							if (file != "") {
 								isFileValid = false;

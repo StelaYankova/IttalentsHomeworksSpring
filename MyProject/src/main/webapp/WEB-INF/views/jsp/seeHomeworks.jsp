@@ -65,6 +65,8 @@
 					</table>
 				</div>
 			</div>
+					<h id = "listHeading">Students in chosen group:</h>
+			
 			<div class="list" >
 				<ul id="listOfStudentsOfGroup" class="editable"></ul>
 			
@@ -93,7 +95,7 @@
 									sWidth : '7%'
 								} ],
 								"ordering": false,
-								"lengthMenu" : [3, 5, 10, 15 ],
+								"lengthMenu" : [5, 10, 15 ],
 								"bDestroy" : true
 							});
 							$('#chosenGroup')
@@ -103,6 +105,7 @@
 												document
 														.getElementById('divTable').style.visibility = 'hidden';
 												document.getElementById('listOfStudentsOfGroup').style.visibility = 'hidden';
+												document.getElementById('listHeading').style.visibility = 'hidden';
 
 												if (!$('#resultTable tbody')
 														.is(':empty')) {
@@ -280,8 +283,11 @@
 													"<li><form action = './GetHomeworkOfStudentServlet'><input type = 'hidden' name = 'id' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'submit' class='btn btn-link'>"
 															+ response[i].username
 															+ "</button></form></li>");
+									
 									document
 											.getElementById("listOfStudentsOfGroup").style.visibility = "visible";
+									document.getElementById('listHeading').style.visibility = 'visible';
+									
 								} else {
 									$('#listOfStudentsOfGroup')
 											.append(
@@ -290,6 +296,8 @@
 															+ "</button></form></li>");
 									document
 											.getElementById("listOfStudentsOfGroup").style.visibility = "visible";
+									document.getElementById('listHeading').style.visibility = 'visible';
+
 								}
 							}
 						}

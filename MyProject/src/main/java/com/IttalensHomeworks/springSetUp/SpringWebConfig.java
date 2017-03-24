@@ -1,11 +1,14 @@
 package com.IttalensHomeworks.springSetUp;
 
+import java.nio.charset.Charset;
 import java.util.Locale;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -16,6 +19,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
 @Configuration
 @EnableWebMvc
 @ComponentScan("com")
@@ -37,6 +41,12 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 		return resolver;
 	}
 	@Bean
+	public StringHttpMessageConverter stringHttpMessageConverter() {
+	    return new StringHttpMessageConverter(Charset.forName("UTF-8"));
+	}
+
+	
+	@Bean
 	public InternalResourceViewResolver getInternalResourceViewResolver(){
 		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
 		resolver.setViewClass(JstlView.class);
@@ -45,12 +55,7 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 		return resolver;
 	}
 	// localization configuration
-	@Bean
-	public MessageSource messageSource() {
-		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-		messageSource.setBasename("messages");
-		return messageSource;
-	}
+	
 	
 	@Bean
 	public LocaleResolver localeResolver() {
@@ -66,4 +71,37 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 		registry.addInterceptor(changeInterceptor);
 	}
 	
+//	@Bean
+//    public CharacterEncodingFilter characterEncodingFilter() {
+//        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+//        characterEncodingFilter.setEncoding("UTF-8");
+//        characterEncodingFilter.setForceEncoding(true);
+//        return characterEncodingFilter;
+//    }
+//	@Bean
+//	public org.springframework.web.filter.CharacterEncodingFilter characterEncodingFilter() {
+//	    org.springframework.web.filter.CharacterEncodingFilter characterEncodingFilter = new org.springframework.web.filter.CharacterEncodingFilter();
+//	    characterEncodingFilter.setEncoding("UTF-8");
+//	    characterEncodingFilter.setForceEncoding(true);
+//	    return characterEncodingFilter;
+//	}
+//	 @Bean
+//	    public ResourceBundleMessageSource configureResourceBundleMessageSource() {
+//	        ResourceBundleMessageSource resource = new ResourceBundleMessageSource();
+//	        resource.setBasename("messages");
+//	        return resource;
+//	    }
+//	 @Bean
+//	    public MessageSource messageSource() {
+//	    	ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+//	        messageSource.setBasenames("i18/users", "i18/errormsg");
+//	        messageSource.setDefaultEncoding("UTF-8");
+//	        return messageSource;
+//	    }
+//	 @Bean
+//		public MessageSource messageSource() {
+//			ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+//			messageSource.setBasename("messages");
+//			return messageSource;
+//		}
 }

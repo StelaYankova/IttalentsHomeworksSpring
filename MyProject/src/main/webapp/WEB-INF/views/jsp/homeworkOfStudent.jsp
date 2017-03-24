@@ -38,43 +38,67 @@
 			</ul>
 		</nav>
 	</div>
+	<c:if test="${not empty invalidFields}">
+			<c:if test="${not invalidFields}">
+				<div class="alert alertAllPages alert-success">
+					<strong>Success!</strong> Group has been added successfully
+				</div>
+			</c:if>
+		</c:if>
 	<div id="pageWrapper">
 		<div id="currHomework">
-		<br>	<div id="downloadHomeworkForm">
-					<form action="./ReadHomeworkServlet" method="GET">
-						<input type='hidden'
-							value='${sessionScope.currHomework.homeworkDetails.tasksFile}'
-							name='fileName'> <strong>You can download tasks
-							<button class='btn btn-link btn-xs' type='submit'>
-								<b>here</b></button>
-						</strong>
-					</form>
-				</div>
-<br>
+			<br>
+			<div id="downloadHomeworkForm">
+				<form action="./ReadHomeworkServlet" method="GET">
+					<input type='hidden'
+						value='${sessionScope.currHomework.homeworkDetails.tasksFile}'
+						name='fileName'> <strong>You can download tasks
+						<button class='btn btn-link btn-xs' type='submit'>
+							<b>here</b>
+						</button>
+					</strong>
+				</form>
+			</div>
+		<div id="divTable">
+				<table id="tasksTable" 
+					class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<td>Tasks</td>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="i" begin="1"
+							end="${sessionScope.currHomework.homeworkDetails.numberOfTasks}">
+							<tr>
+								<td>
+									<button id="seeTaskSolutionButton"
+										class="btn btn-primary btn-sm" type="submit"
+										onclick="seeTaskSolution('${i}')">
+										<c:out value="Task ${i}" />
+									</button>
+								</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
 			<c:if test="${not empty sessionScope.invalidFields}">
 				<c:if test="${sessionScope.invalidFields}">
-					<p class="input-invalid-or-empty">Invalid fields</p>
+					<p class="input-invalid-or-empty">You have invalid fields</p>
 				</c:if>
 			</c:if>
-			<c:if test="${sessionScope.emptyFields}">
-				<p class="input-invalid-or-empty">You
-					cannot have empty fields and maximal grade is 100</p>
-			</c:if>
-			<br>
-			<form action="./UpdateTeacherGradeAndCommentServlet" method="POST"
-				id="UpdateTeacherGradeAndCommentForm" accept-charset="ISO-8859-15">
+				<form action="./UpdateTeacherGradeAndCommentServlet" method="POST"
+				id="UpdateTeacherGradeAndCommentForm" accept-charset="UTF-8">
 				<div class="block">
-					<label><b>Teacher grade:</b></label>
-					<span class="col-sm-4">
+					<label><b>Teacher grade:</b></label> <span class="col-sm-4">
 						<input type="number" class="form-control" min=0 max=100 id="grade"
-							value="${sessionScope.currHomework.teacherGrade}" name="grade" />
+						value="${sessionScope.currHomework.teacherGrade}" name="grade" />
 					</span>
 				</div>
-				<br> <br>
 				<c:if test="${not empty sessionScope.GradeTooLong}">
 					<c:if test="${sessionScope.GradeTooLong}">
-						<p id="gradeMsg" class="invalidData">Maximal length of grade -
-							3</p>
+						<p id="gradeMsg" class="invalidData">Grade - between 1 and 100</p>
 					</c:if>
 				</c:if>
 				<c:if test="${not empty sessionScope.validGrade}">
@@ -84,10 +108,9 @@
 				</c:if>
 				<p id="gradeMsg" class="invalidData"></p>
 				<div class="block">
-					<br> <label><b>Teacher comment:</b></label>&nbsp;
-					<br>
-					<textarea class="form-control" id="textareaComment"
-						maxlength="150" name="comment"><c:out
+					<label><b>Teacher comment:</b></label>&nbsp; <br>
+					<textarea class="form-control" id="textareaComment" maxlength="250"
+						name="comment"><c:out
 							value="${sessionScope.currHomework.teacherComment}"></c:out></textarea>
 					<c:if test="${not empty sessionScope.validComment}">
 
@@ -98,56 +121,22 @@
 					</c:if>
 					<p id="textareaCommentMsg" class="invalidData"></p>
 				</div>
-				<br>
 				<div class="">
-					<input id = "saveButton" type="submit" class="btn btn-default"
+					<input id="saveButton" type="submit" class="btn btn-default"
 						value="Save">
 				</div>
 			</form>
-<br><br>
-<div id = "divTable">
-			<table id="tasksTable" border="1"
-				class="table table-striped table-bordered table-hover">
-				<thead>
-					<tr>
-						<td>Tasks</td>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach var="i" begin="1"
-						end="${sessionScope.currHomework.homeworkDetails.numberOfTasks}">
-						<tr>
-							<td>
-								<button id = "seeTaskSolutionButton" class="btn btn-primary btn-sm"
-									type="submit"
-									onclick="seeTaskSolution('${i}')">
-									<c:out value="Task ${i}" />
-								</button>
-							</td>
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-</div>
-			<!-- <br> <br> <br> -->
-			<div id="taskUpload"></div>
-			<br>
-				</div>
-		
-			<div id="solution">
-				<textarea id="currTaskSolution" disabled="disabled"
-					 class="form-control" cols="30" rows="30">
+		</div>
+
+		<div id="solution">
+		<div id="taskUpload"></div>
+			<textarea id="currTaskSolution" disabled="disabled"
+				class="form-control" cols="30" rows="27">
 	</textarea>
-			</div>
-</div>
-	<c:if test="${not empty sessionScope.invalidFields}">
-		<c:remove var="salary" scope="session" />
-	</c:if>
+		</div>
+	</div>
 	<c:if test="${not empty sessionScope.invalidFields}">
 			<c:remove var="invalidFields" scope="session" />
-		</c:if>
-		<c:if test="${not empty sessionScope.emptyFields}">
-			<c:remove var="emptyFields" scope="session" />
 		</c:if>
 		<c:if test="${not empty sessionScope.GradeTooLong}">
 			<c:remove var="GradeTooLong" scope="session" />
@@ -178,14 +167,14 @@
 							} else {
 								if ((grade < 0) || (grade > 100)) {
 									document.getElementById("gradeMsg").append(
-											"grade - between 0 and 100");
+											"Grade - between 0 and 100");
 									isGradeValid = false;
 								}
 							}
-							if (textareaComment.length > 150) {
+							if (textareaComment.length > 250) {
 								document
 										.getElementById("textareaCommentMsg")
-										.append("comment - maximal 150 symbols");
+										.append("Comment - maximal 250 symbols");
 								isCommentValid = false;
 							}
 							if (isGradeValid === true
@@ -213,8 +202,8 @@
 					'sWidth' : '140%'
 				} ],
 
-				/* "lengthMenu" : [ 5 ], */
-				"scrollY" : '100vh',
+				// "lengthMenu" : [ 5 ], 
+				"scrollY" : '36vh',
 				"scrollCollapse" : true,
 
 				"bDestroy" : true,

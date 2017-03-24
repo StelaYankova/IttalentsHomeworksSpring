@@ -50,49 +50,50 @@
 	<nav class="navbar navbar-inverse" >
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="./index"> <img id = "img-href" src = "http://ittalents.bg/images/logo-white.png" height = "70px" width="auto"></a>
+				<a class="navbar-brand" href="./index"> <img id="img-href"
+					src="http://ittalents.bg/images/logo-white.png" height="70px"
+					width="auto"></a>
 			</div>
-			
-			<ul class="nav navbar-nav navbar-right "  >
-			
+
+			<ul class="nav navbar-nav navbar-right ">
+
 				<li>
-				
-					<div class="" >
+
+					<div class="">
 						<form class="form-inline" action="./LoginServlet" method="POST"
 							name="signInForm" id="signInForm">
-							<div class="form-group"><input type="text"
-									class=" form-control input-md" maxlength="15"
-									value="${sessionScope.usernameTry}" placeholder = "Username" name="username"  required/>
+							<div class="form-group">
+								<input type="text" class=" form-control input-md" maxlength="15"
+									value="${sessionScope.usernameTry}" placeholder="Username"
+									name="username" />
 							</div>
-							<div class="form-group"><input type="password"
-									class="form-control input-md" placeholder = "Password" value="${sessionScope.passwordTry}"
-									maxlength="15" name="password"  required/>
+							<div class="form-group">
+								<input type="password" class="form-control input-md"
+									placeholder="Password" value="${sessionScope.passwordTry}"
+									maxlength="15" name="password" />
 							</div>
-							<input id = "signInButton" type="submit"
+							<input id="signInButton" type="submit"
 								class="btn btn-xs btn-default" value="Sign in">
 
 						</form>
 						<c:if test="${not empty sessionScope.invalidField}">
 							<c:if test="${sessionScope.invalidField}">
 								<p id="usernamePasswordMsg" class="input-invalid-login">Wrong
-									username/password</p>
+									username or password</p>
 							</c:if>
 						</c:if>
 						<p id="usernamePasswordMsg" class="input-invalid-login"></p>
-						
 					</div>
 				</li>
-					<li id = "registerPageButton">
-						<a href="./RegisterServlet">
-							<span class="glyphicon glyphicon-log-in btn-sm"></span>Register here
-						</a>
-					</li>
-				
+				<li id="registerPageButton"><a href="./RegisterServlet"><font size="2"><span
+						class="glyphicon glyphicon-log-in btn-xs"></span> Register here
+				</a></font></li>
+
 			</ul>
 		</div>
 	</nav>
-	<c:if test="${not empty sessionScope.invalidFields}">
-		<c:remove var="invalidFields" scope="session" />
+	<c:if test="${not empty sessionScope.invalidField}">
+		<c:remove var="invalidField" scope="session" />
 	</c:if>
 	<c:if test="${not empty sessionScope.usernameTry}">
 		<c:remove var="usernameTry" scope="session" />
@@ -127,7 +128,7 @@
 			return true;
 		},
 		error: function(response){
-			document.getElementById("usernamePasswordMsg").append("Wrong username/password");
+			document.getElementById("usernamePasswordMsg").append("Wrong username or password");
 			return false;
 		}
 	});

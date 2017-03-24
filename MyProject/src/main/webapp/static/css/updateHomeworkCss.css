@@ -21,6 +21,7 @@
 	position: absolute;
 	padding-left: 540px;
 	padding-top: 87px;
+	z-index:1;
 }
 
 legend{
