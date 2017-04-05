@@ -65,11 +65,12 @@ public class UserController {
 		}
 	}
 	
-	@RequestMapping(value = "/GetHomeworkOfStudentServlet", method = RequestMethod.GET)
+	@RequestMapping(value = "/homeworkOfStudent", method = RequestMethod.GET)
 	protected String getHomeworksOfStudent(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.isTeacher()) {
+			System.out.println("INNANANSNNS");
 			if (request.getParameter("studentId") != null && !(request.getParameter("studentId").trim().equals(""))
 					&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("studentId").trim())
 					&& request.getParameter("id") != null && !(request.getParameter("id").trim().equals(""))
@@ -142,10 +143,12 @@ public class UserController {
 		return "forbiddenPage";
 	}
 
-	@RequestMapping(value = "/GetStudentsScoresServlet", method = RequestMethod.GET)
+	@RequestMapping(value = "/studentsScores", method = RequestMethod.GET)
 	protected String getStudentsScored(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
+//		request.getSession().setAttribute("throughtSeeOrUpdateHomeworks",1); 
+		request.getSession().removeAttribute("throughtSeeOrUpdateHomeworks");
 		if (user.isTeacher()) {
 			return "seeStudentsScores";
 		}
@@ -167,11 +170,13 @@ public class UserController {
 	protected String loginPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = null;
+		String username = (request.getParameter("username") != null) ? (request.getParameter("username").trim()) : ("");
+		String password = (request.getParameter("password") != null) ? (request.getParameter("password").trim()) : ("");
+		request.getSession().setAttribute("usernameTry", username);
+		request.getSession().setAttribute("passwordTry", password);
 		if (isThereEmptyFieldLogin(request.getParameter("username").trim(), request.getParameter("password").trim())) {
 			request.getSession().setAttribute("invalidField", true);
 		} else {
-			String username = request.getParameter("username").trim();
-			String password = request.getParameter("password").trim();
 			try {
 				if (doesUserLoginExist(username, password)) {
 					user = UserDAO.getInstance().getUserByUsername(username);
@@ -207,8 +212,6 @@ public class UserController {
 					}
 				} else {
 					request.getSession().setAttribute("invalidField", true);
-					request.getSession().setAttribute("usernameTry", username);
-					request.getSession().setAttribute("passwordTry", password);
 				}
 			} catch (UserException e) {
 				System.out.println(e.getMessage());
@@ -262,21 +265,16 @@ public class UserController {
 	@RequestMapping(value = "/RegisterServlet", method = RequestMethod.POST)
 	protected String register(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String username = (request.getParameter("username") != null) ? (request.getParameter("username").trim()) : ("");
+		String password = (request.getParameter("password") != null) ? (request.getParameter("password").trim()) : ("");
+		String repeatedPassword = (request.getParameter("repeatedPassword") != null) ? (request.getParameter("repeatedPassword").trim()) : ("");
+		String email = (request.getParameter("email") != null) ? (request.getParameter("email").trim()) : ("");
+		User userTry = new Student(username, password, repeatedPassword, email);
+		request.setAttribute("userTry", userTry);
 		// not null
 		if (isThereEmptyFieldRegister(request.getParameter("username").trim(), request.getParameter("password").trim(), request.getParameter("repeatedPassword").trim(), request.getParameter("email").trim())) {
-			request.setAttribute("emptyFields", true);
-			String username = (request.getParameter("username") != null) ? (request.getParameter("username").trim()) : ("");
-			String password = (request.getParameter("password") != null) ? (request.getParameter("password").trim()) : ("");
-			String repeatedPassword = (request.getParameter("repeatedPassword") != null) ? (request.getParameter("repeatedPassword").trim()) : ("");
-			String email = (request.getParameter("email") != null) ? (request.getParameter("email").trim()) : ("");
-			User userTry = new Student(username, password, repeatedPassword, email);
-			request.setAttribute("userTry", userTry);
+			request.setAttribute("emptyFields", true);			
 		} else {
-			String username = request.getParameter("username").trim();
-			String password = request.getParameter("password").trim();
-			String repeatedPassword = request.getParameter("repeatedPassword").trim();
-			String email = request.getParameter("email").trim();
-			User userTry = new Student(username, password, repeatedPassword, email);
 			request.setAttribute("userTry", userTry);
 			// uniqueUsername
 			try {
@@ -397,7 +395,7 @@ public class UserController {
 		return true;
 	}
 
-	@RequestMapping(value = "/SeeScoresServlet", method = RequestMethod.GET)
+	@RequestMapping(value = "/yourScores", method = RequestMethod.GET)
 	protected String seeScoresServlet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -408,13 +406,13 @@ public class UserController {
 		return "forbiddenPage";
 	}
 
-	@RequestMapping(value = "/UpdateYourProfileServlet", method = RequestMethod.GET)
+	@RequestMapping(value = "/updateProfile", method = RequestMethod.GET)
 	protected String updateYourProfilePage(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		return "updateProfile";
 	}
 
-	@RequestMapping(value = "/UpdateYourProfileServlet", method = RequestMethod.POST)
+	@RequestMapping(value = "/updateProfile", method = RequestMethod.POST)
 	protected String updateYourProfile(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");

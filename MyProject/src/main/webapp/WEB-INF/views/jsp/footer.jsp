@@ -6,7 +6,8 @@
 <meta charset="utf-8">
 <title>IT Talents</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+ --%>
 
 <!-- <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->

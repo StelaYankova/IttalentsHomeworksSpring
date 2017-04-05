@@ -6,7 +6,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link href="<c:url value="css/homeworkOfStudentCss.css" />" rel="stylesheet">
+<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+ --%><link href="<c:url value="css/homeworkOfStudentCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 
 <title>Insert title here</title>
@@ -17,23 +18,31 @@
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
-					<span class="divider"> <span class="accesshide "><span
+					href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
-				<li><a
-					href="http://localhost:8080/MyProject/GetStudentsScoresServlet">See
-						student's scores</a> <span class="divider"> <span
-						class="accesshide "><span class="arrow_text"></span></span>
-				</span></li>
-				<li><c:out value = "${sessionScope.chosenGroupName}"></c:out><span class="divider"> <span
-						class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
-				</span></li> 
-				<li><c:out value = "${sessionScope.currHomework.homeworkDetails.heading}"></c:out><span class="divider"> <span
-						class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
-				</span></li>
+				<li><c:if
+						test="${not empty sessionScope.throughtSeeOrUpdateHomeworks}">
+						<a href="http://localhost:8080/MyProject/seeOrUpdateHomeworks">See/
+							Update homeworks</a>
+						
+
+					</c:if> <c:if test="${empty sessionScope.throughtSeeOrUpdateHomeworks}">
+						<a href="http://localhost:8080/MyProject/studentsScores">See
+							student's scores</a>
+						
+					</c:if><span
+					class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span> </span></li></li>
+				<li><c:out value="${sessionScope.chosenGroupName}"></c:out><span
+					class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span> </span></li>
+				<li><c:out
+						value="${sessionScope.currHomework.homeworkDetails.heading}"></c:out><span
+					class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span> </span></li>
 				<li><c:out value = "${sessionScope.currStudentUsername}"></c:out><span class="divider"> <span
-						class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
+						class="accesshide "><span class="arrow_text"></span></span>
 				</span></li>
 			</ul>
 		</nav>
@@ -41,7 +50,7 @@
 	<c:if test="${not empty invalidFields}">
 			<c:if test="${not invalidFields}">
 				<div class="alert alertAllPages alert-success">
-					<strong>Success!</strong> Group has been added successfully
+					<strong>Success!</strong> Homework has been added successfully
 				</div>
 			</c:if>
 		</c:if>
@@ -109,7 +118,7 @@
 				<p id="gradeMsg" class="invalidData"></p>
 				<div class="block">
 					<label><b>Teacher comment:</b></label>&nbsp; <br>
-					<textarea class="form-control" id="textareaComment" maxlength="250"
+					<textarea class="form-control" id="textareaComment" placeholder = "Enter comment..." maxlength="250"
 						name="comment"><c:out
 							value="${sessionScope.currHomework.teacherComment}"></c:out></textarea>
 					<c:if test="${not empty sessionScope.validComment}">

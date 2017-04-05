@@ -28,7 +28,7 @@ import com.google.gson.JsonObject;
 @Controller
 public class GroupController {
 
-	@RequestMapping(value = "/AddGroupServlet", method = RequestMethod.GET)
+	@RequestMapping(value = "/createGroup", method = RequestMethod.GET)
 	protected String addGroupGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -38,25 +38,20 @@ public class GroupController {
 		return "forbiddenPage";
 	}
 
-	@RequestMapping(value = "/AddGroupServlet", method = RequestMethod.POST)
+	@RequestMapping(value = "/createGroup", method = RequestMethod.POST)
 	protected String addGroupPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.isTeacher()) {
+			String groupName = (request.getParameter("groupName").trim() != null) ? (request.getParameter("groupName").trim()) : ("");
+			String[] selectedTeachersUsername = (request.getParameterValues("teachers") != null) ? (request.getParameterValues("teachers")) : (new String[0]);
+			request.setAttribute("nameTry", groupName);
+			request.setAttribute("selectedTeachersUsernameTry", selectedTeachersUsername);
 			// empty fields
 			boolean isNameUnique = false;
 			if (isThereEmptyField(request.getParameter("groupName").trim(), request.getParameterValues("teachers"))) {
 				request.setAttribute("emptyFields", true);
-				String groupName = (request.getParameter("groupName").trim() != null) ? (request.getParameter("groupName").trim()) : ("");
-				String[] selectedTeachersUsername = (request.getParameterValues("teachers") != null) ? (request.getParameterValues("teachers")) : (new String[0]);
-				request.setAttribute("nameTry", groupName);
-				request.setAttribute("selectedTeachersUsernameTry", selectedTeachersUsername);
-
 			} else {
-				String groupName = request.getParameter("groupName").trim();
-				request.setAttribute("nameTry", groupName);
-				String[] selectedTeachersUsername = request.getParameterValues("teachers");
-				request.setAttribute("selectedTeachersUsernameTry", selectedTeachersUsername);
 				try {
 					// unique name
 					if (isGroupNameUnique(groupName)) {
@@ -144,7 +139,7 @@ public class GroupController {
 	private boolean areCharactersValid(String groupName) {
 		for (int i = 0; i < groupName.length(); i++) {
 			if (!(((int) groupName.charAt(i) >= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM
-					&& (int) groupName.charAt(i) <= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO)) || (int) groupName.charAt(i) == 34) {
+					&& (int) groupName.charAt(i) <= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO)) || (int) groupName.charAt(i) == IValidationsDAO.ASCII_TABLE_QUOTES) {
 				System.out.println("Characters are notvaid");
 				return false;
 			}
@@ -170,7 +165,7 @@ public class GroupController {
 		return doAllTeachersExist;
 	}
 
-	@RequestMapping(value = "/AddStudentToGroupServlet", method = RequestMethod.GET)
+	@RequestMapping(value = "/addOrRemoveStudent", method = RequestMethod.GET)
 	protected String addStudentToGroupGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -180,7 +175,7 @@ public class GroupController {
 		return "forbiddenPage";
 	}
 
-	@RequestMapping(value = "/AddStudentToGroupServlet", method = RequestMethod.POST)
+	@RequestMapping(value = "/addOrRemoveStudent", method = RequestMethod.POST)
 	protected String addStudentToGroupPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -197,7 +192,7 @@ public class GroupController {
 					// does student exist
 					if (!ValidationsDAO.getInstance().isStringValidInteger(chosenGroupIdString)) {
 						request.getSession().setAttribute("invalidFields", true);
-						return "redirect:./AddStudentToGroupServlet";
+						return "redirect:./addOrRemoveStudent";
 					}
 					boolean doesStudentExist = false;
 					boolean isStudentInGroup = false;
@@ -237,7 +232,7 @@ public class GroupController {
 					request.getSession().setAttribute("invalidFields", true);
 				}
 			}
-			return "redirect:./AddStudentToGroupServlet";
+			return "redirect:./addOrRemoveStudent";
 		}
 		return "forbiddenPage";
 	}
@@ -287,7 +282,7 @@ public class GroupController {
 				String groupIdStr = request.getParameter("chosenGroupId").trim();
 				if (!groupIdStr.equals("allGroups") && !groupIdStr.equals("null")) {
 					if (!ValidationsDAO.getInstance().isStringValidInteger(groupIdStr)) {
-						response.setStatus(404);
+						response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 						return;
 					}
 					int groupId = Integer.parseInt((String) request.getParameter("chosenGroupId"));
@@ -321,7 +316,7 @@ public class GroupController {
 											obj.addProperty("hasStudentGivenMinOneTask", hasStudentGivenMinOneTask);
 										}
 									} else {
-										response.setStatus(404);
+										response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 										return;
 									}
 								}
@@ -330,7 +325,7 @@ public class GroupController {
 							response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 							response.getWriter().write(array.toString());
 						} else {
-							response.setStatus(404);
+							response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 						}
 					} catch (GroupException | UserException e) {
 						System.out.println(e.getMessage());
@@ -345,7 +340,7 @@ public class GroupController {
 				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 			} else {
 				if(!request.getParameter("chosenGroupId").equals("null")){
-					response.setStatus(404);
+					response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 			}
 			}
 		} else {
@@ -360,10 +355,9 @@ public class GroupController {
 		if (user.isTeacher()) {
 			if (request.getParameter("chosenGroupId") != null && !(request.getParameter("chosenGroupId").equals(""))) {
 				String groupIdStr = request.getParameter("chosenGroupId").trim();
-				System.out.println(request.getParameter("chosenGroupId").trim());
 				if (!(groupIdStr.equals("allGroups")) && !(groupIdStr.equals("null"))) {
 					if (!ValidationsDAO.getInstance().isStringValidInteger(groupIdStr)) {
-						response.setStatus(404);
+						response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 						return;
 					}
 					int groupId = Integer.parseInt((String) request.getParameter("chosenGroupId"));
@@ -382,7 +376,7 @@ public class GroupController {
 							response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 							response.getWriter().write(array.toString());
 						} else {
-							response.setStatus(404);
+							response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 						}
 					} catch (GroupException | UserException e) {
 						System.out.println(e.getMessage());
@@ -396,14 +390,14 @@ public class GroupController {
 				}
 				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 			} else {
-				response.setStatus(404);
+				response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 			}
 		} else {
 			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 
-	@RequestMapping(value = "/RemoveGroupServlet", method = RequestMethod.POST)
+	@RequestMapping(value = "/removeGroup", method = RequestMethod.POST)
 	protected String removeGroup(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -427,12 +421,12 @@ public class GroupController {
 					return "exception";
 				}
 			}
-			return "redirect:./SeeGroups";
+			return "redirect:./seeGroups";
 		}
 		return "forbiddenPage";
 	}
 
-	@RequestMapping(value = "/RemoveStudentFromGroup", method = RequestMethod.POST)
+	@RequestMapping(value = "/removeStudentFromGroup", method = RequestMethod.POST)
 	protected void removeStudentFromGroup(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -450,7 +444,7 @@ public class GroupController {
 						GroupDAO.getInstance().removeUserFromGroup(chosenGroup, chosenStudent.getId());
 						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 					} else {
-						response.setStatus(404);
+						response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 					}
 				} catch (GroupException | UserException e) {
 					System.out.println(e.getMessage());
@@ -458,14 +452,14 @@ public class GroupController {
 					response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
 				}
 			}else{
-				response.setStatus(404);
+				response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 			}
 		} else {
 			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 
-	@RequestMapping(value = "/SeeGroups", method = RequestMethod.GET)
+	@RequestMapping(value = "/seeGroups", method = RequestMethod.GET)
 	protected String seeGroups(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -475,7 +469,7 @@ public class GroupController {
 		return "forbiddenPage";
 	}
 
-	@RequestMapping(value = "/UpdateGroupServlet", method = RequestMethod.GET)
+	@RequestMapping(value = "/updateGroup", method = RequestMethod.GET)
 	protected String seeUpdateGroupPage(HttpServletRequest request, HttpServletResponse resp)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -513,7 +507,7 @@ public class GroupController {
 		}
 	}
 
-	@RequestMapping(value = "/UpdateGroupServlet", method = RequestMethod.POST)
+	@RequestMapping(value = "/updateGroup", method = RequestMethod.POST)
 	protected String updateGroup(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -588,10 +582,10 @@ public class GroupController {
 					e.printStackTrace();
 					return "exception";
 				}
-				return "redirect:./UpdateGroupServlet";
+				return "redirect:./updateGroup";
 			} else {
 				request.getSession().setAttribute("invalidFields", true);
-				return "redirect:./UpdateGroupServlet";
+				return "redirect:./updateGroup";
 			}
 		}
 		return "forbiddenPage";
@@ -627,7 +621,7 @@ public class GroupController {
 	private boolean areGroupNameCharactersValidUpdateGroup(String groupName) {
 		for (int i = 0; i < groupName.length(); i++) {
 			if (!(((int) groupName.charAt(i) >= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM
-					&& (int) groupName.charAt(i) <= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO)) || (int) groupName.charAt(i) == 34) {
+					&& (int) groupName.charAt(i) <= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO)) || (int) groupName.charAt(i) == IValidationsDAO.ASCII_TABLE_QUOTES) {
 				return false;
 			}
 		}

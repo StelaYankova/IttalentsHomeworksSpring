@@ -44,6 +44,7 @@ public class TestDAO {
 	static Group group1 = null;
 	@Test 
 	public void test01isUsernameUnique() throws UserException, GroupException{		
+		System.out.println(user1.getUsername());
 		user1.setId(UserDAO.getInstance().getUserIdByUsername(user1.getUsername()));
 
 		//UserDAO.getInstance().removeUserProfile(user1);

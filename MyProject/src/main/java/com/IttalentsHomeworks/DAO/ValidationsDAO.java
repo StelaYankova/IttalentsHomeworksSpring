@@ -129,10 +129,10 @@ public class ValidationsDAO implements IValidationsDAO{
 	@Override
 	public boolean createUserAreThereEmptyFields(String username, String password, String repeatedPassword,
 			String email) {
-		if(username == null || username == "" ||password == null || password == "" ||repeatedPassword == null || repeatedPassword == "" ||email == null || email == ""){
-			return true;
+		if(username != null && !(username.trim().equals("")) && password != null && !(password.trim().equals("")) && repeatedPassword != null && !(repeatedPassword.trim().equals("")) && email != null && !(email.trim().equals(""))){
+			return false;
 		}
-		return false;
+		return true;
 	}
 	
 	@Override
@@ -172,7 +172,7 @@ public class ValidationsDAO implements IValidationsDAO{
 	@Override
 	public boolean areGroupNameCharactersValid(String groupName) {
 		for(int i = 0; i < groupName.length(); i++){
-			if(!(((int)groupName.charAt(i) >= ValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM && (int)groupName.charAt(i) <= ValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO))  || (int) groupName.charAt(i) == 34){
+			if(!(((int)groupName.charAt(i) >= ValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM && (int)groupName.charAt(i) <= ValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO))  || (int) groupName.charAt(i) == IValidationsDAO.ASCII_TABLE_QUOTES){
 				return false;
 			}
 		}
@@ -180,18 +180,18 @@ public class ValidationsDAO implements IValidationsDAO{
 	}
 	@Override
 	public boolean addGroupAreThereEmptyFields(String name) {
-		if(name == null || name == ""){
-			return true;
+		if(name != null && !(name.trim().equals(""))){
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean updateUserAreThereEmptyFields(String password, String repeatedPassword, String email) {
-		if(password == null || password == "" ||repeatedPassword == null || repeatedPassword == "" ||email == null || email == ""){
-			return true;
+		if(password != null && !(password.trim().equals("")) && repeatedPassword != null && !(repeatedPassword.trim().equals("")) && email != null && !(email.trim().equals(""))){
+			return false;
 		}
-		return false;	
+		return true;	
 	}
 	
 	@Override
@@ -209,10 +209,10 @@ public class ValidationsDAO implements IValidationsDAO{
 	
 	@Override
 	public boolean isThereGroupEmptyFieldUpdate(String groupName) {
-		if (groupName == null || groupName == "") {
-			return true;
+		if (groupName != null && !(groupName.trim().equals(""))) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 	
 	@Override
@@ -282,19 +282,19 @@ public class ValidationsDAO implements IValidationsDAO{
 
 	@Override
 	public boolean isThereEmptyFieldAddStudentToGroup(String username) {
-		if ((username.equals("")) || username == null) {
-			return true;
+		if (username != null && !(username.trim().equals(""))) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 	
 	@Override
 	public boolean isThereEmptyFieldAddHomework(String heading, String opens, String closes, int numberOfTasksString) {
-		if (heading == null || heading.equals("") || opens == null || opens.equals("") || closes == null
-				|| closes.equals("")) {
-			return true;
+		if (heading != null && !(heading.trim().equals("")) && opens != null && !(opens.trim().equals("")) && closes != null
+				&& !(closes.trim().equals(""))) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 	
 	@Override
@@ -308,7 +308,7 @@ public class ValidationsDAO implements IValidationsDAO{
 	@Override
 	public boolean areCharactersHeadingValidAddHomework(String heading) {
 		for(int i = 0; i < heading.length(); i++){
-			if(!(((int)heading.charAt(i) >= ValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM && (int)heading.charAt(i) <= ValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO))){
+			if(!(((int)heading.charAt(i) >= ValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM && (int)heading.charAt(i) <= ValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO)) || (int) heading.charAt(i) == IValidationsDAO.ASCII_TABLE_QUOTES){
 				return false;
 			}
 		}
@@ -317,7 +317,7 @@ public class ValidationsDAO implements IValidationsDAO{
 	
 	@Override
 	public boolean isHomeworkHeadingUniqueAddHomework(String heading) throws GroupException {
-		if (heading != null && (!heading.equals(""))) {
+		if (heading != null && (!heading.trim().equals(""))) {
 			if (ValidationsDAO.getInstance().isHomeworkHeadingUnique(heading)) {
 				return true;
 			}
@@ -374,12 +374,11 @@ public class ValidationsDAO implements IValidationsDAO{
 
 	@Override
 	public boolean updateGroupAreThereEmptyFields(String heading, String opens, String closes, String tasksFile) {
-		if (heading == null || heading.equals("") || opens == null || opens.equals("") || closes == null
-				|| closes.equals("") || tasksFile == null || tasksFile.equals("")) {
-			
-			return true;
+		if (heading != null && !(heading.trim().equals("")) && opens != null && !(opens.trim().equals("")) && closes != null
+				&& !(closes.trim().equals("")) && tasksFile != null && !(tasksFile.equals(""))) {			
+			return false;
 		}
-		return false;
+		return true;
 	}
 	
 	@Override
@@ -393,7 +392,7 @@ public class ValidationsDAO implements IValidationsDAO{
 	@Override
 	public boolean areHomeworkUpdateCharactersValid(String heading) {
 		for(int i = 0; i < heading.length(); i++){
-			if(!(((int)heading.charAt(i) >= ValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM && (int)heading.charAt(i) <= ValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO))){
+			if(!(((int)heading.charAt(i) >= ValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM && (int)heading.charAt(i) <= ValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO)) || (int) heading.charAt(i) == IValidationsDAO.ASCII_TABLE_QUOTES){
 				return false;
 			}
 		}

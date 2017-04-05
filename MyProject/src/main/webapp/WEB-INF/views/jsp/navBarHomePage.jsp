@@ -32,7 +32,8 @@
 	src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script>
  
 </head>
- <link href="<c:url value="css/navBarCss.css" />" type="text/css" rel="stylesheet">
+<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+ --%> <link href="<c:url value="css/navBarCss.css" />" type="text/css" rel="stylesheet">
 
 <style>
 
@@ -51,12 +52,12 @@
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<a class="navbar-brand" href="./index"> <img id="img-href"
-					src="http://ittalents.bg/images/logo-white.png" height="70px"
-					width="auto"></a>
-			</div>
-
-			<ul class="nav navbar-nav navbar-right ">
-
+					src="http://ittalents.bg/images/logo-white.png"></a>
+			</div>	
+			
+	<div class = "collapse navbar-collapse">
+		
+<ul class="nav navbar-nav <!-- navbar-right --> ">
 				<li>
 
 					<div class="">
@@ -84,12 +85,14 @@
 						</c:if>
 						<p id="usernamePasswordMsg" class="input-invalid-login"></p>
 					</div>
-				</li>
-				<li id="registerPageButton"><a href="./RegisterServlet"><font size="2"><span
+				</li></ul>
+				</div>
+				<div class = "collapse navbar-collapse">
+				<!-- <li id="registerPageButton"> --><a class = "registerPageButton" href="./RegisterServlet"><font size="2"><span
 						class="glyphicon glyphicon-log-in btn-xs"></span> Register here
-				</a></font></li>
+				</a></font><!-- </li> -->
 
-			</ul>
+			</div>
 		</div>
 	</nav>
 	<c:if test="${not empty sessionScope.invalidField}">

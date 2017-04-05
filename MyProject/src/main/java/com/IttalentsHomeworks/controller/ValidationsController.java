@@ -23,7 +23,8 @@ import com.IttalentsHomeworks.model.User;
 
 @Controller
 public class ValidationsController {
-//
+
+	//
 //	protected static final int ASCII_TABLE_VALUE_OF_NINE = 57;
 //	protected static final int ASCII_TABLE_VALUE_OF_ZERO = 48;
 //	protected static final int MAX_SIZE_OF_INTEGER = 10;
@@ -184,7 +185,7 @@ public class ValidationsController {
 
 	private boolean areCharactersGroupNameValid(String groupName) {
 		for(int i = 0; i < groupName.length(); i++){
-			if(!(((int)groupName.charAt(i) >= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM && (int)groupName.charAt(i) <= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO))  || (int) groupName.charAt(i) == 34){
+			if(!(((int)groupName.charAt(i) >= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM && (int)groupName.charAt(i) <= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO))  || (int) groupName.charAt(i) == IValidationsDAO.ASCII_TABLE_QUOTES){
 				return false;
 			}
 		}
@@ -257,7 +258,7 @@ public class ValidationsController {
 
 	private boolean areCharactersHomeworkHeadingValid(String heading) {
 		for(int i = 0; i < heading.length(); i++){
-			if(!(((int)heading.charAt(i) >= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM && (int)heading.charAt(i) <= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO)) || (int) heading.charAt(i) == 34){
+			if(!(((int)heading.charAt(i) >= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM && (int)heading.charAt(i) <= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO)) || (int) heading.charAt(i) == IValidationsDAO.ASCII_TABLE_QUOTES){
 				return false;
 			}
 		}
@@ -363,7 +364,7 @@ public class ValidationsController {
 
 	private boolean areCharactersHomeworkUpdateHeadingValid(String heading) {
 		for(int i = 0; i < heading.length(); i++){
-			if(!(((int)heading.charAt(i) >= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM && (int)heading.charAt(i) <= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO)) || (int) heading.charAt(i) == 34){
+			if(!(((int)heading.charAt(i) >= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM && (int)heading.charAt(i) <= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO)) || (int) heading.charAt(i) == IValidationsDAO.ASCII_TABLE_QUOTES){
 				return false;
 			}
 		}

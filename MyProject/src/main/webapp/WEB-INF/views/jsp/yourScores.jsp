@@ -7,7 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="<c:url value="css/yourScoresCss.css" />" rel="stylesheet">
+<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+ --%><link href="<c:url value="css/yourScoresCss.css" />" rel="stylesheet">
 
 </head>
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
@@ -18,13 +19,12 @@
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="./GetMainPageStudent">Home</a>
-					<span class="divider"> <span class="accesshide "><span
+					href="./GetMainPageStudent">Home</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 				<li>Your
-						scores<span class="divider"> <span class="accesshide "><span
-							class="arrow_text"></span>&nbsp;</span>
+						scores<span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span>
 				</span></li>
 			</ul>
 		</nav>
@@ -108,8 +108,7 @@
 														$('.breadcrumb')
 																.append(
 																		'<li id = "chosenGroupName">'
-																				+ groupName
-																				+ '<span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
+																				+groupName+'<span class="divider"><span class="accesshide "><span class="arrow_text"></span></span></span></li>');
 													}
 													
 												} else {

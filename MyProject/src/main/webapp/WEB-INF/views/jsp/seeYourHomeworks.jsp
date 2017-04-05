@@ -7,7 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="<c:url value="css/seeYourHomeworksCss.css" />" rel="stylesheet">
+<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+ --%><link href="<c:url value="css/seeYourHomeworksCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 
 </head>
@@ -17,13 +18,12 @@
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="./GetMainPageStudent">Home</a>
-					<span class="divider"> <span class="accesshide "><span
+					href="./GetMainPageStudent">Home</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 				<li><c:out
-						value="${sessionScope.chosenGroupName}" ></c:out><span class="divider"> <span
-						class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
+						value="${sessionScope.chosenGroupName}"></c:out><span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span>
 				</span></li>
 			</ul>
 		</nav>

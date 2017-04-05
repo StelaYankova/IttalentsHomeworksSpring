@@ -2,8 +2,8 @@
 
 #formAddHomework {
 	margin: 0 auto;
- 	padding-top: 80px;
-	width: 45%;
+ 	padding-top: 3.750em;
+	width: 50%;
 	text-align: right;
 }
 
@@ -12,10 +12,25 @@ legend{
 }
 
 .control-label.col-sm-4{
-	padding-right: 30px;
+	padding-right: 1.875em;
 }
 
 #addButton{
 	background-color: #2E71AC;
 	 color: #ffffff;
 }
+ 
+@media ( max-width :992px) {
+	.form-group {
+		margin-bottom: 0.938em;
+		width: 100%;
+		text-align: left;
+	}
+	.control-label.col-sm-4 {
+		padding-right: 1.875em;
+		width: 100%
+	}
+	legend {
+		width: 70%;
+	}
+} 

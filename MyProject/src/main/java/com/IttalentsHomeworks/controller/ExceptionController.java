@@ -17,7 +17,6 @@ public class ExceptionController {
 	
 	@ExceptionHandler(AccessDeniedException.class)
 	public String handle403(Exception ex) {
-		System.out.println("DENIIIIIIED");
 	    return "redirect:/403";
 	}
 	

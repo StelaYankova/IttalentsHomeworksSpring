@@ -55,7 +55,7 @@ public class HomeworkController {
 //	private static final int READ_HOMEWORK_GET_NAME_TO_INDEX = 4;
 //	private static final int READ_HOMEWORK_GET_NAME_FROM_INDEX = 6;
 
-	@RequestMapping(value = "/AddHomework", method = RequestMethod.GET)
+	@RequestMapping(value = "/addHomework", method = RequestMethod.GET)
 	protected String addHomeworkGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -65,7 +65,7 @@ public class HomeworkController {
 		return "forbiddenPage";
 	}
 
-	@RequestMapping(value = "/AddHomework", method = RequestMethod.POST)
+	@RequestMapping(value = "/addHomework", method = RequestMethod.POST)
 	protected String addHomeworkPost(HttpServletRequest request,
 			@RequestParam(value = "file") MultipartFile fileUploaded, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -272,7 +272,7 @@ public class HomeworkController {
 	private boolean areCharactersHeadingValid(String heading) {
 		for (int i = 0; i < heading.length(); i++) {
 			if (!(((int) heading.charAt(i) >= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM
-					&& (int) heading.charAt(i) <= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO))  || (int) heading.charAt(i) == 34) {
+					&& (int) heading.charAt(i) <= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO))  || (int) heading.charAt(i) == IValidationsDAO.ASCII_TABLE_QUOTES) {
 				return false;
 			}
 		}
@@ -373,6 +373,7 @@ public class HomeworkController {
 	protected String getCurrHomeworkOfStudent(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
+		System.out.println("INNNNNNNNNNN");
 		if (user.isTeacher()) {
 			if (request.getSession().getAttribute("currHomework") == null
 					|| request.getSession().getAttribute("chosenGroupName") == null
@@ -553,7 +554,7 @@ public class HomeworkController {
 		return "forbiddenPage";
 	}
 
-	@RequestMapping(value = { "/GetHomeworksOfGroupsServlet"}, method = RequestMethod.GET)
+	@RequestMapping(value = { "/homeworksOfGroup"}, method = RequestMethod.GET)
 	protected String getHomeworksOfGroups(@RequestParam(value = "id", required = false) String groupIdUrl,
 			HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		User userTry = (User) request.getSession().getAttribute("user");
@@ -636,7 +637,7 @@ public class HomeworkController {
 					if (canUserAccessHomeworkTasks) {
 						File file = new File(IValidationsDAO.SAVE_DIR + File.separator + fileName);
 						if (!file.exists()) {
-							response.setStatus(404);
+							response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 							return;
 						}
 						response.setContentType("application/ms-excel; charset=UTF-8");
@@ -655,7 +656,7 @@ public class HomeworkController {
 						return;
 					}
 		} else {
-			response.setStatus(404);
+			response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 			return;
 		}
 
@@ -686,7 +687,7 @@ public class HomeworkController {
 					response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 				}
 			} else {
-				response.setStatus(404);
+				response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 			}
 		}
 	}
@@ -712,7 +713,7 @@ public class HomeworkController {
 								+ "userId" + user.getId() + "taskNum" + taskNum + ".java";
 					} else {
 						if(request.getSession().getAttribute("studentId") == null){
-							response.setStatus(404);
+							response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 							return;
 						}else{
 						int studentId = (int) request.getSession().getAttribute("studentId");
@@ -742,12 +743,12 @@ public class HomeworkController {
 					} else {
 						System.out.println(taskNum);
 						System.out.println(homework.getTasks().size());
-						response.setStatus(404);
+						response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 						return;
 
 					}
 		} else {
-			response.setStatus(404);
+			response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 			return;
 		}
 	}
@@ -808,7 +809,7 @@ public class HomeworkController {
 										}
 									}
 									if(!doesUserHaveGroup){
-										response.setStatus(404);
+										response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 										return;
 									}
 								JsonObject obj = new JsonObject();
@@ -840,23 +841,23 @@ public class HomeworkController {
 									}
 									array.add(obj);
 								} else {
-									response.setStatus(404);
+									response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 									return;
 								}
 							
 							}
 						} else {
-							response.setStatus(404);
+							response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 							return;
 						}
 						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 						response.getWriter().write(array.toString());
 					} else {
-						response.setStatus(404);
+						response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 						return;
 					}
 				} else {
-					response.setStatus(404);
+					response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 					return;
 				}
 			} catch (GroupException | UserException e) {
@@ -889,12 +890,12 @@ public class HomeworkController {
 						if(chosenGroup != null){
 							homeworkDetailsByGroup.addAll(GroupDAO.getInstance().getHomeworkDetailsOfGroup(chosenGroup));
 						}else{
-							response.setStatus(404);
+							response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 							return;
 						}
 					} else {
 						if((!request.getParameter("chosenGroup").equals("allGroups") && (!request.getParameter("chosenGroup").equals("null")))){
-							response.setStatus(404);
+							response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 							return;
 						}
 						homeworkDetailsByGroup = GroupDAO.getInstance().getAllHomeworksDetails();
@@ -908,7 +909,7 @@ public class HomeworkController {
 						array.add(obj);
 					}
 				}else{
-					response.setStatus(404);
+					response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 					return;
 				}
 				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
@@ -923,10 +924,11 @@ public class HomeworkController {
 		}
 	}
 
-	@RequestMapping(value = "/SeeHomeworksServlet", method = RequestMethod.GET)
+	@RequestMapping(value = "/seeOrUpdateHomeworks", method = RequestMethod.GET)
 	protected String seeHomeworks(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
+		request.getSession().setAttribute("throughtSeeOrUpdateHomeworks", 1);
 		if (user.isTeacher()) {
 			return "seeHomeworks";
 		}
@@ -981,7 +983,7 @@ public class HomeworkController {
 								request.getSession().setAttribute("chosenGroup", selectedGroupId);
 								selectedGroup = GroupDAO.getInstance().getGroupById(selectedGroupId);
 								if (selectedGroup == null) {
-									response.setStatus(404);
+									response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 									return;
 								}
 								boolean doesUserHaveChosenGroup = false;
@@ -1018,7 +1020,7 @@ public class HomeworkController {
 								response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 								response.getWriter().write(array.toString());
 							} else {
-								response.setStatus(404);
+								response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 							}
 						}
 					} catch (GroupException | UserException e) {
@@ -1031,7 +1033,7 @@ public class HomeworkController {
 					}
 				}
 			} else {
-				response.setStatus(404);
+				response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 			}
 		} else {
 			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
@@ -1350,7 +1352,7 @@ public class HomeworkController {
 	private boolean areHomeworkUpdateCharactersValid(String heading) {
 		for (int i = 0; i < heading.length(); i++) {
 			if (!(((int) heading.charAt(i) >= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM
-					&& (int) heading.charAt(i) <= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO))  || (int) heading.charAt(i) == 34) {
+					&& (int) heading.charAt(i) <= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO))  || (int) heading.charAt(i) == IValidationsDAO.ASCII_TABLE_QUOTES) {
 				return false;
 			}
 		}
@@ -1571,14 +1573,10 @@ public class HomeworkController {
 				MultipartFile file = uploadfile;
 				if (!isFileEmptyUploadSolution(file)) {
 					if (!isSizeValidUploadSolution(file)) {
-//						System.out.println("Size of file is invalid");
-//						request.getSession().setAttribute("wrongSize", true);
 						response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 						return;
 					} else {
 						if (!isContentTypeValidUploadSolution(file)) {
-//							System.out.println("Content is invalid");
-//							request.getSession().setAttribute("wrongContentType", true);
 							response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 							return;
 						} else {
@@ -1599,26 +1597,25 @@ public class HomeworkController {
 									}
 									System.out.println(e.getMessage());
 									e.printStackTrace();
-									response.setStatus(500);
+									response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
 								}
 							} else {
-								response.setStatus(404);
+								response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 								return;
 							}
 						}
 					}
 				}else{
 					response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
-					response.setStatus(400);
 					return;
 				}
 				request.getSession().setAttribute("currTaskUpload", taskNum);
-				response.setStatus(200);
+				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 			} else {
-				response.setStatus(404);
+				response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 			}
 		} else {
-			response.setStatus(403);
+			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
 

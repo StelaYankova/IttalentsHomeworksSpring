@@ -2,25 +2,27 @@
 
 #formUpdate {
 	margin: 0 auto;
-	padding-top: 80px;
-	width: 45%;
+	padding-top: 3.750em;
+	width: 50%;
 }
 
 .multiselect {
-	width: 200px;
+	width: 12.500em;
 }
 
 #removeHomeworkForm {
 	position: absolute;
 	width: 10%;
-	padding-left: 818px;
-	padding-top: 85px;
+	/* padding-left: 40%; */
+	padding-left: 70%;
+	padding-top: 4.063em;
 }
 
 #downloadHomeworkForm {
 	position: absolute;
-	padding-left: 540px;
-	padding-top: 87px;
+	/* padding-left: 33.750em; */
+	padding-left: 50%;
+	padding-top: 4.188em;
 	z-index:1;
 }
 
@@ -29,10 +31,35 @@ legend{
 }
 
 .control-label.col-sm-4{
-	padding-right: 30px;
+	padding-right: 1.875em;
 }
 
 #updateHomeworkButton{
 	background-color: #2E71AC;
 	color: #ffffff;
 }
+
+@media ( max-width :992px) {
+	.form-group {
+		margin-bottom: 0.938em;
+		width: 100%;
+		text-align: left;
+	}
+	.control-label.col-sm-4 {
+		padding-right: 1.875em;
+		width: 100%
+	}
+	legend {
+		width: 70%;
+	}
+} 
+
+@media ( max-width :774px) {
+	#downloadHomeworkForm {
+	position: absolute;
+	/* padding-left: 33.750em; */
+	padding-left: 24%;
+	padding-top: 2em;
+	z-index:1;
+}
+} 

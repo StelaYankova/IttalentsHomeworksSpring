@@ -7,7 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="<c:url value="css/updateProfileCss.css" />" rel="stylesheet">
+<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+ --%><link href="<c:url value="css/updateProfileCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 </head>
 
@@ -30,14 +31,13 @@
 			<nav class="breadcrumb-nav">
 				<ul class="breadcrumb">
 					<li><a
-						href="./GetMainPageStudent">Home</a>
-						<span class="divider"> <span class="accesshide "><span
-								class="arrow_text"></span></span>
-					</span></li>
+						href="./GetMainPageStudent">Home</a><span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
 					<li>Your
-							profile<span class="divider"> <span class="accesshide "><span
-								class="arrow_text"></span>&nbsp;</span>
-					</span></li>
+							profile<span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
 				</ul>
 			</nav>
 		</div>
@@ -47,18 +47,19 @@
 			<nav class="breadcrumb-nav">
 				<ul class="breadcrumb">
 					<li><a
-						href="./GetMainPageTeacher">Home</a>
-						<span class="divider"><span class="accesshide "><span
-								class="arrow_text"></span></span> </span></li>
+						href="./GetMainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
 					<li>Your
 							profile<span class="divider"><span class="accesshide "><span
-								class="arrow_text"></span></span> </span></li>
+							class="arrow_text"></span></span>
+				</span></li>
 				</ul>
 			</nav>
 		</div>
 	</c:if>
 	<div id="pageWrapper">
-		<div id="formUpdateProfile" align="center">
+		<div id="formUpdateProfile" ><!-- align="center" -->
 			<legend>Update profile</legend>
 			<c:if test="${not empty invalidFields}">
 				<c:if test="${invalidFields}">
@@ -68,12 +69,12 @@
 			<c:if test="${emptyFields}">
 				<p class="input-invalid-or-empty">You cannot have empty fields</p>
 			</c:if>
-			<form action="./UpdateYourProfileServlet" method="POST"
+			<form action="./updateProfile" method="POST"
 				id="updateForm" name="updateForm" class="form-horizontal">
 				<div id="inputFields">
 					<div class="form-group">
 						<label class="control-label col-sm-4">Username:</label>
-						<div class="col-sm-3" style="padding-top:7px">
+						<div class="col-sm-3 " style="padding-top:7px">
 							<c:out value="${sessionScope.user.username}"></c:out>
 						</div>
 					</div>
@@ -127,14 +128,21 @@
 							<p id="emailMsg" class="input-invalid"></p>
 						</div>
 					</div>
-					<br><legend></legend>
-					<div class="form-group">
-						<div class="col-md-offset-4 col-sm-5">
+					<legend></legend>
+					<!-- <div class="form-group">
+						<div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-4 col-sm-3">class="col-md-offset-4 col-sm-5"
 							<input id = "updateProfileButton"
 								type="submit" class=" form-control btn btn-default"
 								value="Update">
 						</div>
+					</div> -->
+					<div class="form-group" >
+					<div class="col-md-offset-4 col-sm-5">
+						<input 
+							type="submit" id = "updateProfileButton" class=" form-control btn btn-default"
+							value="Update">
 					</div>
+				</div>
 				</div>
 				
 			</form>

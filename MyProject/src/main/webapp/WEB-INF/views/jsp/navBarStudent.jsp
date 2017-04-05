@@ -31,14 +31,83 @@
 	src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script>
 
 <style>
-
+ul.nav.navbar-nav {
+    margin-left: -8em;
+}
+.navbar-inverse .navbar-nav .open .dropdown-menu>li>a {
+    margin-bottom: -0.5em;
+}
 </style>
- <link href="<c:url value="css/navBarCss.css" />" type="text/css" rel="stylesheet">
+<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+ --%> <link href="<c:url value="css/navBarCss.css" />" type="text/css" rel="stylesheet">
+ <link href="<c:url value="css/navBarTeacherAndStudentCss.css" />" type="text/css" rel="stylesheet">
 
 <body>
 					 <%@ include file="footer.jsp"%> 
+					 	<!-- <div class="dropdownSmallScreen">
+					 
+<nav class="navbar navbar-inverse ">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle glyphicon glyphicon-menu-hamburger collapsed" data-toggle="collapse"
+					data-target="#myNavbar"  id = "dropdownButton">
+					
+				</button>
+				
+				<a class="navbar-brand" href="./index"
+						style="padding-top: 30px; padding-left: 80px;"> <img
+						id="img-href" src="http://ittalents.bg/images/logo-white.png"
+						height="70px" width="auto"></a>
+			</div>
+			<br><br><br><br>
+				<div class="collapsed navbar-collapse" id="myNavbar"  aria-expanded="false" style = "display:inline-block;height:0px">
+					<ul class="nav navbar-nav" aria-expanded="false"> -->
+					<nav class="navbar navbar-inverse dropdownSmallScreen">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle glyphicon glyphicon-menu-hamburger" data-toggle="collapse"
+					data-target="#myNavbar" id = "dropdownButton" >
+					
+				</button>
+				
+				<a class="navbar-brand" href="./index"
+						style="padding-top: 30px; padding-left: 80px;"> <img
+						id="img-href" src="http://ittalents.bg/images/logo-white.png"
+						height="70px" width="auto"></a>
+			</div>
+			<br><br><br><br>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav" >
+						<li><a href="./GetMainPageStudent"
+							style="background: transparent; border: none; color: #ffffff"
+							class="btn-md">Home</a></li>
+						<li><a href="./updateProfile"
+							style="background: transparent; border: none; color: #ffffff"
+							class="btn-md">Your profile</a></li>
+						<li><a href="./yourScores"
+							style="background: transparent; border: none; color: #ffffff"
+							class="btn-md">Your scores</a></li>
+						<!-- <li class="dropdown" id="dropdown"><a
+							style="background: transparent; border: none; color: #ffffff"
+							class="btn-md" onclick="seeGroups()" data-toggle="dropdown"
+							aria-expanded="true"> Your groups <span class="caret"></span>
+						</a> -->
+						<li class="dropdown"><a class="dropdown-toggle"
+							aria-expanded="false"
+						data-toggle="dropdown" href="#" onclick="seeGroups()" style="background: transparent; border: none; color: #ffffff">Your groups<span class="caret"></span></a>
+							<ul class="dropdown-menu" id="groups"
+								style='background-color: #2E71AC; z-index: 1'>
+							</ul></li>
+						<li><a href="./LogoutServlet"
+							style="background: transparent; border: none; color: #ffffff"
+							class="btn-md"> Logout </a></li>
+					</ul>
+				</div>
+			</div>
+	</nav><!-- </div> -->
+	<div class="dropdownLargeScreen">
 
-	<nav class="navbar navbar-inverse">
+	<nav class="navbar navbar-inverse ">
 		<div class="container-fluid">
 			<div class="navbar-header" style="background-color: none; z-index: 1">
 				<a class="navbar-brand" href="./index"
@@ -50,9 +119,9 @@
 				style="padding-top: 25px; padding-right: 25px">
 				<li><a href="./GetMainPageStudent" style="color: #ffffff"
 					class="btn-lg">Home</a></li>
-				<li><a href="./UpdateYourProfileServlet" style="color: #ffffff"
+				<li><a href="./updateProfile" style="color: #ffffff"
 					class="btn-lg">Your profile</a></li>
-				<li><a href="./SeeScoresServlet"
+				<li><a href="./yourScores"
 					class="btn btn-primary btn-lg dropdown-toggle"
 					style="background: transparent; border: none; color: #ffffff">Your
 						scores</a></li>
@@ -69,15 +138,22 @@
 					class="btn-lg"> Logout </a></li>
 			</ul>
 		</div>
-	</nav>
+	</nav></div>
 	<div id="homeworks"></div>				
 	
 	<script>
 /*  	$(document).ready(
- */ function seeGroups() {
-	 if(!$('#groups').is(':empty') ) {
-		$( "#groups" ).empty();
-	} 
+ */ 
+ $(document).ready(function() {
+	    $(".dropdown-toggle").dropdown();
+	});
+ function seeGroups() {
+	 if($('#groups').has("li").length != 0) {
+		 console.log('remove')
+		 $("#groups").empty();
+		} 
+	 
+	
 // document.getElementById('dropdown').className-='open';
 			// document.getElementById('dropdown').className -= ' open';
 
@@ -91,7 +167,7 @@
 			for ( var i in response) {
 				console.log(response[i].id);
 						 $('ul .dropdown-menu').append(
-									"<li><a href = './GetHomeworksOfGroupsServlet?id="+response[i].id+"' method = 'GET' style='color:#ffffff;background-color:#2E71AC'>"
+									"<li class = 'subMenu'><a href = './homeworksOfGroup?id="+response[i].id+"' method = 'GET' class='btn-sm' style='border: none; color: #ffffff; background-color: #2E71AC'>"
 									+ response[i].name + "</a></li>");
 						 
 			}

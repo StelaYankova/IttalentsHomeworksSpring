@@ -1,0 +1,125 @@
+@CHARSET "UTF-8";
+
+.navbar-nav>li>a, .navbar-brand {
+ 	padding-top: 0.2em !important;
+ 	height: 20%;
+ 	    padding-left: 2em;
+}
+/* .navbar-brand>a{
+	display:inline-block;
+} */
+.navbar-brand>#img-href{
+	height: 85%;
+}
+.navbar {
+	background-color: #2E71AC ;
+	margin-bottom: 0px;
+	 min-height: 80px !important; 
+}
+.navbar-nav>li{
+	float:left;
+	margin-top:1.5em;
+	padding-right:0.2em;
+}
+.navbar-header {
+	z-index: 1;
+}
+
+#img-href {
+	position: absolute;
+	z-index: 1;
+}
+
+.wrapword {
+	white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+	white-space: -webkit-pre-wrap; /*Chrome & Safari */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	white-space: pre-wrap; /* css-3 */
+	word-wrap: break-word; /* Internet Explorer 5.5+ */
+	word-break: break-all;
+	white-space: normal;
+}
+.dropdownSmallScreen{
+	display:none;
+}
+
+@media ( max-width :1000px) {
+	.dropdownSmallScreen {
+		display: block;
+	}
+	.navbar-toggle {
+    display: block;
+}
+/* .navbar-collapse.collapse {
+    height: auto!important;
+    padding-bottom: 0;
+    overflow: visible!important;
+} */
+	.navbar-nav>li {
+		float: left;
+		width: 100%;
+	}
+	.dropdownLargeScreen {
+		display: none;
+	}
+	.navbar-nav>ul {
+		float: left;
+		margin-top: 1.5em;
+		padding-right: 0.2em;
+	}
+	.navbar-header {
+		z-index: 1;
+		float: right;
+		padding-right: 14em;
+	}
+	#dropdownButton {
+		position: absolute;
+		left: 1em;
+		top: 1em;
+	}
+	#dropdownButton:hover, #dropdownButton:active, #dropdownButton:visited,
+		#dropdownButton:focus {
+		background-color: #2E71AC;
+	}
+	.navbar-inverse .navbar-toggle {
+		border-color: #ffffff;
+		color: #ffffff;
+	}
+	.dropdown-menu {
+		overflow: scroll;
+	}
+	.navbar-inverse .navbar-toggle {
+		border-color: #ffffff;
+		color: #ffffff;
+	}
+	.dropdown-menu {
+		overflow: scroll-y;
+	}
+	.dropdown-menu>li {
+		display: block;
+	}
+	.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+		border: none;
+	}
+	.nav>li>a {
+		position: relative;
+		display: block;
+		clear: both;
+		margin-right: 10em; 
+		padding-bottom: 0em;
+		width: 100%;
+		margin-bottom: -0.4em;
+	}
+	.subMenu {
+		margin-left: 1em;
+	}
+	.navbar-brand>#img-href {
+		display: none;
+	}
+	
+	 #dropdownButton {
+		margin-left: 0.5em;
+/* 		font-size: 1.6em
+ */	} 
+}

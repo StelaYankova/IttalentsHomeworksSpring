@@ -10,11 +10,12 @@ public interface IValidationsDAO {
 
 	static final int ASCII_TABLE_VALUE_OF_NINE = 57;
 	static final int ASCII_TABLE_VALUE_OF_ZERO = 48;
+	static final int ASCII_TABLE_QUOTES = 34;
 	static final int MAX_SIZE_OF_INTEGER = 10;
 	static final int MIN_SIZE_OF_INTEGER = 0;
 	 static final int FORBIDDEN_STATUS = 403;
+	 static final int PAGE_NOT_FOUND_STATUS = 404;
 	 static final int INTERNAL_SERVER_ERROR_STATUS = 500;
-	 static final int UNPROCESSABLE_ENTITY_STATUS = 422;
 	 static final int SUCCESS_STATUS = 200;
 	 static final int GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO = 126;
 	 static final int GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM = 32;

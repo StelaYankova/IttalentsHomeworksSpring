@@ -32,7 +32,8 @@
 	src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script>
 
 </head>
- <link href="<c:url value="css/navBarCss.css" />" type="text/css" rel="stylesheet">
+<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+ --%> <link href="<c:url value="css/navBarTeacherAndStudentCss.css" />" type="text/css" rel="stylesheet">
 
 
 <!-- <style>
@@ -138,7 +139,54 @@ color:#333;
 
 <body>
 				<%@ include file="footer.jsp"%>
+	<nav class="navbar navbar-inverse dropdownSmallScreen">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle glyphicon glyphicon-menu-hamburger" data-toggle="collapse"
+					data-target="#myNavbar" id = "dropdownButton" >
+					
+				</button>
+				
+				<a class="navbar-brand" href="./index"
+						style="padding-top: 30px; padding-left: 80px;"> <img
+						id="img-href" src="http://ittalents.bg/images/logo-white.png"
+						height="70px" width="auto"></a>
+			</div>
+			<br><br><br><br>
+			<div class="collapse navbar-collapse" aria-expanded = "false" id="myNavbar">
+				<ul class="nav navbar-nav" >
+					
+					<li><a href="./GetMainPageTeacher" class="btn-md"
+						style="background: transparent; border: none; color: #ffffff">Home</a></li>
+					<li><a class="btn-md" href="./updateProfile"
+						style="background: transparent; border: none; color: #ffffff"
+						class="btn-lg">Your profile</a></li>
+						<li class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" href="#" style="background: transparent; border: none; color: #ffffff">Manage <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li class = "subMenu"><a href="./addOrRemoveStudent" class="btn-sm" style="border: none; color: #ffffff; background-color: #2E71AC">Add
+									or remove student</a></li>
+							<li class = "subMenu"><a href="./studentsScores" class="btn-sm" 
+								style="border: none; color: #ffffff; background-color: #2E71AC">Students
+									scores</a></li>
+							<li class = "subMenu"><a href="./seeGroups" class="btn-sm"
+								style="border: none; color: #ffffff; background-color: #2E71AC">See
+									groups</a></li>
+							<li class = "subMenu"><a href="./addHomework" class="btn-sm"
+								style="border: none; color: #ffffff; background-color: #2E71AC">Add
+									homework</a></li>
+						</ul></li>
+					<li><a href="./seeOrUpdateHomeworks" class="btn-md"
+						style="background: transparent; border: none; color: #ffffff">See/Update
+							homeworks</a></li>
+					<li><a href="./LogoutServlet"
+						style="background: transparent; border: none; color: #ffffff"
+						class="btn-md"> Logout </a></li></ul>
+			</div>
+		</div>
+	</nav>
 
+	<div class="dropdownLargeScreen">
 
 	<nav class="navbar navbar-inverse" style = "background-color:none">
 		<div class="container-fluid" style = "background-color:none">
@@ -147,13 +195,13 @@ color:#333;
 					style="padding-top: 30px; padding-left:80px;"> <img id = "img-href" src = "http://ittalents.bg/images/logo-white.png" height = "70px" width="auto"></a>
 			</div>
 			<ul class="nav navbar-nav navbar-right"
-				style="padding-top: 25px; padding-right: 25px">
+				style="padding-top: 25px; padding-right: 25px" style = "float:none">
 					<li><a href="./GetMainPageTeacher" style="color: #ffffff"
 					class="btn-lg">Home</a></li>
-				<li><a href="./UpdateYourProfileServlet" style="color: #ffffff"
+				<li><a href="./updateProfile" style="color: #ffffff"
 					class="btn-lg">Your profile</a></li>
-				<li><a href="./SeeHomeworksServlet"
-					class="btn btn-primary btn-lg dropdown-toggle"
+				<li><a href="./seeOrUpdateHomeworks"
+					class="btn btn-primary btn-lg"
 					style="background: transparent; border: none; color: #ffffff">See/Update
 						homeworks</a></li>
 				<li class="dropdown"><a href="#"
@@ -163,21 +211,38 @@ color:#333;
 						Manage<span class="caret"></span>
 				</a>
 					<ul class="dropdown-menu" style='background-color:#2E71AC'>
-						<li><a href="./AddStudentToGroupServlet"
-							style="border: none; color: #ffffff; background-color:#2E71AC">Add
+						<li><a href="./addOrRemoveStudent"
+							style="border: none; color: #ffffff; background-color:#2E71AC;">Add
 								or remove student</a></li>
-						<li><a href="/MyProject/GetStudentsScoresServlet"
+						<li><a href="./studentsScores"
 							style="border: none; color: #ffffff; background-color:#2E71AC">Students
 								scores</a></li>
-						<li><a href="/MyProject/SeeGroups"
+						<li><a href="./seeGroups"
 							style="border: none; color: #ffffff; background-color:#2E71AC">See
 								groups</a></li>
-						<li><a href="./AddHomework"
+						<li><a href="./addHomework"
 							style="border: none; color: #ffffff; background-color:#2E71AC">Add
 								homework</a></li>
 					</ul></li>		
 				<li><a href="./LogoutServlet" style="color: #ffffff"
 					class="btn-lg"> Logout </a></li>
+					
 			</ul>
 		</div>
-	</nav>
+	</nav></div>
+
+	<script>
+/* $(document).ready(function(){
+  $('.dropdown-submenu a.test').on("click", function(e){
+	  console.log(1)
+    $(this).next('ul').toggle();
+    e.stopPropagation();
+	  console.log(2)
+
+    e.preventDefault();
+  });
+}); */
+ $(document).ready(function() {
+    $(".dropdown-toggle").dropdown();
+}); 
+</script>

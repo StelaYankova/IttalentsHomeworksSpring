@@ -7,7 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="<c:url value="css/addHomeworkCss.css" />" rel="stylesheet">
+<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+ --%><link href="<c:url value="css/addHomeworkCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 
 </head>
@@ -17,13 +18,12 @@
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="./GetMainPageTeacher">Home</a>
-					<span class="divider"> <span class="accesshide "><span
+					href="./GetMainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 				<li>Add
-						homework<span class="divider"> <span class="accesshide "><span
-							class="arrow_text"></span>&nbsp;</span>
+						homework<span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span>
 				</span></li>
 			</ul>
 		</nav>
@@ -53,7 +53,7 @@
 					<label class="control-label col-sm-4" >Heading:</label>
 					<div class="col-sm-7">
 						<input type="text" class="form-control" name="name"
-							value="${nameTry}" placeholder="Enter heading" maxlength="40"
+							value="${nameTry}" placeholder="Enter homework heading" maxlength="40"
 							data-toggle="popover" data-placement="bottom"
 							data-trigger="focus"
 							data-content="Valid length is from 5 to 40 symbols. Valid inputs are numbers and letters (large and small)"
@@ -75,7 +75,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<br> <label class="control-label col-sm-4">Opening
+					<label class="control-label col-sm-4">Opening
 						time:</label>
 					<div class='col-sm-7'>
 						<div class='input-group date' id='datetimepicker6'>
@@ -98,7 +98,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<br> <label class="control-label col-sm-4">Closing
+					<label class="control-label col-sm-4">Closing
 						time:</label>
 					<div class='col-sm-7'>
 						<div class='input-group date' id='datetimepicker7'>
@@ -121,7 +121,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<br> <label class="control-label col-sm-4">Number of
+					<label class="control-label col-sm-4">Number of
 						tasks:</label>
 					<div class="col-sm-7">
 						<input type="number" min="1" max="41" maxlength="2"
@@ -139,7 +139,6 @@
 					</div>
 				</div>
 				
-				<br>
 				<div class="form-group">
 					<label class="control-label col-sm-4">Groups</label>
 					<div class="col-sm-7">
@@ -171,7 +170,7 @@
 					</div>
 				</div>
 <div class="form-group">
-					<br> <label class="control-label col-sm-4">Tasks:</label>
+					<label class="control-label col-sm-4">Tasks:</label>
 					<div class="col-sm-7">
 						<input type="file" accept="application/pdf" name="file"  required/>
 						<c:if test="${not empty validFile}">
@@ -183,7 +182,6 @@
 						<p id="fileMsg" class="input-invalid"></p>
 					</div>
 				</div>
-				<br>
 				<legend></legend>
 				<div class="form-group" >
 					<div class="col-md-offset-4 col-sm-5">

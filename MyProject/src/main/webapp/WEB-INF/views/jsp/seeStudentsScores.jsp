@@ -8,7 +8,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="<c:url value="css/seeStudentsScoresCss.css" />" rel="stylesheet">
+<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+ --%><link href="<c:url value="css/seeStudentsScoresCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 
 </head>
@@ -19,15 +20,14 @@
 			<nav class="breadcrumb-nav">
 				<ul class="breadcrumb" id = "navPathList">
 					<li><a
-						href="./GetMainPageStudent">Home</a>
-						<span class="divider"> <span class="accesshide "><span
-								class="arrow_text"></span></span>
-					</span></li>
+						href="./GetMainPageStudent">Home</a><span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
 					<li><a
-						href="./GetStudentsScoresServlet">Your
-							scores</a> <span class="divider"> <span class="accesshide "><span
-								class="arrow_text"></span>&nbsp;</span>
-					</span></li>
+						href="./studentsScores">Your
+							scores</a><span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
 				</ul>
 			</nav>
 		</div>
@@ -37,13 +37,12 @@
 			<nav class="breadcrumb-nav">
 				<ul class="breadcrumb">
 					<li><a
-						href="./GetMainPageTeacher">Home</a>
-						<span class="divider"> <span class="accesshide "><span
-								class="arrow_text"></span></span>
-					</span></li>
-					<li>See student's scores<span class="divider"> <span
-							class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
-					</span></li>
+						href="./GetMainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
+					<li>See student's scores<span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
 				</ul>
 			</nav>
 		</div>
@@ -135,8 +134,7 @@
 			 $('.breadcrumb')
 				.append(
 						'<li id = "chosenStudentUsername">'
-								+ studentUsername
-								+ '<span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
+								+studentUsername+'<span class="divider"><span class="accesshide "><span class="arrow_text"></span></span></span></li>');
 			
 			$
 					.ajax({
@@ -170,7 +168,7 @@
 												.add(
 														
 														[
-																"<form action = './GetHomeworkOfStudentServlet' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button type = 'submit' class = 'btn btn-link'>"
+																"<form action = './homeworkOfStudent' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button type = 'submit' class = 'btn btn-link'>"
 																		+ response[i].heading
 																		+ "</button></form>"/* ,
 																opensRep,
@@ -183,7 +181,7 @@
 										var rowNode = table.row
 												.add(
 														[
-																"<form action = './GetHomeworkOfStudentServlet' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button style= 'color:#620062' type = 'button' class = 'btn btn-link'>"
+																"<form action = './homeworkOfStudent' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button style= 'color:#620062' type = 'button' class = 'btn btn-link'>"
 																		+ response[i].heading
 																		+ "</button></form>"/* ,
 																opensRep,
@@ -239,10 +237,9 @@
 									$('.breadcrumb')
 											.append(
 													'<li id = "chosenGroupName">'
-															+ groupName
-															+ '<span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
+															+groupName+'<span class="divider"><span class="accesshide "><span class="arrow_text"></span></span></span></li>');
 
-									//	$('#navPathList').append('<li><a href="./GetStudentsScoresServlet">'+groupId+'</a> <span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
+									//	$('#navPathList').append('<li><a href="./studentsScores">'+groupId+'</a> <span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
 
 								}
 
@@ -255,7 +252,7 @@
 							document.getElementById('listOfStudentsOfGroup').style.visibility = 'hidden';
 							document.getElementById('listHeading').style.visibility = 'hidden';
 
-							//$('#navPathList').append('<li><a href="./GetStudentsScoresServlet">'+groupId+'</a> <span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
+							//$('#navPathList').append('<li><a href="./studentsScores">'+groupId+'</a> <span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
 							console.log(4444)
 							$
 									.ajax({

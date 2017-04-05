@@ -402,7 +402,6 @@ public class UserDAO implements IUserDAO {
 		Connection con = manager.getConnection();
 		if (ValidationsDAO.getInstance().isCommentLengthValid(teacherComment)) {
 			try {
-				System.out.println(teacherComment);
 				PreparedStatement ps = con.prepareStatement(SET_TEACHER_COMMENT_TO_HOMEWORK);
 				ps.setString(1, teacherComment);
 				ps.setInt(2, studentId);

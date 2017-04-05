@@ -2,13 +2,13 @@
 
 #formAddGroup{
 	align:right;
-	margin-bottom:60px;  
+	margin-bottom:3.750em;
 }
 legend{
 	text-align: left;
 }
 .control-label.col-sm-4{
-	padding-right: 30px;
+	padding-right: 1.875em;
 }
 #addButton{
 	background-color: #2E71AC;
@@ -16,6 +16,33 @@ legend{
 }
 #formAddGroup {
 	margin: 0 auto;
- 	padding-top: 80px;
+ 	padding-top: 3.750em;
  	width: 40%;
 } 
+@media ( max-width :992px) {
+
+legend {
+		width: 70%;
+	}
+}
+@media ( max-width :768px) {
+	.form-horizontal .control-label {
+    padding-top: 0.438em;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+}
+/* @media ( max-width :1300px) {
+	.control-label.col-sm-4 {
+	padding-right: 1.875em;
+	width:100%;
+}
+
+.form-group {
+	
+	
+	padding-left: 3.750em auto;
+	width:100%;
+}
+} */

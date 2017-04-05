@@ -7,7 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+ --%><link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/addGroupCss.css" />" rel="stylesheet">
 </head>
 <body>
@@ -17,15 +18,15 @@
 			<ul class="breadcrumb">
 				<li><a
 					href="./GetMainPageTeacher">Home</a>
-					<span class="divider"> <span class="accesshide "><span
+					<span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
-				<li><a href="./SeeGroups">See
-						groups</a> <span class="divider"> <span class="accesshide "><span
+				<li><a href="./seeGroups">See
+						groups</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 				<li>Create
-						group<span class="divider"> <span class="accesshide "><span
+						group<span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 			</ul>
@@ -52,12 +53,12 @@
 						<p class="input-invalid-or-empty">You cannot have empty fields</p>
 					</c:if>
 				</c:if>
-			<form action="./AddGroupServlet" method="POST" id="addGroupForm">
+			<form action="./createGroup" method="POST" id="addGroupForm">
 				<div class="form-group">
 					<label class="control-label col-sm-4">Name:</label>
 					<div class="col-sm-7">
 						<input type="text" name="groupName" class="form-control"
-							placeholder="Enter name" data-toggle="popover" value="${nameTry}"
+							placeholder="Enter group name" data-toggle="popover" value="${nameTry}"
 							data-placement="bottom" data-trigger="focus" maxlength="15"
 							data-content="Valid length is from 4 to 15 symbols. Valid inputs are numbers, letters (large and small) and main punctual symbols."
 							required />
@@ -76,11 +77,10 @@
 						<p id="nameMsg" class="input-invalid"></p>
 					</div>
 				</div>
-				<br>
 				<div class="form-group">
 					<label class="control-label col-sm-4">Teachers:</label>
 					<div class="col-sm-7" style = "padding-bottom:15px;">
-						<select class="selectpicker form-control" data-width="101%"  multiple name="teachers" >
+						<select class="selectpicker form-control" data-width="101%" data-size="7" multiple name="teachers" >
 							<c:forEach items="${applicationScope.allTeachers}" var="teacher">
 								<c:set var="isTeacherInGroupTry" value="false"></c:set>
 								<c:forEach items="${selectedTeachersUsernameTry}"

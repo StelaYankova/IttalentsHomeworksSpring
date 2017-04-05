@@ -547,6 +547,9 @@ public class GroupDAO implements IGroupDAO {
 											GroupDAO.getInstance().getGroupById(id));
 								}
 							}
+							//TODO
+							GroupDAO.getInstance().updateNumberOfTasksForStudents(homeworkDetails, currHd.getNumberOfTasks());
+							
 							con.commit();
 						} catch (SQLException e) {
 							try {
@@ -872,4 +875,75 @@ public class GroupDAO implements IGroupDAO {
 		}
 	}
 
+	@Override
+	public void updateNumberOfTasksForStudents(HomeworkDetails homeworkDetails, int numOfTasks) throws GroupException {
+		Connection con = manager.getConnection();
+		PreparedStatement ps;
+		// arraylist ot idta na studenti s tova doma6no
+		ArrayList<Integer> students = GroupDAO.getInstance().getStudentsWithSearchedHomework(homeworkDetails);
+		// ako vavedenite sa >
+		//int difference = 0;
+		if (homeworkDetails.getNumberOfTasks() > numOfTasks) {
+			//difference = homeworkDetails.getNumberOfTasks() - numOfTasks;
+			for (Integer studentId : students) {
+				int currTaskNumberInsert = numOfTasks;
+				while (currTaskNumberInsert != homeworkDetails.getNumberOfTasks()) {
+					try {
+						ps = con.prepareStatement(
+								"INSERT INTO IttalentsHomeworks.Homework_task_solution (student_id, homework_id, task_number) VALUES (?,?,?);");
+						ps.setInt(1, studentId);
+						ps.setInt(2, homeworkDetails.getId());
+						ps.setInt(3, currTaskNumberInsert);
+						ps.execute();
+						currTaskNumberInsert++;
+					} catch (SQLException e) {
+						throw new GroupException("Something went wrong with adding tasks to homework of student..");
+					}
+				}
+
+			}
+
+		}
+		//ako sa po- malko
+		else if(homeworkDetails.getNumberOfTasks() < numOfTasks){
+			//difference = numOfTasks - homeworkDetails.getNumberOfTasks();
+			for (Integer studentId : students) {
+				int currTaskNumberRemove = homeworkDetails.getNumberOfTasks();
+				while (currTaskNumberRemove != numOfTasks) {
+					try {
+						ps = con.prepareStatement(
+								"DELETE FROM IttalentsHomeworks.Homework_task_solution WHERE student_id = ? AND homework_id = ? AND task_number = ?;");
+						ps.setInt(1, studentId);
+						ps.setInt(2, homeworkDetails.getId());
+						ps.setInt(3, currTaskNumberRemove);
+						ps.execute();
+						currTaskNumberRemove++;
+					} catch (SQLException e) {
+						throw new GroupException("Something went wrong with removing tasks from homework of student..");
+					}
+				}
+
+			}
+		}
+		
+		
+	}
+	
+	@Override
+	public ArrayList<Integer> getStudentsWithSearchedHomework(HomeworkDetails homeworkDetails) throws GroupException {
+		Connection con = manager.getConnection();
+		PreparedStatement ps;
+		ArrayList<Integer> students = new ArrayList<>();
+		try {
+			ps = con.prepareStatement("SELECT user_id FROM IttalentsHomeworks.User_has_homework WHERE homework_id = ?;");
+			ps.setInt(1, homeworkDetails.getId());
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				students.add(rs.getInt(1));
+			}
+		} catch (SQLException e) {
+			throw new GroupException("Something went wrong with getting students with searched homeworks..");
+		}	
+		return students;
+	}
 }

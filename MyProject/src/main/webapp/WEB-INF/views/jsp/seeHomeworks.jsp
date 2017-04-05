@@ -7,7 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="<c:url value="css/seeHomeworksCss.css" />" rel="stylesheet">
+<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+ --%><link href="<c:url value="css/seeHomeworksCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 
 </head>
@@ -17,12 +18,11 @@
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="./GetMainPageTeacher">Home</a>
-					<span class="divider"> <span class="accesshide "><span
+					href="./GetMainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 				<li>See/Update homeworks<span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span>&nbsp;</span>
+							class="arrow_text"></span></span>
 				</span></li>
 			</ul>
 		</nav>
@@ -134,8 +134,7 @@
 														$('.breadcrumb')
 																.append(
 																		'<li id = "chosenGroupName">'
-																				+ groupName
-																				+ '<span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
+																				+groupName+'<span class="divider"><span class="accesshide "><span class="arrow_text"></span></span></span></li>');
 													}
 													
 												} else {
@@ -257,8 +256,7 @@
 			$('.breadcrumb')
 					.append(
 							'<li id = "chosenHomeworkName">'
-									+ homeworkName
-									+ '<span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
+									+homeworkName+'<span class="divider"><span class="accesshide "><span class="arrow_text"></span></span></span></li>');
 	
 			$
 					.ajax({
@@ -280,7 +278,7 @@
 								if (hasStudentGivenMinOneTask == true) {
 									$('#listOfStudentsOfGroup')
 											.append(
-													"<li><form action = './GetHomeworkOfStudentServlet'><input type = 'hidden' name = 'id' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'submit' class='btn btn-link'>"
+													"<li><form action = './homeworkOfStudent'><input type = 'hidden' name = 'id' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'submit' class='btn btn-link'>"
 															+ response[i].username
 															+ "</button></form></li>");
 									
@@ -291,7 +289,7 @@
 								} else {
 									$('#listOfStudentsOfGroup')
 											.append(
-													"<li><form action = './GetHomeworkOfStudentServlet'><input type = 'hidden' name = 'id' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'button' style= 'color:#620062' class='btn btn-link'>"
+													"<li><form action = './homeworkOfStudent'><input type = 'hidden' name = 'id' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'button' style= 'color:#620062' class='btn btn-link'>"
 															+ response[i].username
 															+ "</button></form></li>");
 									document

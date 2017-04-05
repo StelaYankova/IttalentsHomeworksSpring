@@ -7,7 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="<c:url value="css/updateGroupCss.css" />" rel="stylesheet">
+<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+ --%><link href="<c:url value="css/updateGroupCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 
 </head>
@@ -17,15 +18,13 @@
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="./GetMainPageTeacher">Home</a>
-					<span class="divider"> <span class="accesshide "><span
+					href="./GetMainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
-				<li><a href="./SeeGroups">See groups</a> <span class="divider"> <span class="accesshide "><span
+				<li><a href="./seeGroups">See groups</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
-				
-				<li><c:out value="${sessionScope.currGroup.name}"></c:out><span class="divider"> <span class="accesshide "><span
+				<li><c:out value="${sessionScope.currGroup.name}"></c:out><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 			</ul>
@@ -40,10 +39,10 @@
 		</c:if>
 	<div id="pageWrapper">
 		
-		<div id="formUpdateGroup" align="right">
+		<div id="formUpdateGroup"><!-- align="right" -->
 				<legend>Update Group</legend>
 		
-			<form action="./UpdateGroupServlet" method="POST"
+			<form action="./updateGroup" method="POST"
 				id="updateGroupForm">
 				<c:if test="${not empty sessionScope.invalidFields}">
 					<c:if test="${sessionScope.invalidFields}">
@@ -59,7 +58,7 @@
 					<label class="control-label col-sm-4">Name:</label>
 					<div class="col-sm-7">
 						<input type="text" class="form-control" name="groupName" maxlength="15"
-							placeholder="Enter name" data-toggle="popover"
+							placeholder="Enter group name" data-toggle="popover"
 							class="form-control" value="${sessionScope.currGroup.name}"
 							data-placement="bottom" data-trigger="focus" 
 							data-content="Valid length is from 4 to 15 symbols. Valid inputs are numbers and letters (large and small)"
@@ -79,7 +78,6 @@
 						<p id="nameMsg" class="input-invalid"></p>
 					</div>
 				</div>
-				<br>
 				<div class="form-group">
 					<label class="control-label col-sm-4">Teachers</label>
 					<div class="col-sm-7">
@@ -109,8 +107,8 @@
 						</c:if>
 						<p id="allTeachersExistMsg" class="input-invalid"></p>
 					</div>
-				</div><br> <br> <br> 
-				<legend></legend><br>
+				</div>
+				<legend></legend>
 					<div class="form-group">
 						<div class="col-md-offset-4 col-sm-5">
 							<input id = "updateGroupButton"

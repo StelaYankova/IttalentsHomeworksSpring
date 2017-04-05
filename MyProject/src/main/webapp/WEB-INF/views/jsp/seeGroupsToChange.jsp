@@ -7,7 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="<c:url value="css/seeGroupsToChangeCss.css" />" rel="stylesheet">
+<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+ --%><link href="<c:url value="css/seeGroupsToChangeCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 
 </head>
@@ -17,11 +18,10 @@
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="./GetMainPageTeacher">Home</a>
-					<span class="divider"> <span class="accesshide "><span
+					href="./GetMainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
-				<li>See groups<span class="divider"> <span class="accesshide "><span
+				<li>See groups<span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 			</ul>
@@ -42,7 +42,7 @@
 		
 		<br>
 		<div id="divTable">
-		<form action="./AddGroupServlet" method="GET">
+		<form action="./createGroup" method="GET">
 			<button style = "width:366px" id="createButtonPosition"
 				class="glyphicon glyphicon-plus btn-primary btn btn-md"
 				type="submit"><b><font size="3">  Create group</font></b></button>
@@ -58,12 +58,12 @@
 				<tbody>
 					<c:forEach var="group" items="${applicationScope.allGroups}">
 						<tr>
-							<td><form action="./UpdateGroupServlet" method="GET">
+							<td><form action="./updateGroup" method="GET">
 									<input type="hidden" name="groupId" value="${group.id}">
 									<button class="btn btn-link" type="submit">
 										<c:out value="${group.name}"></c:out>
 									</button></form>
-									<form action="./RemoveGroupServlet" method="POST"
+									<form action="./removeGroup" method="POST"
 										id="removeGroupForm">
 										<input type="hidden" name="groupId" value="${group.id}">
 										<button type="submit"

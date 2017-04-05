@@ -61,4 +61,8 @@ public interface IGroupDAO {
 
 	void addHomeworkToGroupTransaction(HomeworkDetails homeworkDetails, Group group) throws GroupException, UserException, SQLException;
 
+	void updateNumberOfTasksForStudents(HomeworkDetails homeworkDetails, int numOfTasks) throws GroupException;
+
+	ArrayList<Integer> getStudentsWithSearchedHomework(HomeworkDetails homeworkDetails) throws GroupException;
+
 }

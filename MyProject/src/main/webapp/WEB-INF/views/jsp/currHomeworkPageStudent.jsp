@@ -7,7 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+ --%><link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/currHomeworkPageStudentCss.css" />" rel="stylesheet">
 </head>
 <style>
@@ -20,41 +21,41 @@
 			<ul class="breadcrumb">
 				<li><a
 					href="./GetMainPageStudent">Home</a>
-					<span class="divider"> <span class="accesshide "><span
+					<span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 				<c:if test="${not empty sessionScope.throughtScores}">
 					<c:if test="${sessionScope.throughtScores == 0}">
 						<li><a
-							href="./GetHomeworksOfGroupsServlet"><c:out
-						value="${sessionScope.chosenGroupName}" ></c:out></a> <span class="divider"> <span
-								class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
-						</span></li>
+							href="./homeworksOfGroup"><c:out
+						value="${sessionScope.chosenGroupName}"></c:out></a><span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
 					</c:if>
 					<c:if test="${sessionScope.throughtScores == 1}">
 						<li><a
-							href="./SeeScoresServlet">Your
-								scores</a><span class="divider"> <span class="accesshide "><span
-									class="arrow_text"></span></span>
-						</span></li>
+							href="./yourScores">Your
+								scores</a><span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
 						<li><c:out
-						value="${sessionScope.chosenGroupName}"></c:out><span class="divider"> <span
-								class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
-						</span></li>
+						value="${sessionScope.chosenGroupName}"></c:out><span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
 					</c:if>
 				</c:if>
 				<c:if test="${ empty sessionScope.throughtScores}">
 					<c:if test="${ empty sessionScope.throughtGroups}">
 						<li><a
 							href="./SeeScoresServlet">Your
-								scores</a> <span class="divider"> <span class="accesshide "><span
-									class="arrow_text"></span></span>
-						</span></li>
+								scores</a><span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
 					</c:if>
 				</c:if>
 				<li><c:out
-						value="${sessionScope.currHomework.homeworkDetails.heading}"/><span class="divider"> <span
-						class="accesshide "><span class="arrow_text"></span>&nbsp;</span>
+						value="${sessionScope.currHomework.homeworkDetails.heading}"/><span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span>
 				</span></li>
 			</ul>
 		</nav>
@@ -124,8 +125,8 @@
 			<c:out value="${sessionScope.currHomework.teacherGrade }" />
 
 			<br> <br> <b>Teacher comment:</b> <br>
-			<br> <label id="teacherComment"><c:out
-					value="${sessionScope.currHomework.teacherComment }" /></label> <br>
+			<br> <label id="teacherComment" class = "wrapword"><c:out
+					value="${sessionScope.currHomework.teacherComment}" /></label> <br>
 			<br> <br>
 		</div>
 

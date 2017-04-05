@@ -10,7 +10,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="<c:url value="css/updateHomeworkCss.css" />" rel="stylesheet">
+<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+ --%><link href="<c:url value="css/updateHomeworkCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 
 </head>
@@ -21,14 +22,15 @@
 			<ul class="breadcrumb">
 				<li><a
 					href="./GetMainPageTeacher">Home</a>
-					<span class="divider"><span
-						class="accesshide "><span class="arrow_text"></span></span> </span></li>
+					<span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
 				<li><a
-					href="./SeeHomeworksServlet">See/Update homeworks</a> <span class="divider"> <span class="accesshide "><span
-							class="arrow_text"></span></span></span></li>
+					href="./seeOrUpdateHomeworks">See/Update homeworks</a><span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span>
+				</span></li>
 				<li><%-- <a
-					href="./UpdateHomeworkServlet?chosenHomework=${sessionScope.currHomework.id}"> --%>Update
-						homework<span class="divider"> <span class="accesshide "><span
+					href="./UpdateHomeworkServlet?chosenHomework=${sessionScope.currHomework.id}"> --%><c:out value = "${sessionScope.currHomework.heading}"></c:out><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 			</ul>
@@ -83,7 +85,7 @@
 					<label class="control-label col-sm-4">Heading:</label>
 					<div class="col-sm-7">
 						<input type="text" class="form-control" name="name"
-							value='${sessionScope.currHomework.heading}' maxlength="40"
+							value='${sessionScope.currHomework.heading}' placeholder = "Enter homework heading" maxlength="40"
 							data-toggle="popover" data-placement="bottom"
 							data-trigger="focus"
 							data-content="Valid length is from 5 to 40 symbols. Valid inputs are numbers and letters (large and small)"
@@ -104,7 +106,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<br> <label class="control-label col-sm-4">Opening time:</label>
+					<label class="control-label col-sm-4">Opening time:</label>
 					<div class='col-sm-7'>
 						<div class='input-group date' id='datetimepicker6'>
 							<input type='text'
@@ -127,7 +129,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<br> <label class="control-label col-sm-4">Closing time:</label>
+					<label class="control-label col-sm-4">Closing time:</label>
 					<div class='col-sm-7'>
 						<div class='input-group date' id='datetimepicker7'>
 							<input type='text'
@@ -157,7 +159,7 @@
 						<input type="number" min="1" max = "40" class="form-control"
 							name="numberOfTasks"
 							value='${sessionScope.currHomework.numberOfTasks}' maxlength="2"
-							data-toggle="popover" data-placement="bottom"
+							data-toggle="popover" placeholder = "Enter number of tasks" data-placement="bottom"
 							data-trigger="focus" data-content="From 1 to 40" required />
 						<c:if test="${not empty sessionScope.validTasks}">
 							<c:if test="${not sessionScope.validTasks}">
@@ -169,7 +171,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<br> <br> <label class="control-label col-sm-4">Groups:</label>
+					<label class="control-label col-sm-4">Groups:</label>
 					<div class="col-sm-7">
 						<select class="selectpicker form-control" data-size="7" data-width="101%"
 							multiple name="groups" id="groups" class="form-control" required >
@@ -198,9 +200,9 @@
 						<p id="groupsMsg" class="input-invalid"></p>
 					</div>
 				</div>
-				<br> <br>
+				
 				<div class="form-group">
-					<br> <label class="control-label col-sm-4">Tasks:</label>
+				 <label class="control-label col-sm-4">Tasks:</label>
 					<div class="col-sm-7 ">
 						<input type="file" accept="application/pdf" name="file">
 						<c:if test="${not empty sessionScope.validFile}">
@@ -212,7 +214,6 @@
 						<p id="fileMsg" class="input-invalid"></p>
 					</div>
 				</div>
-				<br>
 				<legend></legend>
 				<div class="form-group">
 					<div class="col-md-offset-4 col-sm-5">
