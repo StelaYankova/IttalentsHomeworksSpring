@@ -37,8 +37,8 @@
 				id="resultTable">
 				<thead class="wrapword">
 					<tr>
-						<td>Heading</td>
-						<td>Days left</td>
+						<th>Heading</th>
+						<th>Days left</th>
 					</tr>
 				</thead>
 				<tbody class="wrapword">

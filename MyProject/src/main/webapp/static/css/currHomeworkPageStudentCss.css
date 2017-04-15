@@ -1,13 +1,13 @@
 @CHARSET "UTF-8";
-
+/* 
 #textareaComment {
 	max-width: 30%;
 }
-/* 
+
 #currTaskSolution {
 	max-width: 50%;
 }
- */
+
 .input-invalid {
     padding-top: 12px;
     margin-bottom: -3px;
@@ -65,4 +65,174 @@
 .uploadSolutionButton{
 	float:right;
 	text-decoration:underline;
+} */
+
+@CHARSET "UTF-8";
+.uploadSolutionButton{
+	float:right;
+	text-decoration:underline;
+}
+#solution{
+	display:none;
+}
+label {
+	display: inline-block;
+	*display: inline; /* for IE7*/
+	zoom: 1; /* for IE7*/
+	float: left;
+	padding-top: 5px;
+	text-align: left;
+	width: 140px;
+}
+
+#solution{
+ width: 52%;
+    float: left;
+    padding-left: 50px;
+    padding-top: 5.7em;
+/*   padding-bottom: 100px;
+ */ }
+
+#currTaskSolution {
+	display: none;
+}
+
+#currHomework {
+    width: 44%;
+    float: left;
+        padding-left: 7em;
+    /* padding-left: 19px; */
+    padding-right: 1.313em;
+    padding-top: 60px;
+}
+.input-invalid {
+    padding-top: 12px;
+    margin-bottom: -3px;
+    text-align: left;
+}
+
+#teacherComment {
+	overflow-y: scroll;
+	resize: none;
+	width: 330px;
+	height: 150px;
+	border-size: 2px;
+	border-style: groove;
+	font-size: 12px;
+	font-style: italic;
+}
+.dataTables_scrollBody{
+	max-height:40.5vh !important;
+}
+
+#divTable{
+	padding-bottom: 10px;
+}
+#tasksTable{
+	border-size: 2px;
+	border-style: groove;
+/* 	width:100%;
+ */}
+.dataTables_scrollHeadInner{
+ 	width:/* 100% !important */;
+}
+#tasksTable td{
+	padding-bottom: 15px;
+    padding-top: 19px;
+	border-size: 2px;
+	border-style: groove;
+}
+#seeTaskSolutionButton{
+	color: #fff; 
+	background-color: #0086b3;
+}
+#taskUpload{
+	display: none;
+	    padding-bottom: 0.1em;
+	
+}
+#currTaskSolution{
+	overflow-y:scroll;
+	 height: 42em;
+    width: 30em;
+}
+ @media ( min-width : 1280px) {
+#currTaskSolution{
+	overflow-y:scroll;
+	 height: 43em;
+    width: 30em;
+}
+} 
+@media ( max-width : 1025px) {
+	#teacherComment {
+		overflow-y: scroll;
+		resize: none;
+		width: 488px;
+		height: 94px;
+		border-size: 2px;
+		border-style: groove;
+		font-size: 12px;
+		font-style: italic;
+	}
+	#solution{
+		width:100%;
+	}
+	
+	#currHomework {
+    width: 100%;
+    padding-right: 1em;
+    padding-left: 1em;
+    padding-bottom:0em;
+}
+
+#solution {
+   /*  width: 52%; */
+    float: left;
+    padding-left: 1em;
+    padding-top: 1em;
+/*     padding-bottom: 100px;
+ */}
+#currTaskSolution {
+    height: 33em;
+    /* margin-bottom:15em; */
+     width:71em; 
+}
+}
+ @media ( max-width : 1011px) {
+#currTaskSolution {
+    height: 33em;
+    width: 68em; 
+/*     margin-bottom:15em;
+ */}
+}
+ @media ( max-width : 992px) {
+#currTaskSolution {
+    height: 33em;
+    width: 51.5em; 
+    /* margin-bottom:15em; */
+}
+} 
+@media ( max-width : 991px) {
+#currTaskSolution {
+    height: 33em;
+    width: 51.5em; 
+    /* margin-bottom:15em; */
+    /* width:70.5em; */
+}
+}
+@media ( max-width : 789px) {
+#currTaskSolution {
+    height: 33em;
+    width: 41.5em; 
+    /* margin-bottom:15em; */
+    /* width:70.5em; */
+}
+}
+@media ( max-width : 590px) {
+#teacherComment{		width: 25em;
+	}
+	#currTaskSolution {
+    width: 21em;
+    padding-left:0em;
+}
 }

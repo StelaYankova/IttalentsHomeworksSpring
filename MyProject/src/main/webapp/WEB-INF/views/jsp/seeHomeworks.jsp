@@ -48,16 +48,17 @@
 				</c:forEach>
 			</select>
 		</div>
-		<div id="currTable"  >
-				<div id="divTable">
+		<div id = "tableAndStudents" style = "display:inline-block">
+		<div id="currTable" style = "">
+				<div id="divTable" style = "width:100%">
 					<table id="resultTable" border="1"
 						class="table table-striped table-bordered table-hover">
 						<thead class="wrapword">
 							<tr>
-								<td>Heading</td>
-								<td>Opens</td>
-								<td>Closes</td>
-								<td></td>
+								<th>Heading</th>
+								<th>Opens</th>
+								<th>Closes</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody class="wrapword">
@@ -65,12 +66,16 @@
 					</table>
 				</div>
 			</div>
-					<h id = "listHeading">Students in chosen group:</h>
-			
-			<div class="list" >
-				<ul id="listOfStudentsOfGroup" class="editable"></ul>
-			
+
+			<div class="list">
+				<div id="listHeading" >
+					<h>Students in chosen group:</h>
+					<ul id="listOfStudentsOfGroup" class="editable">
+					
+					</ul>
+				</div>
 			</div>
+		</div>
 		</div>
 		<script>
 		$(document)
@@ -103,9 +108,9 @@
 											function(event) {
 
 												document
-														.getElementById('divTable').style.visibility = 'hidden';
-												document.getElementById('listOfStudentsOfGroup').style.visibility = 'hidden';
-												document.getElementById('listHeading').style.visibility = 'hidden';
+														.getElementById('divTable').style.display = 'none';
+												document.getElementById('listOfStudentsOfGroup').style.display = 'none';
+												document.getElementById('listHeading').style.display = 'none';
 
 												if (!$('#resultTable tbody')
 														.is(':empty')) {
@@ -176,7 +181,7 @@
 																		.trim(response)
 																		&& groupId !== "null") {
 																	document
-																			.getElementById('divTable').style.visibility = 'hidden';
+																			.getElementById('divTable').style.display = 'none';
 																	alert("There are no homeworks in this group.")
 																}
 																for ( var i in response) {
@@ -229,7 +234,7 @@
 																	}
 																	if (groupId !== "null") {
 																		document
-																				.getElementById('divTable').style.visibility = 'visible';
+																				.getElementById('divTable').style.display = 'block';
 
 																	}
 																}
@@ -283,8 +288,8 @@
 															+ "</button></form></li>");
 									
 									document
-											.getElementById("listOfStudentsOfGroup").style.visibility = "visible";
-									document.getElementById('listHeading').style.visibility = 'visible';
+											.getElementById("listOfStudentsOfGroup").style.display = "block";
+									document.getElementById('listHeading').style.display = 'block';
 									
 								} else {
 									$('#listOfStudentsOfGroup')
@@ -293,8 +298,8 @@
 															+ response[i].username
 															+ "</button></form></li>");
 									document
-											.getElementById("listOfStudentsOfGroup").style.visibility = "visible";
-									document.getElementById('listHeading').style.visibility = 'visible';
+											.getElementById("listOfStudentsOfGroup").style.display = "block";
+									document.getElementById('listHeading').style.display = 'block';
 
 								}
 							}

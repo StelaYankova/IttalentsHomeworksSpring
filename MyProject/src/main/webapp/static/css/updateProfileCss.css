@@ -1,70 +1,55 @@
 @CHARSET "UTF-8";
 
-
-
 #formUpdateProfile {
 	margin: 0 auto;
 	padding-top: 3.750em;
 	width: 42%;
 }
 
-legend{
+legend {
 	text-align: left;
 }
 
 .control-label.col-sm-4 {
 	padding-right: 1.875em;
 }
+
 .form-group {
 	padding-left: 3.750em auto;
-	
 }
+
 #updateProfileButton {
 	background-color: #2E71AC;
-	text-align:center;
+	text-align: center;
 	color: #ffffff;
-	/* width:10em; */
-	/* margin-left:30%; */
-	/* margin-left:-1.em;
-	margin-bottom:0.5em; */
 }
-@media ( max-width :992px) {
-	
+
+/* @media ( max-width :992px) {
 	legend {
 		width: 70%;
 	}
-	
 }
-@media ( max-width :768px) {
+ */
+@media ( max-width :1000px) {
+	#formUpdateProfile {
+		width: 60%;
+	}
+}
+
+@media ( max-width :800px) {
 	.form-horizontal .control-label {
-    padding-top: 0.438em;
-    margin-bottom: 0;
-    text-align: left;
+		padding-top: 0.438em;
+		margin-bottom: 0;
+		text-align: left;
+	}
+	#formUpdateProfile {
+		width: 70%;
+	}
 }
 
-}
-	#updateProfileButton {
-/* margin-left:-0.8em;
-	font-size:1.5em; */
-}
-}
-/* @media ( max-width :1300px) {
-	.control-label.col-sm-4 {
-	padding-right: 1.875em;
-	width:100%;
-}
-
-.form-group {
-	
-	
-	padding-left: 3.750em auto;
-	width:100%;
-} */
-	#updateProfileButton {
-	/* width: 5em;
-    font-size: 1em;
-    text-align: center;
-    margin-left: 0.5em; */
-	
+@media ( max-width :590px) {
+	#formUpdateProfile {
+		width: 90%;
+	}
 }
 }

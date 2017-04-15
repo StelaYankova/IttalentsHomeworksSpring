@@ -1,9 +1,20 @@
 @CHARSET "UTF-8";
+.form-horizontal .control-label{
+	float:left;
+	text-align:left;
+}
 
 .studentSearch {
 	width: 18%;
 }
-
+div.ui-widget{
+	display: block;	
+}
+div.ui-widget:after {
+    content:'';
+    display:block;
+   clear:both;
+}
 .ui-helper-hidden-accessible {
 	display: none;
 }
@@ -14,42 +25,11 @@
     margin-left: 320px;
 }
 .form-group {
-	padding-right: 2.5em;
 	width: 25%;
 }
 .form-group:nth-last-child(2) {
-	padding-right: 0.5em;
 	width: 18.5%;
 }
-/* #listOfStudentsOfGroupHeading{
-	    visibility: hidden;
-    position: absolute;
-    margin-left: 291px;
-    margin-top: -10px;
-    text-align: center;
-    width: 25%;
-    visibility: hidden;
-    margin-left: 29%;
-    padding-top: 0em;
-    margin-top: 2em;
-    z-index: 1;
-    width: 15em;
- } */
-
-/* #listOfStudentsOfGroup {
-	visibility: hidden;
-	margin-left: 292px;
-	margin-top: 25px;
-	z-index: 1;
-	width: 25%;
- } */
-/*  #listOfStudentsOfGroup {
-    visibility: hidden;
-    margin-left: 29%;
-    padding-top: 1em;
-    z-index: 1;
-    width: 18em;
-} */
 #listHeadingAndStudents{
 	 visibility: hidden;
     margin-left: 27.3%;
@@ -72,34 +52,19 @@ ul.ui-autocomplete {
 .input-invalid-addStudentToGroup{
 	text-align: left;
 }
-
+#addStudentToGroupForm{
+	margin:0px auto;
+}
 #formSmallScreen{
 		display:none;
+		margin:0px auto;
 	}
 	#buttonAdd{
-		padding-top: 1.5em; width: 5%; padding-left:1em;
+		padding-top: 1.5em; width: 5%;
 	}
 	
-	@media (max-width: 1024px) {
-		#listHeadingAndStudents {
-    visibility: hidden;
-    margin-left: 26.9%;
-    padding-top: 2em;
-    z-index: 1;
-    width: 15em;
-}
-	}
-	@media (max-width: 1250px) {
-	#listHeadingAndStudents {
-    visibility: hidden;
-    margin-left: 26.9%;
-    padding-top: 2em;
-    z-index: 1;
-     width: 15em; 
-}
-	
-}
-@media (max-width: 1000px) {
+
+@media (max-width: 1250px) {
 	.form-group:nth-last-child(2) {
 		padding-right: 0em;
 		width: 20em;
@@ -108,30 +73,7 @@ ul.ui-autocomplete {
 	padding-right: 0px;
 	width: 20%;
 } 
-/* #listOfStudentsOfGroupHeading{
-	margin-left:18%;
-	
-} */
-#listHeadingAndStudents {
-    visibility: hidden;
-    margin-left: 18%;
-    padding-top: 2em;
-    z-index: 1;
-    width: 15em;
-}
-.form-control {
-    display: block;
-    width: 60%;
-    height: 34px;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 4px;
- }
+
 	#buttonAdd{
 		padding-left:0em;
 		width:20em;
@@ -144,156 +86,57 @@ ul.ui-autocomplete {
     width: 20em;
 }
 	#formLargeScreen{
-		display:none;
+		display:none;margin:0px auto;
 	}
 	#formSmallScreen{
 		display:block;
-		width:40%;
-		margin-left:0em;
+		width:34%;
+		margin:0px auto;
 	}
-	
+	#listHeadingAndStudents {
+    width: 27.5%;
+    margin-left: 23em;
 }
-/* #studentSearch {
-	width: 18%;
+	/* div.ui-widget{
+		width:90%;
+	} */
 }
 
-.ui-helper-hidden-accessible {
-	display: none;
-}
-.input-invalid-addStudentToGroup {
-    text-align: left;
-    color: red;
-    width: 20%;
-    margin-left: 20.000em;
-}
-.form-group {
-	padding-right: 3.125em;
-	width: 25%;
-}
-#listOfStudentsOfGroupHeading{
-	    visibility: hidden;
-    position: absolute;
-    margin-left: 18.188em;
-    margin-top: -0.625em;
-    text-align: center;
-    width: 25%;
- }
- #listHeadingAndStudents {
-	
- margin-left: 18.250em;
-	margin-top: 1.563em;
-	z-index: 1;
-	width: 55em;
-	width:40%;
-	 padding-top: 1em;
-    margin-left:3em; 
- }
-#formSmallScreen{
-		display:none;
-	}
-	#buttonAdd{
-		padding-top: 1.5em; width: 5%; padding-left:1em;
-	}
-	
-@media (max-width: 1000px){
-	#buttonAdd{
-		padding-left:0em;
-		width:20em;
-	}
-#studentSearch {
-    width: 20em;
-}
-
-.form-group {
-    width: 20em;
-}
-	#formLargeScreen{
-		display:none;
+@media (max-width: 1000px) {
+	#listHeadingAndStudents{
+		width: 28.5%;
+		margin-left:28.2em;
 	}
 	#formSmallScreen{
-		display:block;
-		width:40%;
-		margin-left:3em;
+		width:17%;
 	}
-	#listOfStudentsOfGroupHeading{
-	    visibility: hidden;
-    padding-left: 0em;
-	padding-top:-6em;
-    width: 20em;
-    margin-left:0%;
-    margin-top:-2em;
- }
-	#listHeadingAndStudents {
-	visibility: hidden;
-	padding-left: 0em;
-	padding-top:1em;
-    width: 20em;
-    margin-left:22%;
-    margin-top:2em;
-	margin-left: 18.250em;
-	margin-top: 1.563em;
-	z-index: 1;
-	width: 55em;
-	width:40%;
-	 padding-top: 1em;
-    margin-left:3em;
- }
+}
+@media (max-width: 992px) {
+	#listHeadingAndStudents{
+		width: 38%;
+		margin-left: 18em;
+	}
+	#formSmallScreen{
+		width:27%;
+	}
+}
+@media (max-width: 789px) {
+	#listHeadingAndStudents{
+		width: 50%;
+		margin:0px auto;
+	}
+	div.ui-widget{
+		width:76%;
+	}
+}
+@media ( max-width :590px) {
 	
-	#listHeadingAndStudents {
-	visibility: hidden;
-	margin-left: 18.250em;
-	margin-top: 1.563em;
-	z-index: 1;
-	width: 20em;
-	 padding-top: 1em;
-    margin-left:3em;
- }
- #listHeadingAndStudents {
-    visibility: hidden;
-    padding-top: 1em;
-   margin-left: -9em;
-    margin-left: -9em;
-    z-index: 1;
-    width: 70em;
-    display: block;
-}
-#listOfStudentsOfGroupHeading{
-	    visibility: hidden;
-    position: absolute;
-    margin-left: 18.188em;
-    margin-top: -0.625em;
-    text-align: center;
-    width: 25%;
- }
- 
- #listOfStudentsOfGroup {
-	visibility: hidden;
-	margin-left: 18.250em;
-	margin-top: 1.563em;
-	z-index: 1;
-	width: 20em;
- }
+#listHeadingAndStudents{
+		width: 89%;
+		margin:0px auto;
+	}
+	#addStudentToGroupForm {
+    margin-left: -4em;
 }
 
-
-
-#listOfStudentsOfGroup {
-	visibility: hidden;
-	margin-left: 18.250em;
-	margin-top: 1.563em;
-	z-index: 1;
-	width: 25%;
- }
-ul.ui-autocomplete {
-	list-style-type: none;
-	text-decoration: none;
-	
-}
-
-#addStudentToGroupDiv{
-	text-align:center;
-	margin-top:4.375em;
-}
-.input-invalid-addStudentToGroup{
-	text-align: left;
-} */
+}  

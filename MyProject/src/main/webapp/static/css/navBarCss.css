@@ -71,6 +71,7 @@ a.navbar-brand{
 	  padding-right:4.5em;
     /* padding-top: 2em;  */
     font-size:12px;
+    z-index:1;
 }
 .navbar-nav>li{
 	float:right;
@@ -147,6 +148,7 @@ a.navbar-brand{
     padding-left: 12.5em;
     margin-top: -4em;
     font-size: 12px;
+    z-index:1;
 }
 	.navbar-nav>li {
 		float: left;

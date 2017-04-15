@@ -1,5 +1,9 @@
 @CHARSET "UTF-8";
-
+#formAddHomework:after {
+    content:'';
+    display:block;
+   clear:both;
+}
 #formAddHomework {
 	margin: 0 auto;
  	padding-top: 3.750em;
@@ -33,4 +37,30 @@ legend{
 	legend {
 		width: 70%;
 	}
+} 
+
+
+@media ( max-width :1000px) {
+	
+#formAddHomework{
+		width:60%;
+	}
+
+}
+
+
+@media ( max-width :800px) {
+	
+#formAddHomework{
+		width:70%;
+	}
+
+}
+
+@media ( max-width :590px) {
+	
+#formAddHomework{
+		width:90%;
+	}
+
 } 

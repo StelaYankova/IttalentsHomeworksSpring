@@ -1,5 +1,9 @@
 @CHARSET "UTF-8";
-
+/* #updateHomeworkForm:after {
+    content:'';
+    display:block;
+   clear:both;
+} */
 #formUpdate {
 	margin: 0 auto;
 	padding-top: 3.750em;
@@ -10,22 +14,24 @@
 	width: 12.500em;
 }
 
+#readAndRemoveHomework {
+    position: absolute;
+    display: inline-block;
+    left:55%;
+    top:16.8em;
+    z-index: 1;
+    width: 30%;
+}
 #removeHomeworkForm {
-	position: absolute;
-	width: 10%;
-	/* padding-left: 40%; */
-	padding-left: 70%;
-	padding-top: 4.063em;
+    position: absolute;
+    left: 7em;
+    top: -0.4em;
+    width: 10%;
 }
-
 #downloadHomeworkForm {
-	position: absolute;
-	/* padding-left: 33.750em; */
-	padding-left: 50%;
-	padding-top: 4.188em;
-	z-index:1;
+	width: 10%;
 }
-
+ 
 legend{
 	text-align: left;
 }
@@ -49,17 +55,87 @@ legend{
 		padding-right: 1.875em;
 		width: 100%
 	}
-	legend {
+	/* legend {
 		width: 70%;
-	}
+	} */
 } 
 
 @media ( max-width :774px) {
 	#downloadHomeworkForm {
-	position: absolute;
-	/* padding-left: 33.750em; */
-	padding-left: 24%;
-	padding-top: 2em;
-	z-index:1;
+	width:5%;
 }
 } 
+
+#downloadHomeworkForm {
+	padding-left:5em;
+}
+#removeHomeworkForm {
+    left: 12em;
+}
+@media ( max-width :1000px) {
+	
+#formUpdate{
+		width:60%;
+	}
+#downloadHomeworkForm {
+	padding-left:3.3em;
+}
+#removeHomeworkForm {
+    left: 10.6em;
+}
+
+}
+
+
+@media ( max-width :800px) {
+	
+#formUpdate{
+		width:70%;
+	}
+#downloadHomeworkForm {
+	padding-left:3.3em;
+}
+#removeHomeworkForm {
+    left: 11em;
+}
+}
+
+@media ( max-width :590px) {
+	#downloadHomeworkForm button{
+		font-size:0.74em;
+	}
+#formUpdate{
+		width:90%;
+	}
+#downloadHomeworkForm {
+    padding-left: 0.3em;
+    margin-left: 0.6em;
+}
+#removeHomeworkForm {
+    left: 7em;
+}
+
+}
+@media ( max-width :330px) {
+
+#readAndRemoveHomework {
+    position: absolute;
+    display: inline-block;
+    left: 57%;
+    top: 18.1em;
+    z-index: 1;
+    width: 30%;
+}
+}
+
+
+@media ( min-width :1300px) {
+
+#readAndRemoveHomework {
+    position: absolute;
+    display: inline-block;
+    left: 52.5%;
+    z-index: 1;
+    width: 30%;
+}
+}

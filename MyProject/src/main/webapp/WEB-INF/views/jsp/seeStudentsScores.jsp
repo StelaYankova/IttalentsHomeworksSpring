@@ -66,20 +66,21 @@
 				</c:if>
 			</select>
 		</div>
+				<div id = "tableAndStudents" style = "">
 		
 		<div id="currTable">
-			<div id="divTable">
+			<div id="divTable" style = "width:100%">
 			
 				<table id="resultTable" border="1"
 					class="table table-striped table-bordered table-hover dataTables_wrapper form-inline dt-bootstrap">
 					<thead class="wrapword">
 						<tr>
-							<td>Heading</td>
+							<th>Heading</th>
 							<!-- <td>Opens</td>
 						<td>Closes</td>
 						 -->
-							<td>Teacher score</td>
-							<td>Teacher comment</td>
+							<th>Teacher score</th>
+							<th>Teacher comment</th>
 						</tr>
 					</thead>
 					<tbody class="wrapword">
@@ -90,12 +91,15 @@
 			</div>
 			</div>
 		</div>
-		<h id = "listHeading">Students in chosen group:</h>
+		
 		<div class="list">
+		<h id = "listHeading">Students in chosen group:</h>
 			<ul id="listOfStudentsOfGroup" class="editable"></ul>
 		</div>
 	</div>
-	<script>
+	</div>
+</body>
+<script>
 		var table = $('#resultTable').DataTable({
 			"aoColumnDefs" : [ {
 				'bSortable' : true,
@@ -321,5 +325,4 @@
 			});
 		});
 	</script>
-</body>
 </html>

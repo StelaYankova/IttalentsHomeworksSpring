@@ -1,13 +1,13 @@
 @CHARSET "UTF-8";
-
+/* 
 #divTable{
 	width:60%;
 }
 .dataTables_wrapper .dataTables_paginate {
     padding-bottom: 15px;
     padding-right: 0px;
-/*    	padding-top: 8px;
- */    position: relative;
+   	padding-top: 8px;
+    position: relative;
 }
 .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter,
 	.dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing
@@ -55,10 +55,10 @@
 }
 
 .list {
-	/* width: 10%;
+	width: 10%;
 	margin-top: 151px;
 	margin-left: 70%;
-	margin-bottom:50%;  */
+	margin-bottom:50%; 
 	width: 10%;
     padding-top: 163px;
     padding-left: 870px;
@@ -83,4 +83,203 @@
 }
 #studentAverageScore{
 	visibility: hidden;
+ }*/
+ 
+ /* .list:after {
+  content: "";
+  display: table;
+  clear: both;
+} */
+#divTable table.dataTable thead th{
+	font-size:1.1em;
 }
+#listOfStudentsOfGroup {
+	position: absolute;
+	padding-bottom:3.750em;
+ }
+#select{
+	position: absolute;
+	margin-top: 40px;
+	margin-left: 3.750;
+	width: 80%;
+	padding-bottom:3.750em;
+}
+/* #resultTable{
+	margin: 0 auto;
+    width: 95%;
+} */
+#divTable {
+	padding-top: 28px;
+	/* margin: 0 auto; */
+	width: 100%;
+	align:center;
+	visibility:hidden;
+	padding-bottom:3.750em;
+}
+#listHeading {
+	visibility: hidden;
+	position: absolute;
+	padding-top: 140px;
+	padding-left: 880px;
+}
+.list {
+	/* width: 10%;
+	margin-top: 191px;
+	margin-left: 70%;
+	margin-bottom:50%;  */
+	/* width: 10%;
+    padding-top: 163px;
+    padding-left: 870px;
+    padding-bottom: 300px; */
+    /* display:inline-block;
+    content: ""; */
+    width:40%; border:1px solid blue; float: left;display:block;
+    padding-left: 4em;
+    padding-top: 11.4em;
+}
+.list > #listOfStudentsOfGroup button{
+	font-size: 0.9em;
+}
+#pageTitle {
+	text-align: center;
+}
+
+/* #divTable{
+	width:60%;
+} */
+.dataTables_wrapper .dataTables_paginate {
+    padding-bottom: 15px;
+    padding-right: 0px;
+    position: relative;
+}
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter,
+	.dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing
+	{
+	color: #333;
+	padding-left: 3px;
+	padding-bottom: 15px;
+	padding-top: 12px;
+}
+#listOfStudentsOfGroup {
+	visibility: hidden;
+	border-style: double;
+	z-index: 1;
+	height: 305px;
+	width: 290px; 
+	overflow: hidden;
+	overflow-y: scroll;
+	overflow-x: scroll;
+	padding-bottom:3.750em;
+	
+}
+#tableAndStudents{
+	width:100%;overflow:hidden;  border:1px solid black;  display:inline-block;
+}
+#currTable {
+   /*  width: 90%; */
+    float: left;
+    padding-left: 70px;
+    padding-top: 80px;
+    padding-bottom: 3.750em;
+    width:60%; border:1px solid orange; float: left;
+}
+#divTable table.dataTable tbody td button{
+    padding: 0px 0px 0px 0px;
+    font-size: 1em;
+}
+#divTable {
+		width: 92%;
+		font-size: 0.9em;
+		margin-left: 0em;
+		margin-right: 0em;
+	}
+@media ( max-width :900px) {
+	/* #tableAndStudents {
+		display: table;
+	}
+	#currTable {
+		display: table-footer-group;
+	}
+	.list {
+		display: table-header-group;
+	} */
+	#tableAndStudents {
+  
+  /* Setup Flexbox */
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+
+  /* Reverse Column Order */
+  -webkit-flex-flow: column-reverse;
+  flex-flow: column-reverse;
+
+}
+	.list > #listOfStudentsOfGroup button{
+	font-size: 0.7em;
+}
+	#currTable {
+		width: 100%;
+	}
+	.list {
+		width: 100%;
+/* 		margin-left: 15em;
+ */	}
+ .list>#listOfStudentsOfGroup button{
+ 	padding-left:0px;
+ }
+	#listOfStudentsOfGroup {
+    visibility: hidden;
+    border-style: double;
+    z-index: 1;
+    height: 265px;
+    padding-bottom: 3.750em;
+    padding-left: 87px;
+    /* width:100%; */
+}
+}
+
+@media ( max-width :1000px) {
+	/* #divTable {
+		width: 60%;
+	} */
+	#divTable {
+		width: 70%;
+		font-size: 0.7em;
+		margin-left: 0em;
+		margin-right: 0em;
+	}
+	#divTable table.dataTable tbody td{
+    padding: 0px 0px;
+	}
+	#divTable table.dataTable tbody th {
+    padding: 0px 0px;
+	}
+}
+
+#resultTable{
+	margin-left:0px;
+	margin-right:0px;
+	width:100% !important;
+}
+
+@media ( max-width :650px) {
+	/* div#currTable {
+		width:100%;
+		padding-left:0px;
+	} */
+	
+	#currTable{
+		margin-right:0px;
+		padding-left:0px;
+	}
+	div#divTable{
+		margin-right:0px;
+		margin:0px;
+		    width: 100%;
+	}
+	
+	
+ 

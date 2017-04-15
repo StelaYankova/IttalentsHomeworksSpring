@@ -9,32 +9,36 @@ label {
 	text-align: left;
 	width: 140px;
 }
-​#currHomework{
- 	width: 36%;
-    float: left;    
-	padding-left:100px;
-	padding-right:20px;
-	padding-top:60px;
+#solution{
+	display:none;
 }
 #solution{
  width: 52%;
     float: left;
     padding-left: 50px;
-    padding-top: 75px;
-  padding-bottom: 100px;
+    padding-top: 5.7em;
  }
 
 #currTaskSolution {
-	visibility: hidden;
+	display:none;
 }
+
+/* #currHomework {
+    width: 44%;
+    float: left;
+    padding-left: 19px;
+    padding-right: 101px;
+    padding-top: 60px;
+    padding-bottom: 100px;
+} */
+
 #currHomework {
-/* 	width: 40%;
- */ width: 36.5%;
- 	float: left;
-	padding-left: 100px;
-	padding-right: 20px;
-	padding-top: 60px;
-	padding-bottom: 100px;
+    width: 44%;
+    float: left;
+        padding-left: 7em;
+    /* padding-left: 19px; */
+    padding-right: 1.313em;
+    padding-top: 60px;
 }
 .input-invalid-or-empty{
 	width: 250px;
@@ -50,9 +54,12 @@ label {
 	font-size: 12px;
 	font-style: italic
 }
+.dataTables_scrollBody{
+	max-height:40.5vh !important;
+}
 #saveButton{
 	float:left;
-		margin-bottom: 60px;
+		/* margin-bottom: 60px; */
 	
 }
 .invalidData {
@@ -64,6 +71,10 @@ label {
 #tasksTable{
 	border-size: 2px;
 	border-style: groove;
+/* 	width:100%;
+ */}
+.dataTables_scrollHeadInner{
+ 	width:/* 100% !important */;
 }
 #tasksTable td{
 	padding-bottom: 15px;
@@ -77,4 +88,103 @@ label {
 }
 #taskUpload{
 	visibility: hidden;
+	    padding-bottom: 0.1em;
+	
+}
+#currTaskSolution{
+	overflow-y:scroll;
+	 height: 42em;
+    width: 30em;
+}
+ @media ( min-width : 1280px) {
+#currTaskSolution{
+	overflow-y:scroll;
+	 height: 43em;
+    width: 30em;
+}
+} 
+@media ( max-width : 1025px) {
+	#textareaComment {
+		overflow-y: scroll;
+		resize: none;
+		width: 488px;
+		height: 94px;
+		border-size: 2px;
+		border-style: groove;
+		font-size: 12px;
+		font-style: italic;
+	}
+	#solution{
+		width:100%;
+	}
+	
+	.formInput {
+    width: 38%;
+    clear: both;
+}
+	#currHomework {
+    width: 100%;
+    padding-right: 1em;
+    padding-left: 1em;
+    padding-bottom:0em;
+}
+
+#solution {
+   /*  width: 52%; */
+    float: left;
+    padding-left: 1em;
+    padding-top: 1em;
+}
+#currTaskSolution {
+    height: 33em;
+    /* margin-bottom:15em; */
+     width:71em; 
+}
+}
+ @media ( max-width : 1011px) {
+#currTaskSolution {
+    height: 33em;
+    width: 68em; 
+/*     margin-bottom:15em;
+ */}
+}
+ @media ( max-width : 992px) {
+#currTaskSolution {
+    height: 33em;
+    width: 51.5em; 
+/*     margin-bottom:15em;
+ */    display:block;
+}
+#solution {
+    /* width: 52%; */
+    float: left;
+    padding-left: 1em;
+    padding-top: 1em;
+    height:36em !important;
+    /*  height: 25em; */
+} 
+@media ( max-width : 991px) {
+#currTaskSolution {
+    height: 33em;
+    width: 51.5em; 
+/*     margin-bottom:15em;
+ */    /* width:70.5em; */
+}
+}
+@media ( max-width : 789px) {
+#currTaskSolution {
+    height: 33em;
+    width: 41.5em; 
+/*     margin-bottom:15em;
+ */    /* width:70.5em; */
+}
+}
+@media ( max-width : 590px) {
+	#textareaComment {
+		width: 25em;
+	}
+	#currTaskSolution {
+    width: 21em;
+    padding-left:0em;
+}
 }

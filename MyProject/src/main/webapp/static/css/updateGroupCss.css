@@ -2,78 +2,54 @@
 
 #formUpdateGroup {
 	margin: 0 auto;
-	padding-top: 60px;
+	padding-top: 3.750em;
 	width: 42%;
-	/* align:right; */
 }
-legend{
+
+legend {
 	text-align: left;
 }
 
-.control-label.col-sm-4{
-	padding-right: 30px;
+.control-label.col-sm-4 {
+	padding-right: 1.875em;
+}
+
+.form-group {
+	padding-left: 3.750em auto;
 }
 
 #updateGroupButton {
 	background-color: #2E71AC;
-	color: #ffffff
+	text-align: center;
+	color: #ffffff;
 }
 
 /* @media ( max-width :992px) {
-
-legend {
+	legend {
 		width: 70%;
 	}
 }
-@media ( max-width :768px) {
+ */
+@media ( max-width :1000px) {
+	#formUpdateGroup {
+		width: 60%;
+	}
+}
+
+@media ( max-width :800px) {
 	.form-horizontal .control-label {
-    padding-top: 0.438em;
-    margin-bottom: 0;
-    text-align: left;
-}
-#formUpdateGroup {
-	
-	align:left;
-}
-
-}
-@media ( max-width :1300px) {
-	.control-label.col-sm-4 {
-	padding-right: 1.875em;
-	width:100%;
-}
-
-.form-group {
-	padding-left: 3.750em auto;
-	width:100%;
-}
-} */
-
-
-@media ( max-width :992px) {
-
-legend {
+		padding-top: 0.438em;
+		margin-bottom: 0;
+		text-align: left;
+	}
+	#formUpdateGroup {
 		width: 70%;
 	}
 }
-@media ( max-width :768px) {
-	.form-horizontal .control-label {
-    padding-top: 0.438em;
-    margin-bottom: 0;
-    text-align: left;
-}
 
+@media ( max-width :590px) {
+	#formUpdateGroup {
+		width: 90%;
+	}
 }
-/* @media ( max-width :1300px) {
-	.control-label.col-sm-4 {
-	padding-right: 1.875em;
-	width:100%;
-} 
-
-.form-group {
-	
-	
-	padding-left: 3.750em auto;
-	width:100%;
 }
-}*/

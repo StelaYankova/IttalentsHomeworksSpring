@@ -42,11 +42,16 @@
 		
 		<br>
 		<div id="divTable">
-		<form action="./createGroup" method="GET">
-			<button style = "width:366px" id="createButtonPosition"
+		<!-- <form action="./createGroup" method="GET">
+			<button id="createButtonPosition"
 				class="glyphicon glyphicon-plus btn-primary btn btn-md"
 				type="submit"><b><font size="3">  Create group</font></b></button>
-		</form>
+		</form> -->
+		<a href = "./createGroup" id="createButtonPosition"
+				class="glyphicon glyphicon-plus btn-primary btn "
+				type="submit"><b><font size="3">  Create group</font></b></a>
+				
+				
 			<table id="resultTable" border="1"
 				class="table table-striped table-bordered table-hover">
 				<thead>
@@ -58,7 +63,7 @@
 				<tbody>
 					<c:forEach var="group" items="${applicationScope.allGroups}">
 						<tr>
-							<td><form action="./updateGroup" method="GET">
+							<td><div id = "tdContent"><form action="./updateGroup" method="GET" id = "updateGroupForm">
 									<input type="hidden" name="groupId" value="${group.id}">
 									<button class="btn btn-link" type="submit">
 										<c:out value="${group.name}"></c:out>
@@ -70,7 +75,7 @@
 											class="glyphicon glyphicon-remove btn btn-default btn-xs"
 											onclick="javascript:return confirm('Are you sure you want to remove this group permanently?')"></button>
 									</form>
-						</td></tr>
+						</div></td></tr>
 					</c:forEach>
 				</tbody>
 			</table>

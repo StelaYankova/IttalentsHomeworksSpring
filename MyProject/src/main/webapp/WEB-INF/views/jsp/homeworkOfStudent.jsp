@@ -25,12 +25,9 @@
 						test="${not empty sessionScope.throughtSeeOrUpdateHomeworks}">
 						<a href="http://localhost:8080/MyProject/seeOrUpdateHomeworks">See/
 							Update homeworks</a>
-						
-
 					</c:if> <c:if test="${empty sessionScope.throughtSeeOrUpdateHomeworks}">
 						<a href="http://localhost:8080/MyProject/studentsScores">See
 							student's scores</a>
-						
 					</c:if><span
 					class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span> </span></li></li>
@@ -99,7 +96,7 @@
 			</c:if>
 				<form action="./UpdateTeacherGradeAndCommentServlet" method="POST"
 				id="UpdateTeacherGradeAndCommentForm" accept-charset="UTF-8">
-				<div class="block">
+				<div class="formInput">
 					<label><b>Teacher grade:</b></label> <span class="col-sm-4">
 						<input type="number" class="form-control" min=0 max=100 id="grade"
 						value="${sessionScope.currHomework.teacherGrade}" name="grade" />
@@ -116,7 +113,7 @@
 					</c:if>
 				</c:if>
 				<p id="gradeMsg" class="invalidData"></p>
-				<div class="block">
+				<div class="formInput">
 					<label><b>Teacher comment:</b></label>&nbsp; <br>
 					<textarea class="form-control" id="textareaComment" placeholder = "Enter comment..." maxlength="250"
 						name="comment"><c:out
@@ -140,7 +137,7 @@
 		<div id="solution">
 		<div id="taskUpload"></div>
 			<textarea id="currTaskSolution" disabled="disabled"
-				class="form-control" cols="30" rows="27">
+				class="form-control">
 	</textarea>
 		</div>
 	</div>
@@ -236,8 +233,9 @@
 									"Task " + taskNum + " uploaded on: "
 											+ uploadedRep);
 							$("#currTaskSolution").html(response.solution);
-							document.getElementById("taskUpload").style.visibility = "visible";
-							document.getElementById("currTaskSolution").style.visibility = "visible";
+							document.getElementById("taskUpload").style.display = "block";
+							document.getElementById("currTaskSolution").style.display = "block";
+							document.getElementById("solution").style.display = "block";
 						}
 					});
 		}

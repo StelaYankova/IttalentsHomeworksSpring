@@ -30,7 +30,7 @@
 		</nav>
 	</div>
 	<div id="pageWrapper">
-		<h4 id = "pageTitle"><b><u>Your scores</u></b></h4>
+		<h4 id = "pageTitle" ><b><u>Your scores</u></b></h4>
 		<div id = "select" >
 		Choose a group: <select id="selectGroup" class="selectpicker" data-size="5"> 
 			<option value="null">-</option>
@@ -44,11 +44,11 @@
 				class="table table-striped table-bordered table-hover">
 				<thead class="wrapword">
 					<tr>
-						<td>Heading</td>
+						<th>Heading</th>
 						<!-- <td>Opens</td>
 						<td>Closes</td> -->
-						<td>Teacher score</td>
-						<td>Teacher comment</td>
+						<th>Teacher score</th>
+						<th>Teacher comment</th>
 					</tr>
 				</thead>
 				<tbody class=wrapword>
@@ -73,13 +73,13 @@
 									"targets" : [ 0, 1, 2],
 								} ],
 								"dom" : '<"top"l>rt<"bottom"ip><"clear">',
-								"aoColumns" : [ {
+								/* "aoColumns" : [ {
 									sWidth : '14%'
 								}, {
 									sWidth : '12%'
 								}, {
 									sWidth : '12%'
-								}],
+								}], */
 								/* "lengthMenu" : [ 5 ], */
 								"bDestroy" : true,
 								"bPaginate" : false,
@@ -90,8 +90,8 @@
 									.on(
 											'change',
 											function() {
-												document.getElementById('divTable').style.visibility = 'hidden';
-												document.getElementById('studentAverageScore').style.visibility = 'hidden';
+												document.getElementById('divTable').style.display = 'none';
+												document.getElementById('studentAverageScore').style.display = 'none';
 												var selected = $(this).find(":selected").val()
 												$('#resultTable tbody')
 												.html('');
@@ -175,14 +175,14 @@
 																					'no data available in table');
 																}
 																if(selected == "null"){
-																	document.getElementById('divTable').style.visibility = 'hidden';
+																	document.getElementById('divTable').style.display = 'none';
 
 																}else{
-																	document.getElementById('divTable').style.visibility = 'visible';
+																	document.getElementById('divTable').style.display = 'block';
 
 																}
 																var answer = (averageScore/numberHomeworks).toFixed(1);
-																document.getElementById("studentAverageScore").style.visibility = "visible";
+																document.getElementById("studentAverageScore").style.display = "block";
 															
 											if (!$('#score').is(':empty')) {
 																	$("#score").empty();

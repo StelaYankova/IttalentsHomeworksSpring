@@ -44,7 +44,7 @@
 			 
 				<div id = "formSmallScreen">
 				<form action="./addOrRemoveStudent" method="POST"
-					class="form-horizontal" id="addStudentToGroupForm" style="margin-left: 40%">
+					class="form-horizontal" id="addStudentToGroupForm" >
 					<c:if test="${not empty sessionScope.invalidFields}">
 						<c:if test="${sessionScope.invalidFields}">
 							<p class="input-invalid-addStudentToGroup">You have invalid
@@ -88,8 +88,8 @@
 						<!-- required -->
 					</div>
 					<div class="form-group" style="padding-top: 0.125em;">
-						<label class="control-label col-sm-9"
-							style="padding-right: 1.875em; padding-bottom: 0.313em;">Choose
+						<label class="control-label col-sm-13"
+							style="padding-bottom: 0.313em;">Choose
 							group:</label> <select class="selectpicker form-control chosenGroup" name="chosenGroup"
 							>
 							<!-- required -->

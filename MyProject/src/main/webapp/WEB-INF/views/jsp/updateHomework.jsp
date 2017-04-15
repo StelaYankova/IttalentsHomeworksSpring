@@ -44,9 +44,9 @@
 			</c:if>
 		</c:if>
 	<div id="pageWrapper">
-		<div id = "downloadHomeworkForm">
+	<div id = "readAndRemoveHomework">
 			<form action="./ReadHomeworkServlet"
-				method="GET">
+				method="GET" id = "downloadHomeworkForm">
 				<input type='hidden' value='${sessionScope.currHomework.tasksFile}'
 					name='fileName'>
 				 <button class='btn btn-link btn-xs' type='submit'><u>download tasks</u>
@@ -56,13 +56,12 @@
 								value="${sessionScope.currHomework.heading }.pdf" /></i></b> --%>
 				</button>
 			</form>
-		</div>
 		<form action="./RemoveHomeworkDetails"
 			method="POST" id = "removeHomeworkForm" >
 							<button type="submit"
 						class="glyphicon glyphicon-remove btn btn-default btn-xs"
 						onclick="javascript:return confirm('Are you sure you want to remove this homework permanently?')"></button>
-	</form>
+	</form></div>
 		<div id="formUpdate" align="right">
 		
 			<legend>Update homework</legend>

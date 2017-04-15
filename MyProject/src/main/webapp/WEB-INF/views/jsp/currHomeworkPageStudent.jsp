@@ -77,7 +77,7 @@
 			</div>
 			
 			<!-- </div> -->
- 			<div id="id"></div>
+ 			<div id="divTable">
  			<table id="tasksTable" 
 				class="table table-striped table-bordered table-hover">
 				<thead>
@@ -120,7 +120,7 @@
 						</tr>
 					</c:forEach>
 				</tbody>
-			</table>
+			</table></div>
 			<br> <b>Teacher grade:</b>
 			<c:out value="${sessionScope.currHomework.teacherGrade }" />
 
@@ -130,18 +130,18 @@
 			<br> <br>
 		</div>
 
-		<div class="solution">
+		<div id="solution">
 			<c:if test="${sessionScope.hasUploadTimeCome == 'true'}">
 				<div id="taskUpload"></div>
 				<c:if test="${sessionScope.hasUploadTimePassed == 'false'}">
 					<textarea id="currTaskSolution"
-						class="form-control" cols="30" rows="27">
+						class="form-control" ><!-- cols="30" rows="27" -->
 					</textarea>
 				</c:if>
 				<c:if test="${sessionScope.hasUploadTimePassed == 'true'}">
 					<textarea id="currTaskSolution" disabled="disabled"
-						class="form-control" cols="30"
-						rows="27">
+						class="form-control"><!--  cols="30"
+						rows="27" -->
 					</textarea>
 				</c:if>
 			</c:if>
@@ -283,8 +283,9 @@ function uploadFile(e){
 								"Task " + taskNum + " uploaded on: "
 										+ uploadedRep);
 						$("#currTaskSolution").html(response.solution);
-						document.getElementById("taskUpload").style.visibility = "visible";
-						document.getElementById("currTaskSolution").style.visibility = "visible";
+						document.getElementById("taskUpload").style.dislpay = "block";
+						document.getElementById("currTaskSolution").style.display = "block";
+						document.getElementById("solution").style.display = "block";
 						if (uploaded === "-") {
 							document.getElementById("currTaskSolution").disabled = true;
 						} else {

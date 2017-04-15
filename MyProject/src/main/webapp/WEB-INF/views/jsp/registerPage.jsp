@@ -9,9 +9,13 @@
 <%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
  --%><link href="<c:url value="css/registerPageCss.css" />" type="text/css" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" type="text/css" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="HandheldFriendly" content="true">
 </head>
 <body>
 	<%@ include file="navBarHomePage.jsp"%>
+	
 	<c:if test="${not empty invalidFields}">
 		<c:if test="${not invalidFields}">
 			<div class="alert alertRegisterPage alert-success">
@@ -19,8 +23,8 @@
 			</div>
 		</c:if>
 	</c:if>
-	<div id="pageWrapperRegister">
-		<div id="formRegister" align="center">
+	<div id="pageWrapperRegister" style = "">
+		<div id="formRegister" style = "">
 			<legend>Registration</legend>
 			<c:if test="${not empty invalidFields}">
 				<c:if test="${invalidFields}">

@@ -1,17 +1,130 @@
 @CHARSET "UTF-8";
+/* #pageWrapperRegister{
+	padding-bottom: 3.750em;
+	margin-left:auto;
+	margin-right:auto;
+} */
 
-#pageWrapperRegister{
-	padding-bottom: 60px;
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+   /* margin-bottom: 25px; */
+   /* color:#2E71AC; */
+}
+#pageWrapperRegister {
+	max-width: 73.125em;
+	padding-top: 2.500em;
+	margin-left: 1.250em;
+	margin-right: 1.250em;
+	/* margin-bottom:170px; */
+	margin-bottom: 14em;
+	margin-left: auto;
+	margin-right: auto;
+	/* width:960px; */
+}
+
+.alertRegisterPage {
+	position: absolute;
+	top: 5.063em;
+	width: 100%;
 }
 #formRegister {
 	margin: 0 auto;
- 	padding-top: 120px;
+	padding-top: 5em;
+	width: 42%;
+}
+
+legend{
+	text-align: left;
+}
+
+.control-label.col-sm-4 {
+	padding-right: 1.875em;
+}
+.form-group {
+	padding-left: 3.750em auto;
+	
+}
+#registerButton {
+	background-color: #2E71AC;
+	text-align:center;
+	color: #ffffff;
+}
+
+
+
+@media ( max-width :1000px) {
+	
+#formRegister{
+		width:60%;
+	}
+
+}
+@media ( max-width :992px) {
+	
+	legend {
+		width: 70%;
+	}
+	#pageWrapperRegister {
+	width:53.125em;
+	    margin-bottom: 24em;
+}
+	
+}
+
+@media ( max-width :789px) {
+	.form-horizontal .control-label {
+    padding-top: 0.438em;
+    margin-bottom: 0;
+    text-align: left;
+}
+#formRegister{
+		width:70%;
+	}
+#pageWrapperRegister {
+	width:43.125em;
+	    
+}
+}
+
+@media ( max-width :589px) {
+	
+#formRegister{
+		width:90%;
+	}
+#pageWrapperRegister {
+	width:23.125em;
+	   
+}	
+}
+
+
+}
+
+/* 
+legend{
+	 text-align: left;
+}
+
+.control-label.col-sm-4{
+	padding-right: 1.875em;
+}
+
+.container{
+	width:1170px;
+}
+
+#formRegister {
+	margin: 0 auto;
+ 	padding-top: 120em;
  	width: 40%; 
- 	padding-bottom: 60px;
+ 	padding-bottom: 3.750em;
 }
 
 .form-group {
-	margin-left: 60px auto;
+	margin-left: 3.750em auto;
 }
 
 legend{
@@ -19,11 +132,11 @@ legend{
 }
 
 .control-label.col-sm-4{
-	padding-right: 30px;
+	padding-right: 1.875em;
 }
 
 #registerButton {
-	margin-right: 30px;
+	margin-right: 1.875em;
 	background-color: #2E71AC;
 	color: #ffffff;
 }
@@ -31,6 +144,21 @@ legend{
 
 .alertRegisterPage {
 	position: absolute;
-	top: 81px;
+	top: 5.063em;
 	width: 100%;
 }
+@media ( max-width :992px) {
+	.form-group {
+		margin-bottom: 0.938em;
+		width: 100%;
+		text-align: left;
+	}
+	.control-label.col-sm-4 {
+		padding-right: 1.875em;
+		width: 100%
+	}
+	legend {
+		width: 70%;
+	}
+} 
+ */ 
