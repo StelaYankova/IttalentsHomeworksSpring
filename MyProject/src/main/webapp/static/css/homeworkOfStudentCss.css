@@ -1,5 +1,7 @@
 @CHARSET "UTF-8";
-
+#grade{
+	width:22%;
+}
 label {
 	display: inline-block;
 	*display: inline; /* for IE7*/
@@ -149,6 +151,9 @@ label {
  */}
 }
  @media ( max-width : 992px) {
+ #grade {
+    width: 23%;
+}
 #currTaskSolution {
     height: 33em;
     width: 51.5em; 
@@ -172,16 +177,22 @@ label {
 }
 }
 @media ( max-width : 789px) {
+	#grade {
+    width: 30.7%;
+}
 #currTaskSolution {
     height: 33em;
-    width: 41.5em; 
+    width: 38.4em;
 /*     margin-bottom:15em;
  */    /* width:70.5em; */
 }
 }
 @media ( max-width : 590px) {
+	.formInput {
+    width: 73%;
+}
 	#textareaComment {
-		width: 25em;
+		width: 24em;
 	}
 	#currTaskSolution {
     width: 21em;

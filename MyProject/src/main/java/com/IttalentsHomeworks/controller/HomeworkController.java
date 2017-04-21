@@ -1474,10 +1474,10 @@ public class HomeworkController {
 					request.getSession().setAttribute("GradeTooLong", true); // success
 				} else {
 					boolean isGradeValueValid = false;
-					if (!doesGradeHaveInvalidSymbols(teacherGradeString.trim())) {
+					if (doesGradeHaveInvalidSymbols(teacherGradeString.trim())) {
 						teacherGrade = Integer.parseInt(teacherGradeString.trim());
 						// grade >=0 <=100
-						if (isGradeValueValid(teacherGrade)) {
+						if (!isGradeValueValid(teacherGrade)) {
 							isGradeValueValid = true;
 						}
 					}

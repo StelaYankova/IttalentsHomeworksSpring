@@ -249,6 +249,7 @@ function uploadFile(e){
 		$('.input-invalid').empty();
 		var taskNum = sessionStorage.getItem("currTask");
 		var text = document.getElementById("currTaskSolution").value;
+		console.log(taskNum);
 		$
 				.ajax({
 					url : './SaveChangedSolutionText',
@@ -264,10 +265,16 @@ function uploadFile(e){
 									.getItem("currTaskSolution");
 						}
 					}
+				
+					/* sessionStorage.setItem("currTask", taskNum);
+					sessionStorage.setItem("currTaskSolution",
+							response.solution); */
 				})
 	}
+	
 	function seeTaskSolution(taskNum) {
 		$('.input-invalid').empty();
+		console.log(taskNum + " !");
 		$
 				.ajax({
 					url : './ReadJavaFileServlet',
@@ -282,8 +289,8 @@ function uploadFile(e){
 						$("#taskUpload").html(
 								"Task " + taskNum + " uploaded on: "
 										+ uploadedRep);
-						$("#currTaskSolution").html(response.solution);
-						document.getElementById("taskUpload").style.dislpay = "block";
+						document.getElementById('currTaskSolution').value = response.solution;
+						document.getElementById("taskUpload").style.display = "block";
 						document.getElementById("currTaskSolution").style.display = "block";
 						document.getElementById("solution").style.display = "block";
 						if (uploaded === "-") {

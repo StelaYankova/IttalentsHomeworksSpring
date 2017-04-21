@@ -37,8 +37,8 @@
 			<form class="form-horizontal" name="registerForm" id="registerForm"
 				action="./RegisterServlet" method="POST">
 				<div class="form-group">
-					<label for="username" class="control-label col-sm-4">Username:</label>
-					<div class="col-sm-7">
+					<label for="username" class="control-label">Username:</label>
+					<div class="control-label-input">
 						<input type="text" class="form-control"
 							placeholder="Enter username" name="username" maxlength="15"
 							value="${userTry.username}" data-toggle="popover"
@@ -65,8 +65,8 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="password" class="control-label col-sm-4">Password:</label>
-					<div class="col-sm-7">
+					<label for="password" class="control-label">Password:</label>
+					<div class="control-label-input">
 						<input type="password" class="form-control" maxlength="15"
 							name="password" value="${userTry.password }"
 							placeholder="Enter password" data-toggle="popover"
@@ -83,8 +83,8 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="repeatedPassword" class="control-label col-sm-4">Repeat password:</label>
-					<div class="col-sm-7">
+					<label for="repeatedPassword" class="control-label">Repeat password:</label>
+					<div class="control-label-input">
 						<input type="password" class="form-control" maxlength="15"
 							name="repeatedPassword" placeholder="Repeat password"
 							value="${userTry.repeatedPassword }" required />
@@ -98,8 +98,8 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="email" class="control-label col-sm-4">Email:</label>
-					<div class="col-sm-7">
+					<label for="email" class="control-label">Email:</label>
+					<div class="control-label-input">
 						<input type="email" class="form-control" name="email" id="email"
 							placeholder="Enter email" maxlength="40" value="${userTry.email}"
 							required />
@@ -113,11 +113,9 @@
 				</div>
 				<legend></legend>
 				<div class="form-group">
-						<div class="col-md-offset-4 col-sm-5">
 						<input id = "registerButton"
 							type="submit" class=" form-control btn btn-default"
 							value="Register">
-					</div>
 				</div>
 			</form>
 		</div>
@@ -294,7 +292,7 @@
 											}
 
 										});
-					});
+					}); 
 	$(document).ready(function() {
 		$('[data-toggle="popover"]').popover();
 	});

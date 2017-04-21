@@ -223,16 +223,20 @@ label {
 @media ( max-width : 789px) {
 #currTaskSolution {
     height: 33em;
-    width: 41.5em; 
+    width: 38.5em;
     /* margin-bottom:15em; */
     /* width:70.5em; */
 }
 }
 @media ( max-width : 590px) {
-#teacherComment{		width: 25em;
+#teacherComment {
+		width: 25em;
 	}
 	#currTaskSolution {
-    width: 21em;
-    padding-left:0em;
+		width: 21em;
+		padding-left: 0em;
+	}
+	.input-invalid {
+    font-size: 0.9em;
 }
 }

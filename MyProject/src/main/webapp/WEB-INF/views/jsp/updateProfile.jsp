@@ -75,14 +75,14 @@
 				id="updateForm" name="updateForm" class="form-horizontal">
 				<div id="inputFields">
 					<div class="form-group">
-						<label class="control-label col-sm-4">Username:</label>
-						<div class="col-sm-3 " style="padding-top:7px">
+						<label class="control-label">Username:</label>
+						<div class="control-label-input" style="padding-top:7px">
 							<c:out value="${sessionScope.user.username}"></c:out>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-4">Password:</label>
-						<div class="col-sm-7">
+						<label class="control-label">Password:</label>
+						<div class="control-label-input">
 							<input type="password" class="form-control"
 								value="${sessionScope.user.password}" name="password"
 								placeholder="Enter password" maxlength="15"
@@ -100,9 +100,9 @@
 						</div>
 					</div>
 					<div class="form-group ">
-						<label class="control-label col-sm-4">Repeat
+						<label class="control-label">Repeat
 							password:</label>
-						<div class="col-sm-7">
+						<div class="control-label-input">
 							<input type="password" class="form-control"
 								placeholder="Repeat password"
 								value="${sessionScope.user.password}" maxlength="15"
@@ -117,9 +117,9 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-4">Email:</label>
-						<div class="col-sm-7">
-							<input type="email" class="form-control"
+						<label class="control-label">Email:</label>
+						 <div class="control-label-input"> 
+							<input type="email" class="form-control" 
 								placeholder="Enter email" value="${sessionScope.user.email}"
 								name="email"  required />
 							<c:if test="${not empty validEmail}">
@@ -128,7 +128,7 @@
 								</c:if>
 							</c:if>
 							<p id="emailMsg" class="input-invalid"></p>
-						</div>
+						 </div> 
 					</div>
 					<legend></legend>
 					<!-- <div class="form-group">
@@ -138,12 +138,12 @@
 								value="Update">
 						</div>
 					</div> -->
-					<div class="form-group" >
-					<div class="col-md-offset-4 col-sm-5">
+					<div class="form-group button" >
+					<%-- <div class="col-md-offset-4 <!--  col-sm-5 -->"> --%>
 						<input 
-							type="submit" id = "updateProfileButton" class=" form-control btn btn-default"
+							type="submit" id = "updateProfileButton" class="form-control btn btn-default"
 							value="Update">
-					</div>
+					<!-- </div> -->
 				</div>
 				</div>
 				
@@ -166,7 +166,7 @@
 		}
 		return true;
 	}
-	$('#updateForm')
+	  $('#updateForm')
 			.submit(
 					function(e) {
 						e.preventDefault();
@@ -272,7 +272,7 @@
 								}
 							}
 						}
-					});
+					});  
 	$(document).ready(function() {
 		$('[data-toggle="popover"]').popover();
 	});

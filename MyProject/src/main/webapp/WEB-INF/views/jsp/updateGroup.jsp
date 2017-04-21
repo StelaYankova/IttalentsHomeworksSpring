@@ -43,7 +43,7 @@
 				<legend>Update Group</legend>
 		
 			<form action="./updateGroup" method="POST"
-				id="updateGroupForm">
+				id="updateGroupForm" class = "form-horizontal">
 				<c:if test="${not empty sessionScope.invalidFields}">
 					<c:if test="${sessionScope.invalidFields}">
 						<p class="input-invalid-or-empty">You have invalid fields</p>
@@ -55,8 +55,8 @@
 					</c:if>
 				</c:if>
 				<div class="form-group">
-					<label class="control-label col-sm-4">Name:</label>
-					<div class="col-sm-7">
+					<label class="control-label">Name:</label>
+					<div class="control-label-input">
 						<input type="text" class="form-control" name="groupName" maxlength="15"
 							placeholder="Enter group name" data-toggle="popover"
 							class="form-control" value="${sessionScope.currGroup.name}"
@@ -79,8 +79,8 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-sm-4">Teachers</label>
-					<div class="col-sm-7">
+					<label class="control-label">Teachers</label>
+					<div class="control-label-input">
 						<select class="selectpicker form-control" multiple name="teachers">
 							<c:forEach items="${applicationScope.allTeachers}" var="teacher">
 								<c:set var="isTeacherInGroup" value="false"></c:set>
@@ -110,12 +110,10 @@
 				</div>
 				<legend></legend>
 					<div class="form-group">
-						<div class="col-md-offset-4 col-sm-5">
-							<input id = "updateGroupButton"
+ 						<input id = "updateGroupButton"
 								type="submit" class=" form-control btn btn-default"
 								value="Update">
 						</div>
-					</div>
 			</form>
 		</div>
 		<c:if test="${not empty sessionScope.invalidFields}">
@@ -212,7 +210,7 @@
 		return false;
 	}
 	});
-	});
+	}); 
 	$(document).ready(function() {
 		$('[data-toggle="popover"]').popover();
 	});

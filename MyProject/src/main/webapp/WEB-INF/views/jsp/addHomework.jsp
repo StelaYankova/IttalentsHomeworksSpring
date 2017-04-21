@@ -39,8 +39,8 @@
 		<div id="formAddHomework" >
 					<legend>Add homework</legend>
 		
-			<form action="./AddHomework" method="POST"
-				enctype="multipart/form-data" id="addHomeworkForm"  accept-charset="UTF-8">
+			<form action="./addHomework" method="POST"
+				enctype="multipart/form-data" id="addHomeworkForm"  accept-charset="UTF-8" class = "form-horizontal">
 				<c:if test="${not empty invalidFields}">
 					<c:if test="${invalidFields}">
 						<p class="input-invalid-or-empty">You have invalid fields</p>
@@ -50,8 +50,8 @@
 					<p class="input-invalid-or-empty">You cannot have empty fields</p>
 				</c:if>
 				<div class="form-group">
-					<label class="control-label col-sm-4" >Heading:</label>
-					<div class="col-sm-7">
+					<label class="control-label" >Heading:</label>
+					<div class="control-label-input">
 						<input type="text" class="form-control" name="name"
 							value="${nameTry}" placeholder="Enter homework heading" maxlength="40"
 							data-toggle="popover" data-placement="bottom"
@@ -75,9 +75,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-sm-4">Opening
+					<label class="control-label">Opening
 						time:</label>
-					<div class='col-sm-7'>
+					<div class='control-label-input'>
 						<div class='input-group date' id='datetimepicker6'>
 							<input type='text' value="${opensTry}" class="form-control"
 								id="opens" name="opens" placeholder="Enter opening time"
@@ -98,9 +98,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-sm-4">Closing
+					<label class="control-label">Closing
 						time:</label>
-					<div class='col-sm-7'>
+					<div class='control-label-input'>
 						<div class='input-group date' id='datetimepicker7'>
 							<input type='text' value="${closesTry}" data-toggle="popover"
 								data-placement="bottom" data-trigger="focus"
@@ -121,9 +121,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-sm-4">Number of
+					<label class="control-label">Number of
 						tasks:</label>
-					<div class="col-sm-7">
+					<div class="control-label-input">
 						<input type="number" min="1" max="41" maxlength="2"
 							class="form-control" name="numberOfTasks"
 							placeholder="Enter number of tasks" value="${numberOfTasksTry}"
@@ -140,8 +140,8 @@
 				</div>
 				
 				<div class="form-group">
-					<label class="control-label col-sm-4">Groups</label>
-					<div class="col-sm-7">
+					<label class="control-label">Groups</label>
+					<div class="control-label-input">
 						<select class="selectpicker form-control" data-width="101%" data-size="7" multiple name="groups" id="groups"
 							required>
 							<c:forEach items="${applicationScope.allGroups}" var="group">
@@ -170,8 +170,8 @@
 					</div>
 				</div>
 <div class="form-group">
-					<label class="control-label col-sm-4">Tasks:</label>
-					<div class="col-sm-7">
+					<label class="control-label">Tasks:</label>
+					<div class="control-label-input">
 						<input type="file" accept="application/pdf" name="file"  required/>
 						<c:if test="${not empty validFile}">
 							<c:if test="${not validFile}">
@@ -184,11 +184,11 @@
 				</div>
 				<legend></legend>
 				<div class="form-group" >
-					<div class="col-md-offset-4 col-sm-5">
+					<!-- <div class="col-md-offset-4 col-sm-5"> -->
 						<input 
 							type="submit" id = "addButton" class=" form-control btn btn-default"
 							value="Add">
-					</div>
+					<!-- </div> -->
 				</div>
 			</form>
 		</div>
@@ -454,7 +454,7 @@
 															.submit();
 												}
 											});
-						});
+						}); 
 		$(function() {
 			$.ajaxSetup({
 				statusCode : {
@@ -476,222 +476,4 @@
 </body>
 </html>
 
-
-<!-- 
-@CHARSET "UTF-8";
-
-.studentSearch {
-	width: 18%;
-}
-div.ui-widget{
-	display: block;	
-}
-div.ui-widget:after {
-    content:'';
-    display:block;
-   clear:both;
-}
-.ui-helper-hidden-accessible {
-	display: none;
-}
-.input-invalid-addStudentToGroup {
-    text-align: left;
-    color: red;
-    width: 20%;
-    margin-left: 320px;
-}
-.form-group {
-	/* padding-right: 2.5em; */
-	width: 25%;
-}
-.form-group:nth-last-child(2) {
-	/* padding-right: 0.5em; */
-	width: 18.5%;
-}
-/* #listOfStudentsOfGroupHeading{
-	    visibility: hidden;
-    position: absolute;
-    margin-left: 291px;
-    margin-top: -10px;
-    text-align: center;
-    width: 25%;
-    visibility: hidden;
-    margin-left: 29%;
-    padding-top: 0em;
-    margin-top: 2em;
-    z-index: 1;
-    width: 15em;
- } */
-
-/* #listOfStudentsOfGroup {
-	visibility: hidden;
-	margin-left: 292px;
-	margin-top: 25px;
-	z-index: 1;
-	width: 25%;
- } */
-/*  #listOfStudentsOfGroup {
-    visibility: hidden;
-    margin-left: 29%;
-    padding-top: 1em;
-    z-index: 1;
-    width: 18em;
-} */
-/* #listHeadingAndStudents{
-	 visibility: hidden;
-    margin-left: 27.3%;
-    padding-top: 1em;
-    z-index: 1;
-    width: 18.7em;
-} */
-ul.ui-autocomplete {
-	list-style-type: none;
-	text-decoration: none;
-	z-index:1;
-	background-color:#ffffff;
-	
-}
-
-.addStudentToGroupDiv{
-margin:0px auto;
-	margin-top:70px;
-	width:85%;
-}
-.input-invalid-addStudentToGroup{
-	text-align: left;
-}
-#addStudentToGroupForm{
-	margin:0px auto;
-}
-#formSmallScreen{
-		display:none;
-		margin:0px auto;
-	}
-	#buttonAdd{
-		padding-top: 1.5em; width: 5%/* ; padding-left:1em; */
-	}
-	
-	
-	#addStudentToGroupForm {
-    margin-left: -4em;
-}
-}
-
-/* @media (max-width: 1024px) {
-		#listHeadingAndStudents {
-    visibility: hidden;
-    margin-left: 26.9%;
-    padding-top: 2em;
-    z-index: 1;
-    width: 15em;
-}
-	}
-	
-
-	@media (max-width: 1250px) {
-	#listHeadingAndStudents {
-    visibility: hidden;
-    margin-left: 26.9%;
-    padding-top: 2em;
-    z-index: 1;
-     width: 15em; 
-}
-	
-} */
-@media (max-width: 1000px) {
-	.form-group:nth-last-child(2) {
-		padding-right: 0em;
-		width: 20em;
-	}
-	 .form-group {
-	padding-right: 0px;
-	width: 20%;
-} 
-
-/* #listOfStudentsOfGroupHeading{
-	margin-left:18%;
-	
-} */
-/* #listHeadingAndStudents {
-    visibility: hidden;
-    margin-left: 18%;
-    padding-top: 2em;
-    z-index: 1;
-    width: 15em;
-} */
-
-.form-control {
-    display: block;
-    width: 60%;
-    height: 25px;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 4px;
- }
-	#buttonAdd{
-		padding-left:0em;
-		width:20em;
-	}
-.studentSearch {
-    width: 20em;
-}
-
-.form-group {
-    width: 20em;
-}
-	#formLargeScreen{
-		display:none;margin:0px auto;
-	}
-	#formSmallScreen{
-		display:block;
-		width:40%;
-		margin:0px auto;
-	}
-	
-}
-@media (max-width: 1250px) {
-	/* #listHeadingAndStudents{
-		width: 38%;
-		margin:0px auto;
-	}
-	div.ui-widget{
-		width:99%;
-	} */
-	/* #listHeadingAndStudents {
-    visibility: hidden;
-    margin-left: 26.9%;
-    padding-top: 2em;
-    z-index: 1;
-     width: 15em; 
-}  */
-}
-@media (max-width: 789px) {
-	#listHeadingAndStudents{
-		width: 50%;
-		margin:0px auto;
-	}
-	div.ui-widget{
-		width:79%;
-	}
-	/* #listHeadingAndStudents {
-    visibility: hidden;
-    margin-left: 26.9%;
-    padding-top: 2em;
-    z-index: 1;
-     width: 15em; 
-}  */
-}
-@media ( max-width :590px) {
-	
-#listHeadingAndStudents{
-		width: 89%;
-		margin:0px auto;
-	}
-
-}  -->
 

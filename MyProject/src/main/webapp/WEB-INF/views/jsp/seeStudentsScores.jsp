@@ -117,11 +117,11 @@
 				sWidth : '22%'
 			} ],
 			"ordering": false,
-			"lengthMenu" : [ 5, 10, 15 ],
+			"lengthMenu" : [5, 10, 15 ],
 			"bDestroy" : true
 		});
 		function seeHomeworks(groupId, studentId, studentUsername) {
-			document.getElementById('studentAverageScore').style.visibility = 'hidden';
+			document.getElementById('studentAverageScore').style.display = 'none';
 
 			if (!$('#resultTable tbody').is(':empty')) {
 				$("#resultTable tbody").empty();
@@ -194,12 +194,12 @@
 																		+ "/100",
 																response[i].teacherComment ])
 												.draw().node();
-										 								document.getElementById('divTable').style.visibility = 'visible';
+										 								document.getElementById('divTable').style.display = 'block';
 
 									}
 								}
 							var answer = (averageScore/numberHomeworks).toFixed(1);
-							document.getElementById("studentAverageScore").style.visibility = "visible";
+							document.getElementById("studentAverageScore").style.display = "block";
 						
 		if (!$('#score').is(':empty')) {
 								$("#score").empty();
@@ -211,15 +211,15 @@
 		$('#chosenGroup')
 				.change(
 						function(event) {
-							document.getElementById('divTable').style.visibility = 'hidden';
-							document.getElementById('studentAverageScore').style.visibility = 'hidden';
+							document.getElementById('divTable').style.display = 'none';
+							document.getElementById('studentAverageScore').style.display = 'none';
 
 							document.getElementById('')
 							if (!$('#score').is(':empty')) {
 								$("#score").empty();
 							}
-							document.getElementById('divTable').style.visibility = 'hidden';
-							if (!$('#resultTable tbody').is(':empty')) {
+/* 							document.getElementById('divTable').style.display = 'none';
+ */							if (!$('#resultTable tbody').is(':empty')) {
 								$("#resultTable tbody")
 										.html(
 												'<tr><td colspan="5" style = "padding-left:16em ">No data available in table</td></tr>');
@@ -253,8 +253,8 @@
 									$("li#chosenGroupName").remove();
 								}
 							}
-							document.getElementById('listOfStudentsOfGroup').style.visibility = 'hidden';
-							document.getElementById('listHeading').style.visibility = 'hidden';
+							document.getElementById('listOfStudentsOfGroup').style.display = 'none';
+							document.getElementById('listHeading').style.display = 'none';
 
 							//$('#navPathList').append('<li><a href="./studentsScores">'+groupId+'</a> <span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
 							console.log(4444)
@@ -285,14 +285,14 @@
 											}
 											if ($.trim(response)) {
 												document
-														.getElementById('listOfStudentsOfGroup').style.visibility = 'visible';
-												document.getElementById('listHeading').style.visibility = 'visible';
+														.getElementById('listOfStudentsOfGroup').style.display = 'block';
+												document.getElementById('listHeading').style.display = 'block';
 
 											} else {
 												alert("There are no students in this group.");
 												document
-														.getElementById('listOfStudentsOfGroup').style.visibility = 'hidden';
-												document.getElementById('listHeading').style.visibility = 'hidden';
+														.getElementById('listOfStudentsOfGroup').style.display = 'none';
+												document.getElementById('listHeading').style.display = 'none';
 
 											}
 

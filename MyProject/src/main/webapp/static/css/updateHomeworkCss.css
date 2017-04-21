@@ -1,9 +1,9 @@
 @CHARSET "UTF-8";
-/* #updateHomeworkForm:after {
+/* /* #updateHomeworkForm:after {
     content:'';
     display:block;
    clear:both;
-} */
+} 
 #formUpdate {
 	margin: 0 auto;
 	padding-top: 3.750em;
@@ -55,9 +55,9 @@ legend{
 		padding-right: 1.875em;
 		width: 100%
 	}
-	/* legend {
+	legend {
 		width: 70%;
-	} */
+	}
 } 
 
 @media ( max-width :774px) {
@@ -137,5 +137,215 @@ legend{
     left: 52.5%;
     z-index: 1;
     width: 30%;
+} */
+@CHARSET "UTF-8";
+/* #readAndRemoveHomework {
+    position: absolute;
+    display: inline-block;
+    left:55%;
+    top:16.8em;
+    z-index: 1;
+    width: 30%;
+} */
+#readAndRemoveHomework {
+    position: absolute;
+    display: inline-block;
+    left: 50%;
+    top: 17.4em;
+    z-index: 1;
+    width: 30%;
 }
+#removeHomeworkForm {
+    position: absolute;
+    left: 7em;
+    top: -0.4em;
+    width: 10%;
+}
+#downloadHomeworkForm {
+	width: 10%;
+}
+ #downloadHomeworkForm {
+	padding-left:5em;
+}
+#removeHomeworkForm {
+    left: 12em;
+}
+.form-horizontal .control-label {
+	padding-right: 1em;
+	padding-top:2px !important;
+	width: 38%;
+	text-align: right;
+	float: left;
+}
+
+.form-horizontal .control-label-input {
+	width: 50%;
+	float: left;
+	padding-left: 1em;
+}
+
+/* .form-horizontal .form-group:last-child {
+	width: 95%;
+	padding-left: 13.3em;
+} */
+.form-horizontal .form-group:last-child {
+    width: 53.5%;
+    padding-left: 0em;
+    margin-right: 2em;
+}
+#formUpdate {
+	margin: 0 auto;
+	padding-top: 3.750em;
+	width: 42%;
+}
+
+legend {
+	text-align: left;
+}
+
+.form-group {
+	padding-left: 3.750em auto;
+}
+
+#updateHomeworkButton {
+	background-color: #2E71AC;
+	text-align: center;
+	color: #ffffff;
+}
+
+@media
+(
+max-width
+:1000px)
+{
+#formUpdate {
+	width: 60%;
+}
+#downloadHomeworkForm {
+	padding-left:3.3em;
+}
+#removeHomeworkForm {
+    left: 10.6em;
+}
+.form-horizontal .form-group:last-child {
+    width: 52%;
+    padding-left: 0em;
+    margin-right: 3.5em;
+}
+}
+@media ( max-width :992px) {
+	.form-horizontal .form-group:last-child {
+		width: 95%;
+		padding-left: 13.9em;
+	}
+}
+
+@media ( max-width :800px) {
+	.form-horizontal .control-label {
+		padding-top: 0.438em;
+		margin-bottom: 0;
+		text-align: right;
+	}
+	#formUpdate {
+		width: 70%;
+	}
+	.form-horizontal .form-group:last-child {
+		width: 94%;
+		padding-left: 15.8em;
+	}
+	#downloadHomeworkForm {
+    padding-left: 3em;
+}
+#removeHomeworkForm {
+    left: 10em;
+}
+
+}
+
+@media ( max-width :789px) {
+	.form-horizontal .form-group:last-child {
+		width: 95%;
+		padding-left: 12.3em;
+	}
+}
+@media ( max-width :774px) {
+	#downloadHomeworkForm {
+	width:5%;
+}
+}
+@media ( max-width :589px) {
+	/* #removeHomeworkForm {
+    left: 9.6em;
+} */
+#readAndRemoveHomework {
+    left: 53%;
+}
+	#formUpdate {
+		width: 90%;
+	}
+	.form-horizontal .control-label {
+		width: 100%;
+		padding-top: 0.438em;
+		margin-bottom: 0;
+		text-align: left;
+		padding-left: 2em;
+	}
+	.form-horizontal .control-label-input {
+		width: 90%;
+		float: center;
+		padding-left: 2em;
+	}
+	.form-horizontal .form-group:last-child {
+		width: 100%;
+		padding-left: 2em;
+	}
+	#downloadHomeworkForm button{
+		font-size:0.74em;
+	}
+/* #formUpdate{
+		width:90%;
+	} */
+#downloadHomeworkForm {
+    padding-left: 0.3em;
+    margin-left: 0.6em;
+}
+#removeHomeworkForm {
+    left: 7em;
+}
+}
+
+}
+@media ( max-width :590px) {
+	
+
+}
+@media ( max-width :330px) {
+
+/* #readAndRemoveHomework {
+    position: absolute;
+    display: inline-block;
+    left: 57%;
+    top: 18.1em;
+    z-index: 1;
+    width: 30%;
+} */
+#readAndRemoveHomework {
+    position: absolute;
+    display: inline-block;
+    left: 46%;
+    top: 18.6em;
+    z-index: 1;
+    width: 10%;
+}
+}
+
+
+@media ( min-width :1300px) {
+
+#readAndRemoveHomework {
+    position: absolute;
+    display: inline-block;
+    left: 52.5%;
+    z-index: 1;
+    width: 30%;
 }

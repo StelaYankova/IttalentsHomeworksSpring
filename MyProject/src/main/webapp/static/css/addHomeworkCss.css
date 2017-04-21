@@ -1,66 +1,105 @@
 @CHARSET "UTF-8";
-#formAddHomework:after {
-    content:'';
-    display:block;
-   clear:both;
+
+
+.form-horizontal .control-label {
+	padding-top:2px !important;
+	padding-right: 1em;
+	width: 38%;
+	text-align: right;
+	float: left;
 }
+
+.form-horizontal .control-label:last-child {
+	margin-bottom: 0;
+    text-align: right;
+}
+.form-horizontal .control-label-input {
+	width: 50%;
+	float: left;
+	padding-left: 1em;
+}
+
+.form-horizontal .form-group:last-child {
+	width: 95%;
+	padding-left: 13.3em;
+}
+
 #formAddHomework {
 	margin: 0 auto;
- 	padding-top: 3.750em;
-	width: 50%;
-	text-align: right;
+	padding-top: 3.750em;
+	width: 42%;
 }
 
-legend{
-	 text-align: left;
+legend {
+	text-align: left;
 }
 
-.control-label.col-sm-4{
-	padding-right: 1.875em;
+.form-group {
+	padding-left: 3.750em auto;
 }
 
-#addButton{
+#addButton {
 	background-color: #2E71AC;
-	 color: #ffffff;
+	text-align: center;
+	color: #ffffff;
 }
- 
+
+@media
+(
+max-width
+:1000px)
+{
+#formAddHomework {
+	width: 60%;
+}
+
+}
 @media ( max-width :992px) {
-	.form-group {
-		margin-bottom: 0.938em;
-		width: 100%;
-		text-align: left;
+	.form-horizontal .form-group:last-child {
+		width: 95%;
+		padding-left: 13.9em;
 	}
-	.control-label.col-sm-4 {
-		padding-right: 1.875em;
-		width: 100%
-	}
-	legend {
-		width: 70%;
-	}
-} 
-
-
-@media ( max-width :1000px) {
-	
-#formAddHomework{
-		width:60%;
-	}
-
 }
-
 
 @media ( max-width :800px) {
-	
-#formAddHomework{
-		width:70%;
+	.form-horizontal .control-label {
+		margin-bottom: 0;
+		text-align: right;
 	}
-
+	#formAddHomework {
+		width: 70%;
+	}
+	.form-horizontal .form-group:last-child {
+		width: 94%;
+		padding-left: 15.8em;
+	}
 }
 
-@media ( max-width :590px) {
-	
-#formAddHomework{
-		width:90%;
+@media ( max-width :789px) {
+	.form-horizontal .form-group:last-child {
+		width: 95%;
+		padding-left: 12.3em;
 	}
+}
 
-} 
+@media ( max-width :589px) {
+	#formAddHomework {
+		width: 90%;
+	}
+	.form-horizontal .control-label {
+		width: 100%;
+		margin-bottom: 0;
+		text-align: left;
+		padding-left: 2em;
+	}
+	.form-horizontal .control-label-input {
+		width: 90%;
+		float: center;
+		padding-left: 2em;
+	}
+	.form-horizontal .form-group:last-child {
+		width: 100%;
+		padding-left: 2em;
+	}
+}
+}

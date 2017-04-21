@@ -40,74 +40,6 @@
 	<div id="pageWrapper" style = "display:block">
 		<div class="addStudentToGroupDiv">
 			<div class="ui-widget">
-			
-			 
-				<div id = "formSmallScreen">
-				<form action="./addOrRemoveStudent" method="POST"
-					class="form-horizontal" id="addStudentToGroupForm" >
-					<c:if test="${not empty sessionScope.invalidFields}">
-						<c:if test="${sessionScope.invalidFields}">
-							<p class="input-invalid-addStudentToGroup">You have invalid
-								fields</p>
-						</c:if>
-					</c:if>
-					<c:if test="${not empty sessionScope.emptyFields}">
-						<c:if test="${sessionScope.emptyFields}">
-							<p class="input-invalid-addStudentToGroup">You cannot have
-								empty fields</p>
-						</c:if>
-					</c:if>
-					<c:if test="${not empty sessionScope.doesStudentExist}">
-						<c:if test="${not sessionScope.doesStudentExist}">
-							<p id="studentMsg" class="input-invalid-addStudentToGroup">Student
-								does not exist</p>
-						</c:if>
-						<c:if test="${not empty sessionScope.isStudentInGroup}">
-							<c:if test="${sessionScope.doesStudentExist}">
-								<c:if test="${sessionScope.isStudentInGroup}">
-									<p id="studentMsg" class="input-invalid-addStudentToGroup">Student
-										is already in group</p>
-								</c:if>
-							</c:if>
-						</c:if>
-					</c:if>
-					<c:if test="${not empty sessionScope.validGroups}">
-						<c:if test="${not sessionScope.validGroups}">
-							<p id="groupsMsg" class="input-invalid-addStudentToGroup">Group
-								does not exist</p>
-						</c:if>
-					</c:if>
-					<p id="groupMsg" class="input-invalid-addStudentToGroup"></p>
-					<p id="studentMsg" class="input-invalid-addStudentToGroup"></p>
-					<div class="form-group" class="studentSearch">
-						<label class="control-label col-sm-13 "
-							style="padding-bottom: 0.313em;">Choose student:</label> <input
-							class="form-control searchStudents" name="selectedStudent"
-							placeholder="Enter student"
-							value="${sessionScope.chosenUsernameTry}" />
-						<!-- required -->
-					</div>
-					<div class="form-group" style="padding-top: 0.125em;">
-						<label class="control-label col-sm-13"
-							style="padding-bottom: 0.313em;">Choose
-							group:</label> <select class="selectpicker form-control chosenGroup" name="chosenGroup"
-							>
-							<!-- required -->
-							<option value="null">-</option>
-							<c:forEach var="group" items="${applicationScope.allGroups}">
-								<option value="${group.id}"><c:out
-										value="${group.name}"></c:out></option>
-							</c:forEach>
-						</select>
-					</div>
-					<div class="form-group" id = "buttonAdd">
-						<input style="background-color: #2E71AC; color: #ffffff" 
-							type="submit" class=" form-control btn btn-default" value="Add">
-					</div>
-				</form>
-			</div> </div>
-			
-			<div class="ui-widget">
 			<div id = "formLargeScreen">
 				<form action="./addOrRemoveStudent" method="POST"
 					class="form-inline" id="addStudentToGroupForm">
@@ -145,12 +77,10 @@
 					</c:if>
 					<p id="groupMsg" class="input-invalid-addStudentToGroup"></p>
 					<p id="studentMsg" class="input-invalid-addStudentToGroup"></p>
-					<div class="form-group" style="padding-top: 0.125em;">
-						<label class="control-label col-sm-9"
-							style="padding-right: 1.875em; padding-bottom: 0.313em;">Choose
+					<div class="form-group">
+						<label class="control-label">Choose
 							group:</label> <select class="selectpicker form-control chosenGroup" name="chosenGroup"
 							>
-							<!-- required -->
 							<option value="null">-</option>
 							<c:forEach var="group" items="${applicationScope.allGroups}">
 								<option value="${group.id}"><c:out
@@ -159,14 +89,13 @@
 						</select>
 					</div>
 					<div class="form-group" class="studentSearch">
-						<label class="control-label col-sm-13"
-							style="padding-bottom: 0.313em;">Choose student:</label> <input
-							class="form-control searchStudents" name="selectedStudent"
+						<label class="control-label"
+							>Choose student:</label> <input
+							class="form-control searchStudents" maxlength="15" name="selectedStudent"
 							placeholder="Enter student"
 							value="${sessionScope.chosenUsernameTry}" />
-						<!-- required -->
 					</div>
-					<div class="form-group" style="padding-top: 1.5em; width: 0%; padding-left:0em;">
+					<div class="form-group" id = "addButtonDiv">
 						<input style="background-color: #2E71AC; color: #ffffff"
 							type="submit" class=" form-control btn btn-default" value="Add">
 					</div>
@@ -213,7 +142,7 @@
 						var chosenStudentUsernameAlreadyInGroup = true;
 						var chosenStudentUsernameEmpty = false;
 						var chosenGroupEmpty = false;
-						if (chosenGroupId == '') {
+						if (chosenGroupId == 'null') {
 							chosenGroupEmpty = true;
 						}
 						if (!$('#alert').is(':empty')) {

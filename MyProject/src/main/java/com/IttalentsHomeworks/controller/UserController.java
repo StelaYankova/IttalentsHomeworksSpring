@@ -454,7 +454,7 @@ public class UserController {
 			}
 			request.setAttribute("validEmail", isEmailValid);
 			
-			//if (isPassValid == true && isRepeatedPassValid == true && isEmailValid == true) {
+			if (isPassValid == true && isRepeatedPassValid == true && isEmailValid == true) {
 				if (user.isTeacher()) {
 					newUser = new Teacher(username, password, repeatedPassword, email);
 				} else {
@@ -480,7 +480,7 @@ public class UserController {
 					e.printStackTrace();
 					return "exception";
 				}
-			//}
+			}
 		}
 		return "updateProfile";
 	}

@@ -67,14 +67,18 @@
 				</div>
 			</div>
 
-			<div class="list">
+			<!-- <div class="list">
 				<div id="listHeading" >
 					<h>Students in chosen group:</h>
 					<ul id="listOfStudentsOfGroup" class="editable">
 					
 					</ul>
 				</div>
-			</div>
+			</div> -->
+			<div class="list">
+		<h id = "listHeading">Students in chosen group:</h>
+			<ul id="listOfStudentsOfGroup" class="editable"></ul>
+		</div>
 		</div>
 		</div>
 		<script>

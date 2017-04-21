@@ -53,10 +53,10 @@
 						<p class="input-invalid-or-empty">You cannot have empty fields</p>
 					</c:if>
 				</c:if>
-			<form action="./createGroup" method="POST" id="addGroupForm">
+			<form action="./createGroup" method="POST" id="addGroupForm" class = "form-horizontal">
 				<div class="form-group">
-					<label class="control-label col-sm-4">Name:</label>
-					<div class="col-sm-7">
+					<label class="control-label">Name:</label>
+					<div class="control-label-input">
 						<input type="text" name="groupName" class="form-control"
 							placeholder="Enter group name" data-toggle="popover" value="${nameTry}"
 							data-placement="bottom" data-trigger="focus" maxlength="15"
@@ -78,9 +78,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-sm-4">Teachers:</label>
-					<div class="col-sm-7" style = "padding-bottom:15px;">
-						<select class="selectpicker form-control" data-width="101%" data-size="7" multiple name="teachers" >
+					<label class="control-label">Teachers:</label>
+					<div class="control-label-input">
+						<select class="selectpicker form-control"  data-size="7" multiple name="teachers" >
 							<c:forEach items="${applicationScope.allTeachers}" var="teacher">
 								<c:set var="isTeacherInGroupTry" value="false"></c:set>
 								<c:forEach items="${selectedTeachersUsernameTry}"
@@ -111,18 +111,18 @@
 				 
 				<legend></legend>
 					<div class="form-group">
-						<div class="col-md-offset-4 col-sm-5">
+						<!-- <div class="col-md-offset-4 col-sm-5"> -->
 							<input
 								id = "addButton"
 								type="submit" class=" form-control btn btn-default"
 								value="Add">
-						</div>
+						<!-- </div> -->
 					</div>
 			</form>
 		</div>
 	</div>
 	<script>
-	$('#addGroupForm').submit(function(e) {
+	 $('#addGroupForm').submit(function(e) {
 		e.preventDefault();
 		var name = document.forms["addGroupForm"]["groupName"].value;
 		var teachers = document.forms["addGroupForm"]["teachers"].value;
@@ -197,7 +197,7 @@
 				document.getElementById("addGroupForm").submit();
 			}
 		});
-	});
+	}); 
 	$(document).ready(function() {
 		$('[data-toggle="popover"]').popover();
 	});

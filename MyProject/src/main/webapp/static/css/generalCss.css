@@ -2,6 +2,11 @@
 /* .container{
 	
 } */
+.input-invalid-or-empty {
+	color: red;
+	text-align: left;
+}
+
 .breadcrumb>li+li:before {
     padding: 0 5px;
     color: #ccc;
@@ -75,13 +80,17 @@ body {
 }	
 }
 
-.alertAllPages {
+/* #alert {
 	position: absolute;
-	margin-top: 35px;
-	top: 81px;
+	margin-top: 33px;
+	top: 77px;
 	width: 100%;
 }
 
+ */
+ .alert-success{
+ 	margin-top:-1.3em;
+ }
 .wrapword {
 	white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
 	white-space: -webkit-pre-wrap; /*Chrome & Safari */
@@ -93,8 +102,4 @@ body {
 	white-space: normal;
 }
 
-.input-invalid-or-empty {
-	color: red;
-	text-align: left;
-}
 

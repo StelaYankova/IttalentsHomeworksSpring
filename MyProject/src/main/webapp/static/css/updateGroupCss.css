@@ -1,5 +1,112 @@
 @CHARSET "UTF-8";
 
+
+.form-horizontal .control-label {
+	padding-right: 1em;
+	width: 38%;
+	text-align: right;
+	float: left;
+}
+
+.form-horizontal .control-label-input {
+	width: 50%;
+	float: left;
+	padding-left: 1em;
+}
+
+.form-horizontal .form-group:last-child {
+	width: 95%;
+	padding-left: 13.3em;
+}
+
+#formUpdateGroup {
+	margin: 0 auto;
+	padding-top: 3.750em;
+	width: 42%;
+}
+
+legend {
+	text-align: left;
+}
+
+.form-group {
+	padding-left: 3.750em auto;
+}
+
+#updateGroupButton {
+	background-color: #2E71AC;
+	text-align: center;
+	color: #ffffff;
+}
+
+@media ( max-width :1000px) {
+	#formUpdateGroup {
+		width: 60%;
+	}
+}
+
+@media ( max-width :992px) {
+	.form-horizontal .form-group:last-child {
+		width: 95%;
+		padding-left: 13.9em;
+	}
+}
+
+@media ( max-width :800px) {
+	.form-horizontal .control-label {
+		padding-top: 0.438em;
+		margin-bottom: 0;
+		text-align: right;
+	}
+	#formUpdateGroup {
+		width: 70%;
+	}
+	.form-horizontal .form-group:last-child {
+		width: 94%;
+		padding-left: 15.8em;
+	}
+}
+
+@media ( max-width :789px) {
+	.form-horizontal .form-group:last-child {
+		width: 95%;
+		padding-left: 12.3em;
+	}
+}
+
+@media ( max-width :589px) {
+	/* #formUpdateGroup {
+		width: 90%;
+	}
+	.form-horizontal .form-group:last-child {
+		width: 98%;
+		padding-left: 9.4em;
+	}
+	.bootstrap-select.btn-group .dropdown-menu {
+		max-width: 120%;
+		font-size: 0.79em;
+	} */
+	#formUpdateGroup {
+		width: 90%;
+	}
+	.form-horizontal .control-label {
+	    width: 100%;
+		padding-top: 0.438em;
+		margin-bottom: 0;
+		text-align: left;
+		padding-left: 2em;
+	}
+	.form-horizontal .control-label-input {
+		width: 90%;
+		float: center;
+		padding-left: 2em;
+	}
+	.form-horizontal .form-group:last-child {
+		width: 100%;
+		padding-left: 2em;
+	}
+}
+/* 
 #formUpdateGroup {
 	margin: 0 auto;
 	padding-top: 3.750em;
@@ -24,12 +131,12 @@ legend {
 	color: #ffffff;
 }
 
-/* @media ( max-width :992px) {
+@media ( max-width :992px) {
 	legend {
 		width: 70%;
 	}
 }
- */
+
 @media ( max-width :1000px) {
 	#formUpdateGroup {
 		width: 60%;
@@ -53,3 +160,4 @@ legend {
 	}
 }
 }
+ */

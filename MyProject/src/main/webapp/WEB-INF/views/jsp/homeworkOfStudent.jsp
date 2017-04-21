@@ -97,32 +97,30 @@
 				<form action="./UpdateTeacherGradeAndCommentServlet" method="POST"
 				id="UpdateTeacherGradeAndCommentForm" accept-charset="UTF-8">
 				<div class="formInput">
-					<label><b>Teacher grade:</b></label> <span class="col-sm-4">
-						<input type="number" class="form-control" min=0 max=100 id="grade"
+					<label><b>Teacher grade:</b></label>
+						<input type="number" class="form-control" min=0 max=101 id="grade"
 						value="${sessionScope.currHomework.teacherGrade}" name="grade" />
-					</span>
 				</div>
 				<c:if test="${not empty sessionScope.GradeTooLong}">
 					<c:if test="${sessionScope.GradeTooLong}">
-						<p id="gradeMsg" class="invalidData">Grade - between 1 and 100</p>
+						<p id="gradeMsg" class="invalidData">Grade - between 0 and 100</p>
 					</c:if>
 				</c:if>
 				<c:if test="${not empty sessionScope.validGrade}">
 					<c:if test="${not sessionScope.validGrade}">
-						<p id="gradeMsg" class="invalidData">Grade - between 1 and 100</p>
+						<p id="gradeMsg" class="invalidData">Grade - between 0 and 100</p>
 					</c:if>
 				</c:if>
 				<p id="gradeMsg" class="invalidData"></p>
 				<div class="formInput">
 					<label><b>Teacher comment:</b></label>&nbsp; <br>
-					<textarea class="form-control" id="textareaComment" placeholder = "Enter comment..." maxlength="250"
+					<textarea class="form-control" id="textareaComment" placeholder = "Enter comment..." maxlength="251"
 						name="comment"><c:out
 							value="${sessionScope.currHomework.teacherComment}"></c:out></textarea>
 					<c:if test="${not empty sessionScope.validComment}">
 
 						<c:if test="${not sessionScope.validComment}">
-							<p id="textareaCommentMsg" class="invalidData">Invalid
-								comment</p>
+							<p id="textareaCommentMsg" class="invalidData">Comment - maximum 250 symbols</p>
 						</c:if>
 					</c:if>
 					<p id="textareaCommentMsg" class="invalidData"></p>
@@ -154,7 +152,7 @@
 			<c:remove var="validComment" scope="session" />
 		</c:if>
 	<script>
-		$('#UpdateTeacherGradeAndCommentForm')
+		/* $('#UpdateTeacherGradeAndCommentForm')
 				.submit(
 						function(e) {
 							e.preventDefault();
@@ -180,7 +178,7 @@
 							if (textareaComment.length > 250) {
 								document
 										.getElementById("textareaCommentMsg")
-										.append("Comment - maximal 250 symbols");
+										.append("Comment - maximum 250 symbols");
 								isCommentValid = false;
 							}
 							if (isGradeValid === true
@@ -191,7 +189,7 @@
 							} else {
 								return false;
 							}
-						});
+						}); */
 		$(document).ready(function() {
 			var table = $('#tasksTable').DataTable({
 				"autoWidth" : false,

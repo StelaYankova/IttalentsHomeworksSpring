@@ -50,10 +50,6 @@
 				<input type='hidden' value='${sessionScope.currHomework.tasksFile}'
 					name='fileName'>
 				 <button class='btn btn-link btn-xs' type='submit'><u>download tasks</u>
-					<%-- <c:out
-								value="download <u>here</u>" escapeXml="true"/> --%>
-					<%-- <b><i><c:out
-								value="${sessionScope.currHomework.heading }.pdf" /></i></b> --%>
 				</button>
 			</form>
 		<form action="./RemoveHomeworkDetails"
@@ -62,7 +58,7 @@
 						class="glyphicon glyphicon-remove btn btn-default btn-xs"
 						onclick="javascript:return confirm('Are you sure you want to remove this homework permanently?')"></button>
 	</form></div>
-		<div id="formUpdate" align="right">
+		<div id="formUpdate" align="right" class = "form-horizontal">
 		
 			<legend>Update homework</legend>
 
@@ -81,8 +77,8 @@
 					</c:if>
 				</c:if>
 				<div class="form-group">
-					<label class="control-label col-sm-4">Heading:</label>
-					<div class="col-sm-7">
+					<label class="control-label">Heading:</label>
+					<div class="control-label-input">
 						<input type="text" class="form-control" name="name"
 							value='${sessionScope.currHomework.heading}' placeholder = "Enter homework heading" maxlength="40"
 							data-toggle="popover" data-placement="bottom"
@@ -105,8 +101,8 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-sm-4">Opening time:</label>
-					<div class='col-sm-7'>
+					<label class="control-label">Opening time:</label>
+					<div class='control-label-input'>
 						<div class='input-group date' id='datetimepicker6'>
 							<input type='text'
 								value="${sessionScope.currHomework.openingTime}"
@@ -128,8 +124,8 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-sm-4">Closing time:</label>
-					<div class='col-sm-7'>
+					<label class="control-label">Closing time:</label>
+					<div class='control-label-input'>
 						<div class='input-group date' id='datetimepicker7'>
 							<input type='text'
 								value="${sessionScope.currHomework.closingTime}"
@@ -152,9 +148,9 @@
 				</div>
 
 				<div class="form-group">
-					<label class="control-label col-sm-4">Number
+					<label class="control-label">Number
 						of tasks:</label>
-					<div class="col-sm-7">
+					<div class="control-label-input">
 						<input type="number" min="1" max = "40" class="form-control"
 							name="numberOfTasks"
 							value='${sessionScope.currHomework.numberOfTasks}' maxlength="2"
@@ -170,8 +166,8 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-sm-4">Groups:</label>
-					<div class="col-sm-7">
+					<label class="control-label">Groups:</label>
+					<div class="control-label-input">
 						<select class="selectpicker form-control" data-size="7" data-width="101%"
 							multiple name="groups" id="groups" class="form-control" required >
 							<c:forEach items="${applicationScope.allGroups}" var="group">
@@ -201,8 +197,8 @@
 				</div>
 				
 				<div class="form-group">
-				 <label class="control-label col-sm-4">Tasks:</label>
-					<div class="col-sm-7 ">
+				 <label class="control-label">Tasks:</label>
+					<div class="control-label-input">
 						<input type="file" accept="application/pdf" name="file">
 						<c:if test="${not empty sessionScope.validFile}">
 							<c:if test="${not sessionScope.validFile}">
@@ -214,12 +210,10 @@
 					</div>
 				</div>
 				<legend></legend>
-				<div class="form-group">
-					<div class="col-md-offset-4 col-sm-5">
-						<input id = "updateHomeworkButton"
-							type="submit" class=" form-control btn btn-default"
+ 			<div class="form-group" >
+						<input 
+							type="submit" id = "updateHomeworkButton" class=" form-control btn btn-default"
 							value="Update">
-					</div>
 				</div>
 			</form>
 		</div>
@@ -487,7 +481,7 @@
 															.submit();
 												}
 											});
-						});
+						}); 
 		$(document).ready(function() {
 			$('[data-toggle="popover"]').popover();
 		});
