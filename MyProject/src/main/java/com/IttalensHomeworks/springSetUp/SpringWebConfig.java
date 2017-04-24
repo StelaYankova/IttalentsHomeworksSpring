@@ -71,37 +71,4 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 		registry.addInterceptor(changeInterceptor);
 	}
 	
-//	@Bean
-//    public CharacterEncodingFilter characterEncodingFilter() {
-//        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-//        characterEncodingFilter.setEncoding("UTF-8");
-//        characterEncodingFilter.setForceEncoding(true);
-//        return characterEncodingFilter;
-//    }
-//	@Bean
-//	public org.springframework.web.filter.CharacterEncodingFilter characterEncodingFilter() {
-//	    org.springframework.web.filter.CharacterEncodingFilter characterEncodingFilter = new org.springframework.web.filter.CharacterEncodingFilter();
-//	    characterEncodingFilter.setEncoding("UTF-8");
-//	    characterEncodingFilter.setForceEncoding(true);
-//	    return characterEncodingFilter;
-//	}
-//	 @Bean
-//	    public ResourceBundleMessageSource configureResourceBundleMessageSource() {
-//	        ResourceBundleMessageSource resource = new ResourceBundleMessageSource();
-//	        resource.setBasename("messages");
-//	        return resource;
-//	    }
-//	 @Bean
-//	    public MessageSource messageSource() {
-//	    	ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-//	        messageSource.setBasenames("i18/users", "i18/errormsg");
-//	        messageSource.setDefaultEncoding("UTF-8");
-//	        return messageSource;
-//	    }
-//	 @Bean
-//		public MessageSource messageSource() {
-//			ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-//			messageSource.setBasename("messages");
-//			return messageSource;
-//		}
 }

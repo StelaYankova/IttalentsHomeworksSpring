@@ -2,6 +2,9 @@
 /* .container{
 	
 } */
+/* footer{
+	z-index:-1;
+} */
 .input-invalid-or-empty {
 	color: red;
 	text-align: left;
@@ -14,6 +17,7 @@
 }
 .breadcrumb{
 	margin-top:0.5em;
+	margin-bottom: 0.1em !important;
 }
 html {
     position: relative;
@@ -67,7 +71,10 @@ body {
 }
 }
 @media ( max-width :789px) {
-	
+	.breadcrumb {
+    margin-top: 0.5em;
+    margin-bottom: 1.4em !important;
+}
 	#pageWrapper {
 	width:40em;
 	  /*   margin-bottom: 35.625em; */

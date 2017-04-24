@@ -195,7 +195,7 @@
 	margin-left: 0px;
 	width: 100%;
 	border-color: #080808;
-	z-index : 1;
+	z-index : -1;
 	overflow: visible; 
 }
 

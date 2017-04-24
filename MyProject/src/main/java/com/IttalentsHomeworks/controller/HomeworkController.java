@@ -738,6 +738,7 @@ public class HomeworkController {
 							obj.addProperty("uploadedOn", task.getUploadedOn().toString());
 							obj.addProperty("solution", strLine);
 						}
+						System.out.println("Time is " + task.getUploadedOn().toString());
 						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 						response.getWriter().write(obj.toString());
 					} else {
@@ -1477,7 +1478,7 @@ public class HomeworkController {
 					if (doesGradeHaveInvalidSymbols(teacherGradeString.trim())) {
 						teacherGrade = Integer.parseInt(teacherGradeString.trim());
 						// grade >=0 <=100
-						if (!isGradeValueValid(teacherGrade)) {
+						if (isGradeValueValid(teacherGrade)) {
 							isGradeValueValid = true;
 						}
 					}
@@ -1585,11 +1586,15 @@ public class HomeworkController {
 										+ taskNum + ".java";
 								file.transferTo(new File(savePath + File.separator + fileName));
 								try {
+									DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+									LocalDateTime currDateTime = LocalDateTime.now();
+									  String currDateTimeString = currDateTime.format(formatter);
+									  currDateTime = LocalDateTime.parse(currDateTimeString, formatter);
 									UserDAO.getInstance().setSolutionOfTask(homeworkDetails, (Student) user, taskNum,
-											fileName, LocalDateTime.now());
+											fileName, currDateTime);
 									homework.getTasks().get(taskNum).setSolution(fileName);
-									homework.getTasks().get(taskNum).setUploadedOn(LocalDateTime.now());
-									request.getSession().setAttribute("invalidFields", true);
+									homework.getTasks().get(taskNum).setUploadedOn(currDateTime);
+//									request.getSession().setAttribute("invalidFields", false);
 								} catch (UserException e) {
 									File f = new File(savePath + File.separator + fileName);
 									if (f.exists()) {

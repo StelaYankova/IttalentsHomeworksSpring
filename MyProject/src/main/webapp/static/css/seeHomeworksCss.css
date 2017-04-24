@@ -30,7 +30,9 @@
 	width: 80%;
 	padding-bottom: 3.750em;
 }
-
+#select .bootstrap-select.btn-group .dropdown-menu {
+    max-height: 14em !important;
+}
 #pageTitle {
 	text-align: center;
 }

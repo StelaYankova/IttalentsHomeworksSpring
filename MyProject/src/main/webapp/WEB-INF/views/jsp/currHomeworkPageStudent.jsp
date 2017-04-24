@@ -187,7 +187,7 @@ function uploadFile(e){
 	var file = document.forms[e]["datafile"].value;
 	
 
-		$('.input-invalid').empty();
+	 $('.input-invalid').empty();
 		if (file == "") {
 			isFileValid = false;
 			return false;
@@ -196,7 +196,7 @@ function uploadFile(e){
 		if (!isFileValid) {console.log("fileMsg" + e)
 			document.getElementById("fileMsg"+e).append(
 					"Valid file format - java, maximal size - 1MB");
-		}else{ 
+		}else{  
 		var form = new FormData(document.getElementById(e));
 		console.log(form.get("taskNum"))
 		$.ajax({
@@ -214,7 +214,7 @@ function uploadFile(e){
 				"Valid file format - java, maximal size - 1MB");
 			}
 		});
-		}
+	}
 }
 
 	$(document).ready(function() {
@@ -285,6 +285,7 @@ function uploadFile(e){
 					dataType : 'json',
 					success : function(response) {
 						var uploaded = response.uploadedOn;
+						console.log(uploaded)
 						var uploadedRep = uploaded.replace("T", " ");
 						$("#taskUpload").html(
 								"Task " + taskNum + " uploaded on: "

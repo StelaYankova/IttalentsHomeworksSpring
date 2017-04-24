@@ -151,7 +151,7 @@ legend{
     position: absolute;
     display: inline-block;
     left: 50%;
-    top: 17.4em;
+    margin-top: 4.3em;
     z-index: 1;
     width: 30%;
 }

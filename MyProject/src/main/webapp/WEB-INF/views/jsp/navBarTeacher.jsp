@@ -32,110 +32,7 @@
 	src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script>
 
 </head>
-<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
- --%> <link href="<c:url value="css/navBarTeacherAndStudentCss.css" />" type="text/css" rel="stylesheet">
-
-
-<!-- <style>
-
-
-
-#pageWrapper{
- 	margin-top: -10px;
- 	margin-left: 170px;
-	margin-right: 170px;
-	margin-bottom: 70px;
-}
-.input-invalid-or-empty {
-	color: red;
-	text-align: left;
-}
-
-.input-invalid {
-	color: red;
-	text-align: center;
-}
-.breadcrumb > li + li:before {
-color:#333;
-        content: "\3E" /* Hex code for > */
-    }
-.alert {
-	position: absolute;
-	top: 81px;
-	width: 100%;
-	
-}
-
-.invalidData {
-	color: red;
-}
-
-.footerText {
-	color: white;
-}
-
-#footerTextPosition1 {
-	posistion: absolute;
-	margin-left: 15%;
-	margin-top: 1%;
-	float: left;
-}
-
-#footerTextPosition2 {
-	posistion: absolute;
-	margin-left: 30%;
-	margin-top: 1%;
-	float: left;
-	overflow: hidden; /* if you don't want #second to wrap below #first */
-}
-
-#footerTextPosition3 {
-	posistion: absolute;
-	margin-left: 45%;
-	margin-top: 1%;
-	float: left;
-}
-
-#footerTextPosition3, #footerTextPosition2, #footerTextPosition1 {
-	display: inline-block;
-}
-
-.footer {
-	position: absolute;
-	position: fixed;
-	bottom: 0;
-	height: 60px;
-	background-color: #404040;
-	width: 100%;
-	overflow: hidden; /* will contain if #first is longer than #second */
-	z-index: 1;
-}
-
-.navbar {
-	background-color: #2E71AC;
-	margin-bottom: 0px;
-/* 	border-color: /* #2e6da4 #00BFFF;
- */}
-
-.container {
-	text-align: right;
-}
-
-#formFields {
-	top: 110px;
-	right: 0;
-	width: 500px;
-}
-
-.navbar-nav>li>a, .navbar-brand {
-	padding-top: 6px !important;
-	height: 20px;
-}
-
-.navbar {
-	min-height: 80px !important;
-}
-</style> -->
+<link href="<c:url value="css/navBarTeacherAndStudentCss.css" />" type="text/css" rel="stylesheet">
 
 <body>
 				<%@ include file="footer.jsp"%>
@@ -143,7 +40,7 @@ color:#333;
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle glyphicon glyphicon-menu-hamburger" data-toggle="collapse"
-					data-target="#myNavbar" id = "dropdownButton" >
+					data-target="#myNavbar" id = "dropdownButton">
 					
 				</button>
 				
@@ -153,7 +50,7 @@ color:#333;
 						height="70px" width="auto"></a>
 			</div>
 			<br><br><br><br>
-			<div class="collapse navbar-collapse" aria-expanded = "false" id="myNavbar">
+			<div class="collapse" id="myNavbar">
 				<ul class="nav navbar-nav" >
 					
 					<li><a href="./GetMainPageTeacher" class="btn-md"
@@ -232,16 +129,6 @@ color:#333;
 	</nav></div>
 
 	<script>
-/* $(document).ready(function(){
-  $('.dropdown-submenu a.test').on("click", function(e){
-	  console.log(1)
-    $(this).next('ul').toggle();
-    e.stopPropagation();
-	  console.log(2)
-
-    e.preventDefault();
-  });
-}); */
  $(document).ready(function() {
     $(".dropdown-toggle").dropdown();
 }); 

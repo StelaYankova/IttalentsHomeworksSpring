@@ -89,8 +89,8 @@ label {
 	background-color: #0086b3;
 }
 #taskUpload{
-	visibility: hidden;
-	    padding-bottom: 0.1em;
+	display:none;
+	padding-bottom: 0.1em;
 	
 }
 #currTaskSolution{

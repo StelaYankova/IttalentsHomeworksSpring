@@ -15,13 +15,7 @@
 </head>
 
 <body>
-	<c:if test="${not empty invalidFields}">
-		<c:if test="${not invalidFields}">
-			<div class="alert alertAllPages alert-success">
-				<strong>Success!</strong> Your profile has been updated successfully
-			</div>
-		</c:if>
-	</c:if>
+	
 	<c:if test="${sessionScope.isTeacher == false}">
 		<%@ include file="navBarStudent.jsp"%>
 	</c:if>
@@ -59,6 +53,13 @@
 				</ul>
 			</nav>
 		</div>
+	</c:if>
+	<c:if test="${not empty invalidFields}">
+		<c:if test="${not invalidFields}">
+			<div class="alert alertAllPages alert-success">
+				<strong>Success!</strong> Your profile has been updated successfully
+			</div>
+		</c:if>
 	</c:if>
 	<div id="pageWrapper">
 		<div id="formUpdateProfile" ><!-- align="center" -->

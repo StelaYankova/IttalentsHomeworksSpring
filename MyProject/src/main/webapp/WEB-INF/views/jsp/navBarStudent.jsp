@@ -29,39 +29,12 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 <script
 	src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script>
-
-<style>
-ul.nav.navbar-nav {
-    margin-left: -8em;
-}
-.navbar-inverse .navbar-nav .open .dropdown-menu>li>a {
-    margin-bottom: -0.5em;
-}
-</style>
-<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
- --%> <link href="<c:url value="css/navBarCss.css" />" type="text/css" rel="stylesheet">
+<link href="<c:url value="css/navBarCss.css" />" type="text/css" rel="stylesheet">
  <link href="<c:url value="css/navBarTeacherAndStudentCss.css" />" type="text/css" rel="stylesheet">
 
 <body>
 					 <%@ include file="footer.jsp"%> 
-					 	<!-- <div class="dropdownSmallScreen">
-					 
-<nav class="navbar navbar-inverse ">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle glyphicon glyphicon-menu-hamburger collapsed" data-toggle="collapse"
-					data-target="#myNavbar"  id = "dropdownButton">
-					
-				</button>
-				
-				<a class="navbar-brand" href="./index"
-						style="padding-top: 30px; padding-left: 80px;"> <img
-						id="img-href" src="http://ittalents.bg/images/logo-white.png"
-						height="70px" width="auto"></a>
-			</div>
-			<br><br><br><br>
-				<div class="collapsed navbar-collapse" id="myNavbar"  aria-expanded="false" style = "display:inline-block;height:0px">
-					<ul class="nav navbar-nav" aria-expanded="false"> -->
+
 					<nav class="navbar navbar-inverse dropdownSmallScreen">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -76,7 +49,7 @@ ul.nav.navbar-nav {
 						height="70px" width="auto"></a>
 			</div>
 			<br><br><br><br>
-			<div class="collapse navbar-collapse" id="myNavbar">
+			<div class="collapse" id="myNavbar">
 				<ul class="nav navbar-nav" >
 						<li><a href="./GetMainPageStudent"
 							style="background: transparent; border: none; color: #ffffff"
@@ -87,11 +60,6 @@ ul.nav.navbar-nav {
 						<li><a href="./yourScores"
 							style="background: transparent; border: none; color: #ffffff"
 							class="btn-md">Your scores</a></li>
-						<!-- <li class="dropdown" id="dropdown"><a
-							style="background: transparent; border: none; color: #ffffff"
-							class="btn-md" onclick="seeGroups()" data-toggle="dropdown"
-							aria-expanded="true"> Your groups <span class="caret"></span>
-						</a> -->
 						<li class="dropdown"><a class="dropdown-toggle"
 							aria-expanded="false"
 						data-toggle="dropdown" href="#" onclick="seeGroups()" style="background: transparent; border: none; color: #ffffff">Your groups<span class="caret"></span></a>
@@ -104,7 +72,7 @@ ul.nav.navbar-nav {
 					</ul>
 				</div>
 			</div>
-	</nav><!-- </div> -->
+	</nav>
 	<div class="dropdownLargeScreen">
 
 	<nav class="navbar navbar-inverse ">
@@ -148,35 +116,33 @@ ul.nav.navbar-nav {
 	    $(".dropdown-toggle").dropdown();
 	});
  function seeGroups() {
-	 if($('#groups').has("li").length != 0) {
-		 console.log('remove')
-		 $("#groups").empty();
+	 if($('#groups').has("li").length == 0) {
+		 $.ajax({
+				url : './GetGroupsOfUserServlet',
+				type : 'GET',
+				dataType : 'json',
+				success : function(response) {
+					
+					for ( var i in response) {
+						console.log(response[i].id);
+								 $('ul .dropdown-menu').append(
+											"<li class = 'subMenu'><a href = './homeworksOfGroup?id="+response[i].id+"' method = 'GET' style='border: none; color: #ffffff; background-color: #2E71AC'>"
+											+ response[i].name + "</a></li>");
+								 
+					}
+					if (!$('#dropdown').hasClass("open")) {
+						 document.getElementById('dropdown').className += ' open';
+					}
+				}
+
+			});
 		} 
-	 
 	
 // document.getElementById('dropdown').className-='open';
 			// document.getElementById('dropdown').className -= ' open';
 
 
-	$.ajax({
-		url : './GetGroupsOfUserServlet',
-		type : 'GET',
-		dataType : 'json',
-		success : function(response) {
-			
-			for ( var i in response) {
-				console.log(response[i].id);
-						 $('ul .dropdown-menu').append(
-									"<li class = 'subMenu'><a href = './homeworksOfGroup?id="+response[i].id+"' method = 'GET' class='btn-sm' style='border: none; color: #ffffff; background-color: #2E71AC'>"
-									+ response[i].name + "</a></li>");
-						 
-			}
-			if (!$('#dropdown').hasClass("open")) {
-				 document.getElementById('dropdown').className += ' open';
-			}
-		}
-
-	});
+	
 	 
 
 }

@@ -157,7 +157,7 @@ public class GroupDAO implements IGroupDAO {
 			ps.setInt(1, group.getId());
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");//ss
 				String openingTimeString = rs.getString(3);
 				String closingTimeString = rs.getString(4);
 				LocalDateTime openingTime = LocalDateTime.parse(openingTimeString, formatter);

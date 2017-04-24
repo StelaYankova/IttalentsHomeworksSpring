@@ -40,7 +40,7 @@
 				</script>
 				</c:if>
 			</c:if>
-			Choose group: <select id="chosenGroup" class="selectpicker" data-size="10">
+			Choose group: <select id="chosenGroup" class="selectpicker">
 				<option value="null">-</option>
 				<option value="allGroups">All Groups</option>
 				<c:forEach var="group" items="${applicationScope.allGroups}">

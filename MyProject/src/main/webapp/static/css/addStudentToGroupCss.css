@@ -4,7 +4,12 @@
 	margin: 0px auto !important;
 	padding-top: 0.125em;
 }
-
+.bootstrap-select>select {
+    left: 0% !important;
+}
+#addStudentToGroupForm .bootstrap-select.btn-group .dropdown-menu {
+    max-height: 16em !important;
+}
 #addButtonDiv {
 	padding-top: 1.5em;
 	width: 0%;

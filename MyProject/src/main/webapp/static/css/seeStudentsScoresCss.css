@@ -15,6 +15,9 @@
 	max-width: 32em;
 	font-size: 0.9em;
 }
+#select .bootstrap-select.btn-group .dropdown-menu {
+    max-height: 14em !important;
+}
 #select {
 	position: absolute;
 	padding-top: 5em;
