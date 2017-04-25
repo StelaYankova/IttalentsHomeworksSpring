@@ -7,8 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
- --%><link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/currHomeworkPageStudentCss.css" />" rel="stylesheet">
 </head>
 <style>
@@ -293,7 +293,6 @@ function uploadFile(e){
 						document.getElementById('currTaskSolution').value = response.solution;
 						document.getElementById("taskUpload").style.display = "block";
 						document.getElementById("currTaskSolution").style.display = "block";
-						document.getElementById("solution").style.display = "block";
 						if (uploaded === "-") {
 							document.getElementById("currTaskSolution").disabled = true;
 						} else {
@@ -302,6 +301,9 @@ function uploadFile(e){
 						sessionStorage.setItem("currTask", taskNum);
 						sessionStorage.setItem("currTaskSolution",
 								response.solution);
+						console.log("willll")
+						document.getElementById("solution").style.display = "block";
+
 					}
 				});
 	}

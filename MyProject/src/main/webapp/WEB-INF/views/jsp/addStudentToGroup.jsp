@@ -9,8 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
- --%>
+<link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
  <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
  <link href="<c:url value="css/addStudentToGroupCss.css" />" rel="stylesheet">
 
@@ -37,7 +36,7 @@
 				</div>
 			</c:if>
 		</c:if>
-	<div id="pageWrapper" style = "display:block">
+	<div id="pageWrapper">
 		<div class="addStudentToGroupDiv">
 			<div class="ui-widget">
 			<div id = "formLargeScreen">
@@ -96,8 +95,7 @@
 							value="${sessionScope.chosenUsernameTry}" />
 					</div>
 					<div class="form-group" id = "addButtonDiv">
-						<input style="background-color: #2E71AC; color: #ffffff"
-							type="submit" class=" form-control btn btn-default" value="Add">
+						<input type = "submit" class=" form-control btn btn-default" value="Add">
 					</div>
 				</form>
 			</div>
@@ -332,7 +330,7 @@
 									.append(
 											"<li class = 'list-group-item'>"
 													+ response[i].username
-													+ "<button style = 'background:transparent; borders:none; position:relative;float:right' type = 'button' class = 'btn btn-xs'  onclick = 'areYouSureRemove(this,\""
+													+ "<button type='button'class = 'btn btn-xs'  onclick = 'areYouSureRemove(this,\""
 													+ response[i].username
 													+ "\",\""
 													+ groupId

@@ -63,6 +63,7 @@
 
 #listOfStudentsOfGroup {
 	padding-bottom: 3.750em;
+	border: groove !important;
 }
 
 #listHeading {
@@ -75,7 +76,7 @@
 	float: left;
 	display: block;
 	padding-left: 4em;
-	padding-top: 13.8em;
+	padding-top: 13.2em;
 }
 
 .list>#listOfStudentsOfGroup button {
@@ -86,7 +87,7 @@
 	display: none;
 	border-style: double;
 	z-index: 1;
-	height: 305px;
+	height: 19.063em;
 	width: 80%;
 	overflow: hidden;
 	overflow-y: scroll;
@@ -102,15 +103,15 @@
 
 #currTable {
 	float: left;
-	padding-left: 70px;
-	padding-top: 80px;
+	padding-left: 4.375em;
+	padding-top: 5em;
 	padding-bottom: 3.750em;
 	width: 60%;
 	float: left;
 }
 
 #divTable table.dataTable tbody td .btn {
-	padding: 0em 0px 0px 0.3em;
+	padding: 0em 0em 0em 0.3em;
 	font-size: 0.98em;
 }
 
@@ -118,10 +119,10 @@
 	#divTable table.dataTable tbody td {
 		padding: 0.5em;
 		padding-left: 0.8em;
-		font-size: 0.92em;
+		    font-size: 0.78em;
 	}
 	#divTable table.dataTable tbody td .btn {
-		padding: 0em 0px 0px 0.3em;
+		padding: 0em 0em 0em 0.3em;
 		font-size: 0.92em;
 	}
 	#divTable table.dataTable thead th {
@@ -141,7 +142,7 @@
 		float: left;
 		display: block;
 		padding-left: 4em;
-		padding-top: 13.4em;
+		padding-top: 12.6em;
 	}
 	 .dataTables_paginate {
 		margin-top: -0.7em;
@@ -179,11 +180,11 @@
 		font-size: 0.8em;
 	}
 	#divTable table.dataTable tbody td {
-		padding: 0px 0px;
+		padding: 0em 0em;
 		font-size: 0.7em;
 	}
 	#divTable table.dataTable tbody th {
-		padding: 0px 0px;
+		padding: 0em 0em;
 	}
 }
 
@@ -230,7 +231,7 @@ max-width
 	display: none;
 	border-style: double;
 	z-index: 1;
-	height: 265px;
+	height: 16.563em;
 	width: 33%;
 	margin: 0px auto;
 }

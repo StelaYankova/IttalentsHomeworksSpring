@@ -8,8 +8,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
- --%><link href="<c:url value="css/seeStudentsScoresCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+<link href="<c:url value="css/seeStudentsScoresCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 
 </head>
@@ -66,10 +66,10 @@
 				</c:if>
 			</select>
 		</div>
-				<div id = "tableAndStudents" style = "">
+				<div id = "tableAndStudents">
 		
 		<div id="currTable">
-			<div id="divTable" style = "width:100%">
+			<div id="divTable">
 			
 				<table id="resultTable" border="1"
 					class="table table-striped table-bordered table-hover dataTables_wrapper form-inline dt-bootstrap">
@@ -185,7 +185,7 @@
 										var rowNode = table.row
 												.add(
 														[
-																"<form action = './homeworkOfStudent' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button style= 'color:#620062' type = 'button' class = 'btn btn-link'>"
+																"<form action = './homeworkOfStudent' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button title = 'Homework is not uploaded' style= 'color:#620062' type = 'button' class = 'btn btn-link'>"
 																		+ response[i].heading
 																		+ "</button></form>"/* ,
 																opensRep,
@@ -204,7 +204,11 @@
 		if (!$('#score').is(':empty')) {
 								$("#score").empty();
 							}
-							document.getElementById("score").append(answer);
+							if(answer === 'NaN'){
+								document.getElementById("score").append(0);
+							}else{
+								document.getElementById("score").append(answer);
+							}
 						}
 					});
 		}
@@ -270,7 +274,7 @@
 											for ( var i in response) {
 												$('#listOfStudentsOfGroup')
 														.append(
-																"<li><button class = 'btn btn-link' onclick = 'seeHomeworks("
+																"<li type='square'><button class = 'btn btn-link' onclick = 'seeHomeworks("
 																		+ groupId
 																		+ ","
 																		+ response[i].id

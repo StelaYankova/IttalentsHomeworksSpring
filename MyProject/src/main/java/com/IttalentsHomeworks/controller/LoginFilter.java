@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
+
 @WebFilter("/*")
 public class LoginFilter implements Filter {
 
@@ -41,20 +43,13 @@ public class LoginFilter implements Filter {
         boolean loginRequest6 = request.getRequestURI().equals(loginURI6);
         boolean loginRequest7 = request.getRequestURI().equals(loginURI7);
         boolean loginRequest8 = request.getRequestURI().equals(loginURI8);
-        boolean isImage = false;
-        boolean isStylesheet = false;
-        
-        if(request.getRequestURI().length() >= 5){
-        	//System.out.println(request.getRequestURL());
-            System.out.println(request.getRequestURI().substring(request.getRequestURI().length()-4, request.getRequestURI().length()));
-
-        	//isStylesheet = request.getRequestURI().substring(request.getRequestURI().length()-4, request.getRequestURI().length()).equals(".css");
-        	isStylesheet = request.getRequestURI().contains(".css");
+       // boolean isImage = false;
+        //boolean isStylesheet = false;
+        if(request.getRequestURI().matches(".*(css|jpg|png|gif|js)$")){
+            chain.doFilter(request, response);
+            return;
         }
-        if(request.getRequestURI().length() >= 16){
-        	isImage = request.getRequestURI().substring(IS_IMAGE_BEG, IS_IMAGE_END).equals("/image");
-        }
-		if (loggedIn || loginRequest || loginRequest2 || loginRequest1 || loginRequest5 || loginRequest6 || loginRequest7 || loginRequest8 || isImage || isStylesheet) {
+		if (loggedIn || loginRequest || loginRequest2 || loginRequest1 || loginRequest5 || loginRequest6 || loginRequest7 || loginRequest8 /*|| isImage || isStylesheet*/) {
 			chain.doFilter(request, response);
 		} else {
 			if(!isAjax((HttpServletRequest) req)){

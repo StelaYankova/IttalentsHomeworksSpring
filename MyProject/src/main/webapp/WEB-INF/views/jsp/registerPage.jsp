@@ -6,8 +6,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
- --%><link href="<c:url value="css/registerPageCss.css" />" type="text/css" rel="stylesheet">
+<link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+ <link href="<c:url value="css/registerPageCss.css" />" type="text/css" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" type="text/css" rel="stylesheet">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -23,8 +23,8 @@
 			</div>
 		</c:if>
 	</c:if>
-	<div id="pageWrapperRegister" style = "">
-		<div id="formRegister" style = "">
+	<div id="pageWrapperRegister">
+		<div id="formRegister">
 			<legend>Registration</legend>
 			<c:if test="${not empty invalidFields}">
 				<c:if test="${invalidFields}">
@@ -40,10 +40,10 @@
 					<label for="username" class="control-label">Username:</label>
 					<div class="control-label-input">
 						<input type="text" class="form-control"
-							placeholder="Enter username" name="username" maxlength="15"
+							placeholder="Enter username" name="username" maxlength="25"
 							value="${userTry.username}" data-toggle="popover"
 							data-placement="bottom" data-trigger="focus"
-							data-content="Valid length is from 6 to 15 symbols. Valid inputs are numbers and letters (large and small)."
+							data-content="Valid length is from 6 to 25 symbols. Valid inputs are numbers and letters (large and small)."
 							required />
 						<c:if test="${not empty validUsername}">
 							<c:if test="${not validUsername}">

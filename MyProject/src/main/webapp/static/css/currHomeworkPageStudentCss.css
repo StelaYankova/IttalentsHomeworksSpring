@@ -1,73 +1,4 @@
 @CHARSET "UTF-8";
-/* 
-#textareaComment {
-	max-width: 30%;
-}
-
-#currTaskSolution {
-	max-width: 50%;
-}
-
-.input-invalid {
-    padding-top: 12px;
-    margin-bottom: -3px;
-    text-align: left;
-}
-
-#currHomework{
- width: 36%;
-    float: left; 
-	padding-left:100px;
-	padding-right:20px;
-	padding-top:60px;
-	padding-bottom: 100px;
-}
-.solution{
- width: 52%;
-    float: left;
-    padding-left: 50px;
-    padding-top: 75px;
-  padding-bottom: 100px;
-}
-
-#teacherComment {
-	overflow-y: scroll;
-	resize: none;
-	width: 330px;
-	height: 150px;
-	border-size: 2px;
-	border-style: groove;
-	font-size: 12px;
-	font-style: italic;
-}
-#divTasks{
-	padding-bottom: 60px;
-}
-#tasksTable{
-	border-size: 2px;
-	border-style: groove;
-}
-#tasksTable td{
-    padding-bottom: 15px;
-    padding-top: 19px;
-    border-size: 2px;
-	border-style: groove;
-}
-
-#seeTaskSolutionButton {
-	color: #fff;
-	background-color: #0086b3;
-}
-
-#currTaskSolution,#taskUpload,#currTaskSolution{
-	visibility: hidden;
-}
-.uploadSolutionButton{
-	float:right;
-	text-decoration:underline;
-} */
-
-@CHARSET "UTF-8";
 .uploadSolutionButton{
 	float:right;
 	text-decoration:underline;
@@ -80,18 +11,17 @@ label {
 	*display: inline; /* for IE7*/
 	zoom: 1; /* for IE7*/
 	float: left;
-	padding-top: 5px;
+	padding-top: 0.313em;
 	text-align: left;
-	width: 140px;
+	width: 8.750em;
 }
 
 #solution{
  width: 52%;
     float: left;
-    padding-left: 50px;
-    padding-top: 5.7em;
-/*   padding-bottom: 100px;
- */ }
+    padding-left: 3.125em;
+    padding-top: 5em;
+}
 
 #currTaskSolution {
 	display: none;
@@ -100,25 +30,24 @@ label {
 #currHomework {
     width: 44%;
     float: left;
-        padding-left: 7em;
-    /* padding-left: 19px; */
+    padding-left: 7em;
     padding-right: 1.313em;
-    padding-top: 60px;
+    padding-top: 3.750em;
 }
 .input-invalid {
-    padding-top: 12px;
-    margin-bottom: -3px;
+    padding-top: 0.750em;
+    margin-bottom: -0.188em;
     text-align: left;
 }
 
 #teacherComment {
 	overflow-y: scroll;
 	resize: none;
-	width: 330px;
-	height: 150px;
-	border-size: 2px;
-	border-style: groove;
-	font-size: 12px;
+	width: 33em;
+	height: 9.375em;
+	border-size: 0.125em;
+	border: groove;
+	font-size: 0.750em;
 	font-style: italic;
 }
 .dataTables_scrollBody{
@@ -126,21 +55,19 @@ label {
 }
 
 #divTable{
-	padding-bottom: 10px;
+	padding-bottom: 0.625em;
 }
 #tasksTable{
-	border-size: 2px;
-	border-style: groove;
-/* 	width:100%;
- */}
+	border-size: 0.125em;
+	border: groove;
+}
 .dataTables_scrollHeadInner{
  	width:/* 100% !important */;
 }
 #tasksTable td{
-	padding-bottom: 15px;
-    padding-top: 19px;
-	border-size: 2px;
-	border-style: groove;
+	padding-bottom: 0.938em;
+    padding-top: 1.188em;
+	border-size: 0.125em;
 }
 #seeTaskSolutionButton{
 	color: #fff; 
@@ -167,11 +94,11 @@ label {
 	#teacherComment {
 		overflow-y: scroll;
 		resize: none;
-		width: 488px;
-		height: 94px;
-		border-size: 2px;
-		border-style: groove;
-		font-size: 12px;
+		width: 30.500em;
+		height: 5.875em;
+		border-size: 0.125em;
+		border: groove;
+		font-size: 0.750em;
 		font-style: italic;
 	}
 	#solution{
@@ -186,15 +113,12 @@ label {
 }
 
 #solution {
-   /*  width: 52%; */
     float: left;
     padding-left: 1em;
     padding-top: 1em;
-/*     padding-bottom: 100px;
- */}
+}
 #currTaskSolution {
     height: 33em;
-    /* margin-bottom:15em; */
      width:71em; 
 }
 }
@@ -202,30 +126,24 @@ label {
 #currTaskSolution {
     height: 33em;
     width: 68em; 
-/*     margin-bottom:15em;
- */}
+}
 }
  @media ( max-width : 992px) {
 #currTaskSolution {
     height: 33em;
     width: 51.5em; 
-    /* margin-bottom:15em; */
 }
 } 
 @media ( max-width : 991px) {
 #currTaskSolution {
     height: 33em;
     width: 51.5em; 
-    /* margin-bottom:15em; */
-    /* width:70.5em; */
 }
 }
 @media ( max-width : 789px) {
 #currTaskSolution {
     height: 33em;
     width: 38.5em;
-    /* margin-bottom:15em; */
-    /* width:70.5em; */
 }
 }
 @media ( max-width : 590px) {

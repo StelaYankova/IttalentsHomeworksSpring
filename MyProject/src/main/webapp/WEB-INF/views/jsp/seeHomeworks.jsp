@@ -7,8 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
- --%><link href="<c:url value="css/seeHomeworksCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+<link href="<c:url value="css/seeHomeworksCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 
 </head>
@@ -287,7 +287,7 @@
 								if (hasStudentGivenMinOneTask == true) {
 									$('#listOfStudentsOfGroup')
 											.append(
-													"<li><form action = './homeworkOfStudent'><input type = 'hidden' name = 'id' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'submit' class='btn btn-link'>"
+													"<li type='square'><form action = './homeworkOfStudent'><input type = 'hidden' name = 'id' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'submit' class='btn btn-link'>"
 															+ response[i].username
 															+ "</button></form></li>");
 									
@@ -298,7 +298,7 @@
 								} else {
 									$('#listOfStudentsOfGroup')
 											.append(
-													"<li><form action = './homeworkOfStudent'><input type = 'hidden' name = 'id' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'button' style= 'color:#620062' class='btn btn-link'>"
+													"<li type='square'><form action = './homeworkOfStudent'><input type = 'hidden' name = 'id' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'button' title = 'Student has not uploaded the chosen homework' style= 'color:#620062' class='btn btn-link'>"
 															+ response[i].username
 															+ "</button></form></li>");
 									document

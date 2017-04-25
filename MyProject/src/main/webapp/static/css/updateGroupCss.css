@@ -75,17 +75,6 @@ legend {
 }
 
 @media ( max-width :589px) {
-	/* #formUpdateGroup {
-		width: 90%;
-	}
-	.form-horizontal .form-group:last-child {
-		width: 98%;
-		padding-left: 9.4em;
-	}
-	.bootstrap-select.btn-group .dropdown-menu {
-		max-width: 120%;
-		font-size: 0.79em;
-	} */
 	#formUpdateGroup {
 		width: 90%;
 	}
@@ -106,58 +95,3 @@ legend {
 		padding-left: 2em;
 	}
 }
-/* 
-#formUpdateGroup {
-	margin: 0 auto;
-	padding-top: 3.750em;
-	width: 42%;
-}
-
-legend {
-	text-align: left;
-}
-
-.control-label.col-sm-4 {
-	padding-right: 1.875em;
-}
-
-.form-group {
-	padding-left: 3.750em auto;
-}
-
-#updateGroupButton {
-	background-color: #2E71AC;
-	text-align: center;
-	color: #ffffff;
-}
-
-@media ( max-width :992px) {
-	legend {
-		width: 70%;
-	}
-}
-
-@media ( max-width :1000px) {
-	#formUpdateGroup {
-		width: 60%;
-	}
-}
-
-@media ( max-width :800px) {
-	.form-horizontal .control-label {
-		padding-top: 0.438em;
-		margin-bottom: 0;
-		text-align: left;
-	}
-	#formUpdateGroup {
-		width: 70%;
-	}
-}
-
-@media ( max-width :590px) {
-	#formUpdateGroup {
-		width: 90%;
-	}
-}
-}
- */

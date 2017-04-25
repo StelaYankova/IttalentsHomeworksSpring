@@ -9,8 +9,8 @@
 <title>Insert title here</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
- --%><link href="<c:url value="css/updateProfileCss.css" />" rel="stylesheet">
+ <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+<link href="<c:url value="css/updateProfileCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 </head>
 
@@ -77,7 +77,7 @@
 				<div id="inputFields">
 					<div class="form-group">
 						<label class="control-label">Username:</label>
-						<div class="control-label-input" style="padding-top:7px">
+						<div class="control-label-input">
 							<c:out value="${sessionScope.user.username}"></c:out>
 						</div>
 					</div>

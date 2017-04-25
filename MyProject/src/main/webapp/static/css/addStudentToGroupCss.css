@@ -4,14 +4,25 @@
 	margin: 0px auto !important;
 	padding-top: 0.125em;
 }
+#addButtonDiv>input {
+	background-color: #2E71AC;
+	color: #ffffff;
+}
+
 .bootstrap-select>select {
     left: 0% !important;
 }
 #addStudentToGroupForm .bootstrap-select.btn-group .dropdown-menu {
     max-height: 16em !important;
 }
+li.list-group-item>button{
+	background:transparent; borders:none; position:relative;float:right;
+}
+#listOfStudentsOfGroupHeading{
+	padding-bottom:0.2em;
+}
 #addButtonDiv {
-	padding-top: 1.5em;
+	padding-top: 1.2em;
 	width: 0%;
 	padding-left: 0em;
 }
@@ -49,7 +60,7 @@ div.ui-widget:after {
 	text-align: left;
 	color: red;
 	width: 20%;
-	margin-left: 320px;
+	margin-left: 20em;
 }
 
 .form-group {
@@ -77,7 +88,7 @@ ul.ui-autocomplete {
 
 .addStudentToGroupDiv {
 	text-align: center;
-	margin-top: 70px;
+	margin-top: 4.375em;
 }
 
 .input-invalid-addStudentToGroup {

@@ -46,7 +46,7 @@ public interface IValidationsDAO {
 	 static final int ASCII_TABLE_VALUE_OF_DOT = 46;
 	 static final int ASCII_TABLE_VALUE_OF_Z = 90;
 	 static final int ASCII_TABLE_VALUE_OF_A = 65;
-	 static final int MAX_LENGTH_USERNAME = 15;
+	 static final int MAX_LENGTH_USERNAME = 25;
 	 static final int MIN_LENGTH_USERNAME = 6;
 	static final String SAVE_DIR = "/Users/Stela/Desktop/imagesIttalentsHomework";
 

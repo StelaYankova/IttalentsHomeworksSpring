@@ -29,6 +29,8 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 <script
 	src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script>
+	 <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+	
 <link href="<c:url value="css/navBarCss.css" />" type="text/css" rel="stylesheet">
  <link href="<c:url value="css/navBarTeacherAndStudentCss.css" />" type="text/css" rel="stylesheet">
 
@@ -87,22 +89,22 @@
 				style="padding-top: 25px; padding-right: 25px">
 				<li><a href="./GetMainPageStudent" style="color: #ffffff"
 					class="btn-lg">Home</a></li>
-				<li><a href="./updateProfile" style="color: #ffffff"
-					class="btn-lg">Your profile</a></li>
-				<li><a href="./yourScores"
-					class="btn btn-primary btn-lg dropdown-toggle"
-					style="background: transparent; border: none; color: #ffffff">Your
-						scores</a></li>
-				<li class="dropdown" id = "dropdown"><a
-					class="btn btn-primary btn-lg dropdown-toggle"
-					style="background: transparent; border: none; color: #ffffff"
-					onclick="seeGroups()" data-toggle="dropdown" aria-expanded="true"> Your groups <span
-						class="caret"></span>
-				</a>
-					<ul class="dropdown-menu" id="groups"
-						style='background-color: #2E71AC;z-index:1'>
-					</ul></li>
-				<li><a href="./LogoutServlet" style="color: #ffffff"
+
+					<li><a href="./updateProfile" style="color: #ffffff"
+						class="btn-lg">Your profile</a></li>
+					<li><a href="./yourScores"
+						style="background: transparent; border: none; color: #ffffff"
+						class="btn-lg">Your scores</a></li>
+					<li class="dropdown" id="dropdown"><a
+						class="btn btn-primary btn-lg dropdown-toggle"
+						style="background: transparent; border: none; color: #ffffff"
+						onclick="seeGroups()" data-toggle="dropdown" aria-expanded="true">
+							Your groups <span class="caret"></span>
+					</a>
+						<ul class="dropdown-menu" id="groups"
+							style='background-color: #2E71AC; z-index: 1'>
+						</ul></li>
+					<li><a href="./LogoutServlet" style="color: #ffffff"
 					class="btn-lg"> Logout </a></li>
 			</ul>
 		</div>

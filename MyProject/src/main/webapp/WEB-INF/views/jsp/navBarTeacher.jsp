@@ -32,6 +32,8 @@
 	src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script>
 
 </head>
+ <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+
 <link href="<c:url value="css/navBarTeacherAndStudentCss.css" />" type="text/css" rel="stylesheet">
 
 <body>

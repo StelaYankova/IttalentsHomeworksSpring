@@ -1,14 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
- --%><link href="<c:url value="css/seeYourHomeworksCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+<link href="<c:url value="css/seeYourHomeworksCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 
 </head>
@@ -51,10 +53,12 @@
 										<c:out value="${homework.heading}" />
 									</button>
 								</form></td>
-							<td><c:if test="${homework.daysLeft ge 0}">
-									<c:out value="${homework.daysLeft}" />
+							<td><c:set var="passesOn" value="${fn:replace(homework.closingTime,'T', ' ')}" />
+							<c:if test="${homework.daysLeft ge 0}">
+									<c:out value="${homework.daysLeft} (until ${passesOn})" />
 								</c:if> <c:if test="${homework.daysLeft lt 0}">
-									<c:out value="upload time passed" />
+								
+									<c:out value="upload time passed on ${passesOn}" />
 								</c:if></td>
 						</tr>
 					</c:forEach>

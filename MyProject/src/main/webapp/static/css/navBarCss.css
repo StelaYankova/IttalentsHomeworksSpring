@@ -1,13 +1,5 @@
 @CHARSET "UTF-8";
 
-#signInButton{
-	/* align: right; */
-}
-a.navbar-brand{
-	/* padding-top: 30px;
-	 padding-left:80px; */
-	     
-}
 .navbar-nav>li>a, .navbar-brand {
  	padding-top: 0.2em !important;
  	height: 20%;
@@ -16,19 +8,7 @@ a.navbar-brand{
 .navbar-brand>#img-href{
 	height: 85%;
 }
-/* .input-invalid-login {
-	position: absolute;
-	top: 2em;
-	right: 359em;
-	color: red;
-	
-	
-	position: absolute;
-    top: 2.8em;
-    right: 18.8em;
-    color: red;
-    font-size: 0.92em;
-} */
+
 .input-invalid-login {
 	position: absolute;
     top: 2.8em;
@@ -41,30 +21,7 @@ a.navbar-brand{
 	margin-bottom: 0px;
 	 min-height: 80px !important; 
 }
-/* @media all and (max-width:500px) {
-   .navbar-nav>li{
-	float:right;
-	margin-top:1.5em;
-	padding-right:1.2em;
-	display:block;
-	float:none;
-	margin:auto;
-} */
 
-
-/* .header-menu {
-	float: left;
-	line-height: 26px;
-	margin-left: 10px;
-} */
-
-/* a.registerPageButton {
-	  color: #ffffff;
-	  float:right;
-	  padding-right:4em;
-    padding-left: 22px; 
-    font-size:12px;
-} */
 .navbar-collapse>a.registerPageButton{
 	color: #ffffff;
 	  float:right;
@@ -86,28 +43,7 @@ a.navbar-brand{
 	position: absolute;
 	z-index: 1;
 }
- #signInForm{
-	/* margin-top:0px;
-	margin-left: 820px; */
-}
-/* .input-invalid-login{
-	margin-top:22px;
-}  */
-/* .input-invalid-login {
-	margin-top:22px;
-    position: absolute;
-    top: 15px;
-    right: 225px;
-    color: red;
-    font-size: 13px;
-} */
-/* #registerPageButton {
-	text-align: right;
-	padding-left: 1045px;
-	top: -6px;
-	color: #9d9d9d;  
-} */
-
+ 
 .wrapword {
 	white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
 	white-space: -webkit-pre-wrap; /*Chrome & Safari */
@@ -119,21 +55,11 @@ a.navbar-brand{
 	white-space: normal;
 }
 
-/* #formFields {
-	top: 110px;
-	right: 0;
-	width: 500px;
-} */
-/* 
-#formContainer {
-	padding-left: 200px;
-} */
- @media ( max-width:793px) {
+ @media ( max-width:767px) {
 	.navbar-nav>li>a, .navbar-brand {
 		display: none;
 	}
 	.navbar-collapse {
-		/* width: auto; */
 		width: 100%;
 		display: inline-block;
 		margin: 0 auto;
@@ -146,14 +72,48 @@ a.navbar-brand{
     color: #ffffff;
     float: left;
     padding-left: 12.5em;
-    margin-top: -4em;
+    margin-top: -3.55em;
     font-size: 12px;
-    z-index:1;
+    z-index:2 !important;
+    width:100%;
 }
 	.navbar-nav>li {
 		float: left;
 		margin-top: 1.5em;
 		padding-left: 7em;
 	}
+	.input-invalid-login {
+    position: absolute;
+    top: 9.8em;
+    right: 1em;
+    color: red;
+    font-size: 0.92em;
 }
- 
+}
+  @media ( max-width:500px) {
+  .navbar-collapse>a.registerPageButton {
+    color: #ffffff;
+    float: left;
+    padding-left: 12.5em;
+    margin-top: -3.55em;
+    font-size: 12px;
+    z-index:2 !important;
+    width:120%;
+}
+ /* .navbar-collapse>a.registerPageButton {
+    color: #ffffff;
+    float: left;
+    padding-left: 13em;
+    margin-top: -3.55em;
+    font-size: 6px;
+    z-index: 2 !important;
+    width: 100%;
+} */
+/* .input-invalid-login {
+    position: absolute;
+    top: 9.8em;
+    right: 1em;
+    color: red;
+    font-size: 0.92em;
+} */
+}

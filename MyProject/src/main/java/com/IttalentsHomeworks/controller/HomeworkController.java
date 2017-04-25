@@ -738,12 +738,9 @@ public class HomeworkController {
 							obj.addProperty("uploadedOn", task.getUploadedOn().toString());
 							obj.addProperty("solution", strLine);
 						}
-						System.out.println("Time is " + task.getUploadedOn().toString());
 						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 						response.getWriter().write(obj.toString());
 					} else {
-						System.out.println(taskNum);
-						System.out.println(homework.getTasks().size());
 						response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 						return;
 

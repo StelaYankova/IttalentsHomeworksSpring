@@ -32,8 +32,8 @@
 	src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script>
  
 </head>
-<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
- --%> <link href="<c:url value="css/navBarCss.css" />" type="text/css" rel="stylesheet">
+ <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+  <link href="<c:url value="css/navBarCss.css" />" type="text/css" rel="stylesheet">
 
 <style>
 
@@ -64,7 +64,7 @@
 						<form class="form-inline" action="./LoginServlet" method="POST"
 							name="signInForm" id="signInForm">
 							<div class="form-group">
-								<input type="text" class=" form-control input-md" maxlength="15"
+								<input type="text" class=" form-control input-md" maxlength="25"
 									value="${sessionScope.usernameTry}" placeholder="Username"
 									name="username" />
 							</div>

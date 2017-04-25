@@ -2,7 +2,7 @@
 
 
 .form-horizontal .control-label {
-	padding-top:2px !important;
+	padding-top:0.125em !important;
 	padding-right: 1em;
 	width: 38%;
 	text-align: right;

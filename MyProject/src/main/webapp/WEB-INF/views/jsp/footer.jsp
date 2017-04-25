@@ -195,7 +195,7 @@
 	margin-left: 0px;
 	width: 100%;
 	border-color: #080808;
-	z-index : -1;
+	z-index : 0;
 	overflow: visible; 
 }
 
@@ -216,7 +216,6 @@
 }
 </style>
 <body>
-<div class = "">
 	<footer class=" navbar footer row">
 		<div class="row">
 			<div class="col-sm-4">
@@ -240,6 +239,5 @@
 				</div>
 			</div></div>
 		</footer>
-	</div>
 </body>
 </html>

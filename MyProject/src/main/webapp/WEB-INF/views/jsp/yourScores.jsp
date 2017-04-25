@@ -7,8 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<%-- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
- --%><link href="<c:url value="css/yourScoresCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+<link href="<c:url value="css/yourScoresCss.css" />" rel="stylesheet">
 
 </head>
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
@@ -71,7 +71,14 @@
 								"aoColumnDefs" : [ {
 									'className' : "wrapword",
 									"targets" : [ 0, 1, 2],
+									"bSort" : false,
+									
 								} ],
+								"aoColumns": [
+{ "bSortable": false },
+{ "bSortable": false },
+{ "bSortable": false }
+],
 								"dom" : '<"top"l>rt<"bottom"ip><"clear">',
 								/* "aoColumns" : [ {
 									sWidth : '14%'
@@ -84,7 +91,9 @@
 								"bDestroy" : true,
 								"bPaginate" : false,
 								"ordering" : false,	
-								"bInfo": false
+								"bInfo": false,
+								"bSort" : false,
+								
 							});
 							$('#selectGroup')
 									.on(
@@ -187,7 +196,12 @@
 											if (!$('#score').is(':empty')) {
 																	$("#score").empty();
 																}
-																document.getElementById("score").append(answer);
+																console.log(answer)
+																if(answer === 'NaN'){
+																	document.getElementById("score").append(0);
+																}else{
+																	document.getElementById("score").append(answer);
+																}
 															}
 														});
 											});
