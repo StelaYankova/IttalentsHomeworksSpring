@@ -16,7 +16,7 @@
 .form-horizontal .form-group:last-child{
 	width:95%; padding-left:13.3em;
 }
-.form-horizontal .control-label-input:first-child{
+.form-group:first-of-type .control-label-input{
 	padding-top:0.438em !important;
 }
 #formUpdateProfile {

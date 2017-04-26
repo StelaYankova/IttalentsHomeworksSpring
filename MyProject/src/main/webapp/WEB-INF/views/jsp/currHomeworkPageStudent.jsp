@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 
 <!DOCTYPE html>
 <html>
@@ -64,6 +66,7 @@
 		<div id="currHomework">
 			<br>
 			<!-- <div class="form-group"> -->
+			
 			<div id="downloadHomeworkForm">
 				<form action="./ReadHomeworkServlet" method="GET">
 					<input type='hidden'
@@ -75,7 +78,12 @@
 					</strong>
 				</form>
 			</div>
-			
+			<c:set var="opens" value="${fn:replace(sessionScope.currHomework.homeworkDetails.openingTime,'T', ' ')}" />
+			<c:set var="closes" value="${fn:replace(sessionScope.currHomework.homeworkDetails.closingTime,'T', ' ')}" />
+			<b class = "time">Opening time: </b>
+			<c:out value="${opens}" /><br>
+			<b class = "time">Closing time:  </b>
+			<c:out value="${closes}" />
 			<!-- </div> -->
  			<div id="divTable">
  			<table id="tasksTable" 
@@ -121,13 +129,13 @@
 					</c:forEach>
 				</tbody>
 			</table></div>
-			<br> <b>Teacher grade:</b>
-			<c:out value="${sessionScope.currHomework.teacherGrade }" />
+			<br> <b id="teacherGrade">Teacher grade:</b>
+			<c:out value="${sessionScope.currHomework.teacherGrade }" /><br>
 
-			<br> <br> <b>Teacher comment:</b> <br>
+			<b>Teacher comment:</b><br>
 			<br> <label id="teacherComment" class = "wrapword"><c:out
 					value="${sessionScope.currHomework.teacherComment}" /></label> <br>
-			<br> <br>
+			<!-- <br> <br> -->
 		</div>
 
 		<div id="solution">

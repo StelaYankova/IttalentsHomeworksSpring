@@ -3,6 +3,11 @@
 .dataTables_wrapper {
 	padding-bottom: 0.5em;
 }
+#tableAndStudents>.list>ul#listOfStudentsOfGroup>li>button{
+	padding-left:0em;
+	    padding-bottom: 0.3em;
+    margin-top: -0.2em;
+}
 #resultTable_length {
     padding-bottom: 0.5em;
 }

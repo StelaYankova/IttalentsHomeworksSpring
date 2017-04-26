@@ -15,12 +15,14 @@ label {
 	text-align: left;
 	width: 8.750em;
 }
-
+.time{
+   line-height: 2em;
+}
 #solution{
  width: 52%;
     float: left;
     padding-left: 3.125em;
-    padding-top: 5em;
+    padding-top: 9em;
 }
 
 #currTaskSolution {
@@ -53,7 +55,9 @@ label {
 .dataTables_scrollBody{
 	max-height:40.5vh !important;
 }
-
+#teacherGrade {
+    line-height: 2.5em;
+}
 #divTable{
 	padding-bottom: 0.625em;
 }

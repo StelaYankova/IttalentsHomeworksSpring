@@ -679,4 +679,37 @@ public class UserDAO implements IUserDAO {
 		return u;
 	}
 
+	@Override
+	public Homework getHomeworkOfStudentByGroup(int studentId, Group selectedGroup, int homeworkId) {
+//		ArrayList<Homework> homeworksOfStudentByGroup = new ArrayList<>();
+//		Connection con = manager.getConnection();
+//		try {
+//			PreparedStatement ps = con.prepareStatement(GET_HOMEWORK_OF_STUDENT_BY_GROUP);
+//			ps.setInt(1, studentId);
+//			ps.setInt(2, selectedGroup.getId());
+//			ResultSet rs = ps.executeQuery();
+//			if(UserDAO.getInstance().getUserById(studentId) != null){
+//			if (rs.next()) {
+//				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//				String openingTimeString = rs.getString(5);
+//				String closingTimeString = rs.getString(6);
+//				LocalDateTime openingTime = LocalDateTime.parse(openingTimeString, formatter);
+//				LocalDateTime closingTime = LocalDateTime.parse(closingTimeString, formatter);
+//
+//				HomeworkDetails hd = new HomeworkDetails(rs.getInt(1), rs.getString(2), openingTime, closingTime,
+//						rs.getInt(3), rs.getString(4));
+////				ArrayList<Task> tasksOfHomeworkOfStudent = UserDAO.getInstance().getTasksOfHomeworkOfStudent(studentId,
+////						hd);
+//				homeworksOfStudentByGroup
+//						.add(new Homework(rs.getInt(7), rs.getString(8), null, hd));
+//			}
+//			}else{
+//				throw new ValidationException("Student does not exist");
+//			}
+//		} catch (SQLException e) {
+//			throw new UserException("Something went wrong with checking the homeworks of a student by group..");
+//		}
+		return null;
+	}
+
 }

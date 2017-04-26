@@ -798,32 +798,38 @@ public class HomeworkController {
 									.addAll(GroupDAO.getInstance().getHomeworkDetailsOfGroup(selectedGroup));
 							boolean hasStudentGivenMinOneTask = false;
 							for (HomeworkDetails hd : homeworkDetailsByGroup) {
+								System.out.println("1");
+								System.out.println("Getting user by id");
 								if (UserDAO.getInstance().getUserById(studentId) != null) {
+									System.out.println("user is here");
 									boolean doesUserHaveGroup = false;
-									for(Group g: UserDAO.getInstance().getUserById(studentId).getGroups()){
-										if(g.getId() == selectedGroup.getId()){
+									for (Group g : UserDAO.getInstance().getUserById(studentId).getGroups()) {
+										System.out.println("8");
+										if (g.getId() == selectedGroup.getId()) {
 											doesUserHaveGroup = true;
 											break;
 										}
 									}
-									if(!doesUserHaveGroup){
+									if (!doesUserHaveGroup) {
 										response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 										return;
 									}
-								JsonObject obj = new JsonObject();
-								obj.addProperty("heading", hd.getHeading());
-								obj.addProperty("id", hd.getId());
-								obj.addProperty("opens", hd.getOpeningTime().toString());
-								obj.addProperty("closes", hd.getClosingTime().toString());
+									JsonObject obj = new JsonObject();
+									obj.addProperty("heading", hd.getHeading());
+									obj.addProperty("id", hd.getId());
+									obj.addProperty("opens", hd.getOpeningTime().toString());
+									obj.addProperty("closes", hd.getClosingTime().toString());
 
-									System.out.println("user id " + studentId);
-									System.out.println("group id " + selectedGroup.getId());
+									// do tuk //get exact hw
+									System.out.println("will get hw of student by group..");
 									for (Homework h : UserDAO.getInstance().getHomeworksOfStudentByGroup(studentId,
 											selectedGroup)) {
+										System.out.println("2");
 										if (hd.getId() == h.getHomeworkDetails().getId()) {
 											int grade = h.getTeacherGrade();
 											String comment = h.getTeacherComment();
 											for (Task t : h.getTasks()) {
+												System.out.println("3");
 												String x = t.getSolution();
 												if (x != null) {
 													hasStudentGivenMinOneTask = true;
@@ -842,7 +848,6 @@ public class HomeworkController {
 									response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 									return;
 								}
-							
 							}
 						} else {
 							response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);

@@ -5,6 +5,11 @@
 	padding-left: 1em;
 	font-size: 1em;
 }
+#tableAndStudents>.list>ul#listOfStudentsOfGroup>li>form>button{
+	padding-left:0em;
+	    padding-bottom: 0.3em;
+    margin-top: -0.2em;
+}
 #divTable table.dataTable tbody .btn{
 	padding: 0em 0px 0px 0.3em !important;
 	font-size: 0.98em !important;

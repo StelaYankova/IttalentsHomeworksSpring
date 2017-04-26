@@ -21,7 +21,7 @@
 #divTable {
 	padding-top: 13em;
 		width: 80%;
-		display:none;
+		visibility:hidden;
 		margin:0 auto;
 	} 
 #divTable table.dataTable tbody td {

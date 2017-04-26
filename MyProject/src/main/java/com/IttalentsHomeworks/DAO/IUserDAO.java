@@ -65,6 +65,8 @@ public interface IUserDAO {
 	ArrayList<Student> getAllStudents() throws UserException;
 
 	User getUserById(int userId) throws UserException, GroupException;
+
+	Homework getHomeworkOfStudentByGroup(int studentId, Group selectedGroup, int id);
 	
 
 

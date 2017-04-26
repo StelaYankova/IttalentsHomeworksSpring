@@ -1,6 +1,7 @@
 @CHARSET "UTF-8";
 #grade{
-	width:22%;
+	width:19%;
+	    height: 1.8em;
 }
 label {
 	display: inline-block;
@@ -21,7 +22,7 @@ label {
  width: 52%;
     float: left;
     padding-left: 3.125em;
-    padding-top: 5em;
+    padding-top: 9em;
  }
 
 #currTaskSolution {
@@ -42,12 +43,15 @@ label {
 #textareaComment {
 	overflow-y: scroll;
 	resize: none;
-	width: 32em;
+	width: 28.3em;
 	height: 9.375em;
 	border-size: 0.125em;
 	border-style: groove;
 	font-size: 0.85em;
 	font-style: italic
+}
+.time{
+   line-height: 2em;
 }
 .dataTables_scrollBody{
 	max-height:40.5vh !important;

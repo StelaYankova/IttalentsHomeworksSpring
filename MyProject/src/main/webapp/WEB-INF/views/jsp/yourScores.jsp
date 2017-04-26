@@ -75,8 +75,8 @@
 									
 								} ],
 								"aoColumns": [
-{ "bSortable": false },
-{ "bSortable": false },
+{ "bSortable": true },
+{ "bSortable": true },
 { "bSortable": false }
 ],
 								"dom" : '<"top"l>rt<"bottom"ip><"clear">',
@@ -90,16 +90,16 @@
 								/* "lengthMenu" : [ 5 ], */
 								"bDestroy" : true,
 								"bPaginate" : false,
-								"ordering" : false,	
+								/* "ordering" : false,	 */
 								"bInfo": false,
-								"bSort" : false,
+								/* "bSort" : false, */
 								
 							});
 							$('#selectGroup')
 									.on(
 											'change',
 											function() {
-												document.getElementById('divTable').style.display = 'none';
+												document.getElementById('divTable').style.visibility = 'hidden';
 												document.getElementById('studentAverageScore').style.display = 'none';
 												var selected = $(this).find(":selected").val()
 												$('#resultTable tbody')
@@ -184,10 +184,10 @@
 																					'no data available in table');
 																}
 																if(selected == "null"){
-																	document.getElementById('divTable').style.display = 'none';
+																	document.getElementById('divTable').style.visibility = 'hidden';
 
 																}else{
-																	document.getElementById('divTable').style.display = 'block';
+																	document.getElementById('divTable').style.visibility = 'visible';
 
 																}
 																var answer = (averageScore/numberHomeworks).toFixed(1);

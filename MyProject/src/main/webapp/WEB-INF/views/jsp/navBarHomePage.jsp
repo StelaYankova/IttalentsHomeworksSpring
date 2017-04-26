@@ -87,12 +87,8 @@
 					</div>
 				</li></ul>
 				</div>
-				<div class = "collapse navbar-collapse">
-				<!-- <li id="registerPageButton"> --><a class = "registerPageButton" href="./RegisterServlet"><font size="2"><span
-						class="glyphicon glyphicon-log-in btn-xs"></span> Register here
-				</a></font><!-- </li> -->
-
-			</div>
+				<a class = "registerPageButton" href="./RegisterServlet"><span
+						class="glyphicon glyphicon-log-in btn-xs"></span> Register here</a>
 		</div>
 	</nav>
 	<c:if test="${not empty sessionScope.invalidField}">

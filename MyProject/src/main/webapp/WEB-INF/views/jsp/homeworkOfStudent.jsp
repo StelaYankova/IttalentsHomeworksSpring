@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 
 <!DOCTYPE html>
 <html>
@@ -65,6 +67,12 @@
 					</strong>
 				</form>
 			</div>
+			<c:set var="opens" value="${fn:replace(sessionScope.currHomework.homeworkDetails.openingTime,'T', ' ')}" />
+			<c:set var="closes" value="${fn:replace(sessionScope.currHomework.homeworkDetails.closingTime,'T', ' ')}" />
+			<b class = "time">Opening time: </b>
+			<c:out value="${opens}" /><br>
+			<b class = "time">Closing time:  </b>
+			<c:out value="${closes}" />
 		<div id="divTable">
 				<table id="tasksTable" 
 					class="table table-striped table-bordered table-hover">

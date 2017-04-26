@@ -11,7 +11,7 @@
 
 .input-invalid-login {
 	position: absolute;
-    top: 2.8em;
+    top: 3.2em;
     right: 18.8em;
     color: red;
     font-size: 0.92em;
@@ -22,12 +22,13 @@
 	 min-height: 80px !important; 
 }
 
-.navbar-collapse>a.registerPageButton{
-	color: #ffffff;
+/* .navbar-collapse>a.registerPageButton{
+ */	
+ a.registerPageButton{color: #ffffff;
 	  float:right;
-	  padding-right:4.5em;
+	  padding-right:5.7em;
     /* padding-top: 2em;  */
-    font-size:12px;
+    font-size:0.9em;
     z-index:1;
 }
 .navbar-nav>li{
@@ -68,12 +69,12 @@
 		-webkit-box-shadow: none;
 		box-shadow: none;
 	}
-	.navbar-collapse>a.registerPageButton {
+	a.registerPageButton {
     color: #ffffff;
     float: left;
-    padding-left: 12.5em;
-    margin-top: -3.55em;
-    font-size: 12px;
+    padding-left: 12em;
+    margin-top: -2.7em;
+    font-size: 0.9em;
     z-index:2 !important;
     width:100%;
 }
@@ -84,19 +85,19 @@
 	}
 	.input-invalid-login {
     position: absolute;
-    top: 9.8em;
-    right: 1em;
+       top: -1.2em;
+    right: 1.2em;
     color: red;
     font-size: 0.92em;
 }
 }
   @media ( max-width:500px) {
-  .navbar-collapse>a.registerPageButton {
+  a.registerPageButton {
     color: #ffffff;
     float: left;
-    padding-left: 12.5em;
-    margin-top: -3.55em;
-    font-size: 12px;
+    padding-left: 12em;
+    margin-top: -2.7em;
+    font-size: 0.9em;
     z-index:2 !important;
     width:120%;
 }

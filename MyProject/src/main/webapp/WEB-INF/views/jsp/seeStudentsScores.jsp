@@ -102,21 +102,33 @@
 <script>
 		var table = $('#resultTable').DataTable({
 			"aoColumnDefs" : [ {
-				'bSortable' : true,
-				'aTargets' : [ 0, 1, 2 ],
+				/*  'bSortable' : true,
+				'targets' : [ 0, 1], */
 				'className' : "wrapword",
 				"targets" : [ 0, 1, 2 ]
 
 			} ],
+			/* "ordering": false,  */
 			"dom" : '<"top"lp>rt<"clear">',
+			/*  "aoColumns" :[ {
+				"bSortable" : true
+			}, {
+				"bSortable" : true
+			},{
+				"bSortable" : false
+			} ], 
 			"aoColumns" : [ {
 				sWidth : '14%'
 			}, {
 				sWidth : '18%'
 			}, {
 				sWidth : '22%'
-			} ],
-			"ordering": false,
+			}], */
+			"aoColumns": [
+{ "bSortable": true },
+{ "bSortable": true },
+{ "bSortable": false }
+],
 			"lengthMenu" : [5, 10, 15 ],
 			"bDestroy" : true
 		});
