@@ -166,13 +166,13 @@ public class HomeworkController {
 						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 						LocalDateTime openingTime = LocalDateTime.parse(opens, formatter);
 						LocalDateTime closingTime = LocalDateTime.parse(closes, formatter);
-						ArrayList<Group> groupsForHw = new ArrayList<>();
+						ArrayList<Integer> groupsForHw = new ArrayList<>();
 						HomeworkDetails homeworkDetails = new HomeworkDetails(heading, openingTime, closingTime,
 								numberOfTasks, fileName);
 						for (int i = 0; i < selectedGroups.length; i++) {
-							int id = Integer.parseInt(selectedGroups[i]);
-							Group g = GroupDAO.getInstance().getGroupById(id);
-							groupsForHw.add(g);
+							int groupId = Integer.parseInt(selectedGroups[i]);
+							//Group g = GroupDAO.getInstance().getGroupById(id);
+							groupsForHw.add(groupId);
 						}
 						GroupDAO.getInstance().createHomeworkDetails(homeworkDetails, groupsForHw);
 						request.setAttribute("invalidFields", false);
@@ -184,7 +184,8 @@ public class HomeworkController {
 						while ((read = filecontent.read(bytes)) != -1) {
 							out.write(bytes, 0, read);
 						}
-						ArrayList<Group> allGroupsUpdated = GroupDAO.getInstance().getAllGroups();
+						out.close();
+						ArrayList<Group> allGroupsUpdated = GroupDAO.getInstance().getAllGroupsWithoutStudents();
 						request.getServletContext().setAttribute("allGroups", allGroupsUpdated);
 						ArrayList<Teacher> allTeachers = UserDAO.getInstance().getAllTeachers();
 						request.getServletContext().setAttribute("allTeachers", allTeachers);
@@ -356,15 +357,18 @@ public class HomeworkController {
 
 	private boolean doAllGroupsExist(String[] selectedGroups) throws GroupException, UserException {
 		for (String groupId : selectedGroups) {
-			try {
-				Group currGroup = GroupDAO.getInstance().getGroupById(Integer.parseInt(groupId));
-				String groupName = currGroup.getName();
-				if (ValidationsDAO.getInstance().isGroupNameUnique(groupName)) {
+//				Group currGroup = GroupDAO.getInstance().getGroupById(Integer.parseInt(groupId));
+//				String groupName = currGroup.getName();
+//				if (ValidationsDAO.getInstance().isGroupNameUnique(groupName)) {
+//					return false;
+//				}
+				if (ValidationsDAO.getInstance().isStringValidInteger(groupId)) {
+					if (!ValidationsDAO.getInstance().doesGroupExistInDBById(Integer.parseInt(groupId))) {
+						return false;
+					}
+				}else{
 					return false;
 				}
-			} catch (NumberFormatException e) {
-				return false;
-			}
 		}
 		return true;
 	}
@@ -374,6 +378,9 @@ public class HomeworkController {
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		System.out.println("INNNNNNNNNNN");
+		System.out.println(request.getSession().getAttribute("currHomework"));
+		System.out.println(request.getSession().getAttribute("chosenGroupName"));
+		System.out.println(request.getSession().getAttribute("currStudentUsername"));
 		if (user.isTeacher()) {
 			if (request.getSession().getAttribute("currHomework") == null
 					|| request.getSession().getAttribute("chosenGroupName") == null
@@ -433,10 +440,12 @@ public class HomeworkController {
 				boolean doesCurrentGroupContainChosenHomework = false;
 				if (request.getSession().getAttribute("chosenGroup") != null) {
 					int chosenGroupId = (int) request.getSession().getAttribute("chosenGroup");
-					Group chosenGroup;
+					//Group chosenGroup;
 					try {
-						chosenGroup = GroupDAO.getInstance().getGroupById(chosenGroupId);
-						for (HomeworkDetails h : chosenGroup.getHomeworks()) {
+						//chosenGroup = GroupDAO.getInstance().getGroupById(chosenGroupId);
+						ArrayList<HomeworkDetails> allHomeworkDetailsOfGroup = GroupDAO.getInstance().getHomeworkDetailsOfGroup(chosenGroupId);
+						//for (HomeworkDetails h : chosenGroup.getHomeworks()) {
+						for (HomeworkDetails h : allHomeworkDetailsOfGroup) {
 							if (h.getId() == homeworkId) {
 								doesCurrentGroupContainChosenHomework = true;
 								break;
@@ -453,9 +462,10 @@ public class HomeworkController {
 							}
 							request.getSession().setAttribute("chosenGroupName", gName);
 						} else {
-							request.getSession().setAttribute("chosenGroupName", chosenGroup.getName());
+							gName = GroupDAO.getInstance().getGroupNameById(chosenGroupId);
+							request.getSession().setAttribute("chosenGroupName", gName);
 						}
-					} catch (GroupException | UserException e) {
+					} catch (GroupException e) {
 						System.out.println(e.getMessage());
 						e.printStackTrace();
 						return "exception";
@@ -481,78 +491,78 @@ public class HomeworkController {
 
 	// @RequestMapping(value = { "/GetHomeworksOfGroupsServlet" }, method =
 	// RequestMethod.GET)
-	protected String getHomeworksOfGroupsNoGroupIdInUrl(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		System.out.println("BABABAB");
-		User userTry = (User) request.getSession().getAttribute("user");
-		request.getSession().setAttribute("throughtScores", 0);
-		if (!userTry.isTeacher()) {
-			User user = (User) request.getSession().getAttribute("user");
-			String groupChosen = request.getSession().getAttribute("chosenGroup").toString();
-			if (groupChosen != null) {
-				int length = groupChosen.length();
-				String number = groupChosen;
-				if (length > IValidationsDAO.MIN_SIZE_OF_INTEGER && length < IValidationsDAO.MAX_SIZE_OF_INTEGER) {
-					for (int i = 0; i < length; i++) {
-						if ((int) number.charAt(i) < IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO
-								|| (int) number.charAt(i) > IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE) {
-							return "pageNotFound";
-						}
-					}
-				} else {
-					return "pageNotFound";
-				}
-				try {
-					int groupId = Integer.parseInt(groupChosen);
-					boolean doesUserHaveGroup = false;
-					Group group = null;
-					for (Group g : user.getGroups()) {
-						if (g.getId() == groupId) {
-							group = g;
-							doesUserHaveGroup = true;
-							break;
-						}
-					}
-					if (doesUserHaveGroup) {
-						ArrayList<HomeworkDetails> homeworks = new ArrayList<>();
-						for (HomeworkDetails h : group.getHomeworks()) {
-							long days = LocalDateTime.now().until(h.getClosingTime(), ChronoUnit.DAYS);
-							HomeworkDetails currHd = new HomeworkDetails(h.getHeading(), h.getOpeningTime(),
-									h.getClosingTime(), h.getNumberOfTasks(), h.getTasksFile());
-							currHd.setDaysLeft((int) days);
-							currHd.setId(GroupDAO.getInstance().getHomeworkDetailsId(currHd));
-							homeworks.add(currHd);
-						}
-						Group group1 = GroupDAO.getInstance().getGroupById(groupId);
-						System.out.println(group1.getName() + " IUGYUFTYUYGUHIJL:");
-						request.getSession().setAttribute("chosenGroupName", group1.getName());
-
-						request.getSession().setAttribute("chosenGroup", groupId);
-						request.getSession().setAttribute("currHomeworksOfGroup", homeworks);
-					} else {
-
-						return "forbiddenPage";
-					}
-				} catch (GroupException e) {
-					System.out.println(e.getMessage());
-					e.printStackTrace();
-					return "exception";
-				} catch (UserException e) {
-					System.out.println(e.getMessage());
-					e.printStackTrace();
-					return "exception";
-				}
-
-				return "seeYourHomeworks";
-			} else {
-				if (request.getSession().getAttribute("chosenGroup") != null) {
-					return "seeYourHomeworks";
-				}
-				return "pageNotFound";
-			}
-		}
-		return "forbiddenPage";
-	}
+//	protected String getHomeworksOfGroupsNoGroupIdInUrl(HttpServletRequest request, HttpServletResponse response)
+//			throws ServletException, IOException {
+//		System.out.println("BABABAB");
+//		User userTry = (User) request.getSession().getAttribute("user");
+//		request.getSession().setAttribute("throughtScores", 0);
+//		if (!userTry.isTeacher()) {
+//			User user = (User) request.getSession().getAttribute("user");
+//			String groupChosen = request.getSession().getAttribute("chosenGroup").toString();
+//			if (groupChosen != null) {
+//				int length = groupChosen.length();
+//				String number = groupChosen;
+//				if (length > IValidationsDAO.MIN_SIZE_OF_INTEGER && length < IValidationsDAO.MAX_SIZE_OF_INTEGER) {
+//					for (int i = 0; i < length; i++) {
+//						if ((int) number.charAt(i) < IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO
+//								|| (int) number.charAt(i) > IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE) {
+//							return "pageNotFound";
+//						}
+//					}
+//				} else {
+//					return "pageNotFound";
+//				}
+//				try {
+//					int groupId = Integer.parseInt(groupChosen);
+//					boolean doesUserHaveGroup = false;
+//					Group group = null;
+//					for (Group g : user.getGroups()) {
+//						if (g.getId() == groupId) {
+//							group = g;
+//							doesUserHaveGroup = true;
+//							break;
+//						}
+//					}
+//					if (doesUserHaveGroup) {
+//						ArrayList<HomeworkDetails> homeworks = new ArrayList<>();
+//						for (HomeworkDetails h : group.getHomeworks()) {
+//							long days = LocalDateTime.now().until(h.getClosingTime(), ChronoUnit.DAYS);
+//							HomeworkDetails currHd = new HomeworkDetails(h.getHeading(), h.getOpeningTime(),
+//									h.getClosingTime(), h.getNumberOfTasks(), h.getTasksFile());
+//							currHd.setDaysLeft((int) days);
+//							currHd.setId(GroupDAO.getInstance().getHomeworkDetailsId(currHd));
+//							homeworks.add(currHd);
+//						}
+//						Group group1 = GroupDAO.getInstance().getGroupById(groupId);
+//						System.out.println(group1.getName() + " IUGYUFTYUYGUHIJL:");
+//						request.getSession().setAttribute("chosenGroupName", group1.getName());
+//
+//						request.getSession().setAttribute("chosenGroup", groupId);
+//						request.getSession().setAttribute("currHomeworksOfGroup", homeworks);
+//					} else {
+//
+//						return "forbiddenPage";
+//					}
+//				} catch (GroupException e) {
+//					System.out.println(e.getMessage());
+//					e.printStackTrace();
+//					return "exception";
+//				} catch (UserException e) {
+//					System.out.println(e.getMessage());
+//					e.printStackTrace();
+//					return "exception";
+//				}
+//
+//				return "seeYourHomeworks";
+//			} else {
+//				if (request.getSession().getAttribute("chosenGroup") != null) {
+//					return "seeYourHomeworks";
+//				}
+//				return "pageNotFound";
+//			}
+//		}
+//		return "forbiddenPage";
+//	}
 
 	@RequestMapping(value = { "/homeworksOfGroup"}, method = RequestMethod.GET)
 	protected String getHomeworksOfGroups(@RequestParam(value = "id", required = false) String groupIdUrl,
@@ -588,17 +598,13 @@ public class HomeworkController {
 							homeworks.add(currHd);
 						}
 						request.getSession().setAttribute("chosenGroup", groupId);
-						Group g = GroupDAO.getInstance().getGroupById(groupId);
-						request.getSession().setAttribute("chosenGroupName", g.getName());
+						//Group g = GroupDAO.getInstance().getGroupById(groupId);
+						request.getSession().setAttribute("chosenGroupName", GroupDAO.getInstance().getGroupNameById(groupId));
 						request.getSession().setAttribute("currHomeworksOfGroup", homeworks);
 					} else {
 						return "forbiddenPage";
 					}
 				} catch (GroupException e) {
-					System.out.println(e.getMessage());
-					e.printStackTrace();
-					return "exception";
-				} catch (UserException e) {
 					System.out.println(e.getMessage());
 					e.printStackTrace();
 					return "exception";
@@ -784,82 +790,61 @@ public class HomeworkController {
 				if (request.getParameter("groupId") != null && !request.getParameter("groupId").trim().equals("")
 						&& request.getParameter("studentId") != null
 						&& !request.getParameter("studentId").trim().equals("")) {
+					long startTime = System.currentTimeMillis();
+
 					if (ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("groupId").trim())
 							&& ValidationsDAO.getInstance()
 									.isStringValidInteger(request.getParameter("studentId").trim())) {
+						
 						int groupId = Integer.parseInt(request.getParameter("groupId").trim());
 						int studentId = Integer.parseInt(request.getParameter("studentId").trim());
-						Group selectedGroup = null;
 						JsonArray array = new JsonArray();
-						ArrayList<HomeworkDetails> homeworkDetailsByGroup = new ArrayList<>();
-						selectedGroup = GroupDAO.getInstance().getGroupById(groupId);
-						if (selectedGroup != null) {
-							homeworkDetailsByGroup
-									.addAll(GroupDAO.getInstance().getHomeworkDetailsOfGroup(selectedGroup));
+						boolean doesGroupExist = ValidationsDAO.getInstance().doesGroupExistInDBById(groupId);	
+						boolean doesUserExist = ValidationsDAO.getInstance().doesUserExistInDBById(studentId);
+						boolean isSelectedUserTeacher = UserDAO.getInstance().isUserATeacher(studentId);
+						boolean isStudentInGroup = ValidationsDAO.getInstance().isStudentAlreadyInGroup(studentId, groupId);
+						if (doesGroupExist == true && doesUserExist == true && (!isSelectedUserTeacher) && (isStudentInGroup == true)) {
 							boolean hasStudentGivenMinOneTask = false;
-							for (HomeworkDetails hd : homeworkDetailsByGroup) {
-								System.out.println("1");
-								System.out.println("Getting user by id");
-								if (UserDAO.getInstance().getUserById(studentId) != null) {
-									System.out.println("user is here");
-									boolean doesUserHaveGroup = false;
-									for (Group g : UserDAO.getInstance().getUserById(studentId).getGroups()) {
-										System.out.println("8");
-										if (g.getId() == selectedGroup.getId()) {
-											doesUserHaveGroup = true;
-											break;
-										}
-									}
-									if (!doesUserHaveGroup) {
-										response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
-										return;
-									}
-									JsonObject obj = new JsonObject();
-									obj.addProperty("heading", hd.getHeading());
-									obj.addProperty("id", hd.getId());
-									obj.addProperty("opens", hd.getOpeningTime().toString());
-									obj.addProperty("closes", hd.getClosingTime().toString());
 
-									// do tuk //get exact hw
-									System.out.println("will get hw of student by group..");
-									for (Homework h : UserDAO.getInstance().getHomeworksOfStudentByGroup(studentId,
-											selectedGroup)) {
-										System.out.println("2");
-										if (hd.getId() == h.getHomeworkDetails().getId()) {
-											int grade = h.getTeacherGrade();
-											String comment = h.getTeacherComment();
-											for (Task t : h.getTasks()) {
-												System.out.println("3");
-												String x = t.getSolution();
-												if (x != null) {
-													hasStudentGivenMinOneTask = true;
-													break;
-												}
-											}
-											obj.addProperty("hasStudentGivenMinOneTask", hasStudentGivenMinOneTask);
-											obj.addProperty("teacherScore", grade);
-											obj.addProperty("teacherComment", comment);
-											hasStudentGivenMinOneTask = false;
+								long startTime2 = System.currentTimeMillis();
+
+								ArrayList<Homework> allHomeworksOfStudent = UserDAO.getInstance()
+										.getHomeworksOfStudentByGroup(studentId, groupId);
+								long endTime2 = System.currentTimeMillis();
+								System.out.println("That part 2 function took " + (endTime2 - startTime2) + " milliseconds");
+								
+								for (Homework h : allHomeworksOfStudent) {
+									JsonObject obj = new JsonObject();					
+									int grade = h.getTeacherGrade();
+									String comment = h.getTeacherComment();
+									for (Task t : h.getTasks()) {
+										String x = t.getSolution();
+										if (x != null) {
+											hasStudentGivenMinOneTask = true;
 											break;
 										}
 									}
+									obj.addProperty("heading", h.getHomeworkDetails().getHeading());
+									obj.addProperty("id", h.getHomeworkDetails().getId());
+									obj.addProperty("hasStudentGivenMinOneTask", hasStudentGivenMinOneTask);
+									obj.addProperty("teacherScore", grade);
+									obj.addProperty("teacherComment", comment);
 									array.add(obj);
-								} else {
-									response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
-									return;
+									hasStudentGivenMinOneTask = false;
 								}
-							}
+								response.setStatus(IValidationsDAO.SUCCESS_STATUS);
+								response.getWriter().write(array.toString());
 						} else {
+							System.out.println("1111");
+
 							response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 							return;
-						}
-						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
-						response.getWriter().write(array.toString());
-					} else {
-						response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
-						return;
+						}		
 					}
+					long endTime = System.currentTimeMillis();
+					System.out.println("That whole function took " + (endTime - startTime) + " milliseconds");
 				} else {
+					System.out.println("2222");
 					response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 					return;
 				}
@@ -868,14 +853,119 @@ public class HomeworkController {
 				e.printStackTrace();
 				response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
 			} catch (ValidationException e) {
-				System.out.println(e.getMessage());
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else {
-			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
-			return;
 		}
 	}
+//			} else {
+//				response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
+//				return;
+//			}
+//		} catch (GroupException | UserException e) {
+//			System.out.println(e.getMessage());
+//			e.printStackTrace();
+//			response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
+////		} catch (ValidationException e) {
+////			System.out.println(e.getMessage());
+////			e.printStackTrace();
+////		}
+//		} catch (ValidationException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}} else {
+//		response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
+//		return;
+//	}
+//}	
+							//}
+//						}
+//						if (!doesUserHaveGroup) {
+//							response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
+//							return;
+//						}
+//							for (HomeworkDetails hd : homeworkDetailsByGroup) {
+////								System.out.println("1");
+////								System.out.println("Getting user by id");
+//								if (UserDAO.getInstance().getUserById(studentId) != null) {
+////									System.out.println("user is here");
+//									boolean doesUserHaveGroup = false;
+//									for (Group g : UserDAO.getInstance().getUserById(studentId).getGroups()) {
+////										System.out.println("8");
+//										if (g.getId() == selectedGroup.getId()) {
+//											doesUserHaveGroup = true;
+//											break;
+//										}
+//									}
+//									if (!doesUserHaveGroup) {
+//										response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
+//										return;
+//									}
+//									JsonObject obj = new JsonObject();
+//									obj.addProperty("heading", hd.getHeading());
+//									obj.addProperty("id", hd.getId());
+//									obj.addProperty("opens", hd.getOpeningTime().toString());
+//									obj.addProperty("closes", hd.getClosingTime().toString());
+//
+//									// do tuk //get exact hw
+////									System.out.println("will get hw of student by group..");
+//									for (Homework h : UserDAO.getInstance().getHomeworksOfStudentByGroup(studentId,
+//											selectedGroup)) {
+////										System.out.println("2");
+//										if (hd.getId() == h.getHomeworkDetails().getId()) {
+//											int grade = h.getTeacherGrade();
+//											String comment = h.getTeacherComment();
+//											for (Task t : h.getTasks()) {
+//												System.out.println("3");
+//												String x = t.getSolution();
+//												if (x != null) {
+//													hasStudentGivenMinOneTask = true;
+//													break;
+//												}
+//											}
+//											obj.addProperty("hasStudentGivenMinOneTask", hasStudentGivenMinOneTask);
+//											obj.addProperty("teacherScore", grade);
+//											obj.addProperty("teacherComment", comment);
+//											hasStudentGivenMinOneTask = false;
+//											break;
+//										}
+//									}
+//									array.add(obj);
+//								} else {
+//									response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
+//									return;
+//								}
+//							}
+//						} else {
+//							response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
+//							return;
+//						}
+//						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
+//						response.getWriter().write(array.toString());
+//					} else {
+//						response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
+//						return;
+//					}
+//				} else {
+//					response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
+//					return;
+//				}
+//			} catch (GroupException | UserException e) {
+//				System.out.println(e.getMessage());
+//				e.printStackTrace();
+//				response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
+////			} catch (ValidationException e) {
+////				System.out.println(e.getMessage());
+////				e.printStackTrace();
+////			}
+//			} catch (ValidationException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}} else {
+//			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
+//			return;
+//		}
+//	}
 
 	@RequestMapping(value = "/seeHomeworksOfGroupServlet", method = RequestMethod.GET)
 	protected void seeHomeworksOfGroupServlet(HttpServletRequest request, HttpServletResponse response)
@@ -888,10 +978,10 @@ public class HomeworkController {
 				if (request.getParameter("chosenGroup") != null && !(request.getParameter("chosenGroup").trim().equals(""))) {
 					if (!(request.getParameter("chosenGroup").equals("allGroups")) && !(request.getParameter("chosenGroup").equals("null")) && ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("chosenGroup").trim())) {
 						int groupId = Integer.parseInt(request.getParameter("chosenGroup").trim());
-						Group chosenGroup = null;
-						chosenGroup = GroupDAO.getInstance().getGroupById(groupId);
-						if(chosenGroup != null){
-							homeworkDetailsByGroup.addAll(GroupDAO.getInstance().getHomeworkDetailsOfGroup(chosenGroup));
+						//Group chosenGroup = null;
+						//chosenGroup = GroupDAO.getInstance().getGroupById(groupId);
+						if(ValidationsDAO.getInstance().doesGroupExistInDBById(groupId)){
+							homeworkDetailsByGroup.addAll(GroupDAO.getInstance().getHomeworkDetailsOfGroup(groupId));
 						}else{
 							response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 							return;
@@ -917,7 +1007,7 @@ public class HomeworkController {
 				}
 				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 				response.getWriter().write(array.toString());
-			} catch (GroupException | UserException e) {
+			} catch (GroupException e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
 				response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
@@ -947,14 +1037,14 @@ public class HomeworkController {
 					&& !(request.getParameter("selectedGroupId").trim().equals(""))) {
 				ArrayList<HomeworkDetails> homeworkDetailsByGroup = new ArrayList<>();
 				Student user = (Student) request.getSession().getAttribute("user");
-				Group selectedGroup = null;
+			//	Group selectedGroup = null;
 				if (!request.getParameter("selectedGroupId").equals("null")) {
 					try {
 						JsonArray array = new JsonArray();
 						if (request.getParameter("selectedGroupId").equals("allGroups")) {
 							ArrayList<Integer> checkedIds = new ArrayList<>();
 							for (Group g : user.getGroups()) {
-								homeworkDetailsByGroup.addAll(GroupDAO.getInstance().getHomeworkDetailsOfGroup(g));
+								homeworkDetailsByGroup.addAll(GroupDAO.getInstance().getHomeworkDetailsOfGroup(g.getId()));
 								for (HomeworkDetails hd : homeworkDetailsByGroup) {
 									if (!(checkedIds.contains((Integer) hd.getId()))) {
 										JsonObject obj = new JsonObject();
@@ -984,8 +1074,8 @@ public class HomeworkController {
 									.isStringValidInteger(request.getParameter("selectedGroupId"))) {
 								int selectedGroupId = Integer.parseInt(request.getParameter("selectedGroupId"));
 								request.getSession().setAttribute("chosenGroup", selectedGroupId);
-								selectedGroup = GroupDAO.getInstance().getGroupById(selectedGroupId);
-								if (selectedGroup == null) {
+								//selectedGroup = GroupDAO.getInstance().getGroupById(selectedGroupId);
+								if (!ValidationsDAO.getInstance().doesGroupExistInDBById(selectedGroupId)) {
 									response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 									return;
 								}
@@ -1001,15 +1091,16 @@ public class HomeworkController {
 									return;
 								}
 								homeworkDetailsByGroup
-										.addAll(GroupDAO.getInstance().getHomeworkDetailsOfGroup(selectedGroup));
+										.addAll(GroupDAO.getInstance().getHomeworkDetailsOfGroup(selectedGroupId));
 								for (HomeworkDetails hd : homeworkDetailsByGroup) {
 									JsonObject obj = new JsonObject();
 									obj.addProperty("heading", hd.getHeading());
 									obj.addProperty("id", hd.getId());
 									obj.addProperty("opens", hd.getOpeningTime().toString());
 									obj.addProperty("closes", hd.getClosingTime().toString());
+									//not needed
 									for (Homework h : UserDAO.getInstance().getHomeworksOfStudentByGroup(user.getId(),
-											selectedGroup)) {
+											selectedGroupId)) {
 										if (hd.getId() == h.getHomeworkDetails().getId()) {
 											int grade = h.getTeacherGrade();
 											String comment = h.getTeacherComment();
@@ -1254,7 +1345,7 @@ public class HomeworkController {
 							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 							LocalDateTime openingTime = LocalDateTime.parse(opens, formatter);
 							LocalDateTime closingTime = LocalDateTime.parse(closes, formatter);
-							ArrayList<Group> groupsForHw = new ArrayList<>();
+							ArrayList<Integer> groupsForHw = new ArrayList<>();
 							HomeworkDetails homeworkDetails = null;
 							if (isFileNameChanged) {
 								homeworkDetails = new HomeworkDetails(homeworkDetailsId, heading, openingTime,
@@ -1269,15 +1360,17 @@ public class HomeworkController {
 							if (request.getParameterValues("groups") != null) {
 								for (int i = 0; i < selectedGroups.length; i++) {
 									int id = Integer.parseInt(selectedGroups[i]);
-									Group g = GroupDAO.getInstance().getGroupById(id);
-									groupsForHw.add(g);
+									//Group g = GroupDAO.getInstance().getGroupById(id);
+									groupsForHw.add(id);
 								}
 							}
 							GroupDAO.getInstance().updateHomeworkDetails(homeworkDetails, groupsForHw);
 							request.getSession().setAttribute("currHomework", homeworkDetails);
 							request.getServletContext().removeAttribute("allGroups");
-							ArrayList<Group> allGroups = GroupDAO.getInstance().getAllGroups();
+							ArrayList<Group> allGroups = GroupDAO.getInstance().getAllGroupsWithoutStudents();
 							request.getServletContext().setAttribute("allGroups", allGroups);
+							//ne ni trqbvat u4enicite
+							user.setGroups(UserDAO.getInstance().getGroupsOfUser(user.getId()));
 							request.getSession().setAttribute("invalidFields", false);
 
 						}
@@ -1442,15 +1535,22 @@ public class HomeworkController {
 
 	private boolean doAllGroupsExistHomeworkUpdate(String[] selectedGroups) throws GroupException, UserException {
 		for (String groupId : selectedGroups) {
-			try {
-				Group currGroup = GroupDAO.getInstance().getGroupById(Integer.parseInt(groupId));
-				String groupName = currGroup.getName();
-				if (ValidationsDAO.getInstance().isGroupNameUnique(groupName)) {
+			if (ValidationsDAO.getInstance().isStringValidInteger(groupId)) {
+				if (!ValidationsDAO.getInstance().doesGroupExistInDBById(Integer.parseInt(groupId))) {
 					return false;
 				}
-			} catch (NumberFormatException e) {
+			}else{
 				return false;
 			}
+//			try {
+//				Group currGroup = GroupDAO.getInstance().getGroupById(Integer.parseInt(groupId));
+//				String groupName = currGroup.getName();
+//				if (ValidationsDAO.getInstance().isGroupNameUnique(groupName)) {
+//					return false;
+//				}
+//			} catch (NumberFormatException e) {
+//				return false;
+//			}
 		}
 		return true;
 	}
@@ -1477,7 +1577,7 @@ public class HomeworkController {
 					request.getSession().setAttribute("GradeTooLong", true); // success
 				} else {
 					boolean isGradeValueValid = false;
-					if (doesGradeHaveInvalidSymbols(teacherGradeString.trim())) {
+					if (!doesGradeHaveInvalidSymbols(teacherGradeString.trim())) {
 						teacherGrade = Integer.parseInt(teacherGradeString.trim());
 						// grade >=0 <=100
 						if (isGradeValueValid(teacherGrade)) {
@@ -1493,9 +1593,9 @@ public class HomeworkController {
 					request.getSession().setAttribute("validComment", isCommentLengthValid); // success
 					if (isGradeValueValid == true && isCommentLengthValid == true) {
 						try {
-							UserDAO.getInstance().setTeacherComment(homework.getHomeworkDetails(), studentId,
+							UserDAO.getInstance().setTeacherComment(homework.getHomeworkDetails().getId(), studentId,
 									teacherComment);
-							UserDAO.getInstance().setTeacherGrade(homework.getHomeworkDetails(), studentId,
+							UserDAO.getInstance().setTeacherGrade(homework.getHomeworkDetails().getId(), studentId,
 									teacherGrade);
 							homework.setTeacherComment(teacherComment);
 							homework.setTeacherGrade(teacherGrade);
@@ -1592,7 +1692,7 @@ public class HomeworkController {
 									LocalDateTime currDateTime = LocalDateTime.now();
 									  String currDateTimeString = currDateTime.format(formatter);
 									  currDateTime = LocalDateTime.parse(currDateTimeString, formatter);
-									UserDAO.getInstance().setSolutionOfTask(homeworkDetails, (Student) user, taskNum,
+									UserDAO.getInstance().setSolutionOfTask(homeworkDetails.getId(), user.getId(), taskNum,
 											fileName, currDateTime);
 									homework.getTasks().get(taskNum).setSolution(fileName);
 									homework.getTasks().get(taskNum).setUploadedOn(currDateTime);

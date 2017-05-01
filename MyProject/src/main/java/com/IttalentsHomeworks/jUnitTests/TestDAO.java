@@ -113,8 +113,8 @@ public class TestDAO {
 	@Test
 	public void test07removeTeacherFromGroup() throws GroupException, UserException{		
 		boolean isTeacherReturned = false;
-		GroupDAO.getInstance().removeUserFromGroup(group1,user2.getId());
-		for(Teacher t: GroupDAO.getInstance().getTeachersOfGroup(group1)){
+		GroupDAO.getInstance().removeUserFromGroup(group1.getId(),user2.getId());
+		for(Teacher t: GroupDAO.getInstance().getTeachersOfGroup(group1.getId())){
 			if(t.getId() == user2.getId()){
 				isTeacherReturned = true;
 				break;
@@ -126,8 +126,8 @@ public class TestDAO {
 	@Test 
 	public void test08addTeacherToGroup() throws GroupException, UserException, ValidationException{
 		boolean isTeacherReturned = false;
-		GroupDAO.getInstance().addUserToGroup(group1, user2.getId());
-		for(Teacher t: GroupDAO.getInstance().getTeachersOfGroup(group1)){
+		GroupDAO.getInstance().addUserToGroup(group1.getId(), user2.getId());
+		for(Teacher t: GroupDAO.getInstance().getTeachersOfGroup(group1.getId())){
 			if(t.getId() == user2.getId()){
 				isTeacherReturned = true;
 				break;
@@ -138,17 +138,17 @@ public class TestDAO {
 	
 	@Test
 	public void test09isUserAlreadyInGroup() throws GroupException, UserException{
-		boolean isStudentReturned = GroupDAO.getInstance().isUserAlreadyInGroup(group1, user1.getUsername());
+		boolean isStudentReturned = GroupDAO.getInstance().isUserAlreadyInGroup(group1.getId(), user1.getUsername());
 		assertEquals(false, isStudentReturned);
-		boolean isTeacherReturned = GroupDAO.getInstance().isUserAlreadyInGroup(group1, user2.getUsername());
+		boolean isTeacherReturned = GroupDAO.getInstance().isUserAlreadyInGroup(group1.getId(), user2.getUsername());
 		assertEquals(true, isTeacherReturned);
 	}
 	
 	@Test 
 	public void test10addStudentToGroup() throws GroupException, UserException, ValidationException{
 		boolean isStudentReturned = false;
-		GroupDAO.getInstance().addUserToGroup(group1, user1.getId());
-		for(Student s: GroupDAO.getInstance().getStudentsOfGroup(group1)){
+		GroupDAO.getInstance().addUserToGroup(group1.getId(), user1.getId());
+		for(Student s: GroupDAO.getInstance().getStudentsOfGroup(group1.getId())){
 			if(s.getId() == user1.getId()){
 				isStudentReturned = true;
 				break;
@@ -161,15 +161,15 @@ public class TestDAO {
 	@Test
 	public void test11removeStudentFromGroup() throws GroupException, UserException, ValidationException{		
 		boolean isStudentReturned = false;
-		GroupDAO.getInstance().removeUserFromGroup(group1,user1.getId());
-		for(Student s: GroupDAO.getInstance().getStudentsOfGroup(group1)){
+		GroupDAO.getInstance().removeUserFromGroup(group1.getId(),user1.getId());
+		for(Student s: GroupDAO.getInstance().getStudentsOfGroup(group1.getId())){
 			if(s.getId() == user1.getId()){
 				isStudentReturned = true;
 				break;
 			}
 		}
 		//we add the student again
-		GroupDAO.getInstance().addUserToGroup(group1, user1.getId());
+		GroupDAO.getInstance().addUserToGroup(group1.getId(), user1.getId());
 		assertEquals(false, isStudentReturned);
 	}
 	
@@ -188,8 +188,8 @@ public class TestDAO {
 	
 	@Test
 	public void test14createHomeworkForGroup() throws GroupException, UserException, ValidationException, NotUniqueUsernameException{
-		ArrayList<Group> groupsForHw = new ArrayList<>();
-		groupsForHw.add(group1);
+		ArrayList<Integer> groupsForHw = new ArrayList<>();
+		groupsForHw.add(group1.getId());
 		GroupDAO.getInstance().createHomeworkDetails(hd, groupsForHw);
 		int hwId = GroupDAO.getInstance().getHomeworkDetailsId(hd);
 		hd.setId(hwId);
@@ -203,7 +203,7 @@ public class TestDAO {
 		}
 		assertEquals(true, isInHomeworksTable);
 		boolean isInGroupHomeworksTable = false;
-		for(HomeworkDetails hd1: GroupDAO.getInstance().getHomeworkDetailsOfGroup(group1)){
+		for(HomeworkDetails hd1: GroupDAO.getInstance().getHomeworkDetailsOfGroup(group1.getId())){
 			if(hd1.getHeading().equals(hd.getHeading())){
 				isInGroupHomeworksTable = true;
 				break;
@@ -213,9 +213,9 @@ public class TestDAO {
 	}
 	@Test
 	public void test15removeHomeworkFromGroup() throws GroupException, UserException{
-		GroupDAO.getInstance().removeHomeworkFromGroup(hd, group1);
+		GroupDAO.getInstance().removeHomeworkFromGroup(hd.getId(), group1.getId());
 		boolean isInGroupHomeworksTable = false;
-		for(HomeworkDetails hd1: GroupDAO.getInstance().getHomeworkDetailsOfGroup(group1)){
+		for(HomeworkDetails hd1: GroupDAO.getInstance().getHomeworkDetailsOfGroup(group1.getId())){
 			if(hd1.getHeading().equals(hd.getHeading())){
 				isInGroupHomeworksTable = true;
 				break;
@@ -225,9 +225,9 @@ public class TestDAO {
 	}
 	@Test
 	public void test16addHomeworkToGroup() throws GroupException, UserException{
-		GroupDAO.getInstance().addHomeworkToGroup(hd, group1);
+		GroupDAO.getInstance().addHomeworkToGroup(hd, group1.getId());
 		boolean isInGroupHomeworksTable = false;
-		for(HomeworkDetails hd1: GroupDAO.getInstance().getHomeworkDetailsOfGroup(group1)){
+		for(HomeworkDetails hd1: GroupDAO.getInstance().getHomeworkDetailsOfGroup(group1.getId())){
 			if(hd1.getHeading().equals(hd.getHeading())){
 				isInGroupHomeworksTable = true;
 				break;
@@ -238,16 +238,16 @@ public class TestDAO {
 	
 	@Test
 	public void test18addSolutionToTask() throws UserException{
-		ArrayList<Task> tasksOfHw = UserDAO.getInstance().getTasksOfHomeworkOfStudent(user1.getId(), hd);
+		ArrayList<Task> tasksOfHw = UserDAO.getInstance().getTasksOfHomeworkOfStudent(user1.getId(), hd.getId());
 		assertEquals(null, tasksOfHw.get(0).getSolution());
-		UserDAO.getInstance().setSolutionOfTask(hd, (Student)user1, 0, "my_solution.java", LocalDateTime.of(2016, 12, 12, 18, 22, 13));
-		tasksOfHw = UserDAO.getInstance().getTasksOfHomeworkOfStudent(user1.getId(), hd);
+		UserDAO.getInstance().setSolutionOfTask(hd.getId(), user1.getId(), 0, "my_solution.java", LocalDateTime.of(2016, 12, 12, 18, 22, 13));
+		tasksOfHw = UserDAO.getInstance().getTasksOfHomeworkOfStudent(user1.getId(), hd.getId());
 		assertEquals("my_solution.java", tasksOfHw.get(0).getSolution());
 	}
 	
 	@Test
 	public void test19addUploadTomeTotask() throws UserException{
-		ArrayList<Task> tasksOfHw = UserDAO.getInstance().getTasksOfHomeworkOfStudent(user1.getId(), hd);
+		ArrayList<Task> tasksOfHw = UserDAO.getInstance().getTasksOfHomeworkOfStudent(user1.getId(), hd.getId());
 		assertEquals(LocalDateTime.of(2016, 12, 12, 18, 22, 13), tasksOfHw.get(0).getUploadedOn());
 		
 	}
@@ -256,16 +256,16 @@ public class TestDAO {
 	public void test20addTeacherComment() throws UserException, ValidationException{
 		ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(user1.getId());
 		assertEquals(" ", homeworksOfStudent.get(0).getTeacherComment());
-		UserDAO.getInstance().setTeacherComment(hd, user1.getId(), "not bad");
+		UserDAO.getInstance().setTeacherComment(hd.getId(), user1.getId(), "not bad");
 		homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(user1.getId());
 		assertEquals("not bad", homeworksOfStudent.get(0).getTeacherComment());
 	}
 	
 	@Test
 	public void test21addTeacherGrade() throws UserException, ValidationException, GroupException{
-		ArrayList<Homework> homeworksOfStudentByGroup = UserDAO.getInstance().getHomeworksOfStudentByGroup(user1.getId(), group1);
+		ArrayList<Homework> homeworksOfStudentByGroup = UserDAO.getInstance().getHomeworksOfStudentByGroup(user1.getId(), group1.getId());
 		assertEquals(0, homeworksOfStudentByGroup.get(0).getTeacherGrade());
-		UserDAO.getInstance().setTeacherGrade(hd, user1.getId(), 12);
+		UserDAO.getInstance().setTeacherGrade(hd.getId(), user1.getId(), 12);
 		homeworksOfStudentByGroup = UserDAO.getInstance().getHomeworksOfStudent(user1.getId());
 		assertEquals(12, homeworksOfStudentByGroup.get(0).getTeacherGrade());
 	}
@@ -287,11 +287,11 @@ public class TestDAO {
 				assertEquals("testTasks.pdf", hd.getTasksFile());
 			}
 		}
-		ArrayList<Group> groupsforHomework = new ArrayList<>();
-		groupsforHomework.add(group1);
+		ArrayList<Integer> groupsforHomework = new ArrayList<>();
+		groupsforHomework.add(group1.getId());
 		HomeworkDetails updatedHomework = new HomeworkDetails(hd.getId(), "new heading1221135", openingUpdated, closingUpdated, 5, "newFile.pdf");
 		GroupDAO.getInstance().updateHomeworkDetails(updatedHomework, groupsforHomework);
-		ArrayList<HomeworkDetails> newHd = GroupDAO.getInstance().getHomeworkDetailsOfGroup(group1);
+		ArrayList<HomeworkDetails> newHd = GroupDAO.getInstance().getHomeworkDetailsOfGroup(group1.getId());
 		for(HomeworkDetails hd1: GroupDAO.getInstance().getAllHomeworksDetails()){
 			if(hd1.getId() == updatedHomework.getId()){
 				assertEquals( "new heading1221135", newHd.get(0).getHeading());
@@ -321,7 +321,7 @@ public class TestDAO {
 		}
 		assertEquals(false, isInHomeworksTable);
 		boolean isInGroupHomeworksTable = false;
-		for(HomeworkDetails hd1: GroupDAO.getInstance().getHomeworkDetailsOfGroup(group1)){
+		for(HomeworkDetails hd1: GroupDAO.getInstance().getHomeworkDetailsOfGroup(group1.getId())){
 			if(hd1.getHeading().equals(hd.getHeading())){
 				isInGroupHomeworksTable = true;
 				break;
@@ -348,7 +348,7 @@ public class TestDAO {
 		String name = "newName";
 		Group updatedGroup = new Group(group1.getId(), name);
 		//curr t - user2
-		ArrayList<Teacher> currTeachers = GroupDAO.getInstance().getTeachersOfGroup(group1);
+		ArrayList<Teacher> currTeachers = GroupDAO.getInstance().getTeachersOfGroup(group1.getId());
 		updatedGroup.setTeachers(currTeachers);
 		ArrayList<Integer> currTeachersIds = new ArrayList<>();
 		for(Teacher t : currTeachers){
@@ -364,7 +364,7 @@ public class TestDAO {
 		Group getUpdatedGroup = GroupDAO.getInstance().getGroupById(updatedGroup.getId());
 		//we return the curr teachers now and we check if group contains them all
 		boolean areWishedTeachersInGroupAndCurrNot = false;
-		ArrayList<Teacher> currTeachersInUpdatedGroup = GroupDAO.getInstance().getTeachersOfGroup(getUpdatedGroup);
+		ArrayList<Teacher> currTeachersInUpdatedGroup = GroupDAO.getInstance().getTeachersOfGroup(getUpdatedGroup.getId());
 		ArrayList<Integer> currTeachersIdsInUpdatedGroup = new ArrayList<>();
 
 		for(Teacher t: currTeachersInUpdatedGroup){
@@ -380,7 +380,7 @@ public class TestDAO {
 		//we return the curr teachers now and we check if group contains them all
 		boolean areWishedTeachersInGroupAndCurrNot1 = false;
 		
-		ArrayList<Teacher> currTeachersInUpdatedGroup1 = GroupDAO.getInstance().getTeachersOfGroup(getUpdatedGroup1);
+		ArrayList<Teacher> currTeachersInUpdatedGroup1 = GroupDAO.getInstance().getTeachersOfGroup(getUpdatedGroup1.getId());
 		ArrayList<Integer> currTeachersIdsInUpdatedGroup1 = new ArrayList<>();
 		for(Teacher t: currTeachersInUpdatedGroup1){
 			currTeachersIdsInUpdatedGroup1.add(t.getId());
@@ -401,7 +401,7 @@ public class TestDAO {
 	}
 	@Test
 	public void test26removeGroup() throws UserException, GroupException{
-		GroupDAO.getInstance().removeGroup(group1);	
+		GroupDAO.getInstance().removeGroup(group1.getId());	
 		Group g = GroupDAO.getInstance().getGroupById(group1.getId());
 		assertEquals(null, g);
 	}
@@ -409,7 +409,7 @@ public class TestDAO {
 	
 	@Test
 	public void test27removeUserProfile() throws UserException, GroupException{
-		UserDAO.getInstance().removeUserProfile(user1);
+		UserDAO.getInstance().removeUserProfile(user1.getId());
 		User userIdReturned = UserDAO.getInstance().getUserByUsername(user1.getUsername());
 		assertEquals(null, userIdReturned);
 	}

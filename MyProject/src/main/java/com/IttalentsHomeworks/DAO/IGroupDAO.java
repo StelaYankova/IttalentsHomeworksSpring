@@ -17,15 +17,15 @@ public interface IGroupDAO {
 
 	void setManager(DBManager manager);
 
-	ArrayList<Teacher> getTeachersOfGroup(Group g) throws GroupException;
+	ArrayList<Teacher> getTeachersOfGroup(int groupId) throws GroupException;
 
-	ArrayList<Student> getStudentsOfGroup(Group g) throws GroupException, UserException;
+	ArrayList<Student> getStudentsOfGroup(int groupId) throws GroupException, UserException;
 
-	ArrayList<HomeworkDetails> getHomeworkDetailsOfGroup(Group g) throws GroupException;
+	ArrayList<HomeworkDetails> getHomeworkDetailsOfGroup(int groupId) throws GroupException;
 
-	boolean isUserAlreadyInGroup(Group g, String username) throws GroupException, UserException;
+	boolean isUserAlreadyInGroup(int groupId, String username) throws GroupException, UserException;
 
-	void addUserToGroup(Group g, int idUser) throws GroupException, UserException, ValidationException;
+	void addUserToGroup(int chosenGroupId, int idUser) throws GroupException, UserException, ValidationException;
 
 	void createNewGroup(Group g) throws GroupException, ValidationException;
 
@@ -33,19 +33,19 @@ public interface IGroupDAO {
 
 	ArrayList<Group> getAllGroups() throws UserException, GroupException;
 
-	void removeUserFromGroup(Group group, int i) throws GroupException, UserException;
+	void removeUserFromGroup(int groupId, int i) throws GroupException, UserException;
 
-	void removeGroup(Group g) throws GroupException;
+	void removeGroup(int groupId) throws GroupException;
 
-	void createHomeworkDetails(HomeworkDetails hd, ArrayList<Group> groupsForHw) throws GroupException, UserException, ValidationException, NotUniqueUsernameException;
+	void createHomeworkDetails(HomeworkDetails hd, ArrayList<Integer> groupsForHw) throws GroupException, UserException, ValidationException, NotUniqueUsernameException;
 
 	int getHomeworkDetailsId(HomeworkDetails hd) throws GroupException;
 
-	void updateHomeworkDetails(HomeworkDetails hd, ArrayList<Group> groupsforHw) throws GroupException, UserException, ValidationException, NotUniqueUsernameException;
+	void updateHomeworkDetails(HomeworkDetails hd, ArrayList<Integer> groupsForHw) throws GroupException, UserException, ValidationException, NotUniqueUsernameException;
 
-	void removeHomeworkFromGroup(HomeworkDetails hd, Group g) throws GroupException, UserException;
+	void removeHomeworkFromGroup(int homeworkDetailsId, int groupId) throws GroupException, UserException;
 
-	void addHomeworkToGroup(HomeworkDetails hd, Group g) throws GroupException, UserException;
+	void addHomeworkToGroup(HomeworkDetails hd, int groupId) throws GroupException, UserException;
 
 	Group getGroupById(int id) throws GroupException, UserException;
 
@@ -55,14 +55,22 @@ public interface IGroupDAO {
 
 	void updateGroup(Group group, ArrayList<Integer> wishedTeacherIds) throws GroupException, ValidationException, UserException;
 
-	ArrayList<Integer> getIdsOfGroupsForWhichIsHomework(HomeworkDetails homeworkDetails) throws GroupException;
+	ArrayList<Integer> getIdsOfGroupsForWhichIsHomework(int homeworkDetailsId) throws GroupException;
 
 	HomeworkDetails getHomeworkDetailsById(int chosenHomeworkId) throws GroupException;
 
-	void addHomeworkToGroupTransaction(HomeworkDetails homeworkDetails, Group group) throws GroupException, UserException, SQLException;
+	void addHomeworkToGroupTransaction(HomeworkDetails homeworkDetails, int groupId) throws GroupException, UserException, SQLException;
 
 	void updateNumberOfTasksForStudents(HomeworkDetails homeworkDetails, int numOfTasks) throws GroupException;
 
-	ArrayList<Integer> getStudentsWithSearchedHomework(HomeworkDetails homeworkDetails) throws GroupException;
+	ArrayList<Integer> getStudentsWithSearchedHomework(int homeworkDetailsId) throws GroupException;
+
+	Group getGroupWithoutStudentsById(int groupId) throws GroupException;
+
+	String getGroupNameById(int chosenGroupId) throws GroupException;
+
+	ArrayList<Integer> getStudentsIdsOfGroup(int groupId) throws GroupException;
+
+	ArrayList<Group> getAllGroupsWithoutStudents() throws GroupException;
 
 }

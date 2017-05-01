@@ -171,10 +171,10 @@
 							var averageScore = 0;
 							var numberHomeworks = 0;
 							for ( var i in response) {
-									var opens = response[i].opens;
+									/* var opens = response[i].opens;
 									var opensRep = opens.replace("T", " ");
 									var closes = response[i].closes;
-									var closesRep = closes.replace("T", " ");
+									var closesRep = closes.replace("T", " "); */
 									var hasStudentGivenMinOneTask = response[i].hasStudentGivenMinOneTask;
 									averageScore += response[i].teacherScore;
 									numberHomeworks += 1;

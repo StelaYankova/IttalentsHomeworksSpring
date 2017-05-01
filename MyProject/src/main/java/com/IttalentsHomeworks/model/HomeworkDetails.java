@@ -29,6 +29,12 @@ public class HomeworkDetails {
 		this.numberOfTasks = numberOfTasks;
 		this.tasksFile = tasksFile;	
 	}
+	public HomeworkDetails(int id, String heading, LocalDateTime openingTime, LocalDateTime closingTime) {
+		this.id = id;
+		this.heading = heading;
+		this.openingTime = openingTime;
+		this.closingTime = closingTime;
+	}
 	public int getId() {
 		return id;
 	}
@@ -70,6 +76,27 @@ public class HomeworkDetails {
 	}
 	public void setDaysLeft(int daysLeft) {
 		this.daysLeft = daysLeft;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		System.out.println("hash is " + result);
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		HomeworkDetails other = (HomeworkDetails) obj;
+		if (id != other.id)
+			return false;
+		return true;
 	}
 	
 	

@@ -54,6 +54,7 @@ public class GroupDAO implements IGroupDAO {
 	private static final String IS_USER_ALREADY_IN_GROUP = "SELECT * FROM IttalentsHomeworks.User_has_Group WHERE user_id = ? AND group_id = ?;";
 	private static final String GET_HOMEWORK_DETAILS_OF_GROUP = "SELECT H.id, H.heading, H.opens, H.closes, H.num_of_tasks, H.tasks_pdf FROM IttalentsHomeworks.Homework H JOIN IttalentsHomeworks.Group_has_Homework GH ON (GH. homework_id = H.id) WHERE GH.group_id = ?;";
 	private static final String GET_STUDENTS_OF_GROUP = "SELECT U.id, U.username, U.email, U.isTeacher FROM IttalentsHomeworks.User_has_Group G JOIN IttalentsHomeworks.Users U ON (G.user_id = U.id) WHERE G.group_id = ? AND U.isTeacher = 0;";
+	private static final String GET_STUDENTS_OF_GROUP_BY_ID = "SELECT U.id, U.username, U.email, U.isTeacher FROM IttalentsHomeworks.User_has_Group G JOIN IttalentsHomeworks.Users U ON (G.user_id = U.id) WHERE G.group_id = ? AND U.isTeacher = 0;";
 	private static final String GET_TEACHERS_OF_GROUP = "SELECT U.id, U.username, U.email, U.isTeacher FROM IttalentsHomeworks.User_has_Group G JOIN IttalentsHomeworks.Users U ON (G.user_id = U.id) WHERE G.group_id = ? AND U.isTeacher = 1;";
 	private static IGroupDAO instance;
 	private DBManager manager;
@@ -97,16 +98,17 @@ public class GroupDAO implements IGroupDAO {
 	 * IttalentsHomeworks.model.Group)
 	 */
 	@Override
-	public ArrayList<Teacher> getTeachersOfGroup(Group group) throws GroupException {
+	public ArrayList<Teacher> getTeachersOfGroup(int groupId) throws GroupException {
 		ArrayList<Teacher> teachersOfGroup = new ArrayList<>();
 		Connection con = manager.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(GET_TEACHERS_OF_GROUP);
-			ps.setInt(1, group.getId());
+			ps.setInt(1, groupId);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				teachersOfGroup.add(new Teacher(rs.getInt(1), rs.getString(2), rs.getString(3)));
 			}
+			
 		} catch (SQLException e) {
 			throw new GroupException("Something went wrong with checking the teaches of a group..");
 		}
@@ -120,12 +122,12 @@ public class GroupDAO implements IGroupDAO {
 	 * IttalentsHomeworks.model.Group)
 	 */
 	@Override
-	public ArrayList<Student> getStudentsOfGroup(Group group) throws GroupException, UserException {
+	public ArrayList<Student> getStudentsOfGroup(int groupId) throws GroupException, UserException {
 		ArrayList<Student> studentsOfGroup = new ArrayList<>();
 		Connection con = manager.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(GET_STUDENTS_OF_GROUP);
-			ps.setInt(1, group.getId());
+			ps.setInt(1, groupId);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				// all homeworks of student, not by group
@@ -149,12 +151,12 @@ public class GroupDAO implements IGroupDAO {
 	 * IttalentsHomeworks.model.Group)
 	 */
 	@Override
-	public ArrayList<HomeworkDetails> getHomeworkDetailsOfGroup(Group group) throws GroupException {
+	public ArrayList<HomeworkDetails> getHomeworkDetailsOfGroup(int groupId) throws GroupException {
 		ArrayList<HomeworkDetails> homeworksOfGroup = new ArrayList<>();
 		Connection con = manager.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(GET_HOMEWORK_DETAILS_OF_GROUP);
-			ps.setInt(1, group.getId());
+			ps.setInt(1, groupId);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");//ss
@@ -179,14 +181,14 @@ public class GroupDAO implements IGroupDAO {
 	 * IttalentsHomeworks.model.Group, com.IttalentsHomeworks.model.User)
 	 */
 	@Override
-	public boolean isUserAlreadyInGroup(Group group, String username) throws GroupException, UserException{
+	public boolean isUserAlreadyInGroup(int groupId, String username) throws GroupException, UserException{
 		Connection con = manager.getConnection();
 		boolean isUserAlreadyInGroup = false;
 		if (ValidationsDAO.getInstance().doesUserExistInDBByUsername(username)) {
 			try {
 				PreparedStatement ps = con.prepareStatement(IS_USER_ALREADY_IN_GROUP);
 				ps.setInt(1, UserDAO.getInstance().getUserIdByUsername(username));
-				ps.setInt(2, group.getId());
+				ps.setInt(2, groupId);
 				ResultSet rs = ps.executeQuery();
 				if (rs.next()) {
 					isUserAlreadyInGroup = true;
@@ -205,20 +207,20 @@ public class GroupDAO implements IGroupDAO {
 	 * IttalentsHomeworks.model.Group, com.IttalentsHomeworks.model.User)
 	 */
 	@Override
-	public void addUserToGroup(Group group, int userId) throws GroupException, UserException, ValidationException {
+	public void addUserToGroup(int groupId, int userId) throws GroupException, UserException, ValidationException {
 		Connection con = manager.getConnection();
-		User user = UserDAO.getInstance().getUserById(userId);
-		if ((group != null && user != null) && ValidationsDAO.getInstance().doesStudentExist(user.getUsername())) {
-			if (!ValidationsDAO.getInstance().isStudentAlreadyInGroupAddStudent(group.getId(), user.getUsername())) {
+		//User user = UserDAO.getInstance().getUserById(userId);
+		if ((ValidationsDAO.getInstance().doesGroupExistInDBById(groupId)  && ValidationsDAO.getInstance().doesUserExistInDBById(userId)) && ValidationsDAO.getInstance().doesUserExistInDBById(userId)) {
+			if (!ValidationsDAO.getInstance().isStudentAlreadyInGroupAddStudent(groupId, userId)) {
 				try {
 					PreparedStatement ps = con.prepareStatement(ADD_USER_TO_GROUP);
-					ps.setInt(1, user.getId());
-					ps.setInt(2, group.getId());
+					ps.setInt(1, userId);
+					ps.setInt(2, groupId);
 					ps.execute();
-					if (!user.isTeacher()) {
-						for (HomeworkDetails hd : GroupDAO.getInstance().getHomeworkDetailsOfGroup(group)) {
-							if (!((GroupDAO) GroupDAO.getInstance()).doesStudentAlreadyHaveHomework(user, hd)) {
-								UserDAO.getInstance().addHomeworkToStudent(user, hd);
+					if (!UserDAO.getInstance().isUserATeacher(userId)) {
+						for (HomeworkDetails hd : GroupDAO.getInstance().getHomeworkDetailsOfGroup(groupId)) {
+							if (!((GroupDAO) GroupDAO.getInstance()).doesStudentAlreadyHaveHomework(userId, hd)) {
+								UserDAO.getInstance().addHomeworkToStudent(userId, hd);
 							}
 						}
 					}
@@ -233,12 +235,12 @@ public class GroupDAO implements IGroupDAO {
 		}
 	}
 
-	public boolean doesStudentAlreadyHaveHomework(User user, HomeworkDetails hd) throws GroupException {
+	public boolean doesStudentAlreadyHaveHomework(int userId, HomeworkDetails hd) throws GroupException {
 		boolean doesHaveHw = false;
 		Connection con = manager.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(DOES_STUDENT_ALREADY_HAVE_HOMEWORK);
-			ps.setInt(1, user.getId());
+			ps.setInt(1, userId);
 			ps.setInt(2, hd.getId());
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
@@ -345,11 +347,11 @@ public class GroupDAO implements IGroupDAO {
 			st = con.createStatement();
 			ResultSet rs = st.executeQuery(GET_ALL_GROUPS);
 			while (rs.next()) {
-				Group currGroup = new Group(rs.getInt(1), rs.getString(2));
-				ArrayList<Teacher> teachersOfGroup = GroupDAO.getInstance().getTeachersOfGroup(currGroup);
-				ArrayList<Student> studentsOfGroup = GroupDAO.getInstance().getStudentsOfGroup(currGroup);
+				//Group currGroup = new Group(rs.getInt(1), rs.getString(2));
+				ArrayList<Teacher> teachersOfGroup = GroupDAO.getInstance().getTeachersOfGroup(rs.getInt(1));
+				ArrayList<Student> studentsOfGroup = GroupDAO.getInstance().getStudentsOfGroup(rs.getInt(1));
 				ArrayList<HomeworkDetails> homeworkDetailsOfGroup = GroupDAO.getInstance()
-						.getHomeworkDetailsOfGroup(currGroup);
+						.getHomeworkDetailsOfGroup(rs.getInt(1));
 				groups.add(new Group(rs.getInt(1), rs.getString(2), teachersOfGroup, studentsOfGroup,
 						homeworkDetailsOfGroup));
 			}
@@ -366,12 +368,12 @@ public class GroupDAO implements IGroupDAO {
 	 * IttalentsHomeworks.model.Group, com.IttalentsHomeworks.model.Student)
 	 */
 	@Override
-	public void removeUserFromGroup(Group group, int userId) throws GroupException, UserException {
+	public void removeUserFromGroup(int groupId, int userId) throws GroupException, UserException {
 		Connection con = manager.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(REMOVE_USER_FROM_GROUP);
 			ps.setInt(1, userId);
-			ps.setInt(2, group.getId());
+			ps.setInt(2, groupId);
 			ps.execute();
 		} catch (SQLException e) {
 			throw new GroupException("Something went wrong with removing a student from a group..");
@@ -387,11 +389,11 @@ public class GroupDAO implements IGroupDAO {
 	 * model.Group)
 	 */
 	@Override
-	public void removeGroup(Group group) throws GroupException {
+	public void removeGroup(int groupId) throws GroupException {
 		Connection con = manager.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(REMOVE_GROUP);
-			ps.setInt(1, group.getId());
+			ps.setInt(1, groupId);
 			ps.execute();
 		} catch (SQLException e) {
 			throw new GroupException("Something went wrong with removing a group.." + e.getMessage());
@@ -406,7 +408,7 @@ public class GroupDAO implements IGroupDAO {
 	 */
 
 	@Override
-	public void createHomeworkDetails(HomeworkDetails homeworkDetails, ArrayList<Group> groupsForHomework)
+	public void createHomeworkDetails(HomeworkDetails homeworkDetails, ArrayList<Integer> groupsForHomework)
 			throws GroupException, UserException, ValidationException, NotUniqueUsernameException {
 		Connection con = manager.getConnection();
 		if (ValidationsDAO.getInstance().isHomeworkHeadingUniqueAddHomework(homeworkDetails.getHeading())) {
@@ -433,8 +435,8 @@ public class GroupDAO implements IGroupDAO {
 							ps.setString(5, homeworkDetails.getTasksFile());
 							ps.execute();
 							homeworkDetails.setId(GroupDAO.getInstance().getHomeworkDetailsId(homeworkDetails));
-							for (Group group : groupsForHomework) {
-								GroupDAO.getInstance().addHomeworkToGroupTransaction(homeworkDetails, group);
+							for (Integer groupId : groupsForHomework) {
+								GroupDAO.getInstance().addHomeworkToGroupTransaction(homeworkDetails, groupId);
 							}
 							con.commit();
 						} catch (SQLException e) {
@@ -498,7 +500,7 @@ public class GroupDAO implements IGroupDAO {
 	 * IttalentsHomeworks.model.HomeworkDetails, java.util.ArrayList)
 	 */
 	@Override
-	public void updateHomeworkDetails(HomeworkDetails homeworkDetails, ArrayList<Group> groupsForHomework)
+	public void updateHomeworkDetails(HomeworkDetails homeworkDetails, ArrayList<Integer> groupsForHomework)
 			throws GroupException, UserException, ValidationException, NotUniqueUsernameException {
 		Connection con = manager.getConnection();// get id
 		HomeworkDetails currHd = GroupDAO.getInstance().getHomeworkDetailsById(homeworkDetails.getId());
@@ -530,21 +532,21 @@ public class GroupDAO implements IGroupDAO {
 							ps.setInt(6, homeworkDetails.getId());
 							ps.executeUpdate();
 							ArrayList<Integer> currGroupIds = GroupDAO.getInstance()
-									.getIdsOfGroupsForWhichIsHomework(homeworkDetails);
+									.getIdsOfGroupsForWhichIsHomework(homeworkDetails.getId());
 							ArrayList<Integer> wishedGroupIds = new ArrayList<>();
-							for (Group g : groupsForHomework) {
-								wishedGroupIds.add(g.getId());
+							for (Integer id : groupsForHomework) {
+								wishedGroupIds.add(id);
 							}
 							for (Integer id : currGroupIds) {
 								if (!(wishedGroupIds.contains(id))) {
-									GroupDAO.getInstance().removeHomeworkFromGroup(homeworkDetails,
-											GroupDAO.getInstance().getGroupById(id));
+									GroupDAO.getInstance().removeHomeworkFromGroup(homeworkDetails.getId(),
+											id);
 								}
 							}
 							for (Integer id : wishedGroupIds) {
 								if (!(currGroupIds.contains(id))) {
 									GroupDAO.getInstance().addHomeworkToGroupTransaction(homeworkDetails,
-											GroupDAO.getInstance().getGroupById(id));
+											id);
 								}
 							}
 							//TODO
@@ -588,12 +590,12 @@ public class GroupDAO implements IGroupDAO {
 	 * IttalentsHomeworks.model.HomeworkDetails)
 	 */
 	@Override
-	public ArrayList<Integer> getIdsOfGroupsForWhichIsHomework(HomeworkDetails homeworkDetails) throws GroupException {
+	public ArrayList<Integer> getIdsOfGroupsForWhichIsHomework(int homeworkDetailsId) throws GroupException {
 		ArrayList<Integer> groupsIds = new ArrayList<>();
 		Connection con = manager.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(GET_IDS_OF_GROUPS_FOR_WHICH_IS_HOMEWORK);
-			ps.setInt(1, homeworkDetails.getId());
+			ps.setInt(1, homeworkDetailsId);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				groupsIds.add(rs.getInt(1));
@@ -614,13 +616,13 @@ public class GroupDAO implements IGroupDAO {
 	 */
 
 	@Override
-	public void removeHomeworkFromGroup(HomeworkDetails homeworkDetails, Group group)
+	public void removeHomeworkFromGroup(int homeworkDetailsId, int groupId)
 			throws GroupException, UserException {
 		Connection con = manager.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(REMOVE_HOMEWORK_FROM_GROUP_I);
-			ps.setInt(1, group.getId());
-			ps.setInt(2, homeworkDetails.getId());
+			ps.setInt(1, groupId);
+			ps.setInt(2, homeworkDetailsId);
 			ps.execute();
 		} catch (SQLException e) {
 			throw new GroupException("Something went wrong with removing a homework from group..");
@@ -635,18 +637,18 @@ public class GroupDAO implements IGroupDAO {
 	 * com.IttalentsHomeworks.model.Group)
 	 */
 	@Override
-	public void addHomeworkToGroup(HomeworkDetails homeworkDetails, Group group) throws GroupException, UserException {
+	public void addHomeworkToGroup(HomeworkDetails homeworkDetails, int groupId) throws GroupException, UserException {
 		Connection con = manager.getConnection();
 		try {
 			con.setAutoCommit(false);
 			try {
 				PreparedStatement ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_I);
-				ps.setInt(1, group.getId());
+				ps.setInt(1, groupId);
 				ps.setInt(2, homeworkDetails.getId());
 				ps.execute();
 
-				for (Student s : GroupDAO.getInstance().getStudentsOfGroup(group)) {
-					if (!((GroupDAO) GroupDAO.getInstance()).doesStudentAlreadyHaveHomework(s, homeworkDetails)) {
+				for (Student s : GroupDAO.getInstance().getStudentsOfGroup(groupId)) {
+					if (!((GroupDAO) GroupDAO.getInstance()).doesStudentAlreadyHaveHomework(s.getId(), homeworkDetails)) {
 
 						ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_II);
 						ps.setInt(1, s.getId());
@@ -656,7 +658,7 @@ public class GroupDAO implements IGroupDAO {
 						for (int i = 0; i < homeworkDetails.getNumberOfTasks(); i++) {
 
 							Task t = new Task(i, null, null);
-							if (!UserDAO.getInstance().doesTaskAlreadyExist(homeworkDetails, s, i)) {
+							if (!UserDAO.getInstance().doesTaskAlreadyExist(homeworkDetails.getId(), s.getId(), i)) {
 
 								ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_III);
 
@@ -697,11 +699,14 @@ public class GroupDAO implements IGroupDAO {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				ArrayList<Teacher> teachers = GroupDAO.getInstance().getTeachersOfGroup(new Group(id, rs.getString(2)));
-				ArrayList<Student> students = GroupDAO.getInstance().getStudentsOfGroup(new Group(id, rs.getString(2)));
+				//make better
+				long startTime1 = System.currentTimeMillis();
+				ArrayList<Teacher> teachers = GroupDAO.getInstance().getTeachersOfGroup(id);
+				ArrayList<Student> students = GroupDAO.getInstance().getStudentsOfGroup(id);
 				ArrayList<HomeworkDetails> homeworkDetails = GroupDAO.getInstance()
-						.getHomeworkDetailsOfGroup(new Group(id, rs.getString(2)));
-
+						.getHomeworkDetailsOfGroup(id);
+				long endTime1 = System.currentTimeMillis();
+				System.out.println("That part 1 function took " + (endTime1 - startTime1) + " milliseconds!!!");
 				group = new Group(rs.getInt(1), rs.getString(2), teachers, students, homeworkDetails);
 			}
 		} catch (SQLException e) {
@@ -735,7 +740,7 @@ public class GroupDAO implements IGroupDAO {
 			// con.setAutoCommit(false);
 			PreparedStatement ps = con.prepareStatement(REMOVE_HOMEWORK_DETAILS);
 			ps.setInt(1, homeworkDetails.getId());
-			ArrayList<Integer> currGroupIds = GroupDAO.getInstance().getIdsOfGroupsForWhichIsHomework(homeworkDetails);
+			ArrayList<Integer> currGroupIds = GroupDAO.getInstance().getIdsOfGroupsForWhichIsHomework(homeworkDetails.getId());
 			ArrayList<Group> currGroups = new ArrayList<>();
 			for (Integer id : currGroupIds) {
 				currGroups.add(GroupDAO.getInstance().getGroupById(id));
@@ -746,7 +751,7 @@ public class GroupDAO implements IGroupDAO {
 				fileTasks.delete();
 			}
 			for (Group group : currGroups) {
-				for (Student s : GroupDAO.getInstance().getStudentsOfGroup(group)) {
+				for (Student s : GroupDAO.getInstance().getStudentsOfGroup(group.getId())) {
 					for (int i = 0; i < homeworkDetails.getNumberOfTasks(); i++) {
 						String fileName = "hwId" + homeworkDetails.getId() + "userId" + s.getId() + "taskNum" + i
 								+ ".java";
@@ -777,7 +782,7 @@ public class GroupDAO implements IGroupDAO {
 				ps.setInt(2, group.getId());
 				ps.executeUpdate();
 				// curr teachers
-				ArrayList<Teacher> currTeachers = GroupDAO.getInstance().getTeachersOfGroup(group);
+				ArrayList<Teacher> currTeachers = GroupDAO.getInstance().getTeachersOfGroup(group.getId());
 				ArrayList<Integer> currTeachersIds = new ArrayList<>();
 				for (Teacher t : currTeachers) {
 					currTeachersIds.add(t.getId());
@@ -788,14 +793,14 @@ public class GroupDAO implements IGroupDAO {
 				if (currTeachersIds != null) {
 					for (Integer teacherId : currTeachersIds) {
 						if (!(wishedTeachersIds.contains(teacherId))) {
-							GroupDAO.getInstance().removeUserFromGroup(group, teacherId);
+							GroupDAO.getInstance().removeUserFromGroup(group.getId(), teacherId);
 						}
 					}
 				}
 				if (wishedTeachersIds != null) {
 					for (Integer id : wishedTeachersIds) {
 						if (!(currTeachersIds.contains(id))) {
-							GroupDAO.getInstance().addUserToGroup(group, id);
+							GroupDAO.getInstance().addUserToGroup(group.getId(), id);
 						}
 					}
 				}
@@ -843,16 +848,16 @@ public class GroupDAO implements IGroupDAO {
 	}
 
 	@Override
-	public void addHomeworkToGroupTransaction(HomeworkDetails homeworkDetails, Group group)
+	public void addHomeworkToGroupTransaction(HomeworkDetails homeworkDetails, int groupId)
 			throws GroupException, UserException, SQLException {
 		Connection con = manager.getConnection();
 		PreparedStatement ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_I);
-		ps.setInt(1, group.getId());
+		ps.setInt(1, groupId);
 		ps.setInt(2, homeworkDetails.getId());
 		ps.execute();
 
-		for (Student s : GroupDAO.getInstance().getStudentsOfGroup(group)) {
-			if (!((GroupDAO) GroupDAO.getInstance()).doesStudentAlreadyHaveHomework(s, homeworkDetails)) {
+		for (Student s : GroupDAO.getInstance().getStudentsOfGroup(groupId)) {
+			if (!((GroupDAO) GroupDAO.getInstance()).doesStudentAlreadyHaveHomework(s.getId(), homeworkDetails)) {
 
 				ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_II);
 				ps.setInt(1, s.getId());
@@ -862,7 +867,7 @@ public class GroupDAO implements IGroupDAO {
 				for (int i = 0; i < homeworkDetails.getNumberOfTasks(); i++) {
 
 					Task t = new Task(i, null, null);
-					if (!UserDAO.getInstance().doesTaskAlreadyExist(homeworkDetails, s, i)) {
+					if (!UserDAO.getInstance().doesTaskAlreadyExist(homeworkDetails.getId(), s.getId(), i)) {
 						ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_III);
 						ps.setInt(1, s.getId());
 						ps.setInt(2, homeworkDetails.getId());
@@ -880,7 +885,7 @@ public class GroupDAO implements IGroupDAO {
 		Connection con = manager.getConnection();
 		PreparedStatement ps;
 		// arraylist ot idta na studenti s tova doma6no
-		ArrayList<Integer> students = GroupDAO.getInstance().getStudentsWithSearchedHomework(homeworkDetails);
+		ArrayList<Integer> students = GroupDAO.getInstance().getStudentsWithSearchedHomework(homeworkDetails.getId());
 		// ako vavedenite sa >
 		//int difference = 0;
 		if (homeworkDetails.getNumberOfTasks() > numOfTasks) {
@@ -930,13 +935,13 @@ public class GroupDAO implements IGroupDAO {
 	}
 	
 	@Override
-	public ArrayList<Integer> getStudentsWithSearchedHomework(HomeworkDetails homeworkDetails) throws GroupException {
+	public ArrayList<Integer> getStudentsWithSearchedHomework(int homeworkDetailsId) throws GroupException {
 		Connection con = manager.getConnection();
 		PreparedStatement ps;
 		ArrayList<Integer> students = new ArrayList<>();
 		try {
 			ps = con.prepareStatement("SELECT user_id FROM IttalentsHomeworks.User_has_homework WHERE homework_id = ?;");
-			ps.setInt(1, homeworkDetails.getId());
+			ps.setInt(1, homeworkDetailsId);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				students.add(rs.getInt(1));
@@ -945,5 +950,84 @@ public class GroupDAO implements IGroupDAO {
 			throw new GroupException("Something went wrong with getting students with searched homeworks..");
 		}	
 		return students;
+	}
+
+	@Override
+	public Group getGroupWithoutStudentsById(int groupId) throws GroupException {
+		Group group = null;
+		Connection con = manager.getConnection();
+		try {
+			PreparedStatement ps = con.prepareStatement(GET_GROUP_BY_ID);
+			ps.setInt(1, groupId);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				ArrayList<Teacher> teachers = GroupDAO.getInstance().getTeachersOfGroup(groupId);
+				group = new Group(rs.getInt(1), rs.getString(2), teachers);
+			}
+		} catch (SQLException e) {
+			throw new GroupException("Something went wrong with getting the group by id..");
+		}
+		return group;
+	}
+
+	@Override
+	public String getGroupNameById(int chosenGroupId) throws GroupException {
+		Connection con = manager.getConnection();
+		try {
+			PreparedStatement ps = con.prepareStatement("SELECT group_name FROM IttalentsHomeworks.Groups WHERE id = ?;");
+			ps.setInt(1, chosenGroupId);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+				return rs.getString(1);
+			}
+		} catch (SQLException e) {
+			throw new GroupException("Something went wrong with getting the group name by id..");
+		}
+		return null;
+	}
+
+	@Override
+	public ArrayList<Integer> getStudentsIdsOfGroup(int groupId) throws GroupException {
+		ArrayList<Integer> studentsOfGroup = new ArrayList<>();
+		Connection con = manager.getConnection();
+		try {
+			PreparedStatement ps = con.prepareStatement(GET_STUDENTS_OF_GROUP_BY_ID);
+			ps.setInt(1, groupId);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				studentsOfGroup.add(rs.getInt(1));
+				// all homeworks of student, not by group
+				// we dont have to know their groups
+				//Student currStudent = (Student) UserDAO.getInstance().getStudentsByUsername(rs.getString(2));
+//				ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance()
+//						.getHomeworksOfStudent(currStudent.getId());
+//				studentsOfGroup.add(new Student(rs.getInt(1), rs.getString(2), rs.getString(3), 
+//						homeworksOfStudent));
+			}
+		} catch (SQLException e) {
+			throw new GroupException("Something went wrong with getting the students(id) of a group..");
+		}
+		return studentsOfGroup;
+	}
+
+	@Override
+	public ArrayList<Group> getAllGroupsWithoutStudents() throws GroupException {
+		Connection con = manager.getConnection();
+		ArrayList<Group> groups = new ArrayList<>();
+		Statement st;
+		try {
+			st = con.createStatement();
+			ResultSet rs = st.executeQuery(GET_ALL_GROUPS);
+			while (rs.next()) {
+				//Group currGroup = new Group(rs.getInt(1), rs.getString(2));
+				ArrayList<HomeworkDetails> homeworkDetailsOfGroup = GroupDAO.getInstance()
+						.getHomeworkDetailsOfGroup(rs.getInt(1));
+				groups.add(new Group(rs.getInt(1), rs.getString(2), null, null,
+						homeworkDetailsOfGroup));
+			}
+		} catch (SQLException e) {
+			throw new GroupException("Something went wrong with getting groups.." + e.getMessage());
+		}
+		return groups;
 	}
 }

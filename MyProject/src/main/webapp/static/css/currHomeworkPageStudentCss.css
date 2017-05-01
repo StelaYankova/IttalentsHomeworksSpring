@@ -15,14 +15,14 @@ label {
 	text-align: left;
 	width: 8.750em;
 }
-.time{
+.homeworkInfo{
    line-height: 2em;
 }
 #solution{
  width: 52%;
     float: left;
     padding-left: 3.125em;
-    padding-top: 9em;
+    padding-top: 11em;
 }
 
 #currTaskSolution {

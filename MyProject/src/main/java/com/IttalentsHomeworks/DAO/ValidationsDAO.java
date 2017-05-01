@@ -31,6 +31,7 @@ public class ValidationsDAO implements IValidationsDAO{
 	private static final String PASSWORD_MD5 = "MD5";
 	private static IValidationsDAO instance;
 	private DBManager manager;
+	private static final String DOES_USER_HAVE_GROUP = "SELECT count(*) FROM IttalentsHomeworks.User_has_Group WHERE user_id=? AND group_id=?;";
 	private static final String IS_USERNAME_UNIQUE = "SELECT * FROM IttalentsHomeworks.Users WHERE BINARY username = ?;";
 	private static final String IS_GROUP_NAME_UNIQUE = "SELECT id FROM IttalentsHomeworks.Groups WHERE BINARY group_name = ?";
 	private static final String IS_HOMEWORK_HEADING_UNIQUE = "SELECT * FROM IttalentsHomeworks.Homework WHERE BINARY heading = ?";
@@ -270,10 +271,10 @@ public class ValidationsDAO implements IValidationsDAO{
 		return false;
 	}
 	@Override
-	public boolean isStudentAlreadyInGroupAddStudent(int groupId, String username) throws GroupException, UserException {
-		Group chosenGroup;
-			chosenGroup = GroupDAO.getInstance().getGroupById(groupId);
-			if (GroupDAO.getInstance().isUserAlreadyInGroup(chosenGroup, username)) {
+	public boolean isStudentAlreadyInGroupAddStudent(int groupId, int userId) throws GroupException, UserException {
+		//Group chosenGroup;
+			//chosenGroup = GroupDAO.getInstance().getGroupById(groupId);
+			if (ValidationsDAO.getInstance().isStudentAlreadyInGroup(groupId, userId)) {
 				return true;
 			}
 		return false;
@@ -538,4 +539,77 @@ public class ValidationsDAO implements IValidationsDAO{
 		}
 		return true;
 	}
+
+	@Override
+	public boolean doesUserExistInDBById(int studentId) throws UserException {
+		Connection con = manager.getConnection();
+		try {
+			PreparedStatement ps = con.prepareStatement("SELECT username FROM IttalentsHomeworks.Users WHERE id = ?;");
+			ps.setInt(1, studentId);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean doesGroupExistInDBById(int groupId) throws GroupException {
+		Connection con = manager.getConnection();
+		try {
+			PreparedStatement ps = con.prepareStatement("SELECT group_name FROM IttalentsHomeworks.Groups WHERE id = ?;");
+			ps.setInt(1, groupId);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+
+	@Override
+	public boolean isStudentAlreadyInGroup(int userId, int groupId) throws UserException, GroupException {
+		Connection con = manager.getConnection();
+		try {
+			PreparedStatement ps = con.prepareStatement(DOES_USER_HAVE_GROUP);
+			ps.setInt(1, userId);
+			ps.setInt(2, groupId);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+				if(rs.getInt(1) != 0){
+					return true;
+				}
+			}
+		} catch (SQLException e) {
+			throw new UserException("Something went wrong with checking if user has group..");			
+		}
+		return false;
+	}
+
+	@Override
+	public boolean doHomeworkDetailsExist(int chosenHomeworkId) throws HomeworkException{
+		Connection con = manager.getConnection();
+		try {
+			PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM IttalentsHomeworks.Homework WHERE id = ?;");
+			ps.setInt(1, chosenHomeworkId);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+				if(rs.getInt(1) != 0){
+					return true;
+				}
+			}
+		} catch (SQLException e) {
+			throw new HomeworkException("Something went wrong with checking if homework details exist..");			
+		}
+		return false;
+	}
+
 }

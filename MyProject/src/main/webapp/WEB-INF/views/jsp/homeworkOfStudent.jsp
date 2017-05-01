@@ -69,9 +69,11 @@
 			</div>
 			<c:set var="opens" value="${fn:replace(sessionScope.currHomework.homeworkDetails.openingTime,'T', ' ')}" />
 			<c:set var="closes" value="${fn:replace(sessionScope.currHomework.homeworkDetails.closingTime,'T', ' ')}" />
-			<b class = "time">Opening time: </b>
+			<b class = "homeworkInfo">Heading: </b>
+			<c:out value="${sessionScope.currHomework.homeworkDetails.heading}" /><br>
+			<b class = "homeworkInfo">Opening time: </b>
 			<c:out value="${opens}" /><br>
-			<b class = "time">Closing time:  </b>
+			<b class = "homeworkInfo">Closing time:  </b>
 			<c:out value="${closes}" />
 		<div id="divTable">
 				<table id="tasksTable" 

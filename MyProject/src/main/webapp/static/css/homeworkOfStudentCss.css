@@ -22,7 +22,7 @@ label {
  width: 52%;
     float: left;
     padding-left: 3.125em;
-    padding-top: 9em;
+    padding-top: 11em;
  }
 
 #currTaskSolution {
@@ -50,7 +50,7 @@ label {
 	font-size: 0.85em;
 	font-style: italic
 }
-.time{
+.homeworkInfo{
    line-height: 2em;
 }
 .dataTables_scrollBody{

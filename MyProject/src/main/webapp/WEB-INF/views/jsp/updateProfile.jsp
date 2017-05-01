@@ -86,7 +86,7 @@
 						<div class="control-label-input">
 							<input type="password" class="form-control"
 								value="${sessionScope.user.password}" name="password"
-								placeholder="Enter password" maxlength="15"
+								placeholder="Enter password" maxlength="32"
 								data-toggle="popover" data-placement="bottom"
 								data-trigger="focus"
 								data-content="Valid length is from 6 to 15 symbols. Valid inputs are numbers and letters (large and small)"
@@ -106,7 +106,7 @@
 						<div class="control-label-input">
 							<input type="password" class="form-control"
 								placeholder="Repeat password"
-								value="${sessionScope.user.password}" maxlength="15"
+								value="${sessionScope.user.password}" maxlength="32"
 								name="repeatedPassword"  required/>
 							<c:if test="${not empty validRepeatedPass}">
 								<c:if test="${not validRepeatedPass}">

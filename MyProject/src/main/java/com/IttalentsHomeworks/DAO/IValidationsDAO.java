@@ -48,6 +48,8 @@ public interface IValidationsDAO {
 	 static final int ASCII_TABLE_VALUE_OF_A = 65;
 	 static final int MAX_LENGTH_USERNAME = 25;
 	 static final int MIN_LENGTH_USERNAME = 6;
+	 static final int topMostRecentlyClosedHomeworksForTeacher = 10;
+
 	static final String SAVE_DIR = "/Users/Stela/Desktop/imagesIttalentsHomework";
 
 	boolean isUsernameUnique(String username) throws UserException;
@@ -84,7 +86,7 @@ public interface IValidationsDAO {
 	
 	public boolean doesStudentExist(String username) throws UserException;
 	
-	public boolean isStudentAlreadyInGroupAddStudent(int groupId, String username) throws GroupException, UserException;
+	public boolean isStudentAlreadyInGroupAddStudent(int groupId, int userId) throws GroupException, UserException;
 	
 	public boolean isThereEmptyFieldAddStudentToGroup(String username);
 	
@@ -127,5 +129,13 @@ public interface IValidationsDAO {
 	boolean isPasswordUpdateValid(String password, String formerPass);
 
 	boolean isStringValidInteger(String string);
+
+	boolean doesUserExistInDBById(int studentId) throws UserException;
+
+	boolean doesGroupExistInDBById(int groupId) throws GroupException;
+
+	boolean isStudentAlreadyInGroup(int userId, int groupId) throws UserException, GroupException;
+
+	boolean doHomeworkDetailsExist(int chosenHomeworkId) throws HomeworkException;;
 
 }

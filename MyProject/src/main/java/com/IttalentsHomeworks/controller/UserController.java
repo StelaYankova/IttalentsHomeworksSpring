@@ -1,9 +1,21 @@
 package com.IttalentsHomeworks.controller;
-
+import org.apache.commons.collections.MultiHashMap;
+import org.apache.commons.collections.MultiMap;
+import org.apache.commons.collections.map.MultiValueMap;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -79,18 +91,18 @@ public class UserController {
 				int homeworkId = Integer.parseInt(request.getParameter("id").trim());
 				request.getSession().setAttribute("studentId", studentId);
 				Homework homework = null;
-				ArrayList<Homework> homeworks;
+				//ArrayList<Homework> homeworks;
 				try {
-					homeworks = UserDAO.getInstance().getHomeworksOfStudent(studentId);
-					for (Homework h : homeworks) {
+					//homeworks = UserDAO.getInstance().getHomeworksOfStudent(studentId);
+					
+					Student chosenStudent = (Student) UserDAO.getInstance().getUserById(studentId);
+					for (Homework h : chosenStudent.getHomeworks()) {
 						if (h.getHomeworkDetails().getId() == homeworkId) {
 							homework = new Homework(h.getTeacherGrade(), h.getTeacherComment(), h.getTasks(),
 									h.getHomeworkDetails());
 							break;
 						}
 					}
-					Student chosenStudent = (Student) UserDAO.getInstance().getUserById(studentId);
-
 					if(homework == null || chosenStudent == null){
 						return "pageNotFound";
 					}
@@ -128,6 +140,11 @@ public class UserController {
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if (!user.isTeacher()) {
+			try {
+				getActiveHomeworksOfStudent((Student) user, request);
+			} catch (UserException e) {
+				return "exception";
+			}
 			return "mainPageStudent";
 		}
 		return "forbiddenPage";
@@ -138,6 +155,11 @@ public class UserController {
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.isTeacher()) {
+			try {
+				getRecentClosedHomeworksByGroupsOfTeacher((Teacher) user, request);
+			} catch (GroupException e) {
+				return "exception";
+			}
 			return "mainPageTeacher";
 		}
 		return "forbiddenPage";
@@ -183,7 +205,9 @@ public class UserController {
 					request.getSession().setAttribute("user", user);
 					ArrayList<Group> allGroups;
 					try {
-						allGroups = GroupDAO.getInstance().getAllGroups();
+//						allGroups = GroupDAO.getInstance().getAllGroups();
+						allGroups = GroupDAO.getInstance().getAllGroupsWithoutStudents();
+
 						if(request.getServletContext().getAttribute("allGroups") == null){
 							request.getServletContext().setAttribute("allGroups", allGroups);
 						}
@@ -228,6 +252,63 @@ public class UserController {
 			}
 		}
 		return "redirect:./index";
+	}
+
+	private void getActiveHomeworksOfStudent(Student user, HttpServletRequest request) throws UserException {
+		ArrayList<HomeworkDetails> activeHomeworksOfStudent = UserDAO.getInstance().getActiveHomeworksOfStudent(user.getId());
+		request.getSession().setAttribute("activeHomeworksOfStudent", activeHomeworksOfStudent);
+	}
+
+	private void getRecentClosedHomeworksByGroupsOfTeacher(Teacher user, HttpServletRequest request)
+			throws GroupException {
+		// we check if hd is in wanted time range
+		ArrayList<HomeworkDetails> mostRecentlyClosedHomeworksForTeacher = new ArrayList<>();
+		HashMap<Group, HashSet<HomeworkDetails>> mostRecentlyClosedHomeworksForTeacherMap = new HashMap<>();
+		for (Group g : user.getGroups()) {
+			for (HomeworkDetails hd : g.getHomeworks()) {
+				if (hd.getOpeningTime().isBefore(LocalDateTime.now())
+						&& hd.getClosingTime().isBefore(LocalDateTime.now())) {
+					mostRecentlyClosedHomeworksForTeacher.add(hd);
+				}
+			}
+		}
+		// we sort them by closing time
+		mostRecentlyClosedHomeworksForTeacher.sort(new Comparator<HomeworkDetails>() {
+			@Override
+			public int compare(HomeworkDetails o1, HomeworkDetails o2) {
+				return o2.getClosingTime().compareTo(o1.getClosingTime());
+			}
+		});
+		// we get most recently closed hd
+		ArrayList<HomeworkDetails> topMostRecentlyClosedHomeworksForTeacher = new ArrayList<>();
+		for (int i = 0; i < IValidationsDAO.topMostRecentlyClosedHomeworksForTeacher; i++) {
+			if (mostRecentlyClosedHomeworksForTeacher.size() > i) {
+				topMostRecentlyClosedHomeworksForTeacher.add(mostRecentlyClosedHomeworksForTeacher.get(i));
+			}
+		}
+
+		// we get wanted groups of top 5
+		for (Group g : user.getGroups()) {
+			for (HomeworkDetails hd : topMostRecentlyClosedHomeworksForTeacher) {
+				ArrayList<Integer> currGroupIds = GroupDAO.getInstance().getIdsOfGroupsForWhichIsHomework(hd.getId());
+				if (currGroupIds.contains(g.getId())) {
+					if (!mostRecentlyClosedHomeworksForTeacherMap.containsKey(g)) {
+						mostRecentlyClosedHomeworksForTeacherMap.put(g, new HashSet<>());
+					}
+					mostRecentlyClosedHomeworksForTeacherMap.get(g).add(hd);
+				}
+			}
+		}
+		for (HashMap.Entry<Group, HashSet<HomeworkDetails>> entry : mostRecentlyClosedHomeworksForTeacherMap
+				.entrySet()) {
+			System.out.println("Key : " + entry.getKey().getName() + " Value : ");
+			for (HomeworkDetails hd : entry.getValue()) {
+				System.out.println("Value: " + hd.getHeading() + " pass "  + hd.getClosingTime());
+
+			}
+		}
+		request.getSession().setAttribute("mostRecentlyClosedHomeworks", mostRecentlyClosedHomeworksForTeacherMap);
+
 	}
 
 	private boolean doesUserLoginExist(String username, String password) throws UserException, NoSuchAlgorithmException {

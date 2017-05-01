@@ -3,6 +3,7 @@ package com.IttalentsHomeworks.DAO;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.IttalentsHomeworks.DB.DBManager;
 import com.IttalentsHomeworks.Exceptions.GroupException;
@@ -28,9 +29,9 @@ public interface IUserDAO {
 
 	ArrayList<Group> getGroupsOfUser(int userId) throws UserException, GroupException;
 
-	ArrayList<Homework> getHomeworksOfStudentByGroup(int sId, Group g) throws UserException, GroupException, ValidationException;
+	ArrayList<Homework> getHomeworksOfStudentByGroup(int sId, int groupId) throws UserException, GroupException, ValidationException;
 
-	ArrayList<Task> getTasksOfHomeworkOfStudent(int userId, HomeworkDetails hd) throws UserException;
+	ArrayList<Task> getTasksOfHomeworkOfStudent(int userId, int homeworkDetailsId) throws UserException;
 
 	User getUserByUsername(String username) throws UserException, GroupException;
 
@@ -39,16 +40,16 @@ public interface IUserDAO {
 
 	void createNewUser(User u) throws UserException, ValidationException, NoSuchAlgorithmException;
 
-	void removeUserProfile(User u) throws UserException;
+	void removeUserProfile(int userId) throws UserException;
 
-	void setTeacherGrade(HomeworkDetails hd, int studentId, int teacherGrade) throws UserException, ValidationException;
+	void setTeacherGrade(int homeworkDetailsId, int studentId, int teacherGrade) throws UserException, ValidationException;
 
-	void setTeacherComment(HomeworkDetails hd, int studentId, String teacherComment) throws UserException, ValidationException;
+	void setTeacherComment(int homeworkDetailsId, int studentId, String teacherComment) throws UserException, ValidationException;
 
-	void setSolutionOfTask(HomeworkDetails hd, Student st, int taskNum, String solution, LocalDateTime timeOfUpload)
+	void setSolutionOfTask(int homeworkDetailsId, int studentId, int taskNum, String solution, LocalDateTime timeOfUpload)
 			throws UserException;
 
-	void setTimeOfUploadOfTask(HomeworkDetails hd, Student st, int taskNum, LocalDateTime timeOfUpload) throws UserException;
+	void setTimeOfUploadOfTask(int homeworkDetailsId, int studentId, int taskNum, LocalDateTime timeOfUpload) throws UserException;
 
 	void updateUser(User user, String formerPass)  throws UserException, ValidationException, NoSuchAlgorithmException;
 
@@ -56,9 +57,9 @@ public interface IUserDAO {
 
 	boolean isTaskNumberValid(int studentId, int homeworkId, int taskNum) throws UserException;
 
-	void addHomeworkToStudent(User user, HomeworkDetails hd) throws UserException;
+	void addHomeworkToStudent(int userId, HomeworkDetails hd) throws UserException;
 
-	boolean doesTaskAlreadyExist(HomeworkDetails homeworkDetails, Student student, int taskNum) throws UserException;
+	boolean doesTaskAlreadyExist(int homeworkDetailsId, int userId, int taskNum) throws UserException;
 
 	ArrayList<Teacher> getAllTeachers() throws UserException;
 
@@ -66,7 +67,17 @@ public interface IUserDAO {
 
 	User getUserById(int userId) throws UserException, GroupException;
 
-	Homework getHomeworkOfStudentByGroup(int studentId, Group selectedGroup, int id);
+	String getUserUsernameById(Integer studentId) throws UserException;
+
+	ArrayList<Group> topFiveMostRecentlyClosedHomeworksForTeacher(int id) throws UserException;
+
+	ArrayList<HomeworkDetails> getActiveHomeworksOfStudent(int id) throws UserException;
+	
+	//boolean doesUserHaveGroup(int userId, int groupId) throws UserException, GroupException;
+
+	//Homework getHomeworkOfStudentByGroup(int studentId, int selectedGroupId, int id);
+
+	//boolean isStudentAlreadyInGroup(int userId, int groupId) throws UserException, GroupException;
 	
 
 

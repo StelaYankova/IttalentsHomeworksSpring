@@ -93,7 +93,7 @@ public class ValidationsController {
 			String chosenStudentUsername = request.getParameter("chosenStudentUsername").trim();
 			try {
 				Group chosenGroup = GroupDAO.getInstance().getGroupById(chosenGroupId);
-				if (GroupDAO.getInstance().isUserAlreadyInGroup(chosenGroup, chosenStudentUsername)) {
+				if (GroupDAO.getInstance().isUserAlreadyInGroup(chosenGroup.getId(), chosenStudentUsername)) {
 					response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 				} else {
 					response.setStatus(IValidationsDAO.SUCCESS_STATUS);
