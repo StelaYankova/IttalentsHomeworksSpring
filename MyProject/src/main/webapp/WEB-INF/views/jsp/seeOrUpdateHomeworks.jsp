@@ -8,8 +8,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
-<link href="<c:url value="css/seeHomeworksCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/seeOrUpdateHomeworksCss.css" />" rel="stylesheet">
 
 </head>
 <body>
@@ -18,7 +18,7 @@
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="./GetMainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
+					href="./mainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 				<li>See/Update homeworks<span class="divider"><span class="accesshide "><span
@@ -182,7 +182,7 @@
 													}
 													$
 															.ajax({
-																url : './seeHomeworksOfGroupServlet',
+																url : './seeHomeworksOfGroupForUpdateByTeacher',
 																type : 'GET',
 																cache : false,
 																data : {
@@ -233,7 +233,7 @@
 																											+ "</button>",
 																									opensRep,
 																									closesRep,
-																									"<form action = './UpdateHomeworkServlet' method = 'GET'><input type = 'hidden' name = 'chosenHomework' value = "+response[i].id +"><button type = 'submit' style = 'color:black' class='btn btn-link'>Change</button></form>" ])
+																									"<form action = './updateHomework' method = 'GET'><input type = 'hidden' name = 'chosenHomework' value = "+response[i].id +"><button type = 'submit' style = 'color:black' class='btn btn-link'>Change</button></form>" ])
 																					.draw()
 																					.node();
 																		} else {
@@ -253,7 +253,7 @@
 																											+ "</button>",
 																									opensRep,
 																									closesRep,
-																									"<form action = './UpdateHomeworkServlet' method = 'GET'><input type = 'hidden' name = 'chosenHomework' value = "+response[i].id +"><button type = 'submit' class='btn btn-link' style = 'color:black'>Change</button></form>" ])
+																									"<form action = './updateHomework' method = 'GET'><input type = 'hidden' name = 'chosenHomework' value = "+response[i].id +"><button type = 'submit' class='btn btn-link' style = 'color:black'>Change</button></form>" ])
 																					.draw()
 																					.node();
 
@@ -308,7 +308,7 @@
 									if (hasStudentGivenMinOneTask == true) {
 										$('#listOfStudentsOfGroup')
 												.append(
-														"<li type='square'><form action = './homeworkOfStudent'><input type = 'hidden' name = 'id' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'submit' class='btn btn-link'>"
+														"<li type='square'><form action = './getHomeworkOfStudentByTeacher'><input type = 'hidden' name = 'homeworkId' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'submit' class='btn btn-link'>"
 																+ response[i].username
 																+ "</button></form></li>");
 
@@ -319,7 +319,7 @@
 									} else {
 										$('#listOfStudentsOfGroup')
 												.append(
-														"<li type='square'><form action = './homeworkOfStudent'><input type = 'hidden' name = 'id' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'button' title = 'Student has not uploaded the chosen homework' style= 'color:#620062' class='btn btn-link'>"
+														"<li type='square'><form action = './getHomeworkOfStudentByTeacher'><input type = 'hidden' name = 'homeworkId' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'button' title = 'Student has not uploaded the chosen homework' style= 'color:#620062' class='btn btn-link'>"
 																+ response[i].username
 																+ "</button></form></li>");
 										document

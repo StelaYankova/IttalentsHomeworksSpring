@@ -28,12 +28,12 @@ public class LoginFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
         HttpSession session = request.getSession(false);
         String loginURI = request.getContextPath() + "/index";
-        String loginURI3 = request.getContextPath() + "/LoginServlet";
-        String loginURI4 = request.getContextPath() + "/RegisterServlet";
-        String loginURI5 = request.getContextPath() + "/ValidateLogin";
-        String loginURI6 = request.getContextPath() + "/IsUsernameUniqueServlet";
-        String loginURI7 = request.getContextPath() + "/IsUsernameValid";
-        String loginURI8 = request.getContextPath() + "/IsPasswordValid";
+        String loginURI3 = request.getContextPath() + "/login";
+        String loginURI4 = request.getContextPath() + "/register";
+        String loginURI5 = request.getContextPath() + "/validateLogin";
+        String loginURI6 = request.getContextPath() + "/isUsernameUniqueServlet";
+        String loginURI7 = request.getContextPath() + "/isUsernameValid";
+        String loginURI8 = request.getContextPath() + "/isPasswordValid";
         
         boolean loggedIn = session != null && session.getAttribute("user") != null;
         boolean loginRequest = request.getRequestURI().equals(loginURI);

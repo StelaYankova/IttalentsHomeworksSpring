@@ -9,8 +9,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
-<link href="<c:url value="css/homeworkOfStudentCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/currentHomeworkPageOfStudentByTeacherCss.css" />" rel="stylesheet">
 
 <title>Insert title here</title>
 </head>
@@ -20,15 +20,15 @@
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
+					href="./mainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 				<li><c:if
 						test="${not empty sessionScope.throughtSeeOrUpdateHomeworks}">
-						<a href="http://localhost:8080/MyProject/seeOrUpdateHomeworks">See/
+						<a href="./seeOrUpdateHomeworks">See/
 							Update homeworks</a>
 					</c:if> <c:if test="${empty sessionScope.throughtSeeOrUpdateHomeworks}">
-						<a href="http://localhost:8080/MyProject/studentsScores">See
+						<a href="./studentsScoresByTeacher">See
 							student's scores</a>
 					</c:if><span
 					class="divider"><span class="accesshide "><span
@@ -57,7 +57,7 @@
 		<div id="currHomework">
 			<br>
 			<div id="downloadHomeworkForm">
-				<form action="./ReadHomeworkServlet" method="GET">
+				<form action="./readFileOfTasksForHomeworkPDF" method="GET">
 					<input type='hidden'
 						value='${sessionScope.currHomework.homeworkDetails.tasksFile}'
 						name='fileName'> <strong>You can download tasks
@@ -104,7 +104,7 @@
 					<p class="input-invalid-or-empty">You have invalid fields</p>
 				</c:if>
 			</c:if>
-				<form action="./UpdateTeacherGradeAndCommentServlet" method="POST"
+				<form action="./updateTeacherGradeAndComment" method="POST"
 				id="UpdateTeacherGradeAndCommentForm" accept-charset="UTF-8">
 				<div class="formInput">
 					<label><b>Teacher grade:</b></label>
@@ -228,7 +228,7 @@
 		function seeTaskSolution(taskNum) {
 			$
 					.ajax({
-						url : 'http://localhost:8080/MyProject/ReadJavaFileServlet',
+						url : './readSolutionOfTaskJava',
 						data : {
 							"taskNum" : taskNum,
 						},
@@ -238,7 +238,7 @@
 							var uploaded = response.uploadedOn;
 							var uploadedRep = uploaded.replace("T", " ");
 							$("#taskUpload").html(
-									"Task " + taskNum + " uploaded on: "
+									"Task " + taskNum + " last changed on: "
 											+ uploadedRep);
 							$("#currTaskSolution").html(response.solution);
 							document.getElementById("taskUpload").style.display = "block";

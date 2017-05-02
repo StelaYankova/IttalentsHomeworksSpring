@@ -20,11 +20,11 @@
 			<nav class="breadcrumb-nav">
 				<ul class="breadcrumb" id = "navPathList">
 					<li><a
-						href="./GetMainPageStudent">Home</a><span class="divider"><span class="accesshide "><span
+						href="./mainPageStudent">Home</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 					<li><a
-						href="./studentsScores">Your
+						href="./studentsScoresByTeacher">Your
 							scores</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
@@ -37,7 +37,7 @@
 			<nav class="breadcrumb-nav">
 				<ul class="breadcrumb">
 					<li><a
-						href="./GetMainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
+						href="./mainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 					<li>See student's scores<span class="divider"><span class="accesshide "><span
@@ -154,7 +154,7 @@
 			
 			$
 					.ajax({
-						url : './SeeAllHomeworksOfStudentByGroupServlet',
+						url : './seeHomeworksOfStudentByGroupForScoresByTeacher',
 						type : 'GET',
 						data : {
 							"groupId" : groupId,
@@ -184,7 +184,7 @@
 												.add(
 														
 														[
-																"<form action = './homeworkOfStudent' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button type = 'submit' class = 'btn btn-link'>"
+																"<form action = './getHomeworkOfStudentByTeacher' method = 'GET'><input type = 'hidden' name = 'homeworkId' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button type = 'submit' class = 'btn btn-link'>"
 																		+ response[i].heading
 																		+ "</button></form>"/* ,
 																opensRep,
@@ -197,7 +197,7 @@
 										var rowNode = table.row
 												.add(
 														[
-																"<form action = './homeworkOfStudent' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button title = 'Homework is not uploaded' style= 'color:#620062' type = 'button' class = 'btn btn-link'>"
+																"<form action = './getHomeworkOfStudentByTeacher' method = 'GET'><input type = 'hidden' name = 'homeworkId' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button title = 'Homework is not uploaded' style= 'color:#620062' type = 'button' class = 'btn btn-link'>"
 																		+ response[i].heading
 																		+ "</button></form>"/* ,
 																opensRep,
@@ -259,7 +259,7 @@
 													'<li id = "chosenGroupName">'
 															+groupName+'<span class="divider"><span class="accesshide "><span class="arrow_text"></span></span></span></li>');
 
-									//	$('#navPathList').append('<li><a href="./studentsScores">'+groupId+'</a> <span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
+									//	$('#navPathList').append('<li><a href="./studentsScoresByTeacher">'+groupId+'</a> <span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
 
 								}
 

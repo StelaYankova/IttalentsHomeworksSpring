@@ -16,8 +16,6 @@ public class DBManager {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-			System.out.println("MMMMMMM");
-			System.out.println(con);
 		} catch (SQLException | ClassNotFoundException e) {
 			System.err.println("Error with connecting to DB: " + e);
 		}

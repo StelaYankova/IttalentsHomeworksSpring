@@ -72,6 +72,8 @@ public interface IUserDAO {
 	ArrayList<Group> topFiveMostRecentlyClosedHomeworksForTeacher(int id) throws UserException;
 
 	ArrayList<HomeworkDetails> getActiveHomeworksOfStudent(int id) throws UserException;
+
+	ArrayList<Group> getGroupsOfUserWithoutStudents(int id) throws UserException, GroupException;
 	
 	//boolean doesUserHaveGroup(int userId, int groupId) throws UserException, GroupException;
 

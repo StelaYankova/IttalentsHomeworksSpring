@@ -12,19 +12,16 @@
 
 <title>Insert title here</title>
 </head>
-<body>
+<body>	<%@ include file="navBarHomePage.jsp"%>
+
 <div class = "wrapMain">
-	<%@ include file="navBarHomePage.jsp"%>
-	<!-- <div style = "margin-left:auto;margin-right:auto;"> -->
-	<div id="home" class="ng-scope">
-		<div class="video">
-			<video ng-if="!mobile" autoplay="" loop="" class="ng-scope"
-				style="width: 100%;">
+		<div class="video"> 
+			<video autoplay="" loop="" class="ng-scope"
+				style="width:" id = "backgroundvid">
 				<source type="video/mp4"
 					src="http://ittalents.bg/video_sequence/IT_Talents_Web.mp4">
 			</video>
 		</div>
-	</div><!-- </div> -->
 	</div>
 </body>
 </html>

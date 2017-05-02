@@ -68,7 +68,7 @@ public class ValidationsController {
 //	protected static final int MAX_LENGTH_USERNAME = 15;
 //	protected static final int MIN_LENGTH_USERNAME = 6;
 //	protected static final String SAVE_DIR = "/Users/Stela/Desktop/imagesIttalentsHomework";
-	@RequestMapping(value="/DoesUserExist",method = RequestMethod.GET)
+	@RequestMapping(value="/doesUserExist",method = RequestMethod.GET)
 	protected void checkIfUserAlreadyExists(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String chosenStudentUsername = request.getParameter("chosenStudentUsername").trim();
 		try {
@@ -84,7 +84,7 @@ public class ValidationsController {
 		}
 	}
 	
-	@RequestMapping(value="/IsChosenStudentAlreadyInGroup",method = RequestMethod.GET)
+	@RequestMapping(value="/isChosenStudentAlreadyInGroup",method = RequestMethod.GET)
 	protected void isChosenStudentAlreadyInGroup(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -112,7 +112,7 @@ public class ValidationsController {
 		}
 	}
 	
-	@RequestMapping(value="/IsGroupNameUnique",method = RequestMethod.GET)
+	@RequestMapping(value="/isGroupNameUnique",method = RequestMethod.GET)
 	protected void isGroupNameUnique(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if(user.isTeacher()){
@@ -133,7 +133,7 @@ public class ValidationsController {
 		}
 	}
 	
-	@RequestMapping(value="/IsGroupNameUniqueUpdate",method = RequestMethod.GET)
+	@RequestMapping(value="/isGroupNameUniqueUpdate",method = RequestMethod.GET)
 	protected void isGroupNameUniqueUpdate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if(user.isTeacher()){
@@ -162,7 +162,7 @@ public class ValidationsController {
 	}
 	
 	
-	@RequestMapping(value="/IsGroupNameValid",method = RequestMethod.GET)
+	@RequestMapping(value="/isGroupNameValid",method = RequestMethod.GET)
 	protected void isGroupNameValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if(user.isTeacher()){
@@ -192,7 +192,7 @@ public class ValidationsController {
 		return true;
 	}
 	
-	@RequestMapping(value="/IsHomeworkClosingTimeValid",method = RequestMethod.GET)
+	@RequestMapping(value="/isHomeworkClosingTimeValid",method = RequestMethod.GET)
 	protected void isHomeworkClosingTimeValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if(user.isTeacher()){
@@ -216,7 +216,7 @@ public class ValidationsController {
 		}
 	}
 	
-	@RequestMapping(value = "/IsHomeworkHeadingUnique", method = RequestMethod.GET)
+	@RequestMapping(value = "/isHomeworkHeadingUnique", method = RequestMethod.GET)
 	protected void isHomeworkHeadingValid(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -236,7 +236,7 @@ public class ValidationsController {
 		}
 	}
 	
-	@RequestMapping(value="/IsHomeworkHeadingValid",method = RequestMethod.GET)
+	@RequestMapping(value="/isHomeworkHeadingValid",method = RequestMethod.GET)
 	protected void isHomeworkHeadingUnique(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if(user.isTeacher()){
@@ -265,7 +265,7 @@ public class ValidationsController {
 		return true;
 	}
 	
-	@RequestMapping(value="/IsHomeworkOpeningTimeValid",method = RequestMethod.GET)
+	@RequestMapping(value="/isHomeworkOpeningTimeValid",method = RequestMethod.GET)
 	protected void isHomeworkOpeningTimeValid(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -289,7 +289,7 @@ public class ValidationsController {
 		}
 	}
 	
-	@RequestMapping(value="/IsHomeworkUpdateClosingTimeValid",method = RequestMethod.GET)
+	@RequestMapping(value="/isHomeworkUpdateClosingTimeValid",method = RequestMethod.GET)
 	protected void isHomeworkUpdateClosingTimeValid(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -320,7 +320,7 @@ public class ValidationsController {
 		}
 	}
 
-	@RequestMapping(value = "/IsHomeworkUpdateHeadingIsRepeated", method = RequestMethod.GET)
+	@RequestMapping(value = "/isHomeworkUpdateHeadingIsRepeated", method = RequestMethod.GET)
 	protected void isHomeworkUpdateHeadingIsRepeated(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -340,7 +340,7 @@ public class ValidationsController {
 			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
-	@RequestMapping(value="/IsHomeworkUpdateHeadingValid",method = RequestMethod.GET)
+	@RequestMapping(value="/isHomeworkUpdateHeadingValid",method = RequestMethod.GET)
 	protected void isHomeworkUpdateHeadingValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.isTeacher()) {
@@ -372,7 +372,7 @@ public class ValidationsController {
 	}
 	
 	
-	@RequestMapping(value="/IsHomeworkUpdateOpeningTimeValid",method = RequestMethod.GET)
+	@RequestMapping(value="/isHomeworkUpdateOpeningTimeValid",method = RequestMethod.GET)
 	protected void isHomeworkUpdateOpeningTimeValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			String opens = request.getParameter("opens").replace("/", "-").trim();
 		User user = (User) request.getSession().getAttribute("user");
@@ -400,7 +400,7 @@ public class ValidationsController {
 		}
 	}
 	
-	@RequestMapping(value="/IsPasswordValid",method = RequestMethod.GET)
+	@RequestMapping(value="/isPasswordValid",method = RequestMethod.GET)
 	protected void isPasswordValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String password = request.getParameter("password").trim();
@@ -427,7 +427,7 @@ public class ValidationsController {
 		return true;
 	}
 
-	@RequestMapping(value = "/IsUsernameUniqueServlet", method = RequestMethod.GET)
+	@RequestMapping(value = "/isUsernameUnique", method = RequestMethod.GET)
 	protected void isUsernameUnique(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String username = request.getParameter("username").trim();
@@ -446,7 +446,7 @@ public class ValidationsController {
 		}
 	}
 	
-	@RequestMapping(value="/IsUsernameValid",method = RequestMethod.GET)
+	@RequestMapping(value="/isUsernameValid",method = RequestMethod.GET)
 	protected void isUsernameValid(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username").trim();
 		if(isLengthUsernameValid(username) && areCharactersUsernameValid(username)){
@@ -472,7 +472,7 @@ public class ValidationsController {
 		return true;
 	}
 	
-	@RequestMapping(value="/ValidateLogin",method = RequestMethod.GET)
+	@RequestMapping(value="/validateLogin",method = RequestMethod.GET)
 	protected void validateLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username").trim();
 		String password = request.getParameter("password").trim();

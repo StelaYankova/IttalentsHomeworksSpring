@@ -11,7 +11,7 @@
 <title>Insert title here</title>
 <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
-<link href="<c:url value="css/currHomeworkPageStudentCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/currentHomeworkPageOfStudentByStudentCss.css" />" rel="stylesheet">
 </head>
 <style>
 
@@ -22,21 +22,21 @@
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="./GetMainPageStudent">Home</a>
+					href="./mainPageStudent">Home</a>
 					<span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 				<c:if test="${not empty sessionScope.throughtScores}">
 					<c:if test="${sessionScope.throughtScores == 0}">
 						<li><a
-							href="./homeworksOfGroup"><c:out
+							href="./seeHomeworksListOfStudentByGroupByStudent"><c:out
 						value="${sessionScope.chosenGroupName}"></c:out></a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 					</c:if>
 					<c:if test="${sessionScope.throughtScores == 1}">
 						<li><a
-							href="./yourScores">Your
+							href="./studentsScoresByStudent">Your
 								scores</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
@@ -49,7 +49,7 @@
 				<c:if test="${ empty sessionScope.throughtScores}">
 					<c:if test="${ empty sessionScope.throughtGroups}">
 						<li><a
-							href="./SeeScoresServlet">Your
+							href="./studentsScoresByStudent">Your
 								scores</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
@@ -68,7 +68,7 @@
 			<!-- <div class="form-group"> -->
 			
 			<div id="downloadHomeworkForm">
-				<form action="./ReadHomeworkServlet" method="GET">
+				<form action="./readFileOfTasksForHomeworkPDF" method="GET">
 					<input type='hidden'
 						value='${sessionScope.currHomework.homeworkDetails.tasksFile}'
 						name='fileName'> <strong>You can download tasks
@@ -106,7 +106,7 @@
 									<c:out value="Task ${i}" />
 								</button> <c:if test="${sessionScope.hasUploadTimePassed == 'false'}">
 									<c:if test="${sessionScope.hasUploadTimeCome == 'true'}">
-										<form action="./UploadSolutionServlet" method="POST" class = "uploadSolutionButton"
+										<form action="./uploadSolutionToTaskJava" method="POST" class = "uploadSolutionButton"
 											enctype="multipart/form-data" id="uploadSolutionForm${i}"
 											onchange="uploadFile('uploadSolutionForm${i}')" accept-charset="UTF-8">
 											<label class="btn btn-sm btn-file" style = "text-decoration:underline"> <input
@@ -184,7 +184,7 @@ function uploadFile(e){
 	/* var form = document.getElementById(e);
 	var formData = new FormData(form);
 	var oReq = new XMLHttpRequest();
-	oReq.open("POST", './UploadSolutionServlet', true);
+	oReq.open("POST", './uploadSolutionToTaskJava', true);
 	oReq.onload = function(oEvent){
 		if(oReq.status == 200){
 			alert("OK");
@@ -210,7 +210,7 @@ function uploadFile(e){
 		var form = new FormData(document.getElementById(e));
 		console.log(form.get("taskNum"))
 		$.ajax({
-			url:'./UploadSolutionServlet',
+			url:'./uploadSolutionToTaskJava',
 			type:'POST',
 			data: form,
 			processData: false,
@@ -262,7 +262,7 @@ function uploadFile(e){
 		console.log(taskNum);
 		$
 				.ajax({
-					url : './SaveChangedSolutionText',
+					url : './updateSolutionTextOfTaskByStudentJava',
 					type : 'POST',
 					data : {
 						"taskNum" : taskNum,
@@ -287,7 +287,7 @@ function uploadFile(e){
 		console.log(taskNum + " !");
 		$
 				.ajax({
-					url : './ReadJavaFileServlet',
+					url : './readSolutionOfTaskJava',
 					data : {
 						"taskNum" : taskNum
 					},
@@ -298,7 +298,7 @@ function uploadFile(e){
 						console.log(uploaded)
 						var uploadedRep = uploaded.replace("T", " ");
 						$("#taskUpload").html(
-								"Task " + taskNum + " uploaded on: "
+								"Task " + taskNum + " last changed on: "
 										+ uploadedRep);
 						document.getElementById('currTaskSolution').value = response.solution;
 						document.getElementById("taskUpload").style.display = "block";

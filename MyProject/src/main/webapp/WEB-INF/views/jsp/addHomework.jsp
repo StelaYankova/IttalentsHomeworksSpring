@@ -18,7 +18,7 @@
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="./GetMainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
+					href="./mainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 				<li>Add
@@ -140,7 +140,7 @@
 				</div>
 				
 				<div class="form-group">
-					<label class="control-label">Groups</label>
+					<label class="control-label">Groups:</label>
 					<div class="control-label-input">
 						<select class="selectpicker form-control" data-width="101%" data-size="7" multiple name="groups" id="groups"
 							required>
@@ -311,7 +311,7 @@
 
 							$
 									.ajax({
-										url : './IsHomeworkHeadingValid',
+										url : './isHomeworkHeadingValid',
 										type : 'GET',
 										data : {
 											"heading" : name
@@ -324,7 +324,7 @@
 											}
 											$
 													.ajax({
-														url : './IsHomeworkHeadingUnique',
+														url : './isHomeworkHeadingUnique',
 														type : 'GET',
 														data : {
 															"heading" : name
@@ -369,7 +369,7 @@
 										}
 									});
 							$.ajax({
-								url : './IsHomeworkOpeningTimeValid',
+								url : './isHomeworkOpeningTimeValid',
 								type : 'GET',
 								data : {
 									"opens" : opens
@@ -392,7 +392,7 @@
 							});
 							$
 									.ajax({
-										url : './IsHomeworkClosingTimeValid',
+										url : './isHomeworkClosingTimeValid',
 										type : 'GET',
 										data : {
 											"opens" : opens,

@@ -18,12 +18,17 @@ public class Group {
 		this.homeworks = homeworks;
 	}
 	
+	public Group(int id, String name, ArrayList<Teacher> teachers, ArrayList<HomeworkDetails> homeworks) {
+		this.id = id;
+		this.name = name;
+		this.teachers = teachers;
+		this.homeworks = homeworks;
+	}
 	public Group(int id, String name, ArrayList<Teacher> teachers) {
 		this.id = id;
 		this.name = name;
 		this.teachers = teachers;
 	}
-	
 	public Group(int id, String name) {
 		this.id = id;
 		this.name = name;

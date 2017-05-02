@@ -94,7 +94,7 @@ public class GroupController {
 						request.getServletContext().setAttribute("allGroups", allGroupsUpdated);
 						ArrayList<Teacher> allTeachersUpdated = UserDAO.getInstance().getAllTeachers();
 						for (Teacher t : allTeachersUpdated) {
-							t.setGroups(UserDAO.getInstance().getGroupsOfUser(t.getId()));
+							t.setGroups(UserDAO.getInstance().getGroupsOfUserWithoutStudents(t.getId()));
 						}
 						request.getServletContext().setAttribute("allTeachers", allTeachersUpdated);
 					}
@@ -144,7 +144,6 @@ public class GroupController {
 			if (!(((int) groupName.charAt(i) >= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM
 					&& (int) groupName.charAt(i) <= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO))
 					|| (int) groupName.charAt(i) == IValidationsDAO.ASCII_TABLE_QUOTES) {
-				System.out.println("Characters are notvaid");
 				return false;
 			}
 		}
@@ -174,7 +173,7 @@ public class GroupController {
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.isTeacher()) {
-			return "addStudentToGroup";
+			return "addOrRemoveStudentByGroup";
 		}
 		return "forbiddenPage";
 	}
@@ -281,7 +280,6 @@ public class GroupController {
 	@RequestMapping(value = "/getAllStudentsOfGroupServlet", method = RequestMethod.GET)
 	protected void getAllStudentsOfGroup(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		int start = (int) System.currentTimeMillis();
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.isTeacher()) {
 			if (request.getParameter("chosenGroupId") != null
@@ -353,8 +351,6 @@ public class GroupController {
 		} else {
 			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
-		int end = (int) System.currentTimeMillis();
-System.out.println((end-start) + "******");
 	}
 
 	@RequestMapping(value = "/getAllStudentsOfGroupRemoveStudent", method = RequestMethod.GET)
@@ -474,7 +470,7 @@ System.out.println((end-start) + "******");
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.isTeacher()) {
-			return "seeGroupsToChange";
+			return "seeAndChangeGroups";
 		}
 		return "forbiddenPage";
 	}
@@ -578,7 +574,7 @@ System.out.println((end-start) + "******");
 							request.getServletContext().setAttribute("allGroups", allGroups);
 							ArrayList<Teacher> allTeachersUpdated = UserDAO.getInstance().getAllTeachers();
 							for (Teacher t : allTeachersUpdated) {
-								t.setGroups(UserDAO.getInstance().getGroupsOfUser(t.getId()));
+								t.setGroups(UserDAO.getInstance().getGroupsOfUserWithoutStudents(t.getId()));
 							}
 							request.getServletContext().setAttribute("allTeachers", allTeachersUpdated);
 							request.getSession().setAttribute("invalidFields", false);

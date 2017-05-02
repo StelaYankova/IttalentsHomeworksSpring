@@ -35,7 +35,7 @@
 				<p class="input-invalid-or-empty">You cannot have empty fields</p>
 			</c:if>
 			<form class="form-horizontal" name="registerForm" id="registerForm"
-				action="./RegisterServlet" method="POST">
+				action="./register" method="POST">
 				<div class="form-group">
 					<label for="username" class="control-label">Username:</label>
 					<div class="control-label-input">
@@ -194,7 +194,7 @@
 						}
 						$
 								.ajax({
-									url : './IsUsernameUniqueServlet',
+									url : './isUsernameUnique',
 									type : 'GET',
 									data : {
 										"username" : username
@@ -206,7 +206,7 @@
 										}
 										$
 												.ajax({
-													url : './IsUsernameValid',
+													url : './isUsernameValid',
 													type : 'GET',
 													data : {
 														"username" : username
@@ -246,7 +246,7 @@
 									}
 								});
 						$.ajax({
-							url : './IsPasswordValid',
+							url : './isPasswordValid',
 							type : 'GET',
 							data : {
 								"password" : password

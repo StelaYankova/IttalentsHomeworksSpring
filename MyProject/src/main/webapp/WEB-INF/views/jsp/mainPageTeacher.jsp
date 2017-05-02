@@ -18,7 +18,7 @@
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+					href="./mainPageTeacher">Home</a>
 					<span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span> </span></li>
 			</ul>
@@ -102,7 +102,7 @@ function chooseStudent(homeworkName, homeworkId, groupId) {
 						if (hasStudentGivenMinOneTask == true) {
 							$('#listOfStudentsOfGroup')
 									.append(
-											"<li type='square'><form action = './homeworkOfStudent'><input type = 'hidden' name = 'id' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'submit' class='btn btn-link'>"
+											"<li type='square'><form action = './getHomeworkOfStudentByTeacher'><input type = 'hidden' name = 'homeworkId' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'submit' class='btn btn-link'>"
 													+ response[i].username
 													+ "</button></form></li>");
 
@@ -113,7 +113,7 @@ function chooseStudent(homeworkName, homeworkId, groupId) {
 						} else {
 							$('#listOfStudentsOfGroup')
 									.append(
-											"<li type='square'><form action = './homeworkOfStudent'><input type = 'hidden' name = 'id' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'button' title = 'Student has not uploaded the chosen homework' style= 'color:#620062' class='btn btn-link'>"
+											"<li type='square'><form action = './getHomeworkOfStudentByTeacher'><input type = 'hidden' name = 'homeworkId' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'button' title = 'Student has not uploaded the chosen homework' style= 'color:#620062' class='btn btn-link'>"
 													+ response[i].username
 													+ "</button></form></li>");
 							document

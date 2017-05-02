@@ -11,7 +11,7 @@
 <title>Insert title here</title>
 <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
  <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
- <link href="<c:url value="css/addStudentToGroupCss.css" />" rel="stylesheet">
+ <link href="<c:url value="css/addOrRemoveStudentByGroupCss.css" />" rel="stylesheet">
 
 </head>
 <body>
@@ -20,7 +20,7 @@
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="./GetMainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
+					href="./mainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 				<li>Add or remove student<span class="divider"><span class="accesshide "><span
@@ -167,7 +167,7 @@
 						}
 						$
 								.ajax({
-									url : './DoesUserExist',
+									url : './doesUserExist',
 									type : 'GET',
 									data : {
 										"chosenStudentUsername" : chosenStudentUsername
@@ -180,7 +180,7 @@
 										}
 										$
 												.ajax({
-													url : './IsChosenStudentAlreadyInGroup',
+													url : './isChosenStudentAlreadyInGroup',
 													type : 'GET',
 													data : {
 														"chosenGroupId" : chosenGroupId,

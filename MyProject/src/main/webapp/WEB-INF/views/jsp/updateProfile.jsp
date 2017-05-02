@@ -27,7 +27,7 @@
 			<nav class="breadcrumb-nav">
 				<ul class="breadcrumb">
 					<li><a
-						href="./GetMainPageStudent">Home</a><span class="divider"><span class="accesshide "><span
+						href="./mainPageStudent">Home</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 					<li>Your
@@ -43,7 +43,7 @@
 			<nav class="breadcrumb-nav">
 				<ul class="breadcrumb">
 					<li><a
-						href="./GetMainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
+						href="./mainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 					<li>Your
@@ -216,7 +216,7 @@
 							if (password !== currPassword) {
 								$
 										.ajax({
-											url : './IsPasswordValid',
+											url : './isPasswordValid',
 											type : 'GET',
 											data : {
 												"password" : password

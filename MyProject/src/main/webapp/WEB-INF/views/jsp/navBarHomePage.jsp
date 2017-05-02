@@ -61,7 +61,7 @@
 				<li>
 
 					<div class="">
-						<form class="form-inline" action="./LoginServlet" method="POST"
+						<form class="form-inline" action="./login" method="POST"
 							name="signInForm" id="signInForm">
 							<div class="form-group">
 								<input type="text" class=" form-control input-md" maxlength="25"
@@ -87,7 +87,7 @@
 					</div>
 				</li></ul>
 				</div>
-				<a class = "registerPageButton" href="./RegisterServlet"><span
+				<a class = "registerPageButton" href="./register"><span
 						class="glyphicon glyphicon-log-in btn-xs"></span> Register here</a>
 		</div>
 	</nav>
@@ -116,7 +116,7 @@
 	}
 	
 	$.ajax({
-		url: './ValidateLogin',
+		url: './validateLogin',
 		method: 'GET',
 		data:{
 			"username": username,
@@ -124,6 +124,7 @@
 		},
 		success: function(response){
 			document.getElementById("signInForm").submit();
+			console.log("TRUE")
 			return true;
 		},
 		error: function(response){

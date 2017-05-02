@@ -30,7 +30,7 @@
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="http://localhost:8080/MyProject/GetMainPageTeacher">Home</a>
+					href="./mainPageStudent">Home</a>
 					<span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span> </span></li>
 			</ul>
@@ -56,8 +56,8 @@
 										value="${fn:replace(homework.closingTime,'T', ' ')}" />
 								<c:set var="passesOnTime" value="${fn:substring(homework.closingTime, 11, 16)}" />
 								<tr>
-									<td><form action="./GetHomeworkServlet" method="GET">
-											<input type="hidden" name="id" value='${homework.id}'>
+									<td><form action="./seeChosenHomeworkPageOfStudentByStudent" method="GET">
+											<input type="hidden" name="homeworkId" value='${homework.id}'>
 											<button type="submit" class="btn btn-link">
 												<c:out value="${homework.heading}" />
 											</button>

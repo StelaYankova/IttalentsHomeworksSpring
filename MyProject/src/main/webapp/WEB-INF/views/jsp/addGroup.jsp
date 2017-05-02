@@ -17,7 +17,7 @@
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="./GetMainPageTeacher">Home</a>
+					href="./mainPageTeacher">Home</a>
 					<span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
@@ -151,7 +151,7 @@
 			return false;
 		}
 		$.ajax({
-			url : './IsGroupNameUnique',
+			url : './isGroupNameUnique',
 			type : 'GET',
 			data : {
 				"name" : name
@@ -162,7 +162,7 @@
 					isNameValid = true;
 				}
 				$.ajax({
-					url : './IsGroupNameValid',
+					url : './isGroupNameValid',
 					type : 'GET',
 					data : {
 						"name" : name

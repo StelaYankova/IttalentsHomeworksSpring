@@ -8,18 +8,17 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
-<link href="<c:url value="css/yourScoresCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/seeStudentsScoresByStudentCss.css" />" rel="stylesheet">
 
 </head>
-<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
-
 <body>
 	<%@ include file="navBarStudent.jsp"%>
 	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="./GetMainPageStudent">Home</a><span class="divider"><span class="accesshide "><span
+					href="./mainPageStudent">Home</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 				<li>Your
@@ -130,7 +129,7 @@
 												}
 												$
 														.ajax({
-															url : './SeeYourHomeworksByGroup',
+															url : './seeHomeworksByGroupByStudent',
 															data : {
 																"selectedGroupId" : selected
 															},
@@ -166,7 +165,7 @@
 																	var rowNode = table.row
 																			.add(
 																					[
-																							"<form action = './GetHomeworkServlet' method = 'GET'><input type = 'hidden' name = 'id' value = " + response[i].id+ "><button class='btn btn-link' type = 'submit'>"
+																							"<form action = './seeChosenHomeworkPageOfStudentByStudent' method = 'GET'><input type = 'hidden' name = 'homeworkId' value = " + response[i].id+ "><button class='btn btn-link' type = 'submit'>"
 																									+ response[i].heading
 																									+ "</button></form>",
 																							/* opensRep,

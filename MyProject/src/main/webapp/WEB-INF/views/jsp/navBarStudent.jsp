@@ -53,13 +53,13 @@
 			<br><br><br><br>
 			<div class="collapse" id="myNavbar">
 				<ul class="nav navbar-nav" >
-						<li><a href="./GetMainPageStudent"
+						<li><a href="./mainPageStudent"
 							style="background: transparent; border: none; color: #ffffff"
 							class="btn-md">Home</a></li>
 						<li><a href="./updateProfile"
 							style="background: transparent; border: none; color: #ffffff"
 							class="btn-md">Your profile</a></li>
-						<li><a href="./yourScores"
+						<li><a href="./studentsScoresByStudent"
 							style="background: transparent; border: none; color: #ffffff"
 							class="btn-md">Your scores</a></li>
 						<li class="dropdown"><a class="dropdown-toggle"
@@ -68,7 +68,7 @@
 							<ul class="dropdown-menu" id="groups"
 								style='background-color: #2E71AC; z-index: 1'>
 							</ul></li>
-						<li><a href="./LogoutServlet"
+						<li><a href="./logout"
 							style="background: transparent; border: none; color: #ffffff"
 							class="btn-md"> Logout </a></li>
 					</ul>
@@ -87,12 +87,12 @@
 			</div>
 			<ul class="nav navbar-nav navbar-right"
 				style="padding-top: 25px; padding-right: 25px">
-				<li><a href="./GetMainPageStudent" style="color: #ffffff"
+				<li><a href="./mainPageStudent" style="color: #ffffff"
 					class="btn-lg">Home</a></li>
 
 					<li><a href="./updateProfile" style="color: #ffffff"
 						class="btn-lg">Your profile</a></li>
-					<li><a href="./yourScores"
+					<li><a href="./studentsScoresByStudent"
 						style="background: transparent; border: none; color: #ffffff"
 						class="btn-lg">Your scores</a></li>
 					<li class="dropdown" id="dropdown"><a
@@ -104,7 +104,7 @@
 						<ul class="dropdown-menu" id="groups"
 							style='background-color: #2E71AC; z-index: 1'>
 						</ul></li>
-					<li><a href="./LogoutServlet" style="color: #ffffff"
+					<li><a href="./logout" style="color: #ffffff"
 					class="btn-lg"> Logout </a></li>
 			</ul>
 		</div>
@@ -120,7 +120,7 @@
  function seeGroups() {
 	 if($('#groups').has("li").length == 0) {
 		 $.ajax({
-				url : './GetGroupsOfUserServlet',
+				url : './getGroupsOfStudentByStudent',
 				type : 'GET',
 				dataType : 'json',
 				success : function(response) {
@@ -128,7 +128,7 @@
 					for ( var i in response) {
 						console.log(response[i].id);
 								 $('ul .dropdown-menu').append(
-											"<li class = 'subMenu'><a href = './homeworksOfGroup?id="+response[i].id+"' method = 'GET' style='border: none; color: #ffffff; background-color: #2E71AC'>"
+											"<li class = 'subMenu'><a href = './seeHomeworksListOfStudentByGroupByStudent?groupId="+response[i].id+"' method = 'GET' style='border: none; color: #ffffff; background-color: #2E71AC'>"
 											+ response[i].name + "</a></li>");
 								 
 					}

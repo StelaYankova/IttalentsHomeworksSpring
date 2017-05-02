@@ -10,8 +10,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
-<link href="<c:url value="css/seeYourHomeworksCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/seeHomeworksByStudentCss.css" />" rel="stylesheet">
 
 </head>
 <body>
@@ -20,7 +20,7 @@
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="./GetMainPageStudent">Home</a><span class="divider"><span class="accesshide "><span
+					href="./mainPageStudent">Home</a><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 				<li><c:out
@@ -47,8 +47,8 @@
 					<c:forEach var="homework"
 						items="${sessionScope.currHomeworksOfGroup}">
 						<tr>
-							<td><form action="./GetHomeworkServlet" method="GET">
-									<input type="hidden" name="id" value='${homework.id}'>
+							<td><form action="./seeChosenHomeworkPageOfStudentByStudent" method="GET">
+									<input type="hidden" name="homeworkId" value='${homework.id}'>
 									<button type="submit" class="btn btn-link">
 										<c:out value="${homework.heading}" />
 									</button>

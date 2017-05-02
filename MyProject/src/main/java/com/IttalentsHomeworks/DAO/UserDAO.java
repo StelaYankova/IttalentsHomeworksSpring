@@ -23,6 +23,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 
 public class UserDAO implements IUserDAO {
+	private static final String GET_GROUPS_OF_USER_WITHOUT_STUDENTS_AND_TEACHERS_AND_HOMEWORKS = "SELECT G.id, G.group_name FROM IttalentsHomeworks.Groups G JOIN IttalentsHomeworks.User_has_Group UG ON (UG.group_id=G.id) WHERE UG.user_id = ?;";
 	private static final String GET_ALL_STUDENTS = "SELECT * FROM IttalentsHomeworks.Users WHERE isTeacher = 0;";
 	private static final String GET_ALL_TEACHERS = "SELECT * FROM IttalentsHomeworks.Users WHERE isTeacher = 1;";
 	private static final String ADD_HOMEWORK_TO_STUDENT_I = "INSERT INTO IttalentsHomeworks.User_has_homework (user_id,homework_id) VALUES (?,?);";
@@ -134,7 +135,7 @@ public class UserDAO implements IUserDAO {
 	public ArrayList<Group> getGroupsOfUser(int userId) throws UserException, GroupException {
 		Connection con = manager.getConnection();
 		ArrayList<Group> groupsOfUser = new ArrayList<>();
-		PreparedStatement ps;			long startTime1 = System.currentTimeMillis();
+		PreparedStatement ps;			
 
 		try {
 
@@ -153,9 +154,6 @@ public class UserDAO implements IUserDAO {
 		} catch (SQLException e) {
 			throw new UserException("Something went wrong with getting user's groups..");
 		}
-
-		long endTime1 = System.currentTimeMillis();
-		System.out.println("That part 1 function took " + (endTime1 - startTime1) + " milliseconds000000000000");
 		return groupsOfUser;
 	}
 
@@ -253,13 +251,13 @@ public class UserDAO implements IUserDAO {
 				ResultSet rs = ps.executeQuery();
 				if (rs.next()) {
 					ArrayList<Group> groupsOfUser = UserDAO.getInstance()
-							.getGroupsOfUser(UserDAO.getInstance().getUserIdByUsername(username));
+							.getGroupsOfUserWithoutStudents(userId);
 					if (UserDAO.getInstance().isUserATeacher(userId)) {
 						u = new Teacher(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
 								groupsOfUser);
 					} else {
-						int id = UserDAO.getInstance().getUserIdByUsername(username);
-						ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(id);
+						//int id = UserDAO.getInstance().getUserIdByUsername(username);
+						ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(userId);
 						u = new Student(rs.getInt(1), rs.getString(2)
 								, rs.getString(3), rs.getString(4),
 								 groupsOfUser, homeworksOfStudent);
@@ -670,7 +668,7 @@ public class UserDAO implements IUserDAO {
 			ps.setInt(1, userId);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				ArrayList<Group> groupsOfUser = UserDAO.getInstance().getGroupsOfUser(userId);
+				ArrayList<Group> groupsOfUser = UserDAO.getInstance().getGroupsOfUserWithoutStudents(userId);
 				if (UserDAO.getInstance().isUserATeacher(userId)) {
 					u = new Teacher(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), 
 							groupsOfUser);
@@ -750,6 +748,25 @@ public class UserDAO implements IUserDAO {
 			throw new UserException("Somethin went wrong with getting active homeworks of student..");
 		}
 		return activeHomeworksOfStudent;
+	}
+
+	@Override
+	public ArrayList<Group> getGroupsOfUserWithoutStudents(int userId) throws UserException, GroupException{
+		ArrayList<Group> groups = new ArrayList<>();
+		Connection con = manager.getConnection();
+		try {
+			PreparedStatement ps = con.prepareStatement(GET_GROUPS_OF_USER_WITHOUT_STUDENTS_AND_TEACHERS_AND_HOMEWORKS);
+			ps.setInt(1, userId);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				ArrayList<Teacher> teachers = GroupDAO.getInstance().getTeachersOfGroup(rs.getInt(1));
+				ArrayList<HomeworkDetails> hd = GroupDAO.getInstance().getHomeworkDetailsOfGroup(rs.getInt(1));
+				groups.add(new Group(rs.getInt(1), rs.getString(2), teachers, hd));
+			}
+		} catch (SQLException e) {
+			throw new UserException("Something went wrong with getting groups of user..");
+		}
+		return groups;
 	}
 
 //	@Override

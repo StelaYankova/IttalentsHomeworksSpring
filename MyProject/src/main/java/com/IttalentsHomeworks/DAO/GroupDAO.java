@@ -699,14 +699,10 @@ public class GroupDAO implements IGroupDAO {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				//make better
-				long startTime1 = System.currentTimeMillis();
 				ArrayList<Teacher> teachers = GroupDAO.getInstance().getTeachersOfGroup(id);
 				ArrayList<Student> students = GroupDAO.getInstance().getStudentsOfGroup(id);
 				ArrayList<HomeworkDetails> homeworkDetails = GroupDAO.getInstance()
 						.getHomeworkDetailsOfGroup(id);
-				long endTime1 = System.currentTimeMillis();
-				System.out.println("That part 1 function took " + (endTime1 - startTime1) + " milliseconds!!!");
 				group = new Group(rs.getInt(1), rs.getString(2), teachers, students, homeworkDetails);
 			}
 		} catch (SQLException e) {

@@ -4,6 +4,9 @@
 	margin: 0px auto !important;
 	padding-top: 0.125em;
 }
+ul.ui-autocomplete>li{
+	line-height:1.5em !important;
+}
 #addButtonDiv>input {
 	background-color: #2E71AC;
 	color: #ffffff;

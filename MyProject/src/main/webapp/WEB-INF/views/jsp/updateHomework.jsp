@@ -21,7 +21,7 @@
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
 				<li><a
-					href="./GetMainPageTeacher">Home</a>
+					href="./mainPageTeacher">Home</a>
 					<span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
@@ -30,7 +30,7 @@
 							class="arrow_text"></span></span>
 				</span></li>
 				<li><%-- <a
-					href="./UpdateHomeworkServlet?chosenHomework=${sessionScope.currHomework.id}"> --%><c:out value = "${sessionScope.currHomework.heading}"></c:out><span class="divider"><span class="accesshide "><span
+					href="./updateHomework?chosenHomework=${sessionScope.currHomework.id}"> --%><c:out value = "${sessionScope.currHomework.heading}"></c:out><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span>
 				</span></li>
 			</ul>
@@ -45,14 +45,14 @@
 		</c:if>
 	<div id="pageWrapper">
 	<div id = "readAndRemoveHomework">
-			<form action="./ReadHomeworkServlet"
+			<form action="./readFileOfTasksForHomeworkPDF"
 				method="GET" id = "downloadHomeworkForm">
 				<input type='hidden' value='${sessionScope.currHomework.tasksFile}'
 					name='fileName'>
 				 <button class='btn btn-link btn-xs' type='submit'><u>download tasks</u>
 				</button>
 			</form>
-		<form action="./RemoveHomeworkDetails"
+		<form action="./removeHomeworkDetails"
 			method="POST" id = "removeHomeworkForm" >
 							<button type="submit"
 						class="glyphicon glyphicon-remove btn btn-default btn-xs"
@@ -62,7 +62,7 @@
 		
 			<legend>Update homework</legend>
 
-			<form action="./UpdateHomeworkServlet"
+			<form action="./updateHomework"
 				method="POST" enctype="multipart/form-data" id="updateHomeworkForm"  accept-charset="UTF-8">
 				
 
@@ -338,7 +338,7 @@
 							}
 							$
 									.ajax({
-										url : './IsHomeworkUpdateHeadingValid',
+										url : './isHomeworkUpdateHeadingValid',
 										type : 'GET',
 										data : {
 											"heading" : name
@@ -350,7 +350,7 @@
 											}
 											$
 													.ajax({
-														url : './IsHomeworkUpdateHeadingIsRepeated',
+														url : './isHomeworkUpdateHeadingIsRepeated',
 														type : 'GET',
 														data : {
 															"heading" : name
@@ -394,7 +394,7 @@
 										}
 									});
 							$.ajax({
-								url : './IsHomeworkUpdateOpeningTimeValid',
+								url : './isHomeworkUpdateOpeningTimeValid',
 								type : 'GET',
 								data : {
 									"opens" : opens
@@ -416,7 +416,7 @@
 							});
 							$
 									.ajax({
-										url : './IsHomeworkUpdateClosingTimeValid',
+										url : './isHomeworkUpdateClosingTimeValid',
 										type : 'GET',
 										data : {
 											"opens" : opens,

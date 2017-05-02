@@ -55,7 +55,7 @@
 			<div class="collapse" id="myNavbar">
 				<ul class="nav navbar-nav" >
 					
-					<li><a href="./GetMainPageTeacher" class="btn-md"
+					<li><a href="./mainPageTeacher" class="btn-md"
 						style="background: transparent; border: none; color: #ffffff">Home</a></li>
 					<li><a class="btn-md" href="./updateProfile"
 						style="background: transparent; border: none; color: #ffffff"
@@ -65,7 +65,7 @@
 						<ul class="dropdown-menu">
 							<li class = "subMenu"><a href="./addOrRemoveStudent" class="btn-sm" style="border: none; color: #ffffff; background-color: #2E71AC">Add
 									or remove student</a></li>
-							<li class = "subMenu"><a href="./studentsScores" class="btn-sm" 
+							<li class = "subMenu"><a href="./studentsScoresByTeacher" class="btn-sm" 
 								style="border: none; color: #ffffff; background-color: #2E71AC">Students
 									scores</a></li>
 							<li class = "subMenu"><a href="./seeGroups" class="btn-sm"
@@ -78,7 +78,7 @@
 					<li><a href="./seeOrUpdateHomeworks" class="btn-md"
 						style="background: transparent; border: none; color: #ffffff">See/Update
 							homeworks</a></li>
-					<li><a href="./LogoutServlet"
+					<li><a href="./logout"
 						style="background: transparent; border: none; color: #ffffff"
 						class="btn-md"> Logout </a></li></ul>
 			</div>
@@ -95,7 +95,7 @@
 			</div>
 			<ul class="nav navbar-nav navbar-right"
 				style="padding-top: 25px; padding-right: 25px" style = "float:none">
-					<li><a href="./GetMainPageTeacher" style="color: #ffffff"
+					<li><a href="./mainPageTeacher" style="color: #ffffff"
 					class="btn-lg">Home</a></li>
 				<li><a href="./updateProfile" style="color: #ffffff"
 					class="btn-lg">Your profile</a></li>
@@ -113,7 +113,7 @@
 						<li><a href="./addOrRemoveStudent"
 							style="border: none; color: #ffffff; background-color:#2E71AC;">Add
 								or remove student</a></li>
-						<li><a href="./studentsScores"
+						<li><a href="./studentsScoresByTeacher"
 							style="border: none; color: #ffffff; background-color:#2E71AC">Students
 								scores</a></li>
 						<li><a href="./seeGroups"
@@ -123,7 +123,7 @@
 							style="border: none; color: #ffffff; background-color:#2E71AC">Add
 								homework</a></li>
 					</ul></li>		
-				<li><a href="./LogoutServlet" style="color: #ffffff"
+				<li><a href="./logout" style="color: #ffffff"
 					class="btn-lg"> Logout </a></li>
 					
 			</ul>

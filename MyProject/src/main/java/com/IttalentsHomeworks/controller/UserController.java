@@ -44,7 +44,7 @@ import com.google.gson.JsonObject;
 @Controller
 public class UserController {
 
-	@RequestMapping(value = "/GetGroupsOfUserServlet", method = RequestMethod.GET)
+	@RequestMapping(value = "/getGroupsOfStudentByStudent", method = RequestMethod.GET)
 	protected void getGroupsOfStudent(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User userTry = (User) request.getSession().getAttribute("user");
@@ -77,18 +77,17 @@ public class UserController {
 		}
 	}
 	
-	@RequestMapping(value = "/homeworkOfStudent", method = RequestMethod.GET)
+	@RequestMapping(value = "/getHomeworkOfStudentByTeacher", method = RequestMethod.GET)
 	protected String getHomeworksOfStudent(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.isTeacher()) {
-			System.out.println("INNANANSNNS");
 			if (request.getParameter("studentId") != null && !(request.getParameter("studentId").trim().equals(""))
 					&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("studentId").trim())
-					&& request.getParameter("id") != null && !(request.getParameter("id").trim().equals(""))
-					&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("id").trim())) {
+					&& request.getParameter("homeworkId") != null && !(request.getParameter("homeworkId").trim().equals(""))
+					&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("homeworkId").trim())) {
 				int studentId = Integer.parseInt(request.getParameter("studentId").trim());
-				int homeworkId = Integer.parseInt(request.getParameter("id").trim());
+				int homeworkId = Integer.parseInt(request.getParameter("homeworkId").trim());
 				request.getSession().setAttribute("studentId", studentId);
 				Homework homework = null;
 				//ArrayList<Homework> homeworks;
@@ -108,7 +107,7 @@ public class UserController {
 					}
 					request.getSession().setAttribute("currHomework", homework);
 					request.getSession().setAttribute("currStudentUsername", chosenStudent.getUsername());
-					return "redirect:./GetCurrHomeworkOfStudent";
+					return "redirect:./seeChosenHomeworkPageOfStudentByTeacher";
 				} catch (UserException e) {
 					System.out.println(e.getMessage());
 					e.printStackTrace();
@@ -125,18 +124,18 @@ public class UserController {
 		return "forbiddenPage";
 	}
 
-	@RequestMapping(value = "/GetHomeworkPageServlet", method = RequestMethod.GET)
-	protected String getHomeworkPage(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		User user = (User) request.getSession().getAttribute("user");
-		if (!user.isTeacher()) {
-			return "currHomeworkPageStudent";
-		}
-		return "forbiddenPage";
-	}
+//	@RequestMapping(value = "/getChosenHomeworkPageByStudent", method = RequestMethod.GET)
+//	protected String getHomeworkPage(HttpServletRequest request, HttpServletResponse response)
+//			throws ServletException, IOException {
+//		User user = (User) request.getSession().getAttribute("user");
+//		if (!user.isTeacher()) {
+//			return "currentHomeworkPageOfStudentByStudent";
+//		}
+//		return "forbiddenPage";
+//	}
 
-	@RequestMapping(value = "/GetMainPageStudent", method = RequestMethod.GET)
-	protected String getMainPageStudent(HttpServletRequest request, HttpServletResponse response)
+	@RequestMapping(value = "/mainPageStudent", method = RequestMethod.GET)
+	protected String mainPageStudent(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		if (!user.isTeacher()) {
@@ -150,7 +149,7 @@ public class UserController {
 		return "forbiddenPage";
 	}
 
-	@RequestMapping(value = "/GetMainPageTeacher", method = RequestMethod.GET)
+	@RequestMapping(value = "/mainPageTeacher", method = RequestMethod.GET)
 	protected String getMainPageTeacher(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -165,7 +164,7 @@ public class UserController {
 		return "forbiddenPage";
 	}
 
-	@RequestMapping(value = "/studentsScores", method = RequestMethod.GET)
+	@RequestMapping(value = "/studentsScoresByTeacher", method = RequestMethod.GET)
 	protected String getStudentsScored(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
@@ -178,17 +177,17 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
-	protected String loginGet(HttpServletRequest request, HttpServletResponse response)
+	protected String indexGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		return "homePage";
 	}
 
-	@RequestMapping(value = "/LoginServlet", method = RequestMethod.GET)
-	protected String loginServletGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		return "homePage";
-	}
-	@RequestMapping(value = "/LoginServlet", method = RequestMethod.POST)
+//	@RequestMapping(value = "/login", method = RequestMethod.GET)
+//	protected String loginGet(HttpServletRequest request, HttpServletResponse response)
+//			throws ServletException, IOException {
+//		return "homePage";
+//	}
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	protected String loginPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = null;
@@ -213,7 +212,8 @@ public class UserController {
 						}
 						ArrayList<Teacher> allTeachers = UserDAO.getInstance().getAllTeachers();
 						for (Teacher t : allTeachers) {
-							t.setGroups(UserDAO.getInstance().getGroupsOfUser(t.getId()));
+							//t.setGroups(UserDAO.getInstance().getGroupsOfUser(t.getId()));
+							t.setGroups(UserDAO.getInstance().getGroupsOfUserWithoutStudents(t.getId()));
 						}
 						if(request.getServletContext().getAttribute("allTeachers") == null){
 							request.getServletContext().setAttribute("allTeachers", allTeachers);
@@ -229,10 +229,10 @@ public class UserController {
 						if(request.getServletContext().getAttribute("allStudents") == null){
 							request.getServletContext().setAttribute("allStudents", allStudents);
 						}
-						return "redirect:./GetMainPageTeacher";
+						return "redirect:./mainPageTeacher";
 					} else {
 						request.getSession().setAttribute("isTeacher", false);
-						return "redirect:./GetMainPageStudent";
+						return "redirect:./mainPageStudent";
 					}
 				} else {
 					request.getSession().setAttribute("invalidField", true);
@@ -299,14 +299,14 @@ public class UserController {
 				}
 			}
 		}
-		for (HashMap.Entry<Group, HashSet<HomeworkDetails>> entry : mostRecentlyClosedHomeworksForTeacherMap
-				.entrySet()) {
-			System.out.println("Key : " + entry.getKey().getName() + " Value : ");
-			for (HomeworkDetails hd : entry.getValue()) {
-				System.out.println("Value: " + hd.getHeading() + " pass "  + hd.getClosingTime());
-
-			}
-		}
+//		for (HashMap.Entry<Group, HashSet<HomeworkDetails>> entry : mostRecentlyClosedHomeworksForTeacherMap
+//				.entrySet()) {
+//			System.out.println("Key : " + entry.getKey().getName() + " Value : ");
+//			for (HomeworkDetails hd : entry.getValue()) {
+//				System.out.println("Value: " + hd.getHeading() + " pass "  + hd.getClosingTime());
+//
+//			}
+//		}
 		request.getSession().setAttribute("mostRecentlyClosedHomeworks", mostRecentlyClosedHomeworksForTeacherMap);
 
 	}
@@ -322,7 +322,7 @@ public class UserController {
 		return true;
 	}
 
-	@RequestMapping(value = "/LogoutServlet", method = RequestMethod.GET)
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	protected String logout(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		/*Connection con = DBManager.getInstance().getConnection();
@@ -337,13 +337,13 @@ public class UserController {
 		return "redirect:./index";
 	}
 
-	@RequestMapping(value = "/RegisterServlet", method = RequestMethod.GET)
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	protected String goToRegister(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		return "registerPage";
 	}
 
-	@RequestMapping(value = "/RegisterServlet", method = RequestMethod.POST)
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	protected String register(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String username = (request.getParameter("username") != null) ? (request.getParameter("username").trim()) : ("");
@@ -476,13 +476,13 @@ public class UserController {
 		return true;
 	}
 
-	@RequestMapping(value = "/yourScores", method = RequestMethod.GET)
+	@RequestMapping(value = "/studentsScoresByStudent", method = RequestMethod.GET)
 	protected String seeScoresServlet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		request.getSession().setAttribute("throughtScores", 1);
 		if (!user.isTeacher()) {
-			return "yourScores";
+			return "seeStudentsScoresByStudent";
 		}
 		return "forbiddenPage";
 	}
