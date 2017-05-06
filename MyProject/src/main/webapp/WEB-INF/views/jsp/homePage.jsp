@@ -9,7 +9,6 @@
 <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/homePageCss.css" />" rel="stylesheet">
-
 <title>Insert title here</title>
 </head>
 <body>	<%@ include file="navBarHomePage.jsp"%>

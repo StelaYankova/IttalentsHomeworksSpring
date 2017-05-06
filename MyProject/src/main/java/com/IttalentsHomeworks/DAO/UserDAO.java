@@ -37,9 +37,9 @@ public class UserDAO implements IUserDAO {
 	private static final String SET_TEACHER_GRADE_TO_HOMEWORK = "UPDATE IttalentsHomeworks.User_has_homework SET teacher_grade = ? WHERE user_id = ? AND homework_id = ?;";
 	private static final String REMOVE_USER_PROFILE = "DELETE FROM IttalentsHomeworks.Users WHERE id = ?;";
 	private static final String CREATE_NEW_USER = "INSERT INTO IttalentsHomeworks.Users (username, pass, email) VALUES (?,?,?);";
-	private static final String GET_HOMEWORKS_OF_STUDENT = "SELECT H.id, H.heading, H.num_of_tasks, H.tasks_pdf, H.opens, H.closes, UH.teacher_grade, UH.teacher_comment FROM IttalentsHomeworks.User_has_homework UH JOIN IttalentsHomeworks.Homework H ON (H.id = UH.homework_id) WHERE UH.user_id = ?;";
-	private static final String GET_TASKS_OF_HOMEWORK_OF_STUDENT = "SELECT homework_id,task_number,uploaded_on,solution_java FROM IttalentsHomeworks.Homework_task_solution WHERE student_id = ? AND homework_id = ?;";
-	private static final String GET_HOMEWORKS_OF_STUDENT_BY_GROUP = "SELECT H.id, H.heading, H.num_of_tasks, H.tasks_pdf, UH.teacher_grade, UH.teacher_comment FROM IttalentsHomeworks.User_has_homework UH JOIN IttalentsHomeworks.Homework H ON (H.id = UH.homework_id) JOIN IttalentsHomeworks.Group_has_Homework GH ON (H.id = GH.homework_id) WHERE UH.user_id = ? AND GH.group_id = ?;";
+	private static final String GET_HOMEWORKS_OF_STUDENT = "SELECT H.id, H.heading, H.num_of_tasks, H.tasks_pdf, H.opens, H.closes, UH.teacher_grade, UH.teacher_comment,H.test_tasks_directory FROM IttalentsHomeworks.User_has_homework UH JOIN IttalentsHomeworks.Homework H ON (H.id = UH.homework_id) WHERE UH.user_id = ?;";
+	private static final String GET_TASKS_OF_HOMEWORK_OF_STUDENT = "SELECT homework_id,task_number,uploaded_on,solution_java,has_passed_system_test FROM IttalentsHomeworks.Homework_task_solution WHERE student_id = ? AND homework_id = ?;";
+	private static final String GET_HOMEWORKS_OF_STUDENT_BY_GROUP = "SELECT H.id, H.heading, H.num_of_tasks, H.tasks_pdf, UH.teacher_grade, UH.teacher_comment,H.test_tasks_directory FROM IttalentsHomeworks.User_has_homework UH JOIN IttalentsHomeworks.Homework H ON (H.id = UH.homework_id) JOIN IttalentsHomeworks.Group_has_Homework GH ON (H.id = GH.homework_id) WHERE UH.user_id = ? AND GH.group_id = ?;";
 	//private static final String GET_HOMEWORKS_OF_STUDENT_BY_GROUP = "SELECT H.id, H.heading, H.num_of_tasks, H.tasks_pdf/*, H.opens, H.closes,*/, UH.teacher_grade, UH.teacher_comment FROM IttalentsHomeworks.User_has_homework UH JOIN IttalentsHomeworks.Homework H ON (H.id = UH.homework_id) JOIN IttalentsHomeworks.Group_has_Homework GH ON (H.id = GH.homework_id) WHERE UH.user_id = ? AND GH.group_id = ?;";
 	private static final String GET_GROUPS_OF_USER = "SELECT CONCAT(G.id) AS 'group_id', G.group_name FROM IttalentsHomeworks.User_has_Group UG JOIN IttalentsHomeworks.Groups G ON (G.id = UG.group_id) WHERE UG.user_id = ?";
 	private static final String GET_USER_ID_BY_USERNAME = "SELECT id FROM IttalentsHomeworks.Users WHERE BINARY username = ?;";
@@ -182,7 +182,7 @@ public class UserDAO implements IUserDAO {
 //				LocalDateTime closingTime = LocalDateTime.parse(closingTimeString, formatter);
 
 				HomeworkDetails hd = new HomeworkDetails(rs.getInt(1), rs.getString(2), null, null,
-						rs.getInt(3), rs.getString(4));
+						rs.getInt(3), rs.getString(4),rs.getString(7));
 				ArrayList<Task> tasksOfHomeworkOfStudent = UserDAO.getInstance().getTasksOfHomeworkOfStudent(studentId,
 						hd.getId());
 				homeworksOfStudentByGroup
@@ -219,11 +219,11 @@ public class UserDAO implements IUserDAO {
 				String uploadedOnString = null;
 				if (rs.getString(4) == null) {
 					uploadedOnString = "";
-					tasksOfHomeworkOfStudent.add(new Task(rs.getInt(2), rs.getString(4), null));
+					tasksOfHomeworkOfStudent.add(new Task(rs.getInt(2), rs.getString(4), null, false));
 				} else {
 					uploadedOnString = rs.getString(3);
 					LocalDateTime uploadedOn = LocalDateTime.parse(uploadedOnString, formatter);
-					tasksOfHomeworkOfStudent.add(new Task(rs.getInt(2), rs.getString(4), uploadedOn));
+					tasksOfHomeworkOfStudent.add(new Task(rs.getInt(2), rs.getString(4), uploadedOn, rs.getBoolean(5)));
 				}
 			}
 		} catch (SQLException e) {
@@ -293,7 +293,7 @@ public class UserDAO implements IUserDAO {
 				LocalDateTime openingTime = LocalDateTime.parse(openingTimeString, formatter);
 				LocalDateTime closingTime = LocalDateTime.parse(closingTimeString, formatter);
 				HomeworkDetails hd = new HomeworkDetails(rs.getInt(1), rs.getString(2), openingTime, closingTime,
-						rs.getInt(3), rs.getString(4));
+						rs.getInt(3), rs.getString(4),rs.getString(9));
 				ArrayList<Task> tasksOfHomeworkOfStudent = UserDAO.getInstance().getTasksOfHomeworkOfStudent(userId,
 						hd.getId());
 				int teacherScore = 0;
@@ -443,9 +443,15 @@ public class UserDAO implements IUserDAO {
 					ps.setInt(3, homeworkDetailsId);
 					ps.setInt(4, taskNumber);
 					ps.executeUpdate();
+					System.out.println("solution " + solution);
+					System.out.println("studentId " + studentId);
+					System.out.println("homeworkDetailsId " + homeworkDetailsId);
+					System.out.println("taskNumber " + taskNumber);
 					UserDAO.getInstance().setTimeOfUploadOfTask(homeworkDetailsId, studentId, taskNumber, timeOfUpload);
 					con.commit();
 				} catch (SQLException e) {
+					System.out.println("OAPAPPAPA");
+					e.getStackTrace();
 					con.rollback();
 					throw new UserException("Something went wrong with setting student's solution of task..");
 				} finally {

@@ -7,11 +7,13 @@ public class Task {
 	private int taskNumber;
 	private String solution;
 	private LocalDateTime uploadedOn;
+	private boolean hasPassedSystemTest;
 	
-	public Task(int taskNumber, String solution, LocalDateTime uploadedOn) {
+	public Task(int taskNumber, String solution, LocalDateTime uploadedOn, boolean hasPassedSystemTest) {
 		this.taskNumber = taskNumber;
 		this.solution = solution;
 		this.uploadedOn = uploadedOn;
+		this.hasPassedSystemTest = hasPassedSystemTest;
 	}
 	
 	public int getTaskNumber() {
@@ -31,6 +33,14 @@ public class Task {
 	}
 	public void setUploadedOn(LocalDateTime uploadedOn) {
 		this.uploadedOn = uploadedOn;
+	}
+
+	public boolean isHasPassedSystemTest() {
+		return hasPassedSystemTest;
+	}
+
+	public void setHasPassedSystemTest(boolean hasPassedSystemTest) {
+		this.hasPassedSystemTest = hasPassedSystemTest;
 	}
 	
 	

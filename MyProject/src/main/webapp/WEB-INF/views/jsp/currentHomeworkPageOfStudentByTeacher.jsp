@@ -108,7 +108,7 @@
 				id="UpdateTeacherGradeAndCommentForm" accept-charset="UTF-8">
 				<div class="formInput">
 					<label><b>Teacher grade:</b></label>
-						<input type="number" class="form-control" min=0 max=101 id="grade"
+						<input type="number" class="form-control" min=0 max=100 id="grade"
 						value="${sessionScope.currHomework.teacherGrade}" name="grade" />
 				</div>
 				<c:if test="${not empty sessionScope.GradeTooLong}">
@@ -124,7 +124,7 @@
 				<p id="gradeMsg" class="invalidData"></p>
 				<div class="formInput">
 					<label><b>Teacher comment:</b></label>&nbsp; <br>
-					<textarea class="form-control" id="textareaComment" placeholder = "Enter comment..." maxlength="251"
+					<textarea class="form-control" id="textareaComment" placeholder = "Enter comment..." maxlength="250"
 						name="comment"><c:out
 							value="${sessionScope.currHomework.teacherComment}"></c:out></textarea>
 					<c:if test="${not empty sessionScope.validComment}">

@@ -1,6 +1,9 @@
 package com.IttalentsHomeworks.DAO;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,12 +29,12 @@ public class GroupDAO implements IGroupDAO {
 
 	private static final String DOES_STUDENT_ALREADY_HAVE_HOMEWORK = "SELECT * FROM IttalentsHomeworks.User_has_homework WHERE user_id = ? AND homework_id = ?;";
 //	private static final String SAVE_PATH = "/Users/Stela/Desktop/imagesIttalentsHomework";
-	private static final String GET_HOMEWORK_DETAILS_BY_ID = "SELECT id,heading,opens,closes,num_of_tasks,tasks_pdf FROM IttalentsHomeworks.Homework WHERE id = ?;";
+	private static final String GET_HOMEWORK_DETAILS_BY_ID = "SELECT id,heading,opens,closes,num_of_tasks,tasks_pdf,test_tasks_directory FROM IttalentsHomeworks.Homework WHERE id = ?;";
 	private static final String CHANGE_GROUP_NAME = "UPDATE IttalentsHomeworks.Groups SET group_name = ? WHERE id = ?;";
 	private static final String REMOVE_HOMEWORK_DETAILS = "DELETE FROM IttalentsHomeworks.Homework WHERE id = ?";
 	private static final String GET_GROUP_ID_BY_GROUP_NAME = "SELECT id FROM IttalentsHomeworks.Groups WHERE BINARY group_name = ?;";
 	private static final String GET_GROUP_BY_ID = "SELECT id, group_name FROM IttalentsHomeworks.Groups WHERE id = ?;";
-	private static final String ADD_HOMEWORK_TO_GROUP_III = "INSERT INTO IttalentsHomeworks.Homework_task_solution VALUES(?,?,?,null,null);";
+	private static final String ADD_HOMEWORK_TO_GROUP_III = "INSERT INTO IttalentsHomeworks.Homework_task_solution VALUES(?,?,?,null,null,0);";
 	private static final String ADD_HOMEWORK_TO_GROUP_II = "INSERT INTO IttalentsHomeworks.User_has_homework VALUES (?,?,null, null);";
 	private static final String ADD_HOMEWORK_TO_GROUP_I = "INSERT INTO IttalentsHomeworks.Group_has_Homework VALUES (?,?);";
 	// private static final String REMOVE_HOMEWORK_FROM_GROUP_III = "DELETE FROM
@@ -44,15 +47,15 @@ public class GroupDAO implements IGroupDAO {
 	private static final String GET_IDS_OF_GROUPS_FOR_WHICH_IS_HOMEWORK = "SELECT group_id FROM IttalentsHomeworks.Group_has_Homework WHERE homework_id = ?;";
 	private static final String UPDATE_HOMEWORK_DETAILS = "UPDATE IttalentsHomeworks.Homework SET heading = ?, opens = ?, closes = ?, num_of_tasks = ?, tasks_pdf = ? WHERE id = ?;";
 	private static final String GET_HOMEWORK_DETAILS_ID = "SELECT id FROM IttalentsHomeworks.Homework WHERE BINARY heading = ?;";
-	private static final String CREATE_HOMEWORK_DETAILS = "INSERT INTO IttalentsHomeworks.Homework VALUES (NULL, ?, ?, ?, ?, ?);";
+	private static final String CREATE_HOMEWORK_DETAILS = "INSERT INTO IttalentsHomeworks.Homework VALUES (NULL, ?, ?, ?, ?, ?,?);";
 	private static final String REMOVE_GROUP = "DELETE FROM IttalentsHomeworks.Groups WHERE id = ?;";
 	private static final String REMOVE_USER_FROM_GROUP = "DELETE FROM IttalentsHomeworks.User_has_Group WHERE user_id = ? AND group_id = ?;";
 	private static final String GET_ALL_GROUPS = "SELECT CONCAT(G.id) AS 'group_id', G.group_name FROM IttalentsHomeworks.Groups G;";
-	private static final String GET_ALL_HOMEWORKS_DETAILS = "SELECT H.id, H.heading, H.opens, H.closes, H.num_of_tasks, H.tasks_pdf FROM IttalentsHomeworks.Homework H;";
+	private static final String GET_ALL_HOMEWORKS_DETAILS = "SELECT H.id, H.heading, H.opens, H.closes, H.num_of_tasks, H.tasks_pdf,H.test_tasks_directory FROM IttalentsHomeworks.Homework H;";
 	private static final String CREATE_NEW_GROUP = "INSERT INTO IttalentsHomeworks.Groups (group_name) VALUE (?);";
 	private static final String ADD_USER_TO_GROUP = "INSERT INTO IttalentsHomeworks.User_has_Group VALUES (?,?);";
 	private static final String IS_USER_ALREADY_IN_GROUP = "SELECT * FROM IttalentsHomeworks.User_has_Group WHERE user_id = ? AND group_id = ?;";
-	private static final String GET_HOMEWORK_DETAILS_OF_GROUP = "SELECT H.id, H.heading, H.opens, H.closes, H.num_of_tasks, H.tasks_pdf FROM IttalentsHomeworks.Homework H JOIN IttalentsHomeworks.Group_has_Homework GH ON (GH. homework_id = H.id) WHERE GH.group_id = ?;";
+	private static final String GET_HOMEWORK_DETAILS_OF_GROUP = "SELECT H.id, H.heading, H.opens, H.closes, H.num_of_tasks, H.tasks_pdf,H.test_tasks_directory FROM IttalentsHomeworks.Homework H JOIN IttalentsHomeworks.Group_has_Homework GH ON (GH. homework_id = H.id) WHERE GH.group_id = ?;";
 	private static final String GET_STUDENTS_OF_GROUP = "SELECT U.id, U.username, U.email, U.isTeacher FROM IttalentsHomeworks.User_has_Group G JOIN IttalentsHomeworks.Users U ON (G.user_id = U.id) WHERE G.group_id = ? AND U.isTeacher = 0;";
 	private static final String GET_STUDENTS_OF_GROUP_BY_ID = "SELECT U.id, U.username, U.email, U.isTeacher FROM IttalentsHomeworks.User_has_Group G JOIN IttalentsHomeworks.Users U ON (G.user_id = U.id) WHERE G.group_id = ? AND U.isTeacher = 0;";
 	private static final String GET_TEACHERS_OF_GROUP = "SELECT U.id, U.username, U.email, U.isTeacher FROM IttalentsHomeworks.User_has_Group G JOIN IttalentsHomeworks.Users U ON (G.user_id = U.id) WHERE G.group_id = ? AND U.isTeacher = 1;";
@@ -166,7 +169,7 @@ public class GroupDAO implements IGroupDAO {
 				LocalDateTime closingTime = LocalDateTime.parse(closingTimeString, formatter);
 
 				homeworksOfGroup.add(new HomeworkDetails(rs.getInt(1), rs.getString(2), openingTime, closingTime,
-						rs.getInt(5), rs.getString(6)));
+						rs.getInt(5), rs.getString(6),rs.getString(7)));
 			}
 		} catch (SQLException e) {
 			throw new GroupException("Something went wrong with checking the homeworks of a group..");
@@ -324,7 +327,7 @@ public class GroupDAO implements IGroupDAO {
 				LocalDateTime openingTime = LocalDateTime.parse(openingTimeString, formatter);
 				LocalDateTime closingTime = LocalDateTime.parse(closingTimeString, formatter);
 				homeworksOfGroup.add(new HomeworkDetails(rs.getInt(1), rs.getString(2), openingTime, closingTime,
-						rs.getInt(5), rs.getString(6)));
+						rs.getInt(5), rs.getString(6), rs.getString(7)));
 			}
 		} catch (SQLException e) {
 			throw new GroupException("Something went wrong with checking all homework details..");
@@ -411,12 +414,20 @@ public class GroupDAO implements IGroupDAO {
 	public void createHomeworkDetails(HomeworkDetails homeworkDetails, ArrayList<Integer> groupsForHomework)
 			throws GroupException, UserException, ValidationException, NotUniqueUsernameException {
 		Connection con = manager.getConnection();
+		System.out.println("111111111");
 		if (ValidationsDAO.getInstance().isHomeworkHeadingUniqueAddHomework(homeworkDetails.getHeading())) {
-			if (homeworkDetails.getTasksFile() != null && !(homeworkDetails.getTasksFile().trim().equals(""))
-					&& groupsForHomework != null && groupsForHomework.size() > 0) {
+			System.out.println("2222222222");
+
+			if (homeworkDetails.getTasksFile() != null && !(homeworkDetails.getTasksFile().trim().equals("")
+					&& homeworkDetails.getTestTasksFile() != null && !homeworkDetails.getTestTasksFile().trim().equals("")
+					&& groupsForHomework != null && groupsForHomework.size() > 0)) {
+				System.out.println("3333333333");
+
 				if (!ValidationsDAO.getInstance().isThereEmptyFieldAddHomework(homeworkDetails.getHeading(),
 						homeworkDetails.getOpeningTime().toString(), homeworkDetails.getClosingTime().toString(),
 						homeworkDetails.getNumberOfTasks())) {
+					System.out.println("444444444444");
+
 					if (ValidationsDAO.getInstance().isLengthHeadingValidAddHomework(homeworkDetails.getHeading())
 							&& ValidationsDAO.getInstance()
 									.isHomeworkOpeningTimeValidAddHomework(homeworkDetails.getOpeningTime().toString())
@@ -425,23 +436,33 @@ public class GroupDAO implements IGroupDAO {
 									homeworkDetails.getClosingTime().toString())
 							&& ValidationsDAO.getInstance()
 									.isHomeworkNumberOfTasksValidAddHomework(homeworkDetails.getNumberOfTasks())) {
+						System.out.println("5555555555");
+
 						try {
 							con.setAutoCommit(false);
+							System.out.println("19191191");
 							PreparedStatement ps = con.prepareStatement(CREATE_HOMEWORK_DETAILS);
 							ps.setString(1, homeworkDetails.getHeading());
 							ps.setString(2, homeworkDetails.getOpeningTime().toString());
 							ps.setString(3, homeworkDetails.getClosingTime().toString());
 							ps.setInt(4, homeworkDetails.getNumberOfTasks());
 							ps.setString(5, homeworkDetails.getTasksFile());
+							ps.setString(6, homeworkDetails.getTestTasksFile());
 							ps.execute();
-							homeworkDetails.setId(GroupDAO.getInstance().getHomeworkDetailsId(homeworkDetails));
+							System.out.println("6666666");
+							
+							homeworkDetails.setId(GroupDAO.getInstance().getHomeworkDetailsId(homeworkDetails.getHeading()));
 							for (Integer groupId : groupsForHomework) {
 								GroupDAO.getInstance().addHomeworkToGroupTransaction(homeworkDetails, groupId);
 							}
+							System.out.println("7777777777");
 							con.commit();
 						} catch (SQLException e) {
 							if (con != null) {
 								try {
+									e.printStackTrace();
+									System.out.println(e.getMessage());
+									System.out.println(e.getStackTrace());
 									con.rollback();
 								} catch (SQLException e1) {
 									throw new GroupException("Something went wrong with creating a homework..");
@@ -455,12 +476,18 @@ public class GroupDAO implements IGroupDAO {
 							}
 						}
 					} else {
+						System.out.println("888888888");
+
 						throw new ValidationException("Add homework --> invalid field");
 					}
 				} else {
+					System.out.println("999999999");
+
 					throw new ValidationException("Add homework --> empty field");
 				}
 			} else {
+				System.out.println("10101101");
+
 				throw new ValidationException("Add homework --> empty field");
 			}
 		} else {
@@ -476,12 +503,12 @@ public class GroupDAO implements IGroupDAO {
 	 * IttalentsHomeworks.model.HomeworkDetails)
 	 */
 	@Override
-	public int getHomeworkDetailsId(HomeworkDetails homeworkDetails) throws GroupException {
+	public int getHomeworkDetailsId(String homeworkDetailsHeading) throws GroupException {
 		Connection con = manager.getConnection();
 		int homeworkDetailsId = 0;
 		try {
 			PreparedStatement ps = con.prepareStatement(GET_HOMEWORK_DETAILS_ID);
-			ps.setString(1, homeworkDetails.getHeading());
+			ps.setString(1, homeworkDetailsHeading);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				homeworkDetailsId = rs.getInt(1);
@@ -657,7 +684,7 @@ public class GroupDAO implements IGroupDAO {
 
 						for (int i = 0; i < homeworkDetails.getNumberOfTasks(); i++) {
 
-							Task t = new Task(i, null, null);
+							Task t = new Task(i, null, null, false);
 							if (!UserDAO.getInstance().doesTaskAlreadyExist(homeworkDetails.getId(), s.getId(), i)) {
 
 								ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_III);
@@ -742,16 +769,16 @@ public class GroupDAO implements IGroupDAO {
 				currGroups.add(GroupDAO.getInstance().getGroupById(id));
 			}
 			ps.execute();
-			File fileTasks = new File(IValidationsDAO.SAVE_DIR + File.separator + homeworkDetails.getTasksFile());
+			File fileTasks = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_FILES_PDF + File.separator + homeworkDetails.getTasksFile());
 			if (fileTasks.exists()) {
 				fileTasks.delete();
-			}
+			}//TODO pri premahvaneto tr da trie papkata
 			for (Group group : currGroups) {
 				for (Student s : GroupDAO.getInstance().getStudentsOfGroup(group.getId())) {
 					for (int i = 0; i < homeworkDetails.getNumberOfTasks(); i++) {
 						String fileName = "hwId" + homeworkDetails.getId() + "userId" + s.getId() + "taskNum" + i
 								+ ".java";
-						File fileStudentTasks = new File(IValidationsDAO.SAVE_DIR + File.separator + fileName);
+						File fileStudentTasks = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA + File.separator + fileName);
 						if (fileStudentTasks.exists()) {
 							fileStudentTasks.delete();
 						}
@@ -835,7 +862,7 @@ public class GroupDAO implements IGroupDAO {
 				LocalDateTime openingTime = LocalDateTime.parse(openingTimeString, formatter);
 				LocalDateTime closingTime = LocalDateTime.parse(closingTimeString, formatter);
 				homeworkDetails = new HomeworkDetails(rs.getInt(1), rs.getString(2), openingTime, closingTime,
-						rs.getInt(5), rs.getString(6));
+						rs.getInt(5), rs.getString(6), rs.getString(7));
 			}
 		} catch (SQLException e) {
 			throw new GroupException("Something went wrong with getting homework details..");
@@ -847,22 +874,27 @@ public class GroupDAO implements IGroupDAO {
 	public void addHomeworkToGroupTransaction(HomeworkDetails homeworkDetails, int groupId)
 			throws GroupException, UserException, SQLException {
 		Connection con = manager.getConnection();
+		System.out.println("pppppppppp");
 		PreparedStatement ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_I);
 		ps.setInt(1, groupId);
 		ps.setInt(2, homeworkDetails.getId());
 		ps.execute();
+		System.out.println("eeeeeeeeeeeee");
 
 		for (Student s : GroupDAO.getInstance().getStudentsOfGroup(groupId)) {
 			if (!((GroupDAO) GroupDAO.getInstance()).doesStudentAlreadyHaveHomework(s.getId(), homeworkDetails)) {
+				System.out.println("ggggggggg");
 
 				ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_II);
 				ps.setInt(1, s.getId());
 				ps.setInt(2, homeworkDetails.getId());
 				ps.execute();
+				System.out.println(";;;;;;;;;;;;");
 
 				for (int i = 0; i < homeworkDetails.getNumberOfTasks(); i++) {
+					System.out.println("sssssssssssss");
 
-					Task t = new Task(i, null, null);
+					Task t = new Task(i, null, null, false);
 					if (!UserDAO.getInstance().doesTaskAlreadyExist(homeworkDetails.getId(), s.getId(), i)) {
 						ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_III);
 						ps.setInt(1, s.getId());
@@ -871,6 +903,8 @@ public class GroupDAO implements IGroupDAO {
 						ps.execute();
 
 					}
+					System.out.println("vvvvvvvvvvvv");
+
 				}
 			}
 		}
@@ -1025,5 +1059,55 @@ public class GroupDAO implements IGroupDAO {
 			throw new GroupException("Something went wrong with getting groups.." + e.getMessage());
 		}
 		return groups;
+	}
+
+	@Override
+	public boolean doesPassSystemTest(String solutionOfStudent, Homework homework, int taskNum) throws IOException, InterruptedException {
+		//we enter the directory with the student answer
+		String getNameOfTask = solutionOfStudent.split("/", solutionOfStudent.length())[1];
+		String getNameOfDir = solutionOfStudent.split("/", solutionOfStudent.length())[0];
+
+//		Process proc = Runtime.getRuntime()
+//				.exec("cd "+ IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator+ getNameOfDir);
+//		proc.waitFor();
+//		proc = Runtime.getRuntime()
+//				.exec("javac "+ getNameOfTask);proc.waitFor();
+//		Process proc = Runtime.getRuntime()
+//		.exec("javac /Users/Stela/Desktop/homeworkSolutionsJavaIttalentsHomework/hwId210userId260taskNum0/runProgram.java");
+		Process proc = Runtime.getRuntime()
+				.exec("javac "+ IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA + File.separator + solutionOfStudent);
+		System.out.println("javac "+ IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA + File.separator + solutionOfStudent);		
+		System.out.println("cd "+ IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator+ getNameOfDir);
+		System.out.println("javac "+ getNameOfTask);
+		String outXPath = IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator + homework.getHomeworkDetails().getTestTasksFile();
+		//we put answer into the directory of students answer (split po /)
+		proc = Runtime.getRuntime().exec("java -cp "+ IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator +" "+ getNameOfTask.substring(0, getNameOfTask.length()-5) + " < "+ outXPath + File.separator + "in" + taskNum + ".txt > " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator + "answer.txt");
+		System.out.println("java -cp "+ IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator +" "+ getNameOfTask.substring(0, getNameOfTask.length()-5) + " < "+ outXPath + File.separator + "in" + taskNum + ".txt > " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator + "answer.txt");
+		
+		//we read result
+		proc = Runtime.getRuntime().exec(
+				"cat " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA + solutionOfStudent + File.separator + "answer.txt");
+		BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+		String answerSolution = null;
+		StringBuilder answerStudent = new StringBuilder();
+		while ((answerSolution = stdInput.readLine()) != null) {
+			answerStudent.append(answerSolution);
+		}
+		//get real solution
+		//we go to the directory of the file with test tasks of homework and we read the out file with number of task
+		String inXPath = IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator + homework.getHomeworkDetails().getTestTasksFile();
+
+		Process proc1 = Runtime.getRuntime()
+				.exec("cat " + inXPath + File.separator +  "out" + taskNum + ".txt");
+		stdInput = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
+		String answerTest = null;
+		StringBuilder answerTruth = new StringBuilder();
+		while ((answerTest = stdInput.readLine()) != null) {
+			answerTruth.append(answerTest);
+		}
+		System.out.println(answerStudent);
+		System.out.println(answerTruth);
+		System.out.println(answerStudent.toString().equals(answerTruth.toString()));
+		return (answerStudent.toString().equals(answerTruth.toString()));
 	}
 }

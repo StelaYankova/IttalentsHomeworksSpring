@@ -29,8 +29,7 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 <script
-	src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script>
- 
+	src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script> 
 </head>
  <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
   <link href="<c:url value="css/navBarCss.css" />" type="text/css" rel="stylesheet">

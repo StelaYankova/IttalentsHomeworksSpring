@@ -18,7 +18,6 @@ import com.IttalentsHomeworks.Exceptions.GroupException;
 import com.IttalentsHomeworks.Exceptions.UserException;
 import com.IttalentsHomeworks.Exceptions.ValidationException;
 import com.IttalentsHomeworks.model.Group;
-import com.IttalentsHomeworks.model.HomeworkDetails;
 import com.IttalentsHomeworks.model.Student;
 import com.IttalentsHomeworks.model.Task;
 import com.IttalentsHomeworks.model.Teacher;
@@ -90,8 +89,10 @@ public class GroupController {
 						Group newGroup = new Group(groupName, allSelectedTeachers);
 						GroupDAO.getInstance().createNewGroup(newGroup);
 						request.setAttribute("invalidFields", false);
-						ArrayList<Group> allGroupsUpdated = GroupDAO.getInstance().getAllGroupsWithoutStudents();
-						request.getServletContext().setAttribute("allGroups", allGroupsUpdated);
+//						ArrayList<Group> allGroupsUpdated = GroupDAO.getInstance().getAllGroupsWithoutStudents();
+//						request.getServletContext().setAttribute("allGroups", allGroupsUpdated);
+						ArrayList<Group> allGroupsUpdated = (ArrayList<Group>) request.getServletContext().getAttribute("allGroups");
+						allGroupsUpdated.add(GroupDAO.getInstance().getGroupWithoutStudentsById(GroupDAO.getInstance().getGroupIdByGroupName(groupName)));
 						ArrayList<Teacher> allTeachersUpdated = UserDAO.getInstance().getAllTeachers();
 						for (Teacher t : allTeachersUpdated) {
 							t.setGroups(UserDAO.getInstance().getGroupsOfUserWithoutStudents(t.getId()));
@@ -178,7 +179,7 @@ public class GroupController {
 		return "forbiddenPage";
 	}
 
-	@RequestMapping(value = "/addOrRemoveStudent", method = RequestMethod.POST)
+	@RequestMapping(value = "/addStudent", method = RequestMethod.POST)
 	protected String addStudentToGroupPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");

@@ -1,4 +1,5 @@
 package com.IttalentsHomeworks.DAO;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import com.IttalentsHomeworks.DB.DBManager;
@@ -7,6 +8,7 @@ import com.IttalentsHomeworks.Exceptions.NotUniqueUsernameException;
 import com.IttalentsHomeworks.Exceptions.UserException;
 import com.IttalentsHomeworks.Exceptions.ValidationException;
 import com.IttalentsHomeworks.model.Group;
+import com.IttalentsHomeworks.model.Homework;
 import com.IttalentsHomeworks.model.HomeworkDetails;
 import com.IttalentsHomeworks.model.Student;
 import com.IttalentsHomeworks.model.Teacher;
@@ -39,7 +41,7 @@ public interface IGroupDAO {
 
 	void createHomeworkDetails(HomeworkDetails hd, ArrayList<Integer> groupsForHw) throws GroupException, UserException, ValidationException, NotUniqueUsernameException;
 
-	int getHomeworkDetailsId(HomeworkDetails hd) throws GroupException;
+	int getHomeworkDetailsId(String heading) throws GroupException;
 
 	void updateHomeworkDetails(HomeworkDetails hd, ArrayList<Integer> groupsForHw) throws GroupException, UserException, ValidationException, NotUniqueUsernameException;
 
@@ -72,5 +74,7 @@ public interface IGroupDAO {
 	ArrayList<Integer> getStudentsIdsOfGroup(int groupId) throws GroupException;
 
 	ArrayList<Group> getAllGroupsWithoutStudents() throws GroupException;
+
+	boolean doesPassSystemTest(String solutionOfStudent, Homework homework, int taskNum) throws IOException, InterruptedException;
 
 }

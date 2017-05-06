@@ -1,7 +1,6 @@
 package com.IttalentsHomeworks.controller;
 
 
-import static org.hamcrest.CoreMatchers.is;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -25,6 +24,8 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.plaf.synth.SynthSpinnerUI;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,6 +36,7 @@ import com.IttalentsHomeworks.DAO.IValidationsDAO;
 import com.IttalentsHomeworks.DAO.UserDAO;
 import com.IttalentsHomeworks.DAO.ValidationsDAO;
 import com.IttalentsHomeworks.Exceptions.GroupException;
+import com.IttalentsHomeworks.Exceptions.InvalidFilesExtensionInZIP;
 import com.IttalentsHomeworks.Exceptions.NotUniqueUsernameException;
 import com.IttalentsHomeworks.Exceptions.UserException;
 import com.IttalentsHomeworks.Exceptions.ValidationException;
@@ -67,9 +69,10 @@ public class HomeworkController {
 
 	@RequestMapping(value = "/addHomework", method = RequestMethod.POST)
 	protected String addHomeworkPost(HttpServletRequest request,
-			@RequestParam(value = "file") MultipartFile fileUploaded, HttpServletResponse response)
+			@RequestParam(value = "file") MultipartFile fileUploaded, @RequestParam(value = "testsFile") MultipartFile testsFileUploaded, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
+		HomeworkDetails homeworkDetails = null;
 		if (user.isTeacher()) {
 			String heading = (request.getParameter("name") != null) ? (request.getParameter("name").trim()) : ("");
 			String[] selectedGroups = (request.getParameterValues("groups") != null) ? (request.getParameterValues("groups")) : (new String[0]);
@@ -86,14 +89,20 @@ public class HomeworkController {
 			// empty fields
 			if (isThereEmptyField(request.getParameter("name").trim(),
 					request.getParameter("opens").replace("/", "-").trim(),
-					request.getParameter("closes").replace("/", "-").trim(), fileUploaded,
+					request.getParameter("closes").replace("/", "-").trim(), fileUploaded, testsFileUploaded,
 					request.getParameter("numberOfTasks").trim(), request.getParameterValues("groups"))) {
 				request.setAttribute("emptyFields", true);
 			
 			} else {
 				MultipartFile filePart = fileUploaded;
+				MultipartFile testsFilePart = testsFileUploaded;
+				Unzipper unzip = null;
+
+				File unzippedFilesDir = null;
+				File zipFile = null;
 				// heading valid
 				File file = null;
+				File fileTests = null;
 				try {
 					int numberOfTasks = 0;
 					boolean isHeadingValid = false;
@@ -125,6 +134,14 @@ public class HomeworkController {
 						isFileValid = true;
 					}
 					request.setAttribute("validFile", isFileValid);
+					
+					//testsFile
+					boolean isTestsFileValid = false;
+					if (isHomeworkTestsFileSizeValid(testsFilePart) && isHomeworkTestsFileContentTypeValid(testsFilePart)) {
+						isTestsFileValid = true;
+					}
+					request.setAttribute("validTestsFile", isTestsFileValid);
+					
 					// numTasks
 					boolean areTasksValid = false;
 					if (isHomeworkNumberOfTasksANumber(numberOfTasksString)) {
@@ -141,41 +158,73 @@ public class HomeworkController {
 					}
 					request.setAttribute("validGroups", areGroupsValid);
 					if (isHeadingValid == true && isHeadingUnique == true && isOpeningTimeValid == true
-							&& isClosingTimeValid == true && isFileValid == true && areTasksValid == true
+							&& isClosingTimeValid == true && isFileValid == true && isTestsFileValid == true && areTasksValid == true
 							&& areGroupsValid == true) {
-						String savePath = IValidationsDAO.SAVE_DIR;
-						File fileSaveDir = new File(savePath);
-						if (!fileSaveDir.exists()) {
-							fileSaveDir.mkdir();
+					//	String savePathFilePdf = IValidationsDAO.SAVE_DIR_HOMEWORK_FILES_PDF;
+						File fileSaveDirPdf = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_FILES_PDF);
+						if (!fileSaveDirPdf.exists()) {
+							fileSaveDirPdf.mkdir();
 						}
+					//	String savePathFileZip = IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES;
+						File fileSaveDirZip = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES);
+						if (!fileSaveDirZip.exists()) {
+							fileSaveDirZip.mkdir();
+						}
+						//upload file with hw tasks
 						String fileName = " ";
 						fileName = fileUploaded.getOriginalFilename().substring(0,
 								fileUploaded.getOriginalFilename().length() - 4) + ".pdf";
+						System.out.println("file name tasks  " + fileName);
+
 						OutputStream out = null;
 						InputStream filecontent = null;
-						file = new File(IValidationsDAO.SAVE_DIR + File.separator + fileName);
+						file = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_FILES_PDF + File.separator + fileName);
 						while (file.exists()) {
 							Random randomGenerator = new Random();
 							int randomLength = randomGenerator.nextInt((7 - 1) + 1) + 1;
 							String randomString = this.getRandomCharacters(randomLength);
 							fileName = fileUploaded.getOriginalFilename().substring(0,
 									fileUploaded.getOriginalFilename().length() - 4) + randomString + ".pdf";
-							file = new File(IValidationsDAO.SAVE_DIR + File.separator + fileName);
+							file = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_FILES_PDF + File.separator + fileName);
 						}
+						//TODO extract file (+where to download+extract)
 						file.createNewFile();
+						//upload file with hw tests
+						
+						String fileNameTests = " ";
+						System.out.println("original name tests file " +  testsFileUploaded.getOriginalFilename());
+						fileNameTests = testsFileUploaded.getOriginalFilename().substring(0,
+								testsFileUploaded.getOriginalFilename().length() - 4) + ".zip";
+						System.out.println("File name is " + testsFileUploaded.getOriginalFilename().substring(0,
+								testsFileUploaded.getOriginalFilename().length() - 4));
+						//OutputStream outTests = null;
+						//InputStream filecontentTests = null;
+						fileTests = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator + fileNameTests);
+						while (fileTests.exists()) {
+							Random randomGenerator = new Random();
+							int randomLength = randomGenerator.nextInt((7 - 1) + 1) + 1;
+							String randomString = this.getRandomCharacters(randomLength);
+							fileNameTests = testsFileUploaded.getOriginalFilename().substring(0,
+									testsFileUploaded.getOriginalFilename().length() - 4) + randomString + ".zip";
+							fileTests = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator + fileNameTests);
+							//see if unzips, check file is .txt
+							// da e v papka s imeto na doma6noto
+							
+						}
+						
+						fileTests.createNewFile();
+						//
 						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 						LocalDateTime openingTime = LocalDateTime.parse(opens, formatter);
 						LocalDateTime closingTime = LocalDateTime.parse(closes, formatter);
 						ArrayList<Integer> groupsForHw = new ArrayList<>();
-						HomeworkDetails homeworkDetails = new HomeworkDetails(heading, openingTime, closingTime,
-								numberOfTasks, fileName);
+						homeworkDetails = new HomeworkDetails(heading, openingTime, closingTime,
+								numberOfTasks, fileName, null);
 						for (int i = 0; i < selectedGroups.length; i++) {
 							int groupId = Integer.parseInt(selectedGroups[i]);
 							//Group g = GroupDAO.getInstance().getGroupById(id);
 							groupsForHw.add(groupId);
 						}
-						GroupDAO.getInstance().createHomeworkDetails(homeworkDetails, groupsForHw);
-						request.setAttribute("invalidFields", false);
 						// if its ok
 						out = new FileOutputStream(file, true);
 						filecontent = filePart.getInputStream();
@@ -184,7 +233,32 @@ public class HomeworkController {
 						while ((read = filecontent.read(bytes)) != -1) {
 							out.write(bytes, 0, read);
 						}
+						zipFile = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES  + File.separator + fileNameTests);
+						if(!zipFile.exists()){
+							zipFile.mkdirs();
+						}
+						testsFilePart.transferTo(zipFile);
+						
 						out.close();
+						filecontent.close();
+						unzippedFilesDir = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES  + File.separator + homeworkDetails.getHeading());
+						if(!unzippedFilesDir.exists()){
+							unzippedFilesDir.mkdir();
+						}
+						homeworkDetails.setTestTasksFile(unzippedFilesDir.getName());
+						unzip = new Unzipper(IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator + fileNameTests, unzippedFilesDir.getAbsolutePath());
+
+						unzip.unzip(unzip.zipFilePath, unzip.destDirectory);
+						System.out.println("We will create..");
+						System.out.println(homeworkDetails.getHeading());
+						System.out.println(homeworkDetails.getOpeningTime());
+						System.out.println(homeworkDetails.getClosingTime());
+						System.out.println(homeworkDetails.getNumberOfTasks());
+						System.out.println(homeworkDetails.getTasksFile());
+						System.out.println(homeworkDetails.getTestTasksFile());
+						GroupDAO.getInstance().createHomeworkDetails(homeworkDetails, groupsForHw);
+						System.out.println("We have created..");
+
 						ArrayList<Group> allGroupsUpdated = GroupDAO.getInstance().getAllGroupsWithoutStudents();
 						request.getServletContext().setAttribute("allGroups", allGroupsUpdated);
 						ArrayList<Teacher> allTeachers = UserDAO.getInstance().getAllTeachers();
@@ -192,10 +266,30 @@ public class HomeworkController {
 						for (Teacher t : allTeachers) {
 							t.setGroups(UserDAO.getInstance().getGroupsOfUserWithoutStudents(t.getId()));
 						}
+						//we remove zip file
+						if (zipFile.exists()) {
+							zipFile.delete();
+						}
+						request.setAttribute("invalidFields", false);
+
 					}
 				} catch (GroupException | UserException e) {
 					if (file.exists()) {
 						file.delete();
+					}
+					if (fileTests.exists()) {
+						fileTests.delete();
+					}
+					if (unzippedFilesDir.exists()) {
+						String[]entries = unzippedFilesDir.list();
+						for(String s: entries){
+						    File currentFile = new File(unzippedFilesDir.getPath(),s);
+						    currentFile.delete();
+						}
+						unzippedFilesDir.delete();
+					}
+					if (zipFile.exists()) {
+						zipFile.delete();
 					}
 					System.out.println(e.getMessage());
 					e.printStackTrace();
@@ -204,15 +298,88 @@ public class HomeworkController {
 					if (file.exists()) {
 						file.delete();
 					}
+					if (fileTests.exists()) {
+						fileTests.delete();
+					}
+					if (unzippedFilesDir.exists()) {
+						String[]entries = unzippedFilesDir.list();
+						for(String s: entries){
+						    File currentFile = new File(unzippedFilesDir.getPath(),s);
+						    currentFile.delete();
+						}
+						unzippedFilesDir.delete();
+					}
+					if (zipFile.exists()) {
+						zipFile.delete();
+					}
 					request.setAttribute("invalidFields", true);
 				} catch (NotUniqueUsernameException e) {
+					if (file.exists()) {
+						file.delete();
+					}
+					if (fileTests.exists()) {
+						fileTests.delete();
+					}
+					
+					if (unzippedFilesDir.exists()) {
+						String[]entries = unzippedFilesDir.list();
+						for(String s: entries){
+						    File currentFile = new File(unzippedFilesDir.getPath(),s);
+						    currentFile.delete();
+						}
+						unzippedFilesDir.delete();
+					}
+					if (zipFile.exists()) {
+						zipFile.delete();
+					}
 					request.setAttribute("invalidFields", true);
+					e.printStackTrace();
+				} catch (InvalidFilesExtensionInZIP e) {//todo direktoriqta ne se e mahnala
+					if (file.exists()) {
+						file.delete();
+					}
+					if (fileTests.exists()) {
+						fileTests.delete();
+					}
+					System.out.println("DOES EXISTS " + unzippedFilesDir.exists());
+					if (unzippedFilesDir.exists()) {
+						String[]entries = unzippedFilesDir.list();
+						for(String s: entries){
+						    File currentFile = new File(unzippedFilesDir.getPath(),s);
+						    currentFile.delete();
+						}
+						unzippedFilesDir.delete();
+					}
+					if (zipFile.exists()) {
+						zipFile.delete();
+					}
+					request.setAttribute("invalidFields", true);
+
 					e.printStackTrace();
 				}
 			}
 			return "addHomework";
 		}
 		return "forbiddenPage";
+	}
+
+	private boolean isHomeworkTestsFileContentTypeValid(MultipartFile testsFilePart) {
+		if (testsFilePart.getOriginalFilename().contains(".")) {
+			String contentType = testsFilePart.getOriginalFilename().substring(testsFilePart.getOriginalFilename().indexOf("."));
+			if (!(contentType.equals(".zip"))) {
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isHomeworkTestsFileSizeValid(MultipartFile testsFilePart) {
+		long sizeInMb = testsFilePart.getSize() / (1024 * 1024);
+		if (sizeInMb > IValidationsDAO.MAX_SIZE_IN_MB_FOR_HOMEWORK_ASSIGNMENT) {
+			return false;
+		}
+		return true;
 	}
 
 	private String getRandomCharacters(int length) {
@@ -247,7 +414,7 @@ public class HomeworkController {
 	}
 
 	private boolean isThereEmptyField(String heading, String opens, String closes, MultipartFile filePart,
-			String numberOfTasksString, String[] selectedGroups) {
+			MultipartFile testsFileUploaded, String numberOfTasksString, String[] selectedGroups) {
 		boolean isThereEmptyField = true;
 		if (heading != null && !(heading.trim().equals("")) && opens != null && !(opens.trim().equals(""))
 				&& closes != null && !(closes.trim().equals("")) && numberOfTasksString != null
@@ -255,7 +422,7 @@ public class HomeworkController {
 			isThereEmptyField = false;
 			//return false;
 		}
-		if (!(filePart != null && filePart.getSize() != 0)) {
+		if (!(filePart != null && filePart.getSize() != 0 && testsFileUploaded != null && testsFileUploaded.getSize() != 0 ) ) {
 			isThereEmptyField = true;
 			//return false;
 		}
@@ -582,15 +749,15 @@ public class HomeworkController {
 							doesUserHaveGroup = true;
 							break;
 						}
-					}
+					}//TODO dobavih gettasksfile - trqbva li mi nqkade?
 					if (doesUserHaveGroup) {
 						ArrayList<HomeworkDetails> homeworks = new ArrayList<>();
 						for (HomeworkDetails h : group.getHomeworks()) {
 							long days = LocalDateTime.now().until(h.getClosingTime(), ChronoUnit.DAYS);
 							HomeworkDetails currHd = new HomeworkDetails(h.getHeading(), h.getOpeningTime(),
-									h.getClosingTime(), h.getNumberOfTasks(), h.getTasksFile());
+									h.getClosingTime(), h.getNumberOfTasks(), h.getTasksFile(), h.getTestTasksFile());
 							currHd.setDaysLeft((int) days);
-							currHd.setId(GroupDAO.getInstance().getHomeworkDetailsId(currHd));
+							currHd.setId(GroupDAO.getInstance().getHomeworkDetailsId(currHd.getHeading()));
 							homeworks.add(currHd);
 						}
 						request.getSession().setAttribute("chosenGroup", groupId);
@@ -637,7 +804,7 @@ public class HomeworkController {
 						canUserAccessHomeworkTasks = true;
 					}
 					if (canUserAccessHomeworkTasks) {
-						File file = new File(IValidationsDAO.SAVE_DIR + File.separator + fileName);
+						File file = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_FILES_PDF + File.separator + fileName);
 						if (!file.exists()) {
 							response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 							return;
@@ -673,15 +840,37 @@ public class HomeworkController {
 				&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("taskNum"))) {
 			Homework homework = (Homework) request.getSession().getAttribute("currHomework");
 			HomeworkDetails homeworkDetails = homework.getHomeworkDetails();
+			if(homeworkDetails.getOpeningTime().isBefore(LocalDateTime.now())&&homeworkDetails.getClosingTime().isAfter(LocalDateTime.now())){
+
 			String text = request.getParameter("text");
 			int taskNum = Integer.parseInt(request.getParameter("taskNum")) - 1;
 			if (doesTaskNumExist(taskNum, homeworkDetails)) {
-				String fileName = IValidationsDAO.SAVE_DIR + File.separator + "hwId" + homeworkDetails.getId()
-						+ "userId" + user.getId() + "taskNum" + taskNum + ".java";
+				File directory = new File((IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA + File.separator + "hwId" + homeworkDetails.getId()+ "userId" + user.getId() + "taskNum" + taskNum));
+				//String strLine = "";
+				System.out.println("1111111");
+				if (directory.exists()) {				System.out.println("22222");
+
+					String fileName = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA + File.separator + "hwId" + homeworkDetails.getId()+ "userId" + user.getId() + "taskNum" + taskNum).listFiles()[0].getAbsoluteFile().getName();
+					if(fileName == null){				System.out.println("444444");
+
+					//strLine = new String(Files.readAllBytes(Paths.get(fileName)), "UTF8");
+						response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
+						return;
+					}
+				} else {
+					response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
+					return;
+				}
+//				String fileName = IValidationsDAO.SAVE_DIR + File.separator + "hwId" + homeworkDetails.getId()
+//						+ "userId" + user.getId() + "taskNum" + taskNum + ".java";
+				File currentFile = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA + File.separator + "hwId" + homeworkDetails.getId()
+				+ "userId" + user.getId() + "taskNum" + taskNum).listFiles()[0].getAbsoluteFile();
 				if (text.trim().length() > IValidationsDAO.MIN_NUMBER_OF_CHARACTERS_SOLUTION_TASK
 						&& text.length() < IValidationsDAO.MAX_NUMBER_OF_CHARACTERS_SOLUTION_TASK_1_MB) {
-					Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8"));
+					System.out.println("FILE " + currentFile.getAbsolutePath());
+					Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(currentFile.getAbsolutePath()), "UTF-8"));
 					out.write(text);
+					System.out.println(text);
 					out.flush();
 					out.close();
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -691,17 +880,23 @@ public class HomeworkController {
 					try {
 						UserDAO.getInstance().setTimeOfUploadOfTask(homeworkDetails.getId(), user.getId(), taskNum, currDateTime);
 						homework.getTasks().get(taskNum).setUploadedOn(currDateTime);
+					//	UserDAO.getInstance().getTasksOfHomeworkOfStudent(user.getId(), homeworkDetailsId);
 					} catch (UserException e) {
 						response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
 						return;
 					}
-					response.setStatus(IValidationsDAO.SUCCESS_STATUS);
+						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
+					} else {
+						response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
+					}
 				} else {
-					response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
+					response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 				}
 			} else {
-				response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
+				response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 			}
+		} else {
+			response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 		}
 	}
 
@@ -715,49 +910,80 @@ public class HomeworkController {
 	@RequestMapping(value = "/readSolutionOfTaskJava", method = RequestMethod.GET)
 	protected void readJavaFile(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (request.getSession().getAttribute("currHomework") != null && request.getParameter("taskNum") != null && !request.getParameter("taskNum").trim().equals("") && ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("taskNum").trim())) {
-				int taskNum = Integer.parseInt(request.getParameter("taskNum").trim()) - 1;
-				User user = (User) request.getSession().getAttribute("user");
-					Homework homework = (Homework) request.getSession().getAttribute("currHomework");
-					HomeworkDetails homeworkDetails = homework.getHomeworkDetails();
-					String fileName = null;
-					if (!user.isTeacher()) {
-						fileName = IValidationsDAO.SAVE_DIR + File.separator + "hwId" + homeworkDetails.getId()
-								+ "userId" + user.getId() + "taskNum" + taskNum + ".java";
-					} else {
-						if(request.getSession().getAttribute("studentId") == null){
-							response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
-							return;
-						}else{
-						int studentId = (int) request.getSession().getAttribute("studentId");
-						fileName = IValidationsDAO.SAVE_DIR + File.separator + "hwId" + homeworkDetails.getId()
-								+ "userId" + studentId + "taskNum" + taskNum + ".java";
-						}
-					}
-					File f = new File(fileName);
-					String strLine = "";
-					if (f.exists()) {
-						strLine = new String(Files.readAllBytes(Paths.get(fileName)), "UTF8");
-					} else {
-						strLine = "Solution is not uploaded yet.";
-					}
-					JsonObject obj = new JsonObject();
-					if (homework.getTasks().size() > taskNum && taskNum >= 0) {
-						Task task = homework.getTasks().get(taskNum);
-						if (strLine.equals("Solution is not uploaded yet.")) {
-							obj.addProperty("uploadedOn", "-");
-							obj.addProperty("solution", strLine);
-						} else {
-							obj.addProperty("uploadedOn", task.getUploadedOn().toString());
-							obj.addProperty("solution", strLine);
-						}
-						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
-						response.getWriter().write(obj.toString());
-					} else {
-						response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
-						return;
+		if (request.getSession().getAttribute("currHomework") != null && request.getParameter("taskNum") != null
+				&& !request.getParameter("taskNum").trim().equals("")
+				&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("taskNum").trim())) {
+			int taskNum = Integer.parseInt(request.getParameter("taskNum").trim()) - 1;
+			User user = (User) request.getSession().getAttribute("user");
+			Homework homework = (Homework) request.getSession().getAttribute("currHomework");
+			HomeworkDetails homeworkDetails = homework.getHomeworkDetails();
+			String fileName = null;
+			int idOfStudentForHw = -1;
+			if (!user.isTeacher()) {
+				idOfStudentForHw = user.getId();
+				// fileName = ((new File(IValidationsDAO.SAVE_DIR +
+				// File.separator + "hwId" + homeworkDetails.getId()
+				// + "userId" + user.getId() + "taskNum" +
+				// taskNum).listFiles()[0] != null) ? (new
+				// File(IValidationsDAO.SAVE_DIR + File.separator + "hwId" +
+				// homeworkDetails.getId()
+				// + "userId" + user.getId() + "taskNum" +
+				// taskNum).listFiles()[0].getAbsoluteFile().getName()) : null);
+				// fileName = currentFile.getAbsolutePath();
+				// fileName = UserDAO.getInstance().
+				// System.out.println("WE READ FILE " + fileName);
 
-					}
+				// fileName = IValidationsDAO.SAVE_DIR + File.separator + "hwId"
+				// + homeworkDetails.getId()
+				// + "userId" + user.getId() + "taskNum" + taskNum + ".java";
+			} else {
+				if (request.getSession().getAttribute("studentId") == null || (!ValidationsDAO.getInstance()
+						.isStringValidInteger(request.getParameter("studentId").trim()))) {
+					response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
+					return;
+				} else {
+					idOfStudentForHw = (int) request.getSession().getAttribute("studentId");
+					// fileName = new File(IValidationsDAO.SAVE_DIR +
+					// File.separator + "hwId" + homeworkDetails.getId()
+					// + "userId" + studentId + "taskNum" +
+					// taskNum).listFiles()[0].getAbsoluteFile().getName();
+					// fileName = currentFile.getAbsolutePath();
+					// fileName = IValidationsDAO.SAVE_DIR + File.separator +
+					// "hwId" + homeworkDetails.getId()
+					// + "userId" + studentId + "taskNum" + taskNum + ".java";
+				}
+			}
+			File directory = new File((IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA + File.separator + "hwId" + homeworkDetails.getId()
+					+ "userId" + idOfStudentForHw + "taskNum" + taskNum));
+			String strLine = "";
+			if (directory.exists()) {
+				fileName = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA + File.separator + "hwId" + homeworkDetails.getId()
+						+ "userId" + idOfStudentForHw + "taskNum" + taskNum).listFiles()[0].getAbsolutePath();
+				if (fileName != null) {
+					strLine = new String(Files.readAllBytes(Paths.get(fileName)), "UTF8");
+				} else {
+					strLine = "Solution is not uploaded yet.";
+				}
+			} else {
+				strLine = "Solution is not uploaded yet.";
+			}
+			JsonObject obj = new JsonObject();
+			if (homework.getTasks().size() > taskNum && taskNum >= 0) {
+				Task task = homework.getTasks().get(taskNum);
+				if (strLine.equals("Solution is not uploaded yet.")) {
+					obj.addProperty("uploadedOn", "-");
+					obj.addProperty("solution", strLine);
+				} else {
+					obj.addProperty("uploadedOn", task.getUploadedOn().toString());
+					obj.addProperty("solution", strLine);
+				}
+				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
+				response.getWriter().write(obj.toString());
+			} else {
+				response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
+				return;
+
+			}
 		} else {
 			response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 			return;
@@ -1187,220 +1413,220 @@ public class HomeworkController {
 		return "forbiddenPage";
 	}
 
-	@RequestMapping(value = "/updateHomework", method = RequestMethod.POST)
-	protected String updateHomework(HttpServletRequest request,
-			@RequestParam(value = "file") MultipartFile fileMultiPart, HttpServletResponse response)
-			throws ServletException, IOException {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user.isTeacher()) {
-			if (request.getSession().getAttribute("currHomework") != null) {
-				File newFile = null;
-				boolean isFileNameChanged = false;
-				try {
-					// empty fields (except file)
-					boolean isFileEmpty = fileMultiPart.getOriginalFilename().isEmpty();
-					boolean emptyFields = false;
-					if (!isFileEmpty) {
-						emptyFields = isThereEmptyFieldUpdateHomework(request.getParameter("name").trim(),
-								request.getParameter("opens").trim().replace("/", "-"),
-								request.getParameter("closes").trim().replace("/", "-"), fileMultiPart,
-								request.getParameter("numberOfTasks").trim(), request.getParameterValues("groups"));
-					} else {
-						emptyFields = isThereEmptyFieldUpdateHomeworkNoFileUploaded(request.getParameter("name").trim(),
-								request.getParameter("opens").trim().replace("/", "-"),
-								request.getParameter("closes").trim().replace("/", "-"),
-								request.getParameter("numberOfTasks").trim(), request.getParameterValues("groups"));
-					}
-					if (emptyFields) {
-						request.getSession().setAttribute("emptyFields", true);
-					} else {
-						int homeworkDetailsId = ((HomeworkDetails) request.getSession().getAttribute("currHomework"))
-								.getId();
-						String heading = request.getParameter("name").trim();
-						String fileName = " ";
-						String[] selectedGroups = request.getParameterValues("groups");
-						MultipartFile filePart = fileMultiPart;
-						String opens = request.getParameter("opens").trim().replace("/", "-");
-						String closes = request.getParameter("closes").trim().replace("/", "-");
-						String numberOfTasksString = request.getParameter("numberOfTasks").trim();
-						HomeworkDetails currHd = null;
-						currHd = GroupDAO.getInstance().getHomeworkDetailsById(homeworkDetailsId);
-						// valid heading
-						int numberOfTasks = 0;
-						boolean isHeadingValid = false;
-						boolean isHeadingUnique = false;
-						if (areHomeworkUpdateCharactersValid(heading) && isHomeworkUpdateLengthValid(heading)) {
-							isHeadingValid = true;
-							if (isHomeworkUpdateHeadingUnique(heading, currHd)) {
-								isHeadingUnique = true;
-							}
-						}
-						request.getSession().setAttribute("validHeading", isHeadingValid);
-						request.getSession().setAttribute("uniqueHeading", isHeadingUnique); // unique
-						// heading
-						// opening time
-						boolean isOpeningTimeValid = false;
-						if (isHomeworkUpdateOpeningTimeValid(opens, currHd)) {
-							isOpeningTimeValid = true;
-						}
-						request.getSession().setAttribute("validOpeningTime", isOpeningTimeValid);
-						// closing time
-						boolean isClosingTimeValid = false;
-						if (isHomeworkUpdateClosingTimeValid(opens, closes, currHd)) {
-							isClosingTimeValid = true;
-						}
-						request.getSession().setAttribute("validClosingTime", isClosingTimeValid);
-						// numTasks
-						boolean areTasksValid = false;
-						if (isHomeworkNumberOfTasksANumber(numberOfTasksString)) {
-							numberOfTasks = Integer.parseInt(request.getParameter("numberOfTasks"));
-							if (isHomeworkUpdateNumberOfTasksValid(numberOfTasks)) {
-								areTasksValid = true;
-							}
-						}
-						request.getSession().setAttribute("validTasks", areTasksValid);
-						// do all groups exist
-						boolean areGroupsValid = false;
-						if (doAllGroupsExistHomeworkUpdate(selectedGroups)) {
-							areGroupsValid = true;
-						}
-						request.getSession().setAttribute("validGroups", areGroupsValid);
-						boolean isFileValid = false;
-						if (filePart.getSize() == 0) {
-							isFileValid = true;
-						} else {
-							if (isFileUpdateHomeworkValid(filePart)) {
-								isFileValid = true;
-							}
-						}
-						request.getSession().setAttribute("validFile", isFileValid);
-						if (isHeadingValid == true && isHeadingUnique == true && isOpeningTimeValid == true
-								&& isClosingTimeValid == true && areTasksValid == true && areGroupsValid == true
-								&& isFileValid == true) {
-							// fileName = "hwName" + heading + ".pdf";
-							fileName = filePart.getOriginalFilename();
-							newFile = new File(IValidationsDAO.SAVE_DIR + File.separator + fileName);
-							File oldFile = null;
-							// if (!newFile.exists()) {
-							//
-							if (!fileName.equals(currHd.getTasksFile()) && !(fileName.trim().equals(""))) {
-								String oldNameOfFile = currHd.getTasksFile();
-								oldFile = new File(IValidationsDAO.SAVE_DIR + File.separator + oldNameOfFile);// remove
-								isFileNameChanged = true;
-								// String oldNameOfFile;
-								// oldNameOfFile = ((HomeworkDetails)
-								// GroupDAO.getInstance()
-								// .getHomeworkDetailsById(homeworkDetailsId)).getHeading();
-								// oldFile = new File(IValidationsDAO.SAVE_DIR +
-								// File.separator + "hwName" + oldNameOfFile +
-								// ".pdf");
-								// Files.copy(oldFile.toPath(),
-								// newFile.toPath());
-								if (filePart.getSize() != 0) {
-									// isFileValid = true;
-									String savePath = IValidationsDAO.SAVE_DIR;
-									File fileSaveDir = new File(savePath);
-									if (!fileSaveDir.exists()) {
-										fileSaveDir.mkdir();
-									}
-									// final String fileName =
-									// extractFileName(filePart);
-									// fileName = "hwName" + heading + ".pdf";
-									while (newFile.exists()) {
-										Random randomGenerator = new Random();
-										int randomLength = randomGenerator.nextInt((7 - 1) + 1) + 1;
-										String randomString = this.getRandomCharacters(randomLength);
-										fileName = filePart.getOriginalFilename().substring(0,
-												filePart.getOriginalFilename().length() - 4) + randomString + ".pdf";
-										newFile = new File(IValidationsDAO.SAVE_DIR + File.separator + fileName);
-									}
-									newFile.createNewFile();
-								} else {
-									fileName = heading;
-								}
-							}
-							if (filePart.getSize() != 0) {
-								OutputStream out = null;
-								InputStream filecontent = null;
-								out = new FileOutputStream(newFile, true);
-								filecontent = filePart.getInputStream();
-								int read = 0;
-								final byte[] bytes = new byte[1024];
-
-								while ((read = filecontent.read(bytes)) != -1) {
-									out.write(bytes, 0, read);
-								}
-								// if (oldFile != null) {
-								// oldFile.delete();
-								// }
-								// System.out.println("Old file " +
-								// oldFile.getAbsolutePath() + "");
-								if (oldFile != null) {
-									oldFile.delete();
-								}
-								out.flush();
-								out.close();
-							}
-							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-							LocalDateTime openingTime = LocalDateTime.parse(opens, formatter);
-							LocalDateTime closingTime = LocalDateTime.parse(closes, formatter);
-							ArrayList<Integer> groupsForHw = new ArrayList<>();
-							HomeworkDetails homeworkDetails = null;
-							if (isFileNameChanged) {
-								homeworkDetails = new HomeworkDetails(homeworkDetailsId, heading, openingTime,
-										closingTime, numberOfTasks, fileName);
-							} else {
-								if (fileName.equals("")) {
-									fileName = currHd.getTasksFile();
-								}
-								homeworkDetails = new HomeworkDetails(homeworkDetailsId, heading, openingTime,
-										closingTime, numberOfTasks, fileName);
-							}
-							if (request.getParameterValues("groups") != null) {
-								for (int i = 0; i < selectedGroups.length; i++) {
-									int id = Integer.parseInt(selectedGroups[i]);
-									//Group g = GroupDAO.getInstance().getGroupById(id);
-									groupsForHw.add(id);
-								}
-							}
-							GroupDAO.getInstance().updateHomeworkDetails(homeworkDetails, groupsForHw);
-							request.getSession().setAttribute("currHomework", homeworkDetails);
-							request.getServletContext().removeAttribute("allGroups");
-							ArrayList<Group> allGroups = GroupDAO.getInstance().getAllGroupsWithoutStudents();
-							request.getServletContext().setAttribute("allGroups", allGroups);
-							//ne ni trqbvat u4enicite
-							user.setGroups(UserDAO.getInstance().getGroupsOfUserWithoutStudents(user.getId()));
-							request.getSession().setAttribute("invalidFields", false);
-
-						}
-					}
-				} catch (GroupException | UserException e) {
-					if (isFileNameChanged) {
-						if (newFile.exists()) {
-							newFile.delete();
-						}
-					}
-					System.out.println(e.getMessage());
-					e.printStackTrace();
-					return "exception";
-				} catch (ValidationException e) {
-					if (isFileNameChanged) {
-						if (newFile.exists()) {
-							newFile.delete();
-						}
-					}
-					request.getSession().setAttribute("invalidFields", true);
-				} catch (NotUniqueUsernameException e) {
-					request.getSession().setAttribute("invalidFields", true);
-					e.printStackTrace();
-				}
-				return "redirect:./updateHomework";
-			} else {
-				return "pageNotFound";
-			}
-		}
-		return "forbiddenPage";
-	}
+//	@RequestMapping(value = "/updateHomework", method = RequestMethod.POST)
+//	protected String updateHomework(HttpServletRequest request,
+//			@RequestParam(value = "file") MultipartFile fileMultiPart, HttpServletResponse response)
+//			throws ServletException, IOException {
+//		User user = (User) request.getSession().getAttribute("user");
+//		if (user.isTeacher()) {
+//			if (request.getSession().getAttribute("currHomework") != null) {
+//				File newFile = null;
+//				boolean isFileNameChanged = false;
+//				try {
+//					// empty fields (except file)
+//					boolean isFileEmpty = fileMultiPart.getOriginalFilename().isEmpty();
+//					boolean emptyFields = false;
+//					if (!isFileEmpty) {
+//						emptyFields = isThereEmptyFieldUpdateHomework(request.getParameter("name").trim(),
+//								request.getParameter("opens").trim().replace("/", "-"),
+//								request.getParameter("closes").trim().replace("/", "-"), fileMultiPart,
+//								request.getParameter("numberOfTasks").trim(), request.getParameterValues("groups"));
+//					} else {
+//						emptyFields = isThereEmptyFieldUpdateHomeworkNoFileUploaded(request.getParameter("name").trim(),
+//								request.getParameter("opens").trim().replace("/", "-"),
+//								request.getParameter("closes").trim().replace("/", "-"),
+//								request.getParameter("numberOfTasks").trim(), request.getParameterValues("groups"));
+//					}
+//					if (emptyFields) {
+//						request.getSession().setAttribute("emptyFields", true);
+//					} else {
+//						int homeworkDetailsId = ((HomeworkDetails) request.getSession().getAttribute("currHomework"))
+//								.getId();
+//						String heading = request.getParameter("name").trim();
+//						String fileName = " ";
+//						String[] selectedGroups = request.getParameterValues("groups");
+//						MultipartFile filePart = fileMultiPart;
+//						String opens = request.getParameter("opens").trim().replace("/", "-");
+//						String closes = request.getParameter("closes").trim().replace("/", "-");
+//						String numberOfTasksString = request.getParameter("numberOfTasks").trim();
+//						HomeworkDetails currHd = null;
+//						currHd = GroupDAO.getInstance().getHomeworkDetailsById(homeworkDetailsId);
+//						// valid heading
+//						int numberOfTasks = 0;
+//						boolean isHeadingValid = false;
+//						boolean isHeadingUnique = false;
+//						if (areHomeworkUpdateCharactersValid(heading) && isHomeworkUpdateLengthValid(heading)) {
+//							isHeadingValid = true;
+//							if (isHomeworkUpdateHeadingUnique(heading, currHd)) {
+//								isHeadingUnique = true;
+//							}
+//						}
+//						request.getSession().setAttribute("validHeading", isHeadingValid);
+//						request.getSession().setAttribute("uniqueHeading", isHeadingUnique); // unique
+//						// heading
+//						// opening time
+//						boolean isOpeningTimeValid = false;
+//						if (isHomeworkUpdateOpeningTimeValid(opens, currHd)) {
+//							isOpeningTimeValid = true;
+//						}
+//						request.getSession().setAttribute("validOpeningTime", isOpeningTimeValid);
+//						// closing time
+//						boolean isClosingTimeValid = false;
+//						if (isHomeworkUpdateClosingTimeValid(opens, closes, currHd)) {
+//							isClosingTimeValid = true;
+//						}
+//						request.getSession().setAttribute("validClosingTime", isClosingTimeValid);
+//						// numTasks
+//						boolean areTasksValid = false;
+//						if (isHomeworkNumberOfTasksANumber(numberOfTasksString)) {
+//							numberOfTasks = Integer.parseInt(request.getParameter("numberOfTasks"));
+//							if (isHomeworkUpdateNumberOfTasksValid(numberOfTasks)) {
+//								areTasksValid = true;
+//							}
+//						}
+//						request.getSession().setAttribute("validTasks", areTasksValid);
+//						// do all groups exist
+//						boolean areGroupsValid = false;
+//						if (doAllGroupsExistHomeworkUpdate(selectedGroups)) {
+//							areGroupsValid = true;
+//						}
+//						request.getSession().setAttribute("validGroups", areGroupsValid);
+//						boolean isFileValid = false;
+//						if (filePart.getSize() == 0) {
+//							isFileValid = true;
+//						} else {
+//							if (isFileUpdateHomeworkValid(filePart)) {
+//								isFileValid = true;
+//							}
+//						}
+//						request.getSession().setAttribute("validFile", isFileValid);
+//						if (isHeadingValid == true && isHeadingUnique == true && isOpeningTimeValid == true
+//								&& isClosingTimeValid == true && areTasksValid == true && areGroupsValid == true
+//								&& isFileValid == true) {
+//							// fileName = "hwName" + heading + ".pdf";
+//							fileName = filePart.getOriginalFilename();
+//							newFile = new File(IValidationsDAO.SAVE_DIR + File.separator + fileName);
+//							File oldFile = null;
+//							// if (!newFile.exists()) {
+//							//
+//							if (!fileName.equals(currHd.getTasksFile()) && !(fileName.trim().equals(""))) {
+//								String oldNameOfFile = currHd.getTasksFile();
+//								oldFile = new File(IValidationsDAO.SAVE_DIR + File.separator + oldNameOfFile);// remove
+//								isFileNameChanged = true;
+//								// String oldNameOfFile;
+//								// oldNameOfFile = ((HomeworkDetails)
+//								// GroupDAO.getInstance()
+//								// .getHomeworkDetailsById(homeworkDetailsId)).getHeading();
+//								// oldFile = new File(IValidationsDAO.SAVE_DIR +
+//								// File.separator + "hwName" + oldNameOfFile +
+//								// ".pdf");
+//								// Files.copy(oldFile.toPath(),
+//								// newFile.toPath());
+//								if (filePart.getSize() != 0) {
+//									// isFileValid = true;
+//									String savePath = IValidationsDAO.SAVE_DIR;
+//									File fileSaveDir = new File(savePath);
+//									if (!fileSaveDir.exists()) {
+//										fileSaveDir.mkdir();
+//									}
+//									// final String fileName =
+//									// extractFileName(filePart);
+//									// fileName = "hwName" + heading + ".pdf";
+//									while (newFile.exists()) {
+//										Random randomGenerator = new Random();
+//										int randomLength = randomGenerator.nextInt((7 - 1) + 1) + 1;
+//										String randomString = this.getRandomCharacters(randomLength);
+//										fileName = filePart.getOriginalFilename().substring(0,
+//												filePart.getOriginalFilename().length() - 4) + randomString + ".pdf";
+//										newFile = new File(IValidationsDAO.SAVE_DIR + File.separator + fileName);
+//									}
+//									newFile.createNewFile();
+//								} else {
+//									fileName = heading;
+//								}
+//							}
+//							if (filePart.getSize() != 0) {
+//								OutputStream out = null;
+//								InputStream filecontent = null;
+//								out = new FileOutputStream(newFile, true);
+//								filecontent = filePart.getInputStream();
+//								int read = 0;
+//								final byte[] bytes = new byte[1024];
+//
+//								while ((read = filecontent.read(bytes)) != -1) {
+//									out.write(bytes, 0, read);
+//								}
+//								// if (oldFile != null) {
+//								// oldFile.delete();
+//								// }
+//								// System.out.println("Old file " +
+//								// oldFile.getAbsolutePath() + "");
+//								if (oldFile != null) {
+//									oldFile.delete();
+//								}
+//								out.flush();
+//								out.close();
+//							}
+//							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+//							LocalDateTime openingTime = LocalDateTime.parse(opens, formatter);
+//							LocalDateTime closingTime = LocalDateTime.parse(closes, formatter);
+//							ArrayList<Integer> groupsForHw = new ArrayList<>();
+//							HomeworkDetails homeworkDetails = null;
+//							if (isFileNameChanged) {
+//								homeworkDetails = new HomeworkDetails(homeworkDetailsId, heading, openingTime,
+//										closingTime, numberOfTasks, fileName);
+//							} else {
+//								if (fileName.equals("")) {
+//									fileName = currHd.getTasksFile();
+//								}
+//								homeworkDetails = new HomeworkDetails(homeworkDetailsId, heading, openingTime,
+//										closingTime, numberOfTasks, fileName);
+//							}
+//							if (request.getParameterValues("groups") != null) {
+//								for (int i = 0; i < selectedGroups.length; i++) {
+//									int id = Integer.parseInt(selectedGroups[i]);
+//									//Group g = GroupDAO.getInstance().getGroupById(id);
+//									groupsForHw.add(id);
+//								}
+//							}
+//							GroupDAO.getInstance().updateHomeworkDetails(homeworkDetails, groupsForHw);
+//							request.getSession().setAttribute("currHomework", homeworkDetails);
+//							request.getServletContext().removeAttribute("allGroups");
+//							ArrayList<Group> allGroups = GroupDAO.getInstance().getAllGroupsWithoutStudents();
+//							request.getServletContext().setAttribute("allGroups", allGroups);
+//							//ne ni trqbvat u4enicite
+//							user.setGroups(UserDAO.getInstance().getGroupsOfUserWithoutStudents(user.getId()));
+//							request.getSession().setAttribute("invalidFields", false);
+//
+//						}
+//					}
+//				} catch (GroupException | UserException e) {
+//					if (isFileNameChanged) {
+//						if (newFile.exists()) {
+//							newFile.delete();
+//						}
+//					}
+//					System.out.println(e.getMessage());
+//					e.printStackTrace();
+//					return "exception";
+//				} catch (ValidationException e) {
+//					if (isFileNameChanged) {
+//						if (newFile.exists()) {
+//							newFile.delete();
+//						}
+//					}
+//					request.getSession().setAttribute("invalidFields", true);
+//				} catch (NotUniqueUsernameException e) {
+//					request.getSession().setAttribute("invalidFields", true);
+//					e.printStackTrace();
+//				}
+//				return "redirect:./updateHomework";
+//			} else {
+//				return "pageNotFound";
+//			}
+//		}
+//		return "forbiddenPage";
+//	}
 
 	private boolean isFileUpdateHomeworkValid(MultipartFile filePart) {
 		if (isHomeworkUpdateContentTypeValid(filePart) && isHomeworkUpdateSizeValid(filePart)) {
@@ -1652,7 +1878,7 @@ public class HomeworkController {
 		}
 		return "forbiddenPage";
 	}
-
+	//ckeck uploadTimeIsCorrect
 	@RequestMapping(value = "/uploadSolutionToTaskJava", method = RequestMethod.POST)
 	protected void uploadSolution(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam("datafile") MultipartFile uploadfile) throws ServletException, IOException {
@@ -1662,15 +1888,13 @@ public class HomeworkController {
 			if (request.getSession().getAttribute("currHomework") != null && request.getParameter("taskNum") != null
 					&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("taskNum"))) {
 				
-				String savePath = IValidationsDAO.SAVE_DIR;
+				String savePath = IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA;
 				int taskNum = Integer.parseInt(request.getParameter("taskNum")) - 1;
 				Homework homework = (Homework) request.getSession().getAttribute("currHomework");
 				HomeworkDetails homeworkDetails = homework.getHomeworkDetails();
+				if(homeworkDetails.getOpeningTime().isBefore(LocalDateTime.now())&&homeworkDetails.getClosingTime().isAfter(LocalDateTime.now())){
 				// creates the save directory if it does not exists
-				File fileSaveDir = new File(savePath);
-				if (!fileSaveDir.exists()) {
-					fileSaveDir.mkdir();
-				}
+				
 				String fileName = " ";
 				MultipartFile file = uploadfile;
 				if (!isFileEmptyUploadSolution(file)) {
@@ -1683,27 +1907,51 @@ public class HomeworkController {
 							return;
 						} else {
 							if (doesTaskNumExist(taskNum, homeworkDetails)) {
-								fileName = "hwId" + homeworkDetails.getId() + "userId" + user.getId() + "taskNum"
-										+ taskNum + ".java";
-								file.transferTo(new File(savePath + File.separator + fileName));
+								String fileDirectory = "hwId" + homeworkDetails.getId() + "userId" + user.getId() + "taskNum"
+										+ taskNum;
+								File fileSaveDir = new File(savePath + File.separator + fileDirectory);
+								if (!fileSaveDir.exists()) {
+									fileSaveDir.mkdir();
+								}
+								fileName = file.getOriginalFilename();
+								File newFile = null;
+								//file.transferTo(new File(savePath +File.separator + fileDirectory+ File.separator + fileName));
+								if(fileSaveDir.listFiles().length == 0){
+									newFile = new File(savePath +File.separator+fileDirectory+ File.separator + fileName);
+									if(!newFile.exists()){
+										newFile.createNewFile();
+									}
+								}else{
+									file.transferTo(new File(fileSaveDir.listFiles()[0].getAbsolutePath()));
+									new File(fileSaveDir.listFiles()[0].getAbsolutePath()).renameTo(new File(savePath +File.separator+fileDirectory+ File.separator + fileName));
+								}
 								try {
 									DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 									LocalDateTime currDateTime = LocalDateTime.now();
 									  String currDateTimeString = currDateTime.format(formatter);
 									  currDateTime = LocalDateTime.parse(currDateTimeString, formatter);
 									UserDAO.getInstance().setSolutionOfTask(homeworkDetails.getId(), user.getId(), taskNum,
-											fileName, currDateTime);
+											fileDirectory+ File.separator + fileName, currDateTime);
 									homework.getTasks().get(taskNum).setSolution(fileName);
 									homework.getTasks().get(taskNum).setUploadedOn(currDateTime);
+									//TODO has passed system score
+									GroupDAO.getInstance().doesPassSystemTest(fileDirectory+ File.separator + fileName,homework, taskNum);
+									
+									
+									
+									
 //									request.getSession().setAttribute("invalidFields", false);
 								} catch (UserException e) {
-									File f = new File(savePath + File.separator + fileName);
+									File f = new File(savePath +File.separator + fileDirectory+ File.separator + fileName);
 									if (f.exists()) {
 										f.delete();
-									}
+									} 
 									System.out.println(e.getMessage());
 									e.printStackTrace();
 									response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
 								}
 							} else {
 								response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
@@ -1717,6 +1965,9 @@ public class HomeworkController {
 				}
 				request.getSession().setAttribute("currTaskUpload", taskNum);
 				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
+				}else{
+					response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
+				}
 			} else {
 				response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 			}
@@ -1724,6 +1975,79 @@ public class HomeworkController {
 			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
+
+
+//	@RequestMapping(value = "/uploadSolutionToTaskJava", method = RequestMethod.POST)
+//	protected void uploadSolution(HttpServletRequest request, HttpServletResponse response,
+//			@RequestParam("datafile") MultipartFile uploadfile) throws ServletException, IOException {
+//
+//		User user = (User) request.getSession().getAttribute("user");
+//		if (!user.isTeacher()) {
+//			if (request.getSession().getAttribute("currHomework") != null && request.getParameter("taskNum") != null
+//					&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("taskNum"))) {
+//				
+//				String savePath = IValidationsDAO.SAVE_DIR;
+//				int taskNum = Integer.parseInt(request.getParameter("taskNum")) - 1;
+//				Homework homework = (Homework) request.getSession().getAttribute("currHomework");
+//				HomeworkDetails homeworkDetails = homework.getHomeworkDetails();
+//				// creates the save directory if it does not exists
+//				File fileSaveDir = new File(savePath);
+//				if (!fileSaveDir.exists()) {
+//					fileSaveDir.mkdir();
+//				}
+//				String fileName = " ";
+//				MultipartFile file = uploadfile;
+//				if (!isFileEmptyUploadSolution(file)) {
+//					if (!isSizeValidUploadSolution(file)) {
+//						response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
+//						return;
+//					} else {
+//						if (!isContentTypeValidUploadSolution(file)) {
+//							response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
+//							return;
+//						} else {
+//							if (doesTaskNumExist(taskNum, homeworkDetails)) {
+//								fileName = "hwId" + homeworkDetails.getId() + "userId" + user.getId() + "taskNum"
+//										+ taskNum + ".java";
+//								file.transferTo(new File(savePath + File.separator + fileName));
+//								try {
+//									DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//									LocalDateTime currDateTime = LocalDateTime.now();
+//									  String currDateTimeString = currDateTime.format(formatter);
+//									  currDateTime = LocalDateTime.parse(currDateTimeString, formatter);
+//									UserDAO.getInstance().setSolutionOfTask(homeworkDetails.getId(), user.getId(), taskNum,
+//											fileName, currDateTime);
+//									homework.getTasks().get(taskNum).setSolution(fileName);
+//									homework.getTasks().get(taskNum).setUploadedOn(currDateTime);
+////									request.getSession().setAttribute("invalidFields", false);
+//								} catch (UserException e) {
+//									File f = new File(savePath + File.separator + fileName);
+//									if (f.exists()) {
+//										f.delete();
+//									}
+//									System.out.println(e.getMessage());
+//									e.printStackTrace();
+//									response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
+//								}
+//							} else {
+//								response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
+//								return;
+//							}
+//						}
+//					}
+//				}else{
+//					response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
+//					return;
+//				}
+//				request.getSession().setAttribute("currTaskUpload", taskNum);
+//				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
+//			} else {
+//				response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
+//			}
+//		} else {
+//			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
+//		}
+//	}
 
 	private boolean isContentTypeValidUploadSolution(MultipartFile file) {
 		String contentType = file.getOriginalFilename().substring(file.getOriginalFilename().indexOf("."));

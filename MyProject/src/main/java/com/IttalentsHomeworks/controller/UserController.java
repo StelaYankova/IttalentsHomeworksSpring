@@ -1,7 +1,5 @@
 package com.IttalentsHomeworks.controller;
-import org.apache.commons.collections.MultiHashMap;
-import org.apache.commons.collections.MultiMap;
-import org.apache.commons.collections.map.MultiValueMap;
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
@@ -182,7 +180,7 @@ public class UserController {
 		return "homePage";
 	}
 
-//	@RequestMapping(value = "/login", method = RequestMethod.GET)
+//	@RequestMapping(value = "/", method = RequestMethod.GET)
 //	protected String loginGet(HttpServletRequest request, HttpServletResponse response)
 //			throws ServletException, IOException {
 //		return "homePage";
@@ -544,11 +542,16 @@ public class UserController {
 				newUser.setId(userId);
 				try {
 					UserDAO.getInstance().updateUser(newUser, user.getPassword());
+					newUser = UserDAO.getInstance().getUserByUsername(username);
 					request.setAttribute("invalidFields", false);
-					if(!password.equals(user.getPassword())){
-						String encryptedPassword = ValidationsDAO.getInstance().encryptPass(password);
-						newUser.setPassword(encryptedPassword);
-					}
+//					if(!password.equals(user.getPassword())){
+//						String encryptedPassword = ValidationsDAO.getInstance().encryptPass(password);
+//						newUser.setPassword(encryptedPassword);
+//					}
+					/////
+				
+					
+					////
 					request.getSession().setAttribute("user", newUser);
 				} catch (UserException e) {
 					System.out.println(e.getMessage());
@@ -557,6 +560,10 @@ public class UserController {
 				} catch (ValidationException e) {
 					request.setAttribute("invalidFields", true);
 				} catch (NoSuchAlgorithmException e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+					return "exception";
+				} catch (GroupException e) {
 					System.out.println(e.getMessage());
 					e.printStackTrace();
 					return "exception";

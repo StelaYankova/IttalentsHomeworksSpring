@@ -50,7 +50,10 @@ public interface IValidationsDAO {
 	 static final int MIN_LENGTH_USERNAME = 6;
 	 static final int topMostRecentlyClosedHomeworksForTeacher = 10;
 
-	static final String SAVE_DIR = "/Users/Stela/Desktop/imagesIttalentsHomework";
+		//static final String SAVE_DIR = "/Users/Stela/Desktop/imagesIttalentsHomework";
+		static final String SAVE_DIR_HOMEWORK_FILES_PDF = "/Users/Stela/Desktop/homeworkFilesPdfIttalentsHomework";
+		static final String SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA = "/Users/Stela/Desktop/homeworkSolutionsJavaIttalentsHomework";
+		static final String SAVE_DIR_HOMEWORK_TESTS_FILES = "/Users/Stela/Desktop/homeworkTestsFilesIttalentsHomework";
 
 	boolean isUsernameUnique(String username) throws UserException;
 

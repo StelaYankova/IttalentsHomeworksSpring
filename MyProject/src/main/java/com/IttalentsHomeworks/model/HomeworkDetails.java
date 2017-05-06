@@ -10,24 +10,27 @@ public class HomeworkDetails {
 	private LocalDateTime closingTime;
 	private int numberOfTasks;
 	private String tasksFile;
+	private String testTasksFile;
 	private int daysLeft;
 	
 	public HomeworkDetails(int id, String heading, LocalDateTime openingTime, LocalDateTime closingTime,
-			int numberOfTasks, String tasksFile) {
+			int numberOfTasks, String tasksFile, String testTasksFile) {
 		this.id = id;
 		this.heading = heading;
 		this.openingTime = openingTime;
 		this.closingTime = closingTime;
 		this.numberOfTasks = numberOfTasks;
 		this.tasksFile = tasksFile;
+		this.setTestTasksFile(testTasksFile);
 	}
 	public HomeworkDetails(String heading, LocalDateTime openingTime, LocalDateTime closingTime, int numberOfTasks,
-			String tasksFile) {
+			String tasksFile, String testTasksFile) {
 		this.heading = heading;
 		this.openingTime = openingTime;
 		this.closingTime = closingTime;
 		this.numberOfTasks = numberOfTasks;
 		this.tasksFile = tasksFile;	
+		this.setTestTasksFile(testTasksFile);
 	}
 	public HomeworkDetails(int id, String heading, LocalDateTime openingTime, LocalDateTime closingTime) {
 		this.id = id;
@@ -97,6 +100,12 @@ public class HomeworkDetails {
 		if (id != other.id)
 			return false;
 		return true;
+	}
+	public String getTestTasksFile() {
+		return testTasksFile;
+	}
+	public void setTestTasksFile(String testTasksFile) {
+		this.testTasksFile = testTasksFile;
 	}
 	
 	

@@ -40,7 +40,7 @@
 		<div class="addStudentToGroupDiv">
 			<div class="ui-widget">
 			<div id = "formLargeScreen">
-				<form action="./addOrRemoveStudent" method="POST"
+				<form action="./addStudent" method="POST"
 					class="form-inline" id="addStudentToGroupForm">
 					<c:if test="${not empty sessionScope.invalidFields}">
 						<c:if test="${sessionScope.invalidFields}">

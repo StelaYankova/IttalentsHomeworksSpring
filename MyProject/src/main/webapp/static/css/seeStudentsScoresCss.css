@@ -162,6 +162,7 @@ width: 80%;
 	}
 	#divTable table.dataTable tbody td {
 		padding: 0em 0em;
+		padding-left: 0.35em;
 	}
 	#divTable table.dataTable tbody th {
 		padding: 0em 0em;

@@ -11,6 +11,8 @@
 
 <!-- <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
+	<link rel="icon" type="image/png" href="./images/favIcon.png">
+	
 </head>
 <!-- <style>
 /* .open>.dropdown-menu {

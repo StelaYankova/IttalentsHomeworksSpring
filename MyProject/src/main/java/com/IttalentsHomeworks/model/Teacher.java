@@ -14,4 +14,5 @@ public class Teacher extends User{
 		super(username, password, repeatedPassword, email);
 		super.isTeacher = true;
 	}
+	
 }

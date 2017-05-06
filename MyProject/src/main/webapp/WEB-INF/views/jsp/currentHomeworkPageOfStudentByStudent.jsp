@@ -270,7 +270,7 @@ function uploadFile(e){
 					},
 					error : function(data) {
 						if (data.status == 400) {
-							alert("File cannot be empty and should be smaller than 1MB");
+							alert("File cannot be empty and should be smaller than 1MB (you have to upload it before you edit it)");
 							document.getElementById("currTaskSolution").value = sessionStorage
 									.getItem("currTaskSolution");
 						}
@@ -303,10 +303,15 @@ function uploadFile(e){
 						document.getElementById('currTaskSolution').value = response.solution;
 						document.getElementById("taskUpload").style.display = "block";
 						document.getElementById("currTaskSolution").style.display = "block";
-						if (uploaded === "-") {
-							document.getElementById("currTaskSolution").disabled = true;
-						} else {
-							document.getElementById("currTaskSolution").disabled = false;
+						console.log(uploaded)
+						var hasUploadTimePassed = ${sessionScope.hasUploadTimePassed};
+						console.log(hasUploadTimePassed)
+						if(!hasUploadTimePassed){
+							if (uploaded === "-") {
+								document.getElementById("currTaskSolution").disabled = true;
+							} else{
+								document.getElementById("currTaskSolution").disabled = false;
+							}
 						}
 						sessionStorage.setItem("currTask", taskNum);
 						sessionStorage.setItem("currTaskSolution",
