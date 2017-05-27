@@ -180,10 +180,12 @@
 						<p id="fileMsg" class="input-invalid"></p>
 					</div>
 				</div>
+				
 				<div class="form-group">
 					<label class="control-label">Tests:</label>
 					<div class="control-label-input">
-						<input type="file" accept="application/zip" name="testsFile" required /><span>Files in ZIP must be ".txt"</span>
+						<input type="file" accept="application/zip" name="testsFile" required /><span id = "testsFileConstraint">(Files in ZIP must be ".txt")</span>
+						<br/>
 						<c:if test="${not empty validTestsFile}">
 							<c:if test="${not validTestsFile}">
 								<p id="testsFileMsg" class="input-invalid">Valid file format -
@@ -227,15 +229,60 @@
 				return false;
 			}
 			var size = (document.forms["addHomeworkForm"]["testsFile"].files[0].size / 1024 / 1024)
-					.toFixed(2);
+					.toFixed(10);
 			console.log(size)
 			if (size > 20 || size == 0) {
 				console.log(false)//DA DOBAVA
-				//return false;
+				return false;
 			}
-			return true;
+			var isTestsFileValid = false;
+			var form = new FormData(document.forms["addHomeworkForm"]);
+			console.log(form)
+			//see types
+					$.ajax({
+								url : './isHomeworkZipFileValid',
+								type : 'POST',
+			
+							 	data: form, 
+							 	processData: false,
+								contentType:false,
+								 dataType: false,
+				
+								success : function(response) {
+									if (!$('#testsFileMsg').is(':empty')) {
+										$("#testsFileMsg").empty();
+										isTestsFileValid = true;
+										console.log("TRUE")
+										//return true;
+									}
+								},
+								error : function(data) {
+									if (!$('#testsFileMsg').is(':empty')) {
+										$("#testsFileMsg").empty();
+									}
+									isTestsFileValid = false;
+									/* document.getElementById("testsFileMsg").append(
+											"Extensions in .zip are not valid"); */
+									console.log("FALSE")
+									//return false;
+
+								}
+			
+						});
+
+		 $(document).ajaxStop(function() {
+				console.log("Are valid at the end: " + isTestsFileValid)
+				if(isTestsFileValid === true){
+					console.log("return"+ isTestsFileValid);
+					return true;
+				}else{
+					console.log("return"+ isTestsFileValid);
+
+					return false;
+				}
+			});
 		}
-		function isFileValidCheck() {
+		 function isFileValidCheck() {
 			var file = document.forms["addHomeworkForm"]["file"].value;
 			var val = file.toLowerCase();
 			var regex = new RegExp("(.*?)\.(pdf)$");
@@ -243,14 +290,13 @@
 				return false;
 			}
 			var size = (document.forms["addHomeworkForm"]["file"].files[0].size / 1024 / 1024)
-					.toFixed(2);
-			console.log(size)
+					.toFixed(10);
 			if (size > 20 || size == 0) {
 				console.log(false)
 				return false;
 			}
 			return true;
-		}
+		} 
 		$('#addHomeworkForm')
 				.submit(
 						function(e) {
@@ -340,7 +386,8 @@
 							if (!(isNameValid === true && isOpensValid === true
 									&& isClosesValid === true
 									&& isNumberOfTasksValid === true
-									&& isFileValid === true && isGroupsValid === true)) {
+									&& isFileValid === true
+									&& isTestsFileValid === true && isGroupsValid === true)) {
 								return false;
 							}
 
@@ -466,6 +513,9 @@
 												"Number of tasks - between 1 and 40");
 							}
 							isFileValid = isFileValidCheck();
+							
+							
+							
 							if (!isFileValid) {
 								if (!$('#fileMsg').is(':empty')) {
 									$("#fileMsg").empty();
@@ -475,31 +525,100 @@
 										.append(
 												"Valid file format - pdf, maximal size - 20MB");
 							}
-							isTestsFileValid = isTestsFileValidCheck();
-							if (!isTestsFileValid) {
-								if (!$('#testsFileMsg').is(':empty')) {
-									$("#testsFileMsg").empty();
+							
+							var isTestsFileValid = true;
+							var file = document.forms["addHomeworkForm"]["testsFile"].value;
+			var val = file.toLowerCase();
+			var regex = new RegExp("(.*?)\.(zip)$");
+			if (!(regex.test(val))) {
+				isTestsFileValid = false;
+			}
+			var size = (document.forms["addHomeworkForm"]["testsFile"].files[0].size / 1024 / 1024)
+					.toFixed(10);
+			console.log(size)
+			if (size > 20 || size == 0) {
+				console.log(false)//DA DOBAVA
+				isTestsFileValid =  false;
+			}
+			
+			var form = new FormData(document.forms["addHomeworkForm"]);
+			console.log(form)
+			//see types
+			if(isTestsFileValid === true){
+					$.ajax({
+								url : './isHomeworkZipFileValid',
+								type : 'POST',
+			
+							 	data: form, 
+							 	processData: false,
+								contentType:false,
+								 dataType: false,
+				
+								success : function(response) {
+									if (!$('#testsFileMsg').is(':empty')) {
+										$("#testsFileMsg").empty();
+										isTestsFileValid = true;
+										console.log("TRUE")
+									}
+								},
+								error : function(data) {
+									if (!$('#testsFileMsg').is(':empty')) {
+										$("#testsFileMsg").empty();
+									}
+									isTestsFileValid = false;
+									console.log("FALSE")
+
 								}
-								document
-										.getElementById("testsFileMsg")
-										.append(
-												"Valid file format - zip, maximal size - 20MB");
-							}
+			
+						});
+
+							
+			}
+						
+							
+							
+							
+							
+							
+							//setTimeout(function () {
+						//	console.log("((())) + " + isTestsFileValid)
+							
 							$(document)
 									.ajaxStop(
-											function() {
+											function() {console.log("AJAX READU")
+												if (!$('#testsFileMsg').is(':empty')) {
+													$("#testsFileMsg").empty();
+												}
+												if (isTestsFileValid === false) {console.log("L:::::::: " + isTestsFileValid)
+													
+													document
+															.getElementById("testsFileMsg")
+															.append(
+																	"Valid file format - zip, maximal size - 20MB, valid extensions in zip - .txt");
+												}
+												console.log("!!!")
+												console.log(isNameUnique)
+												console.log(isNameValid)
+												console.log(isOpensValid)
+												console.log(isClosesValid)
+												console.log(isNumberOfTasksValid)
+												console.log(isFileValid)
+												console.log(isTestsFileValid)
+											
 												if ((isNameUnique === true
 														&& isNameValid === true
 														&& isOpensValid === true
 														&& isClosesValid === true
-														&& isNumberOfTasksValid === true && isFileValid === true && isTestsFileValid == true)) {
-
+														&& isNumberOfTasksValid === true
+														&& isFileValid === true && isTestsFileValid == true)) {
+	console.log("WILL SUBMIT")
 													document.getElementById(
 															"addHomeworkForm")
 															.submit();
 												}
-											});
+											});//},2000);
 						});
+						
 		$(function() {
 			$.ajaxSetup({
 				statusCode : {

@@ -104,7 +104,12 @@
 									class="btn btn-primary btn-sm" type="submit"
 									onclick="seeTaskSolution('${i}')">
 									<c:out value="Task ${i}" />
-								</button> <c:if test="${sessionScope.hasUploadTimePassed == 'false'}">
+								</button> 
+								<span class = "systemScore" id = "systemScore${i}">
+								<c:if test="${sessionScope.currHomework.tasks[i-1].hasPassedSystemTest eq true}"><c:out value = "${sessionScope.pointsPerTask}%"></c:out></c:if>
+ 										<c:if test="${sessionScope.currHomework.tasks[i-1].hasPassedSystemTest ne true}">0%</c:if></span>
+ 										
+ 										<c:if test="${sessionScope.hasUploadTimePassed == 'false'}">
 									<c:if test="${sessionScope.hasUploadTimeCome == 'true'}">
 										<form action="./uploadSolutionToTaskJava" method="POST" class = "uploadSolutionButton"
 											enctype="multipart/form-data" id="uploadSolutionForm${i}"
@@ -122,8 +127,11 @@
 												
 											</c:if> --%>
 <!-- 										</span>
- -->										<p id="fileMsguploadSolutionForm${i}" class="input-invalid"></p>
-										
+--> 									
+ 										
+ <%-- 										<span class = "systemScore" id = "systemScore${i}"><c:if test="${sessionScope.currHomework.tasks[i-1].hasPassedSystemTest eq true}"><c:out value = "${sessionScope.pointsPerTask}%"></c:out></c:if>
+ 										<c:if test="${sessionScope.currHomework.tasks[i-1].hasPassedSystemTest ne true}">0%</c:if></span> --%>
+ 										<p id="fileMsguploadSolutionForm${i}" class="input-invalid"></p>
 									</c:if>
 								</c:if>
 							</td>
@@ -173,7 +181,9 @@
 	<c:if test="${not empty sessionScope.currTaskSolution}">
 		<c:remove var="currTaskSolution" scope="session" />
 	</c:if>
-	
+	<c:if test="${not empty sessionScope.pointsPerTask}">
+		<c:remove var="pointsPerTask" scope="session" />
+	</c:if>
 </body>
 <script>
 
@@ -208,18 +218,28 @@ function uploadFile(e){
 					"Valid file format - java, maximal size - 1MB");
 		}else{  
 		var form = new FormData(document.getElementById(e));
-		console.log(form.get("taskNum"))
+		//console.log(form.get("taskNum"))
 		$.ajax({
 			url:'./uploadSolutionToTaskJava',
 			type:'POST',
 			data: form,
 			processData: false,
 			contentType:false,
-			success:function(data){
+			 dataType: 'json',
+			success:function(response){
 				alert("The solution has been added successfully!");
+				console.log(response.pointsPerTask)
+				console.log("systemScore" + form.get("taskNum"));
+				if(response.hasPassedTest){
+					document.getElementById("systemScore" + form.get("taskNum")).innerHTML = response.pointsPerTask + "%";
+				}else{
+					document.getElementById("systemScore" + form.get("taskNum")).innerHTML = "0%";
+				}
 				seeTaskSolution(form.get("taskNum"));
 			},
+			
 			error:function(data){
+				 
 				document.getElementById("fileMsg"+e).append(
 				"Valid file format - java, maximal size - 1MB");
 			}
@@ -264,11 +284,25 @@ function uploadFile(e){
 				.ajax({
 					url : './updateSolutionTextOfTaskByStudentJava',
 					type : 'POST',
+					dataType:'json',
 					data : {
 						"taskNum" : taskNum,
 						"text" : text
 					},
+					success: function(data){
+						console.log(data.pointsPerTask)
+						console.log("systemScore" + taskNum);
+						if(data.hasPassedTest){
+							document.getElementById("systemScore" + taskNum).innerHTML = data.pointsPerTask + "%";
+						}else{
+							document.getElementById("systemScore" + taskNum).innerHTML = "0%";
+						}
+					},
 					error : function(data) {
+						if (data.status == 406) {
+						      alert('You should upload file before you update its text!');
+						    }
+						
 						if (data.status == 400) {
 							alert("File cannot be empty and should be smaller than 1MB (you have to upload it before you edit it)");
 							document.getElementById("currTaskSolution").value = sessionStorage
@@ -330,7 +364,7 @@ function uploadFile(e){
 			return false;
 		}
 		var size = (document.forms[e]["datafile"].files[0].size / 1024 / 1024)
-				.toFixed(2);
+				.toFixed(10);
 		if (size > 1 || size === 0) {
 			return false;
 		}

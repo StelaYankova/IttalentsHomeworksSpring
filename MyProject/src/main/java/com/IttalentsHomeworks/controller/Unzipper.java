@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import com.IttalentsHomeworks.Exceptions.InvalidFilesExtensionInZIP;
  
@@ -41,40 +42,72 @@ public class Unzipper {
 //			}
 //    	
 //	}
+   
     public Unzipper(String zipFilePath, String destDirectory){
     	this.zipFilePath = zipFilePath;
     	this.destDirectory = destDirectory;
     }
-    public void unzip(String zipFilePath, String destDirectory) throws IOException, InvalidFilesExtensionInZIP {
-        File destDir = new File(destDirectory);
-        if (!destDir.exists()) {
-            destDir.mkdir();
-        }
-        ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
+    
+    public boolean areExtensionsValid(ZipInputStream zipIn) throws IOException{
+    	
         ZipEntry entry = zipIn.getNextEntry();
+
         // iterates over entries in the zip file
         while (entry != null) {
-            String filePath = destDirectory + File.separator + entry.getName();
+        	System.out.println("Entry is not null");
+           // String filePath = destDirectory + File.separator + entry.getName();
             if (!entry.isDirectory()) {
+            	System.out.println("Entry is not directory");
                 // if the entry is a file, extracts it
             	String fileExtension = entry.getName().substring(entry.getName().length() - 3,
 						entry.getName().length());
             	System.out.println("File extension is " + entry.getName().substring(entry.getName().length() - 3,
 									entry.getName().length()));
+            	System.out.println("Extension: " + fileExtension);
             	if(!fileExtension.equals("txt")){
-            		throw new InvalidFilesExtensionInZIP("Valid file extension is .txt");
+            		return false;
             	}
-                extractFile(zipIn, filePath);
-            } else {
-                // if the entry is a directory, make the directory
-                File dir = new File(filePath);
-                dir.mkdir();
+                
             }
             zipIn.closeEntry();
             entry = zipIn.getNextEntry();
-        }
-        zipIn.close();
+		}
+        return true;
     }
+    public void unzip(String zipFilePath, String destDirectory) throws IOException, InvalidFilesExtensionInZIP {
+    	File destDir = new File(destDirectory);
+        if (!destDir.exists()) {
+            destDir.mkdir();
+        }
+        ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
+        ZipEntry entry = zipIn.getNextEntry();
+        if(areExtensionsValid(zipIn)){
+		zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
+		entry = zipIn.getNextEntry();
+		while (entry != null) {
+			String filePath = destDirectory + File.separator + entry.getName();
+
+			if (!entry.isDirectory()) {
+				extractFile(zipIn, filePath);
+				zipIn.closeEntry();
+			} else {
+				System.out.println("ITS DIRECTORY");
+				// if the entry is a directory, make the directory
+				File dir = new File(filePath);
+				dir.mkdir();
+				// throw new InvalidFilesExtensionInZIP("Valid file extension is
+				// .txt");
+			}
+			entry = zipIn.getNextEntry();
+
+        }
+
+        zipIn.close();
+        }else{
+        	throw new InvalidFilesExtensionInZIP("Valid file extension is .txt");
+        }
+    }
+    
     /**
      * Extracts a zip entry (file entry)
      * @param zipIn

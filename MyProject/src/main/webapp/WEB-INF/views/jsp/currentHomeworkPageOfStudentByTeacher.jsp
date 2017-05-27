@@ -93,6 +93,9 @@
 										onclick="seeTaskSolution('${i}')">
 										<c:out value="Task ${i}" />
 									</button>
+									<span class = "systemScore" id = "systemScore${i}"><c:if test="${sessionScope.currHomework.tasks[i-1].hasPassedSystemTest eq true}"><c:out value = "${sessionScope.pointsPerTask}%"></c:out></c:if>
+ 										<c:if test="${sessionScope.currHomework.tasks[i-1].hasPassedSystemTest ne true}">0%</c:if></span>
+ 									
 								</td>
 							</tr>
 						</c:forEach>

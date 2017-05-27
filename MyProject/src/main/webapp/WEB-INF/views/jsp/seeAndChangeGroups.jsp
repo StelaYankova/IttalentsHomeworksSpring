@@ -30,7 +30,7 @@
 		<c:if test="${not empty invalidFields}">
 			<c:if test="${not invalidFields}">
 				<div class="alert alertAllPages alert-success">
-					<strong>Success!</strong> Group has been added successfully
+					<strong>Success!</strong> Group has been removed successfully
 				</div>
 			</c:if>
 		</c:if>

@@ -6,12 +6,18 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.zip.ZipInputStream;
+
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.IttalentsHomeworks.DAO.GroupDAO;
 import com.IttalentsHomeworks.DAO.IValidationsDAO;
 import com.IttalentsHomeworks.DAO.ValidationsDAO;
@@ -22,6 +28,8 @@ import com.IttalentsHomeworks.model.HomeworkDetails;
 import com.IttalentsHomeworks.model.User;
 
 @Controller
+@MultipartConfig
+
 public class ValidationsController {
 
 	//
@@ -465,7 +473,13 @@ public class ValidationsController {
 
 	private boolean areCharactersUsernameValid(String username) {
 		for(int i = 0; i < username.length(); i++){
-			if(!(((int)username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO && (int)username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE) || ((int)username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A && (int)username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z) || ((int)username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a && (int)username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z) || (int) username.charAt(i) == IValidationsDAO.ASCII_TABLE_VALUE_OF_DOT)){
+			if (!(((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO
+					&& (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
+					|| ((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A
+							&& (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
+					|| ((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a
+							&& (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z)
+					|| (int) username.charAt(i) == IValidationsDAO.ASCII_TABLE_VALUE_OF_DOT)) {
 				return false;
 			}
 		}
@@ -494,5 +508,19 @@ public class ValidationsController {
 			response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
 		}	
 	}
+	
+	@RequestMapping(value="/isHomeworkZipFileValid",method = RequestMethod.POST)
+	protected void isHomeworkZipFileValid(HttpServletRequest request, HttpServletResponse response, @RequestParam("testsFile") MultipartFile uploadfile) throws ServletException, IOException {
+		Unzipper unzipper = new Unzipper(null, null);
+		System.out.println("HELLO");
+		if (unzipper.areExtensionsValid(new ZipInputStream(uploadfile.getInputStream()))) {
+			response.setStatus(IValidationsDAO.SUCCESS_STATUS);
+			System.out.println("VALID");
 
+		} else {
+			response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
+			System.out.println("NotValid");
+		}
+		
+	}
 }

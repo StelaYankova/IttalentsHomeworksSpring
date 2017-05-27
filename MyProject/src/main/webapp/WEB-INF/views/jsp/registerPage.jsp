@@ -253,13 +253,13 @@
 							data : {
 								"password" : password
 							},
-							success : function(response) {
+							success : function(response) {console.log("da")
 								if (!$('#passwordMsg').is(':empty')) {
 									$("#passwordMsg").empty();
 									isPasswordValid = true;
 								}
 							},
-							error : function(data) {
+							error : function(data) {console.log("ne")
 								if (!$('#passwordMsg').is(':empty')) {
 									$("#passwordMsg").empty();
 								}

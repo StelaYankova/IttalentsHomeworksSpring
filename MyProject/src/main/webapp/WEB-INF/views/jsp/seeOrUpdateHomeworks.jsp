@@ -228,19 +228,19 @@
 																			var rowNode = table.row
 																					.add(
 																							[
-																									"<button type = 'submit' class='btn btn-link' onclick = 'chooseGroupFirst()'>"
+																									"<button type = 'submit' class='wrapword btn btn-link' onclick = 'chooseGroupFirst()'>"
 																											+ response[i].heading
 																											+ "</button>",
 																									opensRep,
 																									closesRep,
-																									"<form action = './updateHomework' method = 'GET'><input type = 'hidden' name = 'chosenHomework' value = "+response[i].id +"><button type = 'submit' style = 'color:black' class='btn btn-link'>Change</button></form>" ])
+																									"<form action = './updateHomework' method = 'GET'><input type = 'hidden' name = 'chosenHomework' value = "+response[i].id +"><button type = 'submit' style = 'color:black' class='wrapword btn btn-link'>Change</button></form>" ])
 																					.draw()
 																					.node();
 																		} else {
 																			var rowNode = table.row
 																					.add(
 																							[
-																									"<button type = 'submit' class='btn btn-link' onclick = 'chooseStudent("
+																									"<button type = 'submit' class='wrapword btn btn-link' onclick = 'chooseStudent("
 																											+ "\""
 																											+ response[i].heading
 																											+ "\""
@@ -253,7 +253,7 @@
 																											+ "</button>",
 																									opensRep,
 																									closesRep,
-																									"<form action = './updateHomework' method = 'GET'><input type = 'hidden' name = 'chosenHomework' value = "+response[i].id +"><button type = 'submit' class='btn btn-link' style = 'color:black'>Change</button></form>" ])
+																									"<form action = './updateHomework' method = 'GET'><input type = 'hidden' name = 'chosenHomework' value = "+response[i].id +"><button type = 'submit' class='wrapword btn btn-link' style = 'color:black'>Change</button></form>" ])
 																					.draw()
 																					.node();
 
@@ -308,7 +308,7 @@
 									if (hasStudentGivenMinOneTask == true) {
 										$('#listOfStudentsOfGroup')
 												.append(
-														"<li type='square'><form action = './getHomeworkOfStudentByTeacher'><input type = 'hidden' name = 'homeworkId' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'submit' class='btn btn-link'>"
+														"<li type='square'><form action = './getHomeworkOfStudentByTeacher'><input type = 'hidden' name = 'homeworkId' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'submit' class='wrapword btn btn-link'>"
 																+ response[i].username
 																+ "</button></form></li>");
 
@@ -319,7 +319,7 @@
 									} else {
 										$('#listOfStudentsOfGroup')
 												.append(
-														"<li type='square'><form action = './getHomeworkOfStudentByTeacher'><input type = 'hidden' name = 'homeworkId' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'button' title = 'Student has not uploaded the chosen homework' style= 'color:#620062' class='btn btn-link'>"
+														"<li type='square'><form action = './getHomeworkOfStudentByTeacher'><input type = 'hidden' name = 'homeworkId' value = "+homeworkId +"><input type = 'hidden' name = 'studentId' value = "+response[i].id+"><button type = 'button' title = 'Student has not uploaded the chosen homework' style= 'color:#620062' class='wrapword btn btn-link'>"
 																+ response[i].username
 																+ "</button></form></li>");
 										document

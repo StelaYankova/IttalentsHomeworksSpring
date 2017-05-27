@@ -7,6 +7,12 @@
 	width: 80%;
 	padding-bottom:3.750em;
 }
+#studentAverageScore{
+	padding-top:0.5em;
+}
+#studentAverageSystemScore{
+	padding-top:0.5em;
+}
 #select .bootstrap-select.btn-group .dropdown-menu {
     max-height: 14em !important;
 }
@@ -30,10 +36,28 @@
 	font-size: 0.95em;
 	width:27%;
 }
-
+#divTable table.dataTable tbody td:nth-child(1) {
+	padding: 0.5em;
+	padding-left: 0.8em;
+	font-size: 0.95em;
+	width:27.5%;
+} 
+#divTable table.dataTable tbody td:nth-child(2), #divTable table.dataTable tbody td:nth-child(3) {
+	padding: 0.5em;
+	padding-left: 0.8em;
+	font-size: 0.95em;
+	width:22.5%;
+} 
+ #divTable table.dataTable tbody td:nth-child(4) {
+	padding: 0.5em;
+	padding-left: 0.8em;
+	font-size: 0.95em;
+	width:45%;
+} 
 #divTable table.dataTable tbody td form .btn {
 	padding: 0em 0px 0px 0.3em;
 	font-size: 0.98em;
+	text-align:left;
 }
 
 #divTable table.dataTable thead th {
@@ -69,7 +93,7 @@
 	#divTable table.dataTable thead th {
 		padding: 0.5em;
 		padding-left: 1em;
-		font-size: 0.68em;
+		font-size: 0.59em;
 	}
 	#divTable table.dataTable tbody td form .btn {
 		font-size: 0.8em;

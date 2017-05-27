@@ -45,11 +45,18 @@
 		</c:if>
 	<div id="pageWrapper">
 	<div id = "readAndRemoveHomework">
-			<form action="./readFileOfTasksForHomeworkPDF"
+ 			<form action="./readFileOfTasksForHomeworkPDF"
 				method="GET" id = "downloadHomeworkForm">
 				<input type='hidden' value='${sessionScope.currHomework.tasksFile}'
 					name='fileName'>
 				 <button class='btn btn-link btn-xs' type='submit'><u>download tasks</u>
+				</button>
+			</form>
+			<form action="./readFileOfTasksForHomeworkTestsZip"
+				method="GET" id = "downloadHomeworkTestsForm">
+				<input type='hidden' value='${sessionScope.currHomework.testTasksFile}'
+					name='fileName'>
+				 <button class='btn btn-link btn-xs' type='submit'><u>download tests</u>
 				</button>
 			</form>
 		<form action="./removeHomeworkDetails"
@@ -209,6 +216,23 @@
 						<p id="fileMsg" class="input-invalid"></p>
 					</div>
 				</div>
+				<div class="form-group">
+					<label class="control-label">Tests:</label>
+					<div class="control-label-input">
+					
+						<input type="file" accept="application/zip" name="testsFile" /><span id = "testsFileConstraint">(Files in ZIP must be ".txt")</span>
+						<br/>
+						<c:if test="${not empty validTestsFile}">
+							<c:if test="${not validTestsFile}">
+								<p id="testsFileMsg" class="input-invalid">Valid file format -
+									zip, maximal size - 20MB</p>
+							</c:if>
+						</c:if>
+						
+						<p id="testsFileMsg" class="input-invalid"></p>
+					</div>
+					
+				</div>
 				<legend></legend>
  			<div class="form-group" >
 						<input 
@@ -261,13 +285,29 @@
 				return false;
 			}
 			var size = (document.forms["updateHomeworkForm"]["file"].files[0].size / 1024 / 1024)
-					.toFixed(2);
+					.toFixed(10);
 			if (size > 20 || size == 0) {
 				return false;
 			}
 			return true;
 		}
-		$('#updateHomeworkForm')
+		function isTestsFileValidCheck() {
+			var file = document.forms["updateHomeworkForm"]["testsFile"].value;
+			var val = file.toLowerCase();
+			var regex = new RegExp("(.*?)\.(zip)$");
+			if (!(regex.test(val))) {
+				return false;
+			}
+			var size = (document.forms["updateHomeworkForm"]["testsFile"].files[0].size / 1024 / 1024)
+					.toFixed(10);
+			console.log(size)
+			if (size > 20 || size == 0) {//TODO tuk + v add hw
+				console.log(false)//DA DOBAVA
+				return false;
+			}
+			return true;
+		}
+		 $('#updateHomeworkForm')
 				.submit(
 						function(e) {
 							e.preventDefault();
@@ -277,6 +317,8 @@
 							var numberOfTasks = document.forms["updateHomeworkForm"]["numberOfTasks"].value;
 							var file = document.forms["updateHomeworkForm"]["file"].value;
 							var groups = document.forms["updateHomeworkForm"]["groups"].value;
+							var testsFile = document.forms["updateHomeworkForm"]["testsFile"].value;
+
 							var isNameValid = true;
 							var isNameUnique = true;
 							var isOpensValid = true;
@@ -284,6 +326,8 @@
 							var isNumberOfTasksValid = true;
 							var isFileValid = true;
 							var isGroupsValid = true;
+							var isTestsFileValid = true;
+
 							if (!$('#nameMsg').is(':empty')) {
 								$("#nameMsg").empty();
 							}
@@ -299,6 +343,13 @@
 							if (!$('#groupsMsg').is(':empty')) {
 								$("#groupsMsg").empty();
 							}
+							if (!$('#fileMsg').is(':empty')) {
+								$("#fileMsg").empty();
+							}
+							if (!$('#testsFileMsg').is(':empty')) {
+								$("#testsFileMsg").empty();
+							}
+							
 							if (name == "") {
 								document.getElementById("nameMsg").append(
 										"Fill heading");
@@ -467,21 +518,93 @@
 													"Valid file format - pdf, maximal size - 20MB");
 								}
 							}
+							var isTestsFileValid = true;
+							if (testsFile != "") {
+							
+							var file = document.forms["updateHomeworkForm"]["testsFile"].value;
+			var val = file.toLowerCase();
+			var regex = new RegExp("(.*?)\.(zip)$");
+			if (!(regex.test(val))) {
+				isTestsFileValid = false;
+			}
+			var size = (document.forms["updateHomeworkForm"]["testsFile"].files[0].size / 1024 / 1024)
+					.toFixed(10);
+			console.log(size)
+			if (size > 20 || size == 0) {
+				console.log(false)//DA DOBAVA
+				isTestsFileValid =  false;
+			}
+			
+			var form = new FormData(document.forms["updateHomeworkForm"]);
+			console.log(form)
+			//see types
+			if(isTestsFileValid === true){
+					$.ajax({
+								url : './isHomeworkZipFileValid',
+								type : 'POST',
+			
+							 	data: form, 
+							 	processData: false,
+								contentType:false,
+								 dataType: false,
+				
+								success : function(response) {
+									if (!$('#testsFileMsg').is(':empty')) {
+										$("#testsFileMsg").empty();
+										isTestsFileValid = true;
+										console.log("TRUE")
+									}
+								},
+								error : function(data) {
+									if (!$('#testsFileMsg').is(':empty')) {
+										$("#testsFileMsg").empty();
+									}
+									isTestsFileValid = false;
+									console.log("FALSE")
+
+								}
+			
+						});
+
+							
+			}
+							//isTestsFileValid = isTestsFileValidCheck();
+							/* if (!isTestsFileValid) {
+								if (!$('#testsFileMsg').is(':empty')) {
+									$("#testsFileMsg").empty();
+								}
+								document
+										.getElementById("testsFileMsg")
+										.append(
+												"Valid file format - zip, maximal size - 20MB");
+							}
+							} */
 							$(document)
 									.ajaxStop(
 											function() {
+												console.log("AJAX READU")
+												if (!$('#testsFileMsg').is(':empty')) {
+													$("#testsFileMsg").empty();
+												}
+												if (isTestsFileValid === false) {console.log("L:::::::: " + isTestsFileValid)
+													
+													document
+															.getElementById("testsFileMsg")
+															.append(
+																	"Valid file format - zip, maximal size - 20MB, valid extensions in zip - .txt");
+												}
 												if ((isNameUnique === true
 														&& isNameValid === true
 														&& isOpensValid === true
 														&& isClosesValid === true
-														&& isNumberOfTasksValid === true && isFileValid === true)) {
+														&& isNumberOfTasksValid === true && isFileValid === true && isTestsFileValid == true)) {
 													document
 															.getElementById(
 																	"updateHomeworkForm")
 															.submit();
 												}
 											});
-						}); 
+							}});
 		$(document).ready(function() {
 			$('[data-toggle="popover"]').popover();
 		});

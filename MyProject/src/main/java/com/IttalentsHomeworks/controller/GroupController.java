@@ -1,5 +1,6 @@
 package com.IttalentsHomeworks.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
@@ -309,17 +310,43 @@ public class GroupController {
 									int chosenHomeworkId = Integer.parseInt(request.getParameter("homeworkId"));
 									//HomeworkDetails chosenHomework = null;
 									//chosenHomework = GroupDAO.getInstance().getHomeworkDetailsById(chosenHomeworkId);
+									//TODO izliza 4e ima doma6no e nqma
 									if (ValidationsDAO.getInstance().doHomeworkDetailsExist(chosenHomeworkId)) {
 										for (Task t : UserDAO.getInstance().getTasksOfHomeworkOfStudent(studentId,
 												chosenHomeworkId)) {
 											hasStudentGivenMinOneTask = false;
 											String x = t.getSolution();
+											System.out.println("00000");
 											if (x != null) {
-												hasStudentGivenMinOneTask = true;
-												obj.addProperty("hasStudentGivenMinOneTask", hasStudentGivenMinOneTask);
-												break;
+												System.out.println("11111");
+
+												File f = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA
+														+ File.separator + x);
+												if (f.exists() && f.isFile()) {
+													System.out.println("2222222");
+
+													long length = f.length();
+													System.out.println("File size: " + length);
+													if (length > 0) {
+														System.out.println("33333");
+
+														hasStudentGivenMinOneTask = true;
+														 obj.addProperty("hasStudentGivenMinOneTask",
+														 hasStudentGivenMinOneTask);
+														break;
+													}
+												}
+												System.out.println("4444");
+
+												System.out.println("Solution of user : " + studentId);
+												System.out.println(t.getSolution());
 											}
-											obj.addProperty("hasStudentGivenMinOneTask", hasStudentGivenMinOneTask);
+//											if (x != null) {
+//												hasStudentGivenMinOneTask = true;
+//												obj.addProperty("hasStudentGivenMinOneTask", hasStudentGivenMinOneTask);
+//												break;
+//											}
+											//obj.addProperty("hasStudentGivenMinOneTask", hasStudentGivenMinOneTask);
 										}
 									} else {
 										response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);

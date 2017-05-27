@@ -39,12 +39,13 @@ public class UserDAO implements IUserDAO {
 	private static final String CREATE_NEW_USER = "INSERT INTO IttalentsHomeworks.Users (username, pass, email) VALUES (?,?,?);";
 	private static final String GET_HOMEWORKS_OF_STUDENT = "SELECT H.id, H.heading, H.num_of_tasks, H.tasks_pdf, H.opens, H.closes, UH.teacher_grade, UH.teacher_comment,H.test_tasks_directory FROM IttalentsHomeworks.User_has_homework UH JOIN IttalentsHomeworks.Homework H ON (H.id = UH.homework_id) WHERE UH.user_id = ?;";
 	private static final String GET_TASKS_OF_HOMEWORK_OF_STUDENT = "SELECT homework_id,task_number,uploaded_on,solution_java,has_passed_system_test FROM IttalentsHomeworks.Homework_task_solution WHERE student_id = ? AND homework_id = ?;";
-	private static final String GET_HOMEWORKS_OF_STUDENT_BY_GROUP = "SELECT H.id, H.heading, H.num_of_tasks, H.tasks_pdf, UH.teacher_grade, UH.teacher_comment,H.test_tasks_directory FROM IttalentsHomeworks.User_has_homework UH JOIN IttalentsHomeworks.Homework H ON (H.id = UH.homework_id) JOIN IttalentsHomeworks.Group_has_Homework GH ON (H.id = GH.homework_id) WHERE UH.user_id = ? AND GH.group_id = ?;";
+	private static final String GET_HOMEWORKS_OF_STUDENT_BY_GROUP = "SELECT H.id, H.heading, H.opens, H.closes,H.num_of_tasks, H.tasks_pdf, UH.teacher_grade, UH.teacher_comment,H.test_tasks_directory FROM IttalentsHomeworks.User_has_homework UH JOIN IttalentsHomeworks.Homework H ON (H.id = UH.homework_id) JOIN IttalentsHomeworks.Group_has_Homework GH ON (H.id = GH.homework_id) WHERE UH.user_id = ? AND GH.group_id = ?;";
 	//private static final String GET_HOMEWORKS_OF_STUDENT_BY_GROUP = "SELECT H.id, H.heading, H.num_of_tasks, H.tasks_pdf/*, H.opens, H.closes,*/, UH.teacher_grade, UH.teacher_comment FROM IttalentsHomeworks.User_has_homework UH JOIN IttalentsHomeworks.Homework H ON (H.id = UH.homework_id) JOIN IttalentsHomeworks.Group_has_Homework GH ON (H.id = GH.homework_id) WHERE UH.user_id = ? AND GH.group_id = ?;";
 	private static final String GET_GROUPS_OF_USER = "SELECT CONCAT(G.id) AS 'group_id', G.group_name FROM IttalentsHomeworks.User_has_Group UG JOIN IttalentsHomeworks.Groups G ON (G.id = UG.group_id) WHERE UG.user_id = ?";
 	private static final String GET_USER_ID_BY_USERNAME = "SELECT id FROM IttalentsHomeworks.Users WHERE BINARY username = ?;";
 	private static final String IS_USER_A_TEACHER = "SELECT isTeacher FROM IttalentsHomeworks.Users WHERE id = ?;";
 	private static final String GET_USER_BY_ID = "SELECT * FROM IttalentsHomeworks.Users WHERE id = ?;";
+	private static final String GET_HOMEWORK_OF_STUDENT = "SELECT H.id, H.heading, H.num_of_tasks, H.tasks_pdf, H.opens, H.closes, UH.teacher_grade, UH.teacher_comment,H.test_tasks_directory FROM IttalentsHomeworks.User_has_homework UH JOIN IttalentsHomeworks.Homework H ON (H.id = UH.homework_id) WHERE UH.user_id = ? AND UH.homework_id = ?;";
 	private static IUserDAO instance;
 	private DBManager manager;
 
@@ -144,12 +145,18 @@ public class UserDAO implements IUserDAO {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				//Group currGroup = new Group(rs.getInt(1), rs.getString(2));
-				ArrayList<Teacher> teachersOfGroup = GroupDAO.getInstance().getTeachersOfGroup(rs.getInt(1));
-				ArrayList<Student> studentsOfGroup = GroupDAO.getInstance().getStudentsOfGroup(rs.getInt(1));
-				ArrayList<HomeworkDetails> homeworkDetailsOfGroup = GroupDAO.getInstance()
-						.getHomeworkDetailsOfGroup(rs.getInt(1));
-				groupsOfUser.add(new Group(rs.getInt(1), rs.getString(2), teachersOfGroup, studentsOfGroup,
-						homeworkDetailsOfGroup));
+//				ArrayList<Teacher> teachersOfGroup = GroupDAO.getInstance().getTeachersOfGroup(rs.getInt(1));
+//				ArrayList<Student> studentsOfGroup = GroupDAO.getInstance().getStudentsOfGroup(rs.getInt(1));
+//				ArrayList<HomeworkDetails> homeworkDetailsOfGroup = GroupDAO.getInstance()
+//						.getHomeworkDetailsOfGroup(rs.getInt(1));
+//				groupsOfUser.add(new Group(rs.getInt(1), rs.getString(2), teachersOfGroup, studentsOfGroup,
+//						homeworkDetailsOfGroup));
+//				ArrayList<Teacher> teachersOfGroup = GroupDAO.getInstance().getTeachersOfGroup(rs.getInt(1));
+//				ArrayList<Student> studentsOfGroup = GroupDAO.getInstance().getStudentsOfGroup(rs.getInt(1));
+//				ArrayList<HomeworkDetails> homeworkDetailsOfGroup = GroupDAO.getInstance()
+//						.getHomeworkDetailsOfGroup(rs.getInt(1));
+				groupsOfUser.add(new Group(rs.getInt(1), rs.getString(2)));
+
 			}
 		} catch (SQLException e) {
 			throw new UserException("Something went wrong with getting user's groups..");
@@ -175,18 +182,33 @@ public class UserDAO implements IUserDAO {
 			ResultSet rs = ps.executeQuery();
 			if(ValidationsDAO.getInstance().doesUserExistInDBById(studentId)){
 			while (rs.next()) {
-//				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//				String openingTimeString = rs.getString(5);
-//				String closingTimeString = rs.getString(6);
-//				LocalDateTime openingTime = LocalDateTime.parse(openingTimeString, formatter);
-//				LocalDateTime closingTime = LocalDateTime.parse(closingTimeString, formatter);
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				String openingTimeString = rs.getString(3);
+				String closingTimeString = rs.getString(4);
+				LocalDateTime openingTime = LocalDateTime.parse(openingTimeString, formatter);
+				LocalDateTime closingTime = LocalDateTime.parse(closingTimeString, formatter);
 
-				HomeworkDetails hd = new HomeworkDetails(rs.getInt(1), rs.getString(2), null, null,
-						rs.getInt(3), rs.getString(4),rs.getString(7));
+//				HomeworkDetails hd = new HomeworkDetails(rs.getInt(1), rs.getString(2), null, null,
+//						rs.getInt(3), rs.getString(4),rs.getString(7));
+//				ArrayList<Task> tasksOfHomeworkOfStudent = UserDAO.getInstance().getTasksOfHomeworkOfStudent(studentId,
+//						hd.getId());
+//				homeworksOfStudentByGroup
+//						.add(new Homework(rs.getInt(5), rs.getString(6), tasksOfHomeworkOfStudent, hd));
+				int teacherScore = 0;
+				if (rs.getInt(7) != 0) {
+					teacherScore = rs.getInt(7);
+				}
+				String teacherComment = " ";
+				if (rs.getString(8) != null) {
+					teacherComment = rs.getString(8);
+				}
+				
+				HomeworkDetails hd = new HomeworkDetails(rs.getInt(1), rs.getString(2), openingTime, closingTime,
+						rs.getInt(5), rs.getString(6),rs.getString(7));
 				ArrayList<Task> tasksOfHomeworkOfStudent = UserDAO.getInstance().getTasksOfHomeworkOfStudent(studentId,
 						hd.getId());
 				homeworksOfStudentByGroup
-						.add(new Homework(rs.getInt(5), rs.getString(6), tasksOfHomeworkOfStudent, hd));
+						.add(new Homework(teacherScore, teacherComment, tasksOfHomeworkOfStudent, hd));
 			}
 			}else{
 				throw new ValidationException("Student does not exist");
@@ -207,6 +229,7 @@ public class UserDAO implements IUserDAO {
 	@Override
 	public ArrayList<Task> getTasksOfHomeworkOfStudent(int studentId, int homeworkDetailsId)
 			throws UserException {
+		long start = System.currentTimeMillis();
 		ArrayList<Task> tasksOfHomeworkOfStudent = new ArrayList<>();
 		Connection con = manager.getConnection();
 		try {
@@ -257,15 +280,37 @@ public class UserDAO implements IUserDAO {
 								groupsOfUser);
 					} else {
 						//int id = UserDAO.getInstance().getUserIdByUsername(username);
-						ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(userId);
+						//ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(userId);
 						u = new Student(rs.getInt(1), rs.getString(2)
 								, rs.getString(3), rs.getString(4),
-								 groupsOfUser, homeworksOfStudent);
+								groupsOfUser, null);
 					}
 				}
 			} catch (SQLException e) {
 				throw new UserException("Something went wrong with getting user by username..");
 			}
+//			try {
+//				PreparedStatement ps = con.prepareStatement(GET_USER_BY_ID);
+//				ps.setInt(1, userId);
+//
+//				ResultSet rs = ps.executeQuery();
+//				if (rs.next()) {
+//					ArrayList<Group> groupsOfUser = UserDAO.getInstance()
+//							.getGroupsOfUserWithoutStudents(userId);
+//					if (UserDAO.getInstance().isUserATeacher(userId)) {
+//						u = new Teacher(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
+//								groupsOfUser);
+//					} else {
+//						//int id = UserDAO.getInstance().getUserIdByUsername(username);
+//						ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(userId);
+//						u = new Student(rs.getInt(1), rs.getString(2)
+//								, rs.getString(3), rs.getString(4),
+//								 groupsOfUser, homeworksOfStudent);
+//					}
+//				}
+//			} catch (SQLException e) {
+//				throw new UserException("Something went wrong with getting user by username..");
+//			}
 		}
 
 		return u;
@@ -450,7 +495,7 @@ public class UserDAO implements IUserDAO {
 					UserDAO.getInstance().setTimeOfUploadOfTask(homeworkDetailsId, studentId, taskNumber, timeOfUpload);
 					con.commit();
 				} catch (SQLException e) {
-					System.out.println("OAPAPPAPA");
+					System.out.println(e.getMessage());
 					e.getStackTrace();
 					con.rollback();
 					throw new UserException("Something went wrong with setting student's solution of task..");
@@ -561,10 +606,13 @@ public class UserDAO implements IUserDAO {
 			ps.setInt(1, userId);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				int id = UserDAO.getInstance().getUserIdByUsername(username);
-				ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(id);
-				u = new Student(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), null,
-						homeworksOfStudent);
+//				int id = UserDAO.getInstance().getUserIdByUsername(username);
+//				ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(id);
+//				u = new Student(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), null,
+//						homeworksOfStudent);
+//				int id = UserDAO.getInstance().getUserIdByUsername(username);
+//				ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(id);
+				u = new Student(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), null, null);
 			}
 		} catch (SQLException e) {
 			throw new UserException("Something went wrong with getting user by username..");
@@ -673,15 +721,26 @@ public class UserDAO implements IUserDAO {
 			PreparedStatement ps = con.prepareStatement(GET_USER_BY_ID);
 			ps.setInt(1, userId);
 			ResultSet rs = ps.executeQuery();
+//			if (rs.next()) {
+//				ArrayList<Group> groupsOfUser = UserDAO.getInstance().getGroupsOfUserWithoutStudents(userId);
+//				if (UserDAO.getInstance().isUserATeacher(userId)) {
+//					u = new Teacher(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), 
+//							groupsOfUser);
+//				} else {
+//					ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(userId);
+//					u = new Student(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), 
+//							groupsOfUser, homeworksOfStudent);
+//				}
+//			}
 			if (rs.next()) {
 				ArrayList<Group> groupsOfUser = UserDAO.getInstance().getGroupsOfUserWithoutStudents(userId);
 				if (UserDAO.getInstance().isUserATeacher(userId)) {
 					u = new Teacher(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), 
 							groupsOfUser);
 				} else {
-					ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(userId);
+//					ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(userId);
 					u = new Student(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), 
-							groupsOfUser, homeworksOfStudent);
+							groupsOfUser, null);
 				}
 			}
 		} catch (SQLException e) {
@@ -773,6 +832,61 @@ public class UserDAO implements IUserDAO {
 			throw new UserException("Something went wrong with getting groups of user..");
 		}
 		return groups;
+	}
+
+	@Override
+	public Homework getHomeworkOfStudent(int userId, int homeworkId) throws UserException {
+		//ArrayList<Homework> homeworksOfStudent = new ArrayList<>();
+		Connection con = manager.getConnection();
+		try {
+			PreparedStatement ps = con.prepareStatement(GET_HOMEWORK_OF_STUDENT);
+			ps.setInt(1, userId);
+			ps.setInt(2, homeworkId);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				String openingTimeString = rs.getString(5);
+				String closingTimeString = rs.getString(6);
+				LocalDateTime openingTime = LocalDateTime.parse(openingTimeString, formatter);
+				LocalDateTime closingTime = LocalDateTime.parse(closingTimeString, formatter);
+				HomeworkDetails hd = new HomeworkDetails(rs.getInt(1), rs.getString(2), openingTime, closingTime,
+						rs.getInt(3), rs.getString(4),rs.getString(9));
+				
+				ArrayList<Task> tasksOfHomeworkOfStudent = UserDAO.getInstance().getTasksOfHomeworkOfStudent(userId,
+						hd.getId());
+				System.out.println("Solution is: " + tasksOfHomeworkOfStudent.get(0).getSolution() + " user is " + userId + "hwdt :" + hd.getId());
+				int teacherScore = 0;
+				if (rs.getInt(7) != 0) {
+					teacherScore = rs.getInt(7);
+				}
+				String teacherComment = " ";
+				if (rs.getString(8) != null) {
+					teacherComment = rs.getString(8);
+				}
+				return new Homework(teacherScore, teacherComment, tasksOfHomeworkOfStudent, hd);
+			//	homeworksOfStudent.add(new Homework(teacherScore, teacherComment, tasksOfHomeworkOfStudent, hd));
+			}
+		} catch (SQLException e) {
+			throw new UserException("Something went wrong with checking the homeworks of a student by group..");
+		}
+		return null;
+	}
+
+	@Override
+	public void setPassedSystemTest(int userId, int homeworkDetailsId, int taskNum, boolean hasPassedTest) throws UserException {
+		Connection con = manager.getConnection();
+		try {
+			PreparedStatement ps = con.prepareStatement("UPDATE IttalentsHomeworks.Homework_task_solution SET has_passed_system_test = ? WHERE student_id = ? AND homework_id = ? AND task_number = ?;");
+			ps.setBoolean(1, hasPassedTest);
+			ps.setInt(2, userId);
+			ps.setInt(3, homeworkDetailsId);
+			ps.setInt(4, taskNum);
+			ps.executeUpdate();
+			System.out.println("updated on " + userId + ", " + homeworkDetailsId);
+		} catch (SQLException e) {
+			throw new UserException("Something went wrong with setting of system score task of homework of student..");
+		}
+		
 	}
 
 //	@Override

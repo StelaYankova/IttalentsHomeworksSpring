@@ -40,6 +40,7 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 		resolver.setDefaultEncoding("utf-8");
 		return resolver;
 	}
+	
 	@Bean
 	public StringHttpMessageConverter stringHttpMessageConverter() {
 	    return new StringHttpMessageConverter(Charset.forName("UTF-8"));

@@ -46,6 +46,7 @@
 						<th>Heading</th>
 						<!-- <td>Opens</td>
 						<td>Closes</td> -->
+						<th>System score</th>
 						<th>Teacher score</th>
 						<th>Teacher comment</th>
 					</tr>
@@ -53,10 +54,16 @@
 				<tbody class=wrapword>
 				</tbody>
 			</table>
-			<div id = "studentAverageScore">
-				<strong><u>Average score: <span id = "score"></span>/100</u></strong>
+			<div id="studentAverageScore">
+				<strong><u>Average teacher score: <span id="score"></span>/100
+				</u></strong>
+			</div>
+			<div id="studentAverageSystemScore">
+				<strong><u>Average system score: <span id="scoreSystem"></span>/100
+				</u></strong>
 			</div>
 		</div>
+	</div>
 		</div>
 	<script>
 		$(document)
@@ -69,23 +76,25 @@
 							var table = $('#resultTable').DataTable({
 								"aoColumnDefs" : [ {
 									'className' : "wrapword",
-									"targets" : [ 0, 1, 2],
+									"targets" : [ 0, 1, 2,3],
 									"bSort" : false,
 									
 								} ],
 								"aoColumns": [
 { "bSortable": true },
-{ "bSortable": true },
+{ "bSortable": false },{ "bSortable": false },
 { "bSortable": false }
 ],
 								"dom" : '<"top"l>rt<"bottom"ip><"clear">',
-								/* "aoColumns" : [ {
+								/*  "aoColumns" : [ {
 									sWidth : '14%'
 								}, {
 									sWidth : '12%'
 								}, {
 									sWidth : '12%'
-								}], */
+								}, {
+									sWidth : '2%'
+								}],  */
 								/* "lengthMenu" : [ 5 ], */
 								"bDestroy" : true,
 								"bPaginate" : false,
@@ -148,9 +157,11 @@
 																			.draw();
 																}
 																var averageScore = 0;
+																var averageSystemScore = 0;
 																var numberHomeworks = 0;
 																for ( var i in response) {
 																	averageScore += response[i].teacherScore;
+																	averageSystemScore += response[i].systemScore;
 																	numberHomeworks += 1;
 																	var opens = response[i].opens;
 																	var opensRep = opens
@@ -162,12 +173,14 @@
 																			.replace(
 																					"T",
 																					" ");
+																	console.log(response[i].systemScore)
+																	console.log(response[i].teacherComment)
 																	var rowNode = table.row
 																			.add(
 																					[
-																							"<form action = './seeChosenHomeworkPageOfStudentByStudent' method = 'GET'><input type = 'hidden' name = 'homeworkId' value = " + response[i].id+ "><button class='btn btn-link' type = 'submit'>"
+																							"<form action = './seeChosenHomeworkPageOfStudentByStudent' method = 'GET'><input type = 'hidden' name = 'homeworkId' value = " + response[i].id+ "><button class='wrapword btn btn-link' type = 'submit'>"
 																									+ response[i].heading
-																									+ "</button></form>",
+																									+ "</button></form>",response[i].systemScore,
 																							/* opensRep,
 																							closesRep, */
 																							response[i].teacherScore
@@ -190,6 +203,7 @@
 
 																}
 																var answer = (averageScore/numberHomeworks).toFixed(1);
+																var answerSystemScore = (averageSystemScore/numberHomeworks).toFixed(1);
 																document.getElementById("studentAverageScore").style.display = "block";
 															
 											if (!$('#score').is(':empty')) {
@@ -200,6 +214,14 @@
 																	document.getElementById("score").append(0);
 																}else{
 																	document.getElementById("score").append(answer);
+																}
+																if (!$('#scoreSystem').is(':empty')) {
+																	$("#scoreSystem").empty();
+																}
+																if(answerSystemScore === 'NaN'){
+																	document.getElementById("scoreSystem").append(0);
+																}else{
+																	document.getElementById("scoreSystem").append(answerSystemScore);
 																}
 															}
 														});

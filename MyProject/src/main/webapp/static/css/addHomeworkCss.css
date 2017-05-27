@@ -8,6 +8,19 @@
 	text-align: right;
 	float: left;
 }
+.form-horizontal .form-group:nth-child(7) .control-label-input {
+    padding-top: 0.55em;
+}
+.form-horizontal .form-group:nth-child(6) .control-label-input {
+    padding-top: 0.55em;
+}
+#testsFileConstraint{
+	font-size: 0.65em;
+    color: red;
+    float: left;
+        padding-top: 0.4em;
+    padding-left: 0.2em;
+}
 
 .form-horizontal .control-label:last-child {
 	margin-bottom: 0;

@@ -8,11 +8,29 @@
     z-index: 1;
     width: 30%;
 }
+.form-horizontal .form-group:nth-child(7) .control-label-input {
+    padding-top: 0.55em;
+}
+.form-horizontal .form-group:nth-child(6) .control-label-input {
+    padding-top: 0.55em;
+}
+#testsFileConstraint{
+	font-size: 0.65em;
+    color: red;
+    float: left;
+        padding-top: 0.4em;
+    padding-left: 0.2em;
+}
 #removeHomeworkForm {
     position: absolute;
     left: 7em;
     top: -0.4em;
     width: 10%;
+}
+#downloadHomeworkTestsForm{
+	width: 25%;
+    margin-top: -1.55em;
+    margin-left: -1.5em;
 }
 #downloadHomeworkForm {
 	width: 10%;
@@ -25,7 +43,8 @@
 }
 .form-horizontal .control-label {
 	padding-right: 1em;
-	padding-top:0.438em;
+	/* padding-top:0.438em; */
+	    padding-top: 0.7em !important;
 	width: 38%;
 	text-align: right;
 	float: left;
@@ -86,6 +105,10 @@ max-width
 #formUpdate {
 	width: 60%;
 }
+#downloadHomeworkTestsForm{
+	    margin-top: -1.57em;
+    margin-left: -3.3em;
+}
 #downloadHomeworkForm {
 	padding-left:3.3em;
 }
@@ -107,8 +130,9 @@ max-width
 
 @media ( max-width :800px) {
 	.form-horizontal .control-label {
-		padding-top: 0.438em;
-		margin-bottom: 0;
+/* 		padding-top: 0.438em;
+ */    padding-top: 0.7em !important;		
+ margin-bottom: 0;
 		text-align: right;
 	}
 	#formUpdate {
@@ -132,6 +156,10 @@ max-width
 		width: 95%;
 		padding-left: 12.3em;
 	}
+	#downloadHomeworkTestsForm {
+    margin-top: -2.57em;
+    margin-left: 3em;
+}
 }
 @media ( max-width :774px) {
 	#downloadHomeworkForm {
@@ -148,7 +176,8 @@ max-width
 	}
 	.form-horizontal .control-label {
 		width: 100%;
-		padding-top: 0.438em;
+		/* padding-top: 0.438em; */
+		    padding-top: 0.7em !important;
 		margin-bottom: 0;
 		text-align: left;
 		padding-left: 2em;
@@ -162,6 +191,13 @@ max-width
 		width: 100%;
 		padding-left: 2em;
 	}
+	#downloadHomeworkTestsForm button{
+		font-size:0.74em;
+	}
+	#downloadHomeworkTestsForm{
+	    margin-top: -2.3em;
+  	  margin-left: 0.89em;
+    }
 	#downloadHomeworkForm button{
 		font-size:0.74em;
 	}

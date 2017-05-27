@@ -3,6 +3,7 @@ package com.IttalentsHomeworks.DAO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,7 +36,7 @@ public class GroupDAO implements IGroupDAO {
 	private static final String GET_GROUP_ID_BY_GROUP_NAME = "SELECT id FROM IttalentsHomeworks.Groups WHERE BINARY group_name = ?;";
 	private static final String GET_GROUP_BY_ID = "SELECT id, group_name FROM IttalentsHomeworks.Groups WHERE id = ?;";
 	private static final String ADD_HOMEWORK_TO_GROUP_III = "INSERT INTO IttalentsHomeworks.Homework_task_solution VALUES(?,?,?,null,null,0);";
-	private static final String ADD_HOMEWORK_TO_GROUP_II = "INSERT INTO IttalentsHomeworks.User_has_homework VALUES (?,?,null, null);";
+	private static final String ADD_HOMEWORK_TO_GROUP_II = "INSERT INTO IttalentsHomeworks.User_has_homework VALUES (?,?,0, '');";
 	private static final String ADD_HOMEWORK_TO_GROUP_I = "INSERT INTO IttalentsHomeworks.Group_has_Homework VALUES (?,?);";
 	// private static final String REMOVE_HOMEWORK_FROM_GROUP_III = "DELETE FROM
 	// IttalentsHomeworks.Homework_task_solution WHERE student_id = ? AND
@@ -45,7 +46,7 @@ public class GroupDAO implements IGroupDAO {
 	// ?;";
 	private static final String REMOVE_HOMEWORK_FROM_GROUP_I = "DELETE FROM IttalentsHomeworks.Group_has_Homework WHERE group_id = ? AND homework_id = ?;";
 	private static final String GET_IDS_OF_GROUPS_FOR_WHICH_IS_HOMEWORK = "SELECT group_id FROM IttalentsHomeworks.Group_has_Homework WHERE homework_id = ?;";
-	private static final String UPDATE_HOMEWORK_DETAILS = "UPDATE IttalentsHomeworks.Homework SET heading = ?, opens = ?, closes = ?, num_of_tasks = ?, tasks_pdf = ? WHERE id = ?;";
+	private static final String UPDATE_HOMEWORK_DETAILS = "UPDATE IttalentsHomeworks.Homework SET heading = ?, opens = ?, closes = ?, num_of_tasks = ?, tasks_pdf = ?, test_tasks_directory = ? WHERE id = ?;";
 	private static final String GET_HOMEWORK_DETAILS_ID = "SELECT id FROM IttalentsHomeworks.Homework WHERE BINARY heading = ?;";
 	private static final String CREATE_HOMEWORK_DETAILS = "INSERT INTO IttalentsHomeworks.Homework VALUES (NULL, ?, ?, ?, ?, ?,?);";
 	private static final String REMOVE_GROUP = "DELETE FROM IttalentsHomeworks.Groups WHERE id = ?;";
@@ -135,11 +136,10 @@ public class GroupDAO implements IGroupDAO {
 			while (rs.next()) {
 				// all homeworks of student, not by group
 				// we dont have to know their groups
-				Student currStudent = (Student) UserDAO.getInstance().getStudentsByUsername(rs.getString(2));
-				ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance()
-						.getHomeworksOfStudent(currStudent.getId());
-				studentsOfGroup.add(new Student(rs.getInt(1), rs.getString(2), rs.getString(3), 
-						homeworksOfStudent));
+				//Student currStudent = (Student) UserDAO.getInstance().getStudentsByUsername(rs.getString(2));
+//				ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance()
+//						.getHomeworksOfStudent(currStudent.getId());
+				studentsOfGroup.add(new Student(rs.getInt(1), rs.getString(2), rs.getString(3)));
 			}
 		} catch (SQLException e) {
 			throw new GroupException("Something went wrong with checking the students of a group..");
@@ -351,12 +351,17 @@ public class GroupDAO implements IGroupDAO {
 			ResultSet rs = st.executeQuery(GET_ALL_GROUPS);
 			while (rs.next()) {
 				//Group currGroup = new Group(rs.getInt(1), rs.getString(2));
-				ArrayList<Teacher> teachersOfGroup = GroupDAO.getInstance().getTeachersOfGroup(rs.getInt(1));
-				ArrayList<Student> studentsOfGroup = GroupDAO.getInstance().getStudentsOfGroup(rs.getInt(1));
-				ArrayList<HomeworkDetails> homeworkDetailsOfGroup = GroupDAO.getInstance()
-						.getHomeworkDetailsOfGroup(rs.getInt(1));
-				groups.add(new Group(rs.getInt(1), rs.getString(2), teachersOfGroup, studentsOfGroup,
-						homeworkDetailsOfGroup));
+//				ArrayList<Teacher> teachersOfGroup = GroupDAO.getInstance().getTeachersOfGroup(rs.getInt(1));
+//				ArrayList<Student> studentsOfGroup = GroupDAO.getInstance().getStudentsOfGroup(rs.getInt(1));
+//				ArrayList<HomeworkDetails> homeworkDetailsOfGroup = GroupDAO.getInstance()
+//						.getHomeworkDetailsOfGroup(rs.getInt(1));
+//				groups.add(new Group(rs.getInt(1), rs.getString(2), teachersOfGroup, studentsOfGroup,
+//						homeworkDetailsOfGroup));
+//				ArrayList<Teacher> teachersOfGroup = GroupDAO.getInstance().getTeachersOfGroup(rs.getInt(1));
+//				ArrayList<Student> studentsOfGroup = GroupDAO.getInstance().getStudentsOfGroup(rs.getInt(1));
+//				ArrayList<HomeworkDetails> homeworkDetailsOfGroup = GroupDAO.getInstance()
+//						.getHomeworkDetailsOfGroup(rs.getInt(1));
+				groups.add(new Group(rs.getInt(1), rs.getString(2)));
 			}
 		} catch (SQLException e) {
 			throw new UserException("Something went wrong with getting groups.." + e.getMessage());
@@ -412,22 +417,15 @@ public class GroupDAO implements IGroupDAO {
 
 	@Override
 	public void createHomeworkDetails(HomeworkDetails homeworkDetails, ArrayList<Integer> groupsForHomework)
-			throws GroupException, UserException, ValidationException, NotUniqueUsernameException {
+			throws GroupException, UserException, ValidationException, NotUniqueHomeworkHeadingException {
 		Connection con = manager.getConnection();
-		System.out.println("111111111");
 		if (ValidationsDAO.getInstance().isHomeworkHeadingUniqueAddHomework(homeworkDetails.getHeading())) {
-			System.out.println("2222222222");
-
 			if (homeworkDetails.getTasksFile() != null && !(homeworkDetails.getTasksFile().trim().equals("")
 					&& homeworkDetails.getTestTasksFile() != null && !homeworkDetails.getTestTasksFile().trim().equals("")
 					&& groupsForHomework != null && groupsForHomework.size() > 0)) {
-				System.out.println("3333333333");
-
 				if (!ValidationsDAO.getInstance().isThereEmptyFieldAddHomework(homeworkDetails.getHeading(),
 						homeworkDetails.getOpeningTime().toString(), homeworkDetails.getClosingTime().toString(),
 						homeworkDetails.getNumberOfTasks())) {
-					System.out.println("444444444444");
-
 					if (ValidationsDAO.getInstance().isLengthHeadingValidAddHomework(homeworkDetails.getHeading())
 							&& ValidationsDAO.getInstance()
 									.isHomeworkOpeningTimeValidAddHomework(homeworkDetails.getOpeningTime().toString())
@@ -436,11 +434,8 @@ public class GroupDAO implements IGroupDAO {
 									homeworkDetails.getClosingTime().toString())
 							&& ValidationsDAO.getInstance()
 									.isHomeworkNumberOfTasksValidAddHomework(homeworkDetails.getNumberOfTasks())) {
-						System.out.println("5555555555");
-
 						try {
 							con.setAutoCommit(false);
-							System.out.println("19191191");
 							PreparedStatement ps = con.prepareStatement(CREATE_HOMEWORK_DETAILS);
 							ps.setString(1, homeworkDetails.getHeading());
 							ps.setString(2, homeworkDetails.getOpeningTime().toString());
@@ -448,14 +443,11 @@ public class GroupDAO implements IGroupDAO {
 							ps.setInt(4, homeworkDetails.getNumberOfTasks());
 							ps.setString(5, homeworkDetails.getTasksFile());
 							ps.setString(6, homeworkDetails.getTestTasksFile());
-							ps.execute();
-							System.out.println("6666666");
-							
+							ps.execute();							
 							homeworkDetails.setId(GroupDAO.getInstance().getHomeworkDetailsId(homeworkDetails.getHeading()));
 							for (Integer groupId : groupsForHomework) {
 								GroupDAO.getInstance().addHomeworkToGroupTransaction(homeworkDetails, groupId);
 							}
-							System.out.println("7777777777");
 							con.commit();
 						} catch (SQLException e) {
 							if (con != null) {
@@ -476,22 +468,16 @@ public class GroupDAO implements IGroupDAO {
 							}
 						}
 					} else {
-						System.out.println("888888888");
-
 						throw new ValidationException("Add homework --> invalid field");
 					}
 				} else {
-					System.out.println("999999999");
-
 					throw new ValidationException("Add homework --> empty field");
 				}
 			} else {
-				System.out.println("10101101");
-
 				throw new ValidationException("Add homework --> empty field");
 			}
 		} else {
-			throw new NotUniqueUsernameException("Add homework --> not unique username");
+			throw new NotUniqueHomeworkHeadingException("Add homework --> not unique username");
 		}
 
 	}
@@ -528,13 +514,12 @@ public class GroupDAO implements IGroupDAO {
 	 */
 	@Override
 	public void updateHomeworkDetails(HomeworkDetails homeworkDetails, ArrayList<Integer> groupsForHomework)
-			throws GroupException, UserException, ValidationException, NotUniqueUsernameException {
+			throws GroupException, UserException, ValidationException, NotUniqueHomeworkHeadingException {
 		Connection con = manager.getConnection();// get id
 		HomeworkDetails currHd = GroupDAO.getInstance().getHomeworkDetailsById(homeworkDetails.getId());
-
 		if (ValidationsDAO.getInstance().isHomeworkUpdateHeadingUnique(homeworkDetails.getHeading(), currHd)) {
 
-			if (homeworkDetails.getTasksFile() != null && !(homeworkDetails.getTasksFile().trim().equals(""))
+			if (homeworkDetails.getTasksFile() != null && !(homeworkDetails.getTasksFile().trim().equals("") && homeworkDetails.getTestTasksFile() != null && !(homeworkDetails.getTestTasksFile().trim().equals("")))
 					&& groupsForHomework != null && groupsForHomework.size() > 0) {
 				if (!ValidationsDAO.getInstance().updateGroupAreThereEmptyFields(homeworkDetails.getHeading(),
 						homeworkDetails.getOpeningTime().toString(), homeworkDetails.getClosingTime().toString(),
@@ -556,7 +541,8 @@ public class GroupDAO implements IGroupDAO {
 							ps.setString(3, homeworkDetails.getClosingTime().toString());
 							ps.setInt(4, homeworkDetails.getNumberOfTasks());
 							ps.setString(5, homeworkDetails.getTasksFile());
-							ps.setInt(6, homeworkDetails.getId());
+							ps.setString(6, homeworkDetails.getTestTasksFile());
+							ps.setInt(7, homeworkDetails.getId());
 							ps.executeUpdate();
 							ArrayList<Integer> currGroupIds = GroupDAO.getInstance()
 									.getIdsOfGroupsForWhichIsHomework(homeworkDetails.getId());
@@ -605,7 +591,7 @@ public class GroupDAO implements IGroupDAO {
 				throw new ValidationException("Update homework --> empty field");
 			}
 		} else {
-			throw new NotUniqueUsernameException("Add homework --> not unique username");
+			throw new NotUniqueHomeworkHeadingException("Add homework --> not unique username");
 		}
 
 	}
@@ -726,11 +712,16 @@ public class GroupDAO implements IGroupDAO {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				ArrayList<Teacher> teachers = GroupDAO.getInstance().getTeachersOfGroup(id);
-				ArrayList<Student> students = GroupDAO.getInstance().getStudentsOfGroup(id);
-				ArrayList<HomeworkDetails> homeworkDetails = GroupDAO.getInstance()
-						.getHomeworkDetailsOfGroup(id);
-				group = new Group(rs.getInt(1), rs.getString(2), teachers, students, homeworkDetails);
+//				ArrayList<Teacher> teachers = GroupDAO.getInstance().getTeachersOfGroup(id);
+//				ArrayList<Student> students = GroupDAO.getInstance().getStudentsOfGroup(id);
+//				ArrayList<HomeworkDetails> homeworkDetails = GroupDAO.getInstance()
+//						.getHomeworkDetailsOfGroup(id);
+//				group = new Group(rs.getInt(1), rs.getString(2), teachers, students, homeworkDetails);
+//				ArrayList<Teacher> teachers = GroupDAO.getInstance().getTeachersOfGroup(id);
+//				ArrayList<Student> students = GroupDAO.getInstance().getStudentsOfGroup(id);
+//				ArrayList<HomeworkDetails> homeworkDetails = GroupDAO.getInstance()
+//						.getHomeworkDetailsOfGroup(id);
+				group = new Group(rs.getInt(1), rs.getString(2));
 			}
 		} catch (SQLException e) {
 			throw new GroupException("Something went wrong with getting the group by id..");
@@ -874,28 +865,23 @@ public class GroupDAO implements IGroupDAO {
 	public void addHomeworkToGroupTransaction(HomeworkDetails homeworkDetails, int groupId)
 			throws GroupException, UserException, SQLException {
 		Connection con = manager.getConnection();
-		System.out.println("pppppppppp");
 		PreparedStatement ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_I);
 		ps.setInt(1, groupId);
 		ps.setInt(2, homeworkDetails.getId());
 		ps.execute();
-		System.out.println("eeeeeeeeeeeee");
-
 		for (Student s : GroupDAO.getInstance().getStudentsOfGroup(groupId)) {
+			System.out.println("user with id " + s.getId() + " is in group");
 			if (!((GroupDAO) GroupDAO.getInstance()).doesStudentAlreadyHaveHomework(s.getId(), homeworkDetails)) {
-				System.out.println("ggggggggg");
-
+				System.out.println("user with id " + s.getId() + " does not have hw");
 				ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_II);
 				ps.setInt(1, s.getId());
 				ps.setInt(2, homeworkDetails.getId());
 				ps.execute();
-				System.out.println(";;;;;;;;;;;;");
-
+				System.out.println("nubmer of tasks is " + homeworkDetails.getNumberOfTasks());
 				for (int i = 0; i < homeworkDetails.getNumberOfTasks(); i++) {
-					System.out.println("sssssssssssss");
-
 					Task t = new Task(i, null, null, false);
 					if (!UserDAO.getInstance().doesTaskAlreadyExist(homeworkDetails.getId(), s.getId(), i)) {
+						System.out.println("Task is does not exist yet..");
 						ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_III);
 						ps.setInt(1, s.getId());
 						ps.setInt(2, homeworkDetails.getId());
@@ -903,8 +889,6 @@ public class GroupDAO implements IGroupDAO {
 						ps.execute();
 
 					}
-					System.out.println("vvvvvvvvvvvv");
-
 				}
 			}
 		}
@@ -1064,50 +1048,147 @@ public class GroupDAO implements IGroupDAO {
 	@Override
 	public boolean doesPassSystemTest(String solutionOfStudent, Homework homework, int taskNum) throws IOException, InterruptedException {
 		//we enter the directory with the student answer
+		System.out.println("Full directory: " + solutionOfStudent);
 		String getNameOfTask = solutionOfStudent.split("/", solutionOfStudent.length())[1];
 		String getNameOfDir = solutionOfStudent.split("/", solutionOfStudent.length())[0];
-
-//		Process proc = Runtime.getRuntime()
-//				.exec("cd "+ IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator+ getNameOfDir);
-//		proc.waitFor();
-//		proc = Runtime.getRuntime()
-//				.exec("javac "+ getNameOfTask);proc.waitFor();
-//		Process proc = Runtime.getRuntime()
-//		.exec("javac /Users/Stela/Desktop/homeworkSolutionsJavaIttalentsHomework/hwId210userId260taskNum0/runProgram.java");
+		
+		//we compile the program
 		Process proc = Runtime.getRuntime()
 				.exec("javac "+ IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA + File.separator + solutionOfStudent);
-		System.out.println("javac "+ IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA + File.separator + solutionOfStudent);		
-		System.out.println("cd "+ IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator+ getNameOfDir);
-		System.out.println("javac "+ getNameOfTask);
+		System.out.println("proc starts waiting");
+		proc.waitFor();
+		System.out.println("proc ends waiting");
 		String outXPath = IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator + homework.getHomeworkDetails().getTestTasksFile();
-		//we put answer into the directory of students answer (split po /)
-		proc = Runtime.getRuntime().exec("java -cp "+ IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator +" "+ getNameOfTask.substring(0, getNameOfTask.length()-5) + " < "+ outXPath + File.separator + "in" + taskNum + ".txt > " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator + "answer.txt");
-		System.out.println("java -cp "+ IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator +" "+ getNameOfTask.substring(0, getNameOfTask.length()-5) + " < "+ outXPath + File.separator + "in" + taskNum + ".txt > " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator + "answer.txt");
-		
-		//we read result
-		proc = Runtime.getRuntime().exec(
-				"cat " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA + solutionOfStudent + File.separator + "answer.txt");
-		BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-		String answerSolution = null;
-		StringBuilder answerStudent = new StringBuilder();
-		while ((answerSolution = stdInput.readLine()) != null) {
-			answerStudent.append(answerSolution);
-		}
-		//get real solution
-		//we go to the directory of the file with test tasks of homework and we read the out file with number of task
-		String inXPath = IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator + homework.getHomeworkDetails().getTestTasksFile();
 
-		Process proc1 = Runtime.getRuntime()
-				.exec("cat " + inXPath + File.separator +  "out" + taskNum + ".txt");
-		stdInput = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
-		String answerTest = null;
-		StringBuilder answerTruth = new StringBuilder();
-		while ((answerTest = stdInput.readLine()) != null) {
-			answerTruth.append(answerTest);
+		//we get args params
+		System.out.println("cat "+outXPath + File.separator + "in" + taskNum + ".txt");
+		File in = new File(outXPath + File.separator + "in" + taskNum + ".txt");
+		if(!in.exists()){
+			System.out.println("File in does not exist");
+			return false;
 		}
+		Process proc1 = Runtime.getRuntime().exec("cat "+outXPath + File.separator + "in" + taskNum + ".txt");
+		proc1.waitFor();
+		InputStream stdout = proc1.getInputStream ();
+		BufferedReader reader = new BufferedReader (new InputStreamReader(stdout));
+		String line = "";
+  		StringBuilder argParams = new StringBuilder();
+
+		while ((line = reader.readLine ()) != null) {
+			argParams.append(line + " ");
+		}
+	    System.out.println ("args params: " + argParams);
+
+	    //we run the program 
+	    System.out.println("Fails " + getNameOfTask);
+	    System.out.println(getNameOfTask.substring(0, getNameOfTask.length()-5));
+	    System.out.println("java -cp " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator +" "+ getNameOfTask.substring(0, getNameOfTask.length()-5) + " " + argParams);
+	    Process proc2 = Runtime.getRuntime().exec("java -cp " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator +" "+ getNameOfTask.substring(0, getNameOfTask.length()-5) + " " + argParams);
+	    proc2.waitFor();
+	    stdout = proc2.getInputStream ();
+		 reader = new BufferedReader (new InputStreamReader(stdout));
+	    line = "";
+  		StringBuilder answerStudent = new StringBuilder();
+	    while ((line = reader.readLine ()) != null) {
+	    	answerStudent.append(line);
+		}
+	    System.out.println ("student answer : " + answerStudent);
+	//we  get real solution
+	  	//	we go to the directory of the file with test tasks of homework and we read the out file with number of task
+	  		String inXPath = IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator + homework.getHomeworkDetails().getTestTasksFile();
+	  		File out = new File(inXPath + File.separator +  "out" + taskNum + ".txt");
+	  		if(!out.exists()){
+	  			System.out.println("Out file does not exist");
+	  			return false;
+	  		}
+	  		Process proc3 = Runtime.getRuntime()
+	  				.exec("cat " + inXPath + File.separator +  "out" + taskNum + ".txt");
+	  		proc3.waitFor();
+	  		stdout = proc3.getInputStream ();
+			 reader = new BufferedReader (new InputStreamReader(stdout));
+	  		String answerTest = null;
+	  		StringBuilder answerTruth = new StringBuilder();
+	  		while ((answerTest = reader.readLine()) != null) {
+	  			answerTruth.append(answerTest);
+	  		}
+	    boolean doesPastSystemTest = answerStudent.toString().equals(answerTruth.toString());
 		System.out.println(answerStudent);
 		System.out.println(answerTruth);
-		System.out.println(answerStudent.toString().equals(answerTruth.toString()));
-		return (answerStudent.toString().equals(answerTruth.toString()));
+		System.out.println(doesPastSystemTest);
+		
+		return doesPastSystemTest;
+//		String outXPath = IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator + homework.getHomeworkDetails().getTestTasksFile();
+//		//we put answer into the directory of students answer (split po /)
+//		//try with params without file
+//		System.out.println("With params     "+"java -cp " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator +" "+ getNameOfTask.substring(0, getNameOfTask.length()-5) + " < "+ outXPath + File.separator + "in" + taskNum + ".txt ");
+//
+//		Process procTry2 = Runtime.getRuntime().exec("java -cp " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator +" "+ getNameOfTask.substring(0, getNameOfTask.length()-5) + " | "+ outXPath + File.separator + "in" + taskNum + ".txt");
+//		InputStream stdout = procTry2.getInputStream ();
+//		BufferedReader reader = new BufferedReader (new InputStreamReader(stdout));
+//		String line = "";
+//		while ((line = reader.readLine ()) != null) {
+//		    System.out.println ("Stdout with params: " + line);
+//		}
+////end try with params without file
+//		
+//		
+//		
+//		//try without params without file
+//				Process procTry1 = Runtime.getRuntime().exec("java -cp " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator +" "+ getNameOfTask.substring(0, getNameOfTask.length()-5));
+//				InputStream stdout1 = procTry1.getInputStream ();
+//				BufferedReader reader1 = new BufferedReader (new InputStreamReader(stdout1));
+//				String line1 = "";
+//				while ((line1 = reader1.readLine ()) != null) {
+//				    System.out.println ("Stdout: " + line1);
+//				}
+//				System.out.println("java -cp " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator +" "+ getNameOfTask.substring(0, getNameOfTask.length()-5));
+//		//end try without params without file
+//				
+//		//try without params into file
+//		Process procTry = Runtime.getRuntime().exec("java -cp " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator +" "+ getNameOfTask.substring(0, getNameOfTask.length()-5) + " > " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator + "answer.txt");
+//		System.out.println("java -cp " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator +" "+ getNameOfTask.substring(0, getNameOfTask.length()-5) + " > " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator + "answer.txt");
+//		//end try without params into file
+//		//	Process proc2 = Runtime.getRuntime().exec("java -cp "+ IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator +" "+ getNameOfTask.substring(0, getNameOfTask.length()-5) + " < "+ outXPath + File.separator + "in" + taskNum + ".txt > " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator + "answer.txt");
+//		
+//		System.out.println("java -cp "+ IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator +" "+ getNameOfTask.substring(0, getNameOfTask.length()-5) + " < "+ outXPath + File.separator + "in" + taskNum + ".txt > " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator + "answer.txt");
+//		System.out.println("proc2 starts waiting");
+////		File f = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator + "answer.txt");
+////		while(!f.exists()){
+////			System.out.println("does not exist..");
+////		}
+//		
+//		//proc2.waitFor();
+//		
+//		System.out.println("proc2 ends waiting");
+//
+//		System.out.println("java -cp "+ IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator +" "+ getNameOfTask.substring(0, getNameOfTask.length()-5) + " < "+ outXPath + File.separator + "in" + taskNum + ".txt > " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA +File.separator + getNameOfDir + File.separator + "answer.txt");
+//		//we read result
+//		Process proc3 = Runtime.getRuntime().exec(
+//				"cat " + IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA + solutionOfStudent + File.separator + "answer.txt");
+//		System.out.println("proc3 starts waiting");
+//
+//		proc3.waitFor();
+//		System.out.println("proc3 ends waiting");
+
+//		BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+//		String answerSolution = null;
+//		StringBuilder answerStudent = new StringBuilder();
+//		while ((answerSolution = stdInput.readLine()) != null) {
+//			answerStudent.append(answerSolution);
+//		}
+		//get real solution
+		//we go to the directory of the file with test tasks of homework and we read the out file with number of task
+//		String inXPath = IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator + homework.getHomeworkDetails().getTestTasksFile();
+//
+//		Process proc1 = Runtime.getRuntime()
+//				.exec("cat " + inXPath + File.separator +  "out" + taskNum + ".txt");
+//		proc1.waitFor();
+//		stdInput = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
+//		String answerTest = null;
+//		StringBuilder answerTruth = new StringBuilder();
+//		while ((answerTest = stdInput.readLine()) != null) {
+//			answerTruth.append(answerTest);
+//		}
+		
 	}
 }

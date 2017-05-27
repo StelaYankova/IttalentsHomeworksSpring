@@ -49,7 +49,7 @@
 						<tr>
 							<td><form action="./seeChosenHomeworkPageOfStudentByStudent" method="GET">
 									<input type="hidden" name="homeworkId" value='${homework.id}'>
-									<button type="submit" class="btn btn-link">
+									<button type="submit" class="wrapword btn btn-link">
 										<c:out value="${homework.heading}" />
 									</button>
 								</form></td>

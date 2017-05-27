@@ -39,11 +39,11 @@ public interface IGroupDAO {
 
 	void removeGroup(int groupId) throws GroupException;
 
-	void createHomeworkDetails(HomeworkDetails hd, ArrayList<Integer> groupsForHw) throws GroupException, UserException, ValidationException, NotUniqueUsernameException;
+	void createHomeworkDetails(HomeworkDetails hd, ArrayList<Integer> groupsForHw) throws GroupException, UserException, ValidationException, NotUniqueHomeworkHeadingException;
 
 	int getHomeworkDetailsId(String heading) throws GroupException;
 
-	void updateHomeworkDetails(HomeworkDetails hd, ArrayList<Integer> groupsForHw) throws GroupException, UserException, ValidationException, NotUniqueUsernameException;
+	void updateHomeworkDetails(HomeworkDetails hd, ArrayList<Integer> groupsForHw) throws GroupException, UserException, ValidationException, NotUniqueHomeworkHeadingException;
 
 	void removeHomeworkFromGroup(int homeworkDetailsId, int groupId) throws GroupException, UserException;
 

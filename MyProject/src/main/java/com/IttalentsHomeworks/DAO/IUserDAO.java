@@ -74,6 +74,10 @@ public interface IUserDAO {
 	ArrayList<HomeworkDetails> getActiveHomeworksOfStudent(int id) throws UserException;
 
 	ArrayList<Group> getGroupsOfUserWithoutStudents(int id) throws UserException, GroupException;
+
+	Homework getHomeworkOfStudent(int userId, int homeworkId) throws UserException;
+
+	void setPassedSystemTest(int id, int id2, int taskNum, boolean hasPassedTest) throws UserException;
 	
 	//boolean doesUserHaveGroup(int userId, int groupId) throws UserException, GroupException;
 

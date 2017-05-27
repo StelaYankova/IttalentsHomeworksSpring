@@ -3,6 +3,10 @@
 	float:right;
 	text-decoration:underline;
 }
+.systemScore{
+	z-index:1;
+	padding-left:1em;
+}
 #solution{
 	display:none;
 }

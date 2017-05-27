@@ -3,6 +3,10 @@
 	width:19%;
 	    height: 1.8em;
 }
+.systemScore{
+	z-index:1;
+	padding-left:1em;
+}
 label {
 	display: inline-block;
 	*display: inline; /* for IE7*/

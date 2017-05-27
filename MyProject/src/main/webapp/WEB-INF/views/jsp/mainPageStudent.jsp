@@ -58,13 +58,13 @@
 								<tr>
 									<td><form action="./seeChosenHomeworkPageOfStudentByStudent" method="GET">
 											<input type="hidden" name="homeworkId" value='${homework.id}'>
-											<button type="submit" class="btn btn-link">
+											<button type="submit" class="wrapword btn btn-link">
 												<c:out value="${homework.heading}" />
 											</button>
 										</form></td>
 									<c:if test="${homework.daysLeft == 0}">
 										<td><c:out
-												value="${homework.daysLeft} days left (homework passes today at ${passesOnTime})"></c:out></td>
+												value="${homework.daysLeft} days left (homework passes at ${passesOnTime})"></c:out></td>
 									</c:if>
 									<c:if test="${homework.daysLeft gt 0}">
 										<td><c:out

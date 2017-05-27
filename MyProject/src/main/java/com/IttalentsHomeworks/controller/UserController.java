@@ -34,6 +34,7 @@ import com.IttalentsHomeworks.model.Group;
 import com.IttalentsHomeworks.model.Homework;
 import com.IttalentsHomeworks.model.HomeworkDetails;
 import com.IttalentsHomeworks.model.Student;
+import com.IttalentsHomeworks.model.Task;
 import com.IttalentsHomeworks.model.Teacher;
 import com.IttalentsHomeworks.model.User;
 import com.google.gson.JsonArray;
@@ -93,16 +94,28 @@ public class UserController {
 					//homeworks = UserDAO.getInstance().getHomeworksOfStudent(studentId);
 					
 					Student chosenStudent = (Student) UserDAO.getInstance().getUserById(studentId);
-					for (Homework h : chosenStudent.getHomeworks()) {
-						if (h.getHomeworkDetails().getId() == homeworkId) {
-							homework = new Homework(h.getTeacherGrade(), h.getTeacherComment(), h.getTasks(),
-									h.getHomeworkDetails());
-							break;
-						}
-					}
+					homework = UserDAO.getInstance().getHomeworkOfStudent(studentId, homeworkId);
+//					for (Homework h : chosenStudent.getHomeworks()) {
+//						if (h.getHomeworkDetails().getId() == homeworkId) {
+//							homework = new Homework(h.getTeacherGrade(), h.getTeacherComment(), h.getTasks(),
+//									h.getHomeworkDetails());
+//							break;
+//						}
+//					}
 					if(homework == null || chosenStudent == null){
 						return "pageNotFound";
 					}
+					for(Task t: homework.getTasks()){
+						System.out.println("HAS PASSSSSED");
+						System.out.println(t.isHasPassedSystemTest());
+					}
+					int numberOfTasks = homework.getHomeworkDetails().getNumberOfTasks();
+					System.out.println("Number of tasks is " + numberOfTasks);
+					int pointsPerTask = 100 / numberOfTasks;
+					System.out.println("Points per task is " + pointsPerTask);
+					request.getSession().setAttribute("pointsPerTask", pointsPerTask);
+					
+					
 					request.getSession().setAttribute("currHomework", homework);
 					request.getSession().setAttribute("currStudentUsername", chosenStudent.getUsername());
 					return "redirect:./seeChosenHomeworkPageOfStudentByTeacher";
@@ -390,11 +403,17 @@ public class UserController {
 					isEmailValid = true;
 				}
 				request.setAttribute("validEmail", isEmailValid);
+				System.out.println(isUsernameUnique);
+				System.out.println(isUsernameValid);
+				System.out.println(isPassValid);
+				System.out.println(isRepeatedPassValid);
+				System.out.println(isEmailValid);
 				if (isUsernameUnique == true && isUsernameValid == true && isPassValid == true
 						&& isRepeatedPassValid == true && isEmailValid == true) {
 					// we create user
 					User user = new Student(username, password, repeatedPassword, email);
 					UserDAO.getInstance().createNewUser(user);
+					System.out.println("REGISTERED");
 					request.setAttribute("invalidFields", false);
 				}
 			} catch (UserException e) {
@@ -424,14 +443,26 @@ public class UserController {
 	}
 
 	private boolean areCharactersValidUsernameRegister(String username) {
-		for (int i = 0; i < username.length(); i++) {
-			if (!(((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO && (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
-					|| ((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A && (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
-					|| ((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a && (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z)) || ((int) username.charAt(i) == IValidationsDAO.ASCII_TABLE_VALUE_OF_DOT)) {
+		for(int i = 0; i < username.length(); i++){
+			if (!(((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO
+					&& (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
+					|| ((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A
+							&& (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
+					|| ((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a
+							&& (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z)
+					|| (int) username.charAt(i) == IValidationsDAO.ASCII_TABLE_VALUE_OF_DOT)) {
 				return false;
 			}
 		}
 		return true;
+//		for (int i = 0; i < username.length(); i++) {
+//			if (!(((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO && (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
+//					|| ((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A && (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
+//					|| ((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a && (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z)) || ((int) username.charAt(i) == IValidationsDAO.ASCII_TABLE_VALUE_OF_DOT)) {
+//				return false;
+//			}
+//		}
+//		return true;
 	}
 
 	private boolean isLengthValidPassRegister(String password) {

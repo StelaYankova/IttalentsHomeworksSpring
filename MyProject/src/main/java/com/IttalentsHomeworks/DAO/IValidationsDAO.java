@@ -54,6 +54,7 @@ public interface IValidationsDAO {
 		static final String SAVE_DIR_HOMEWORK_FILES_PDF = "/Users/Stela/Desktop/homeworkFilesPdfIttalentsHomework";
 		static final String SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA = "/Users/Stela/Desktop/homeworkSolutionsJavaIttalentsHomework";
 		static final String SAVE_DIR_HOMEWORK_TESTS_FILES = "/Users/Stela/Desktop/homeworkTestsFilesIttalentsHomework";
+		static final int NOT_ACCEPTABLE = 406;
 
 	boolean isUsernameUnique(String username) throws UserException;
 

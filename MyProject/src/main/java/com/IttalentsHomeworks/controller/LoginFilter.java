@@ -31,7 +31,7 @@ public class LoginFilter implements Filter {
         String loginURI3 = request.getContextPath() + "/login";
         String loginURI4 = request.getContextPath() + "/register";
         String loginURI5 = request.getContextPath() + "/validateLogin";
-        String loginURI6 = request.getContextPath() + "/isUsernameUniqueServlet";
+        String loginURI6 = request.getContextPath() + "/isUsernameUnique";
         String loginURI7 = request.getContextPath() + "/isUsernameValid";
         String loginURI8 = request.getContextPath() + "/isPasswordValid";
         
@@ -43,8 +43,6 @@ public class LoginFilter implements Filter {
         boolean loginRequest6 = request.getRequestURI().equals(loginURI6);
         boolean loginRequest7 = request.getRequestURI().equals(loginURI7);
         boolean loginRequest8 = request.getRequestURI().equals(loginURI8);
-       // boolean isImage = false;
-        //boolean isStylesheet = false;
         if(request.getRequestURI().matches(".*(css|jpg|png|gif|js)$")){
             chain.doFilter(request, response);
             return;

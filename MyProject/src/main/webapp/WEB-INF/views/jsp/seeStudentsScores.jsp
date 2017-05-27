@@ -67,32 +67,40 @@
 			</select>
 		</div>
 				<div id = "tableAndStudents">
-		
-		<div id="currTable">
-			<div id="divTable">
-			
-				<table id="resultTable" border="1"
-					class="table table-striped table-bordered table-hover dataTables_wrapper form-inline dt-bootstrap">
-					<thead class="wrapword">
-						<tr>
-							<th>Heading</th>
-							<!-- <td>Opens</td>
+
+			<div id="currTable">
+				<div id="divTable">
+
+					<table id="resultTable" border="1"
+						class="table table-striped table-bordered table-hover dataTables_wrapper form-inline dt-bootstrap">
+						<thead class="wrapword">
+							<tr>
+								<th>Heading</th>
+								<!-- <td>Opens</td>
 						<td>Closes</td>
 						 -->
-							<th>Teacher score</th>
-							<th>Teacher comment</th>
-						</tr>
-					</thead>
-					<tbody class="wrapword">
-					</tbody>
-				</table>
-				<div id = "studentAverageScore">
-				<strong><u>Average score: <span id = "score"></span>/100</u></strong>
+								<th>System score</th>
+								<th>Teacher score</th>
+								<th>Teacher comment</th>
+							</tr>
+						</thead>
+						<tbody class="wrapword">
+						</tbody>
+					</table>
+					<div id="studentAverageScore">
+						<strong><u>Average teacher score: <span id="score"></span>/100
+						</u></strong>
+					</div>
+					<div id="studentAverageSystemScore">
+
+						<strong><u>Average system score: <span
+								id="scoreSystem"></span>/100
+						</u></strong>
+					</div>
+				</div>
 			</div>
-			</div>
-		</div>
-		
-		<div class="list">
+
+			<div class="list">
 		<h id = "listHeading">Students in chosen group:</h>
 			<ul id="listOfStudentsOfGroup" class="editable"></ul>
 		</div>
@@ -105,7 +113,7 @@
 				/*  'bSortable' : true,
 				'targets' : [ 0, 1], */
 				'className' : "wrapword",
-				"targets" : [ 0, 1, 2 ]
+				"targets" : [ 0, 1, 2 , 3 ]
 
 			} ],
 			/* "ordering": false,  */
@@ -126,8 +134,8 @@
 			}], */
 			"aoColumns": [
 { "bSortable": true },
-{ "bSortable": true },
-{ "bSortable": false }
+{ "bSortable": false },
+{ "bSortable": false },{ "bSortable": false }
 ],
 			"lengthMenu" : [5, 10, 15 ],
 			"bDestroy" : true
@@ -169,7 +177,9 @@
 										alert("There are no homeworks in this group.");
 							} 
 							var averageScore = 0;
+							var averageSystemScore = 0;
 							var numberHomeworks = 0;
+							console.log("getting there..")
 							for ( var i in response) {
 									/* var opens = response[i].opens;
 									var opensRep = opens.replace("T", " ");
@@ -177,16 +187,19 @@
 									var closesRep = closes.replace("T", " "); */
 									var hasStudentGivenMinOneTask = response[i].hasStudentGivenMinOneTask;
 									averageScore += response[i].teacherScore;
+									averageSystemScore += response[i].systemScore;
 									numberHomeworks += 1;
 									if (hasStudentGivenMinOneTask === true) {
-										
+										console.log("ooo")
+										console.log(response[i].systemScore)
+										console.log(response[i].teacherComment)
 										var rowNode = table.row
 												.add(
 														
 														[
-																"<form action = './getHomeworkOfStudentByTeacher' method = 'GET'><input type = 'hidden' name = 'homeworkId' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button type = 'submit' class = 'btn btn-link'>"
+																"<form action = './getHomeworkOfStudentByTeacher' method = 'GET'><input type = 'hidden' name = 'homeworkId' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button type = 'submit' class = 'wrapword btn btn-link'>"
 																		+ response[i].heading
-																		+ "</button></form>"/* ,
+																		+ "</button></form>",response[i].systemScore  /* ,
 																opensRep,
 																closesRep */,
 																response[i].teacherScore
@@ -197,22 +210,23 @@
 										var rowNode = table.row
 												.add(
 														[
-																"<form action = './getHomeworkOfStudentByTeacher' method = 'GET'><input type = 'hidden' name = 'homeworkId' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button title = 'Homework is not uploaded' style= 'color:#620062' type = 'button' class = 'btn btn-link'>"
+																"<form action = './getHomeworkOfStudentByTeacher' method = 'GET'><input type = 'hidden' name = 'homeworkId' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button title = 'Homework is not uploaded' style= 'color:#620062' type = 'button' class = 'wrapword btn btn-link'>"
 																		+ response[i].heading
-																		+ "</button></form>"/* ,
+																		+ "</button></form>",response[i].systemScore /* ,
 																opensRep,
 																closesRep */,
 																response[i].teacherScore
 																		+ "/100",
 																response[i].teacherComment ])
 												.draw().node();
-										 								document.getElementById('divTable').style.display = 'block';
 
 									}
 								}
+								document.getElementById('divTable').style.display = 'block';
+
 							var answer = (averageScore/numberHomeworks).toFixed(1);
-							document.getElementById("studentAverageScore").style.display = "block";
-						
+							var answerSystemScore = (averageSystemScore/numberHomeworks).toFixed(1);
+							
 		if (!$('#score').is(':empty')) {
 								$("#score").empty();
 							}
@@ -221,8 +235,22 @@
 							}else{
 								document.getElementById("score").append(answer);
 							}
+							
+							if (!$('#scoreSystem').is(':empty')) {
+								$("#scoreSystem").empty();
+							}
+							if(answerSystemScore === 'NaN'){
+								document.getElementById("scoreSystem").append(0);
+							}else{
+								document.getElementById("scoreSystem").append(answerSystemScore);
+							}
+							console.log("blocking")
+							document.getElementById("studentAverageScore").style.display = "block";
+							console.log("ready")
 						}
+						
 					});
+			
 		}
 		$('#chosenGroup')
 				.change(
@@ -233,6 +261,9 @@
 							document.getElementById('')
 							if (!$('#score').is(':empty')) {
 								$("#score").empty();
+							}
+							if (!$('#scoreSystem').is(':empty')) {
+								$("#scoreSystem").empty();
 							}
 /* 							document.getElementById('divTable').style.display = 'none';
  */							if (!$('#resultTable tbody').is(':empty')) {
@@ -286,7 +317,7 @@
 											for ( var i in response) {
 												$('#listOfStudentsOfGroup')
 														.append(
-																"<li type='square'><button class = 'btn btn-link' onclick = 'seeHomeworks("
+																"<li type='square'><button class = 'wrapword btn btn-link' onclick = 'seeHomeworks("
 																		+ groupId
 																		+ ","
 																		+ response[i].id

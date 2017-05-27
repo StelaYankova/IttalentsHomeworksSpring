@@ -3,6 +3,13 @@
 .dataTables_wrapper {
 	padding-bottom: 0.5em;
 }
+#studentAverageScore{
+	padding-top:0.5em;
+}
+#studentAverageSystemScore{
+	padding-top:0.5em;
+}
+
 #tableAndStudents>.list>ul#listOfStudentsOfGroup>li>button{
 	padding-left:0em;
 	    padding-bottom: 0.3em;
@@ -16,7 +23,7 @@
 	max-width: 28em;
 } */
 .dataTables_paginate {
-	margin-top: -0.7em;
+	margin-top: -0.45em;
 	max-width: 32em;
 	font-size: 0.9em;
 }
@@ -37,6 +44,7 @@
 
 #resultTable {
 	width: 100% !important;
+	padding-bottom: 0em;
 }
 
 #divTable {
@@ -45,17 +53,37 @@
 	display: none;
 	margin: 0 auto;
 }
-
+/* #divTable table.dataTable tbody td:last-child{
+	width:30%;
+}
 #divTable table.dataTable tbody td {
 	padding: 0.5em;
 	padding-left: 0.8em;
 	font-size: 0.95em;
-	width: 27%;
-}
-
+	width: 17%;
+} */
+#divTable table.dataTable tbody td:nth-child(1) {
+	padding: 0.5em;
+	padding-left: 0.8em;
+	font-size: 0.95em;
+	width:27.5%;
+} 
+#divTable table.dataTable tbody td:nth-child(2), #divTable table.dataTable tbody td:nth-child(3) {
+	padding: 0.5em;
+	padding-left: 0.8em;
+	font-size: 0.95em;
+	width:22.5%;
+} 
+ #divTable table.dataTable tbody td:nth-child(4) {
+	padding: 0.5em;
+	padding-left: 0.8em;
+	font-size: 0.95em;
+	width:45%;
+} 
 #divTable table.dataTable tbody td form .btn {
 	padding: 0em 0em 0em 0.3em;
 	font-size: 0.98em;
+	text-align: left;
 }
 
 #divTable table.dataTable thead th {
@@ -126,13 +154,13 @@ width: 80%;
 	#divTable table.dataTable thead th {
 		padding: 0.5em;
 		padding-left: 1em;
-		font-size: 0.8em;
+		font-size: 0.7em;
 	}
 	#divTable {
 		width: 95%;
 	}
 	 .dataTables_paginate {
-		margin-top: -0.7em;
+		margin-top: -0.45em;
 		max-width: 34em;
 		font-size: 0.61em;
 	} 
@@ -152,7 +180,7 @@ width: 80%;
 	#divTable table.dataTable thead th {
 		padding: 0.5em;
 		padding-left: 1em;
-		font-size: 0.68em;
+		font-size: 0.59em;
 	}
 	#divTable table.dataTable thead td {
 		font-size: 0.85em;
@@ -216,7 +244,7 @@ width: 80%;
 		margin: 0px auto;
 	}
 	.dataTables_paginate {
-		margin-top: -0.7em;
+		margin-top: -0.45em;
 		max-width: 58em;
 		font-size: 0.8em;
 	}
@@ -238,7 +266,7 @@ width: 80%;
 
 @media ( max-width :589px) {
 	.dataTables_paginate {
-		margin-top: -0.7em;
+		margin-top: -0.45em;
 		max-width: 56em;
 		font-size: 0.6em;
 	}

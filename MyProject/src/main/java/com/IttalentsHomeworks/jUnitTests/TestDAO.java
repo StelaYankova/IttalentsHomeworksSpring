@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import com.IttalentsHomeworks.DAO.GroupDAO;
+import com.IttalentsHomeworks.DAO.NotUniqueHomeworkHeadingException;
 import com.IttalentsHomeworks.DAO.UserDAO;
 import com.IttalentsHomeworks.DAO.ValidationsDAO;
 import com.IttalentsHomeworks.Exceptions.GroupException;
@@ -40,7 +41,7 @@ public class TestDAO {
 	 static String closingString = LocalDateTime.now().plusDays(3).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
 	static LocalDateTime closing = LocalDateTime.parse(closingString, formatter);
-	static HomeworkDetails hd = new HomeworkDetails("test_homework", opening, closing, 5, "testTasks.pdf");
+	static HomeworkDetails hd = new HomeworkDetails("test_homework", opening, closing, 5, "testTasks.pdf", "");
 	static Group group1 = null;
 	@Test 
 	public void test01isUsernameUnique() throws UserException, GroupException{		
@@ -187,11 +188,11 @@ public class TestDAO {
 	}
 	
 	@Test
-	public void test14createHomeworkForGroup() throws GroupException, UserException, ValidationException, NotUniqueUsernameException{
+	public void test14createHomeworkForGroup() throws GroupException, UserException, ValidationException, NotUniqueUsernameException, NotUniqueHomeworkHeadingException{
 		ArrayList<Integer> groupsForHw = new ArrayList<>();
 		groupsForHw.add(group1.getId());
 		GroupDAO.getInstance().createHomeworkDetails(hd, groupsForHw);
-		int hwId = GroupDAO.getInstance().getHomeworkDetailsId(hd);
+		int hwId = GroupDAO.getInstance().getHomeworkDetailsId(hd.getHeading());
 		hd.setId(hwId);
 
 		boolean isInHomeworksTable = false;
@@ -255,7 +256,7 @@ public class TestDAO {
 	@Test
 	public void test20addTeacherComment() throws UserException, ValidationException{
 		ArrayList<Homework> homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(user1.getId());
-		assertEquals(" ", homeworksOfStudent.get(0).getTeacherComment());
+		assertEquals("", homeworksOfStudent.get(0).getTeacherComment());
 		UserDAO.getInstance().setTeacherComment(hd.getId(), user1.getId(), "not bad");
 		homeworksOfStudent = UserDAO.getInstance().getHomeworksOfStudent(user1.getId());
 		assertEquals("not bad", homeworksOfStudent.get(0).getTeacherComment());
@@ -270,7 +271,7 @@ public class TestDAO {
 		assertEquals(12, homeworksOfStudentByGroup.get(0).getTeacherGrade());
 	}
 	@Test
-	public void test21updateHomework() throws GroupException, UserException, ValidationException, NotUniqueUsernameException{
+	public void test21updateHomework() throws GroupException, UserException, ValidationException, NotUniqueUsernameException, NotUniqueHomeworkHeadingException{
 		String openingStringUpdated = LocalDateTime.now().plusDays(3)
 				.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 		LocalDateTime openingUpdated = LocalDateTime.parse(openingStringUpdated, formatter);
@@ -289,7 +290,7 @@ public class TestDAO {
 		}
 		ArrayList<Integer> groupsforHomework = new ArrayList<>();
 		groupsforHomework.add(group1.getId());
-		HomeworkDetails updatedHomework = new HomeworkDetails(hd.getId(), "new heading1221135", openingUpdated, closingUpdated, 5, "newFile.pdf");
+		HomeworkDetails updatedHomework = new HomeworkDetails(hd.getId(), "new heading1221135", openingUpdated, closingUpdated, 5, "newFile.pdf", "");
 		GroupDAO.getInstance().updateHomeworkDetails(updatedHomework, groupsforHomework);
 		ArrayList<HomeworkDetails> newHd = GroupDAO.getInstance().getHomeworkDetailsOfGroup(group1.getId());
 		for(HomeworkDetails hd1: GroupDAO.getInstance().getAllHomeworksDetails()){
@@ -309,7 +310,7 @@ public class TestDAO {
 		ArrayList<Group> groupsForHw = new ArrayList<>();
 		groupsForHw.add(group1);
 		
-		int hwId = GroupDAO.getInstance().getHomeworkDetailsId(hd);
+		int hwId = GroupDAO.getInstance().getHomeworkDetailsId(hd.getHeading());
 		hd.setId(hwId);
 		GroupDAO.getInstance().removeHomeworkDetails(hd);
 		boolean isInHomeworksTable = false;
