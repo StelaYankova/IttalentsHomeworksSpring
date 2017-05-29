@@ -8,68 +8,67 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
- <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/addGroupCss.css" />" rel="stylesheet">
+<link rel="icon" type="image/png" href="./images/favIcon.png">
+
 </head>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
 	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
-				<li><a
-					href="./mainPageTeacher">Home</a>
-					<span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
-				<li><a href="./seeGroups">See
-						groups</a><span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
-				<li>Create
-						group<span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
+				<li><a href="./mainPageTeacher">Home</a> <span class="divider"><span
+						class="accesshide "><span class="arrow_text"></span></span> </span></li>
+				<li><a href="./seeGroups">See groups</a><span class="divider"><span
+						class="accesshide "><span class="arrow_text"></span></span> </span></li>
+				<li>Create group<span class="divider"><span
+						class="accesshide "><span class="arrow_text"></span></span> </span></li>
 			</ul>
 		</nav>
 	</div>
 	<c:if test="${not empty invalidFields}">
-			<c:if test="${not invalidFields}">
-				<div class="alert alertAllPages alert-success">
-					<strong>Success!</strong> Group has been added successfully
-				</div>
-			</c:if>
+		<c:if test="${not invalidFields}">
+			<div class="alert alertAllPages alert-success">
+				<strong>Success!</strong> Group has been added successfully
+			</div>
 		</c:if>
+	</c:if>
 	<div id="pageWrapper">
-		
+
 		<div id="formAddGroup">
-		<legend>Add Group</legend>
-		<c:if test="${not empty invalidFields}">
-					<c:if test="${invalidFields}">
-						<p class="input-invalid-or-empty">You have invalid fields</p>
-					</c:if>
+			<legend>Add Group</legend>
+			<c:if test="${not empty invalidFields}">
+				<c:if test="${invalidFields}">
+					<p class="input-invalid-or-empty">You have invalid fields</p>
 				</c:if>
-				<c:if test="${not empty emptyFields}">
-					<c:if test="${emptyFields}">
-						<p class="input-invalid-or-empty">You cannot have empty fields</p>
-					</c:if>
+			</c:if>
+			<c:if test="${not empty emptyFields}">
+				<c:if test="${emptyFields}">
+					<p class="input-invalid-or-empty">You cannot have empty fields</p>
 				</c:if>
-			<form action="./createGroup" method="POST" id="addGroupForm" class = "form-horizontal">
+			</c:if>
+			<form action="./createGroup" method="POST" id="addGroupForm"
+				class="form-horizontal">
 				<div class="form-group">
 					<label class="control-label">Name:</label>
 					<div class="control-label-input">
 						<input type="text" name="groupName" class="form-control"
-							placeholder="Enter group name" data-toggle="popover" value="${nameTry}"
-							data-placement="bottom" data-trigger="focus" maxlength="15"
+							placeholder="Enter group name" data-toggle="popover"
+							value="${nameTry}" data-placement="bottom" data-trigger="focus"
+							maxlength="15"
 							data-content="Valid length is from 4 to 15 symbols. Valid inputs are numbers, letters (large and small) and main punctual symbols."
 							required />
 						<c:if test="${not empty validName}">
 							<c:if test="${not validName}">
-								<p id="nameMsg" class="input-invalid">Group name is not valid</p>
+								<p id="nameMsg" class="input-invalid">Group name is not
+									valid</p>
 							</c:if>
 							<c:if test="${not empty uniqueName}">
 								<c:if test="${validName}">
 									<c:if test="${not uniqueName}">
-										<p id="nameMsg" class="input-invalid">Group name already exists</p>
+										<p id="nameMsg" class="input-invalid">Group name already
+											exists</p>
 									</c:if>
 								</c:if>
 							</c:if>
@@ -80,7 +79,8 @@
 				<div class="form-group">
 					<label class="control-label">Teachers:</label>
 					<div class="control-label-input">
-						<select class="selectpicker form-control"  data-size="7" multiple name="teachers" >
+						<select class="selectpicker form-control" data-size="7" multiple
+							name="teachers">
 							<c:forEach items="${applicationScope.allTeachers}" var="teacher">
 								<c:set var="isTeacherInGroupTry" value="false"></c:set>
 								<c:forEach items="${selectedTeachersUsernameTry}"
@@ -106,18 +106,14 @@
 							</c:if>
 						</c:if>
 						<p id="allTeachersExistMsg" class="input-invalid"></p>
-					</div> 
-				</div>
-				 
-				<legend></legend>
-					<div class="form-group">
-						<!-- <div class="col-md-offset-4 col-sm-5"> -->
-							<input
-								id = "addButton"
-								type="submit" class=" form-control btn btn-default"
-								value="Add">
-						<!-- </div> -->
 					</div>
+				</div>
+
+				<legend></legend>
+				<div class="form-group">
+					<input id="addButton" type="submit"
+						class=" form-control btn btn-default" value="Add">
+				</div>
 			</form>
 		</div>
 	</div>

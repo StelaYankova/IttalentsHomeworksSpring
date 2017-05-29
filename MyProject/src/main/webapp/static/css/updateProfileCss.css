@@ -1,24 +1,27 @@
 @CHARSET "UTF-8";
 
-.form-horizontal .control-label{
+.form-horizontal .control-label {
 	padding-right: 1em;
 	width: 38%;
-	text-align:right;
+	text-align: right;
 	float: left;
 }
 
 .form-horizontal .control-label-input {
-    width: 50%;
-    float: left;
-    padding-left: 1em;
+	width: 50%;
+	float: left;
+	padding-left: 1em;
 }
 
-.form-horizontal .form-group:last-child{
-	width:95%; padding-left:13.3em;
+.form-horizontal .form-group:last-child {
+	width: 95%;
+	padding-left: 13.3em;
 }
-.form-group:first-of-type .control-label-input{
-	padding-top:0.438em !important;
+
+.form-group:first-of-type .control-label-input {
+	padding-top: 0.438em !important;
 }
+
 #formUpdateProfile {
 	margin: 0 auto;
 	padding-top: 3.750em;
@@ -44,6 +47,7 @@ legend {
 		width: 60%;
 	}
 }
+
 @media ( max-width :992px) {
 	.form-horizontal .form-group:last-child {
 		width: 95%;
@@ -60,24 +64,25 @@ legend {
 	#formUpdateProfile {
 		width: 70%;
 	}
-	 .form-horizontal .form-group:last-child {
+	.form-horizontal .form-group:last-child {
 		width: 94%;
 		padding-left: 15.8em;
-	} 
+	}
 }
+
 @media ( max-width :789px) {
 	.form-horizontal .form-group:last-child {
 		width: 95%;
 		padding-left: 12.3em;
 	}
 }
+
 @media ( max-width :589px) {
-	
 	#formUpdateProfile {
 		width: 90%;
 	}
 	.form-horizontal .control-label {
-	    width: 100%;
+		width: 100%;
 		padding-top: 0.438em;
 		margin-bottom: 0;
 		text-align: left;

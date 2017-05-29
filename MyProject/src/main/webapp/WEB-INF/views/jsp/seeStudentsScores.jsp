@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <!DOCTYPE html>
 <html>
@@ -9,25 +9,23 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
-<link href="<c:url value="css/seeStudentsScoresCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/seeStudentsScoresCss.css" />"
+	rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+<link rel="icon" type="image/png" href="./images/favIcon.png">
 
 </head>
 <body>
 	<%@ include file="navBarTeacher.jsp"%>
 	<c:if test="${sessionScope.isTeacher == false}">
-		<div class="navPath" >
+		<div class="navPath">
 			<nav class="breadcrumb-nav">
-				<ul class="breadcrumb" id = "navPathList">
-					<li><a
-						href="./mainPageStudent">Home</a><span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
-					<li><a
-						href="./studentsScoresByTeacher">Your
-							scores</a><span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
+				<ul class="breadcrumb" id="navPathList">
+					<li><a href="./mainPageStudent">Home</a><span class="divider"><span
+							class="accesshide "><span class="arrow_text"></span></span> </span></li>
+					<li><a href="./studentsScoresByTeacher">Your scores</a><span
+						class="divider"><span class="accesshide "><span
+								class="arrow_text"></span></span> </span></li>
 				</ul>
 			</nav>
 		</div>
@@ -36,19 +34,16 @@
 		<div class="navPath">
 			<nav class="breadcrumb-nav">
 				<ul class="breadcrumb">
-					<li><a
-						href="./mainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
-					<li>See student's scores<span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
+					<li><a href="./mainPageTeacher">Home</a><span class="divider"><span
+							class="accesshide "><span class="arrow_text"></span></span> </span></li>
+					<li>See student's scores<span class="divider"><span
+							class="accesshide "><span class="arrow_text"></span></span> </span></li>
 				</ul>
 			</nav>
 		</div>
 	</c:if>
 	<div id="pageWrapper">
-		<h4 id = "pageTitle">
+		<h4 id="pageTitle">
 			<b><u>Scores of students</u></b>
 		</h4>
 		<div id="select">
@@ -66,8 +61,7 @@
 				</c:if>
 			</select>
 		</div>
-				<div id = "tableAndStudents">
-
+		<div id="tableAndStudents">
 			<div id="currTable">
 				<div id="divTable">
 
@@ -76,9 +70,6 @@
 						<thead class="wrapword">
 							<tr>
 								<th>Heading</th>
-								<!-- <td>Opens</td>
-						<td>Closes</td>
-						 -->
 								<th>System score</th>
 								<th>Teacher score</th>
 								<th>Teacher comment</th>
@@ -92,46 +83,28 @@
 						</u></strong>
 					</div>
 					<div id="studentAverageSystemScore">
-
 						<strong><u>Average system score: <span
-								id="scoreSystem"></span>/100
+								id="scoreSystem"></span>%
 						</u></strong>
 					</div>
 				</div>
 			</div>
 
 			<div class="list">
-		<h id = "listHeading">Students in chosen group:</h>
-			<ul id="listOfStudentsOfGroup" class="editable"></ul>
+				<h id="listHeading">Students in chosen group:</h>
+				<ul id="listOfStudentsOfGroup" class="editable"></ul>
+			</div>
 		</div>
-	</div>
 	</div>
 </body>
 <script>
 		var table = $('#resultTable').DataTable({
 			"aoColumnDefs" : [ {
-				/*  'bSortable' : true,
-				'targets' : [ 0, 1], */
 				'className' : "wrapword",
 				"targets" : [ 0, 1, 2 , 3 ]
 
 			} ],
-			/* "ordering": false,  */
 			"dom" : '<"top"lp>rt<"clear">',
-			/*  "aoColumns" :[ {
-				"bSortable" : true
-			}, {
-				"bSortable" : true
-			},{
-				"bSortable" : false
-			} ], 
-			"aoColumns" : [ {
-				sWidth : '14%'
-			}, {
-				sWidth : '18%'
-			}, {
-				sWidth : '22%'
-			}], */
 			"aoColumns": [
 { "bSortable": true },
 { "bSortable": false },
@@ -159,7 +132,6 @@
 				.append(
 						'<li id = "chosenStudentUsername">'
 								+studentUsername+'<span class="divider"><span class="accesshide "><span class="arrow_text"></span></span></span></li>');
-			
 			$
 					.ajax({
 						url : './seeHomeworksOfStudentByGroupForScoresByTeacher',
@@ -179,29 +151,18 @@
 							var averageScore = 0;
 							var averageSystemScore = 0;
 							var numberHomeworks = 0;
-							console.log("getting there..")
 							for ( var i in response) {
-									/* var opens = response[i].opens;
-									var opensRep = opens.replace("T", " ");
-									var closes = response[i].closes;
-									var closesRep = closes.replace("T", " "); */
 									var hasStudentGivenMinOneTask = response[i].hasStudentGivenMinOneTask;
 									averageScore += response[i].teacherScore;
 									averageSystemScore += response[i].systemScore;
 									numberHomeworks += 1;
 									if (hasStudentGivenMinOneTask === true) {
-										console.log("ooo")
-										console.log(response[i].systemScore)
-										console.log(response[i].teacherComment)
 										var rowNode = table.row
 												.add(
-														
 														[
 																"<form action = './getHomeworkOfStudentByTeacher' method = 'GET'><input type = 'hidden' name = 'homeworkId' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button type = 'submit' class = 'wrapword btn btn-link'>"
 																		+ response[i].heading
-																		+ "</button></form>",response[i].systemScore  /* ,
-																opensRep,
-																closesRep */,
+																		+ "</button></form>",response[i].systemScore +"%",
 																response[i].teacherScore
 																		+ "/100",
 																response[i].teacherComment ])
@@ -212,21 +173,16 @@
 														[
 																"<form action = './getHomeworkOfStudentByTeacher' method = 'GET'><input type = 'hidden' name = 'homeworkId' value = " + response[i].id+ "><input type = 'hidden' name = 'studentId' value = "+studentId+"><button title = 'Homework is not uploaded' style= 'color:#620062' type = 'button' class = 'wrapword btn btn-link'>"
 																		+ response[i].heading
-																		+ "</button></form>",response[i].systemScore /* ,
-																opensRep,
-																closesRep */,
+																		+ "</button></form>",response[i].systemScore +"%",
 																response[i].teacherScore
 																		+ "/100",
 																response[i].teacherComment ])
 												.draw().node();
-
 									}
 								}
 								document.getElementById('divTable').style.display = 'block';
-
 							var answer = (averageScore/numberHomeworks).toFixed(1);
 							var answerSystemScore = (averageSystemScore/numberHomeworks).toFixed(1);
-							
 		if (!$('#score').is(':empty')) {
 								$("#score").empty();
 							}
@@ -244,20 +200,15 @@
 							}else{
 								document.getElementById("scoreSystem").append(answerSystemScore);
 							}
-							console.log("blocking")
 							document.getElementById("studentAverageScore").style.display = "block";
-							console.log("ready")
 						}
-						
 					});
-			
 		}
 		$('#chosenGroup')
 				.change(
 						function(event) {
 							document.getElementById('divTable').style.display = 'none';
 							document.getElementById('studentAverageScore').style.display = 'none';
-
 							document.getElementById('')
 							if (!$('#score').is(':empty')) {
 								$("#score").empty();
@@ -265,8 +216,7 @@
 							if (!$('#scoreSystem').is(':empty')) {
 								$("#scoreSystem").empty();
 							}
-/* 							document.getElementById('divTable').style.display = 'none';
- */							if (!$('#resultTable tbody').is(':empty')) {
+							if (!$('#resultTable tbody').is(':empty')) {
 								$("#resultTable tbody")
 										.html(
 												'<tr><td colspan="5" style = "padding-left:16em ">No data available in table</td></tr>');
@@ -284,27 +234,18 @@
 									$("li#chosenGroupName").remove();
 									var groupName = $(this).find(":selected")
 											.text();
-									console.log(groupName)
 									$('.breadcrumb')
 											.append(
 													'<li id = "chosenGroupName">'
 															+groupName+'<span class="divider"><span class="accesshide "><span class="arrow_text"></span></span></span></li>');
-
-									//	$('#navPathList').append('<li><a href="./studentsScoresByTeacher">'+groupId+'</a> <span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
-
 								}
-
 							} else {
 								if (!$('li#chosenGroupName').is(':empty')) {
-
 									$("li#chosenGroupName").remove();
 								}
 							}
 							document.getElementById('listOfStudentsOfGroup').style.display = 'none';
 							document.getElementById('listHeading').style.display = 'none';
-
-							//$('#navPathList').append('<li><a href="./studentsScores">'+groupId+'</a> <span class="divider"> <span class="accesshide "><span class="arrow_text"></span>&nbsp;</span></span></li>');
-							console.log(4444)
 							$
 									.ajax({
 										url : './getAllStudentsOfGroupServlet',
@@ -328,23 +269,18 @@
 																		+ ")'>"
 																		+ response[i].username
 																		+ "</button></li>");
-
 											}
 											if ($.trim(response)) {
 												document
 														.getElementById('listOfStudentsOfGroup').style.display = 'block';
 												document.getElementById('listHeading').style.display = 'block';
-
 											} else {
 												alert("There are no students in this group.");
 												document
 														.getElementById('listOfStudentsOfGroup').style.display = 'none';
 												document.getElementById('listHeading').style.display = 'none';
-
 											}
-
 										}
-
 									});
 						});
 		function selectOption(index) {

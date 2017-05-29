@@ -1,18 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    
+	pageEncoding="UTF-8"%>
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-            <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-    
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
-<link href="<c:url value="css/updateHomeworkCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+<link href="<c:url value="css/updateHomeworkCss.css" />"
+	rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+<link rel="icon" type="image/png" href="./images/favIcon.png">
 
 </head>
 <body>
@@ -20,59 +22,54 @@
 	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
-				<li><a
-					href="./mainPageTeacher">Home</a>
-					<span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
-				<li><a
-					href="./seeOrUpdateHomeworks">See/Update homeworks</a><span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
-				<li><%-- <a
-					href="./updateHomework?chosenHomework=${sessionScope.currHomework.id}"> --%><c:out value = "${sessionScope.currHomework.heading}"></c:out><span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
+				<li><a href="./mainPageTeacher">Home</a> <span class="divider"><span
+						class="accesshide "><span class="arrow_text"></span></span> </span></li>
+				<li><a href="./seeOrUpdateHomeworks">See/Update homeworks</a><span
+					class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span> </span></li>
+				<li><c:out value="${sessionScope.currHomework.heading}"></c:out><span
+					class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span> </span></li>
 			</ul>
 		</nav>
 	</div>
 	<c:if test="${not empty sessionScope.invalidFields}">
-			<c:if test="${not sessionScope.invalidFields}">
-				<div class="alert alertAllPages alert-success">
-					<strong>Success!</strong> Homework has been updated successfully
-				</div>
-			</c:if>
+		<c:if test="${not sessionScope.invalidFields}">
+			<div class="alert alertAllPages alert-success">
+				<strong>Success!</strong> Homework has been updated successfully
+			</div>
 		</c:if>
+	</c:if>
 	<div id="pageWrapper">
-	<div id = "readAndRemoveHomework">
- 			<form action="./readFileOfTasksForHomeworkPDF"
-				method="GET" id = "downloadHomeworkForm">
+		<div id="readAndRemoveHomework">
+			<form action="./readFileOfTasksForHomeworkPDF" method="GET"
+				id="downloadHomeworkForm">
 				<input type='hidden' value='${sessionScope.currHomework.tasksFile}'
 					name='fileName'>
-				 <button class='btn btn-link btn-xs' type='submit'><u>download tasks</u>
+				<button class='btn btn-link btn-xs' type='submit'>
+					<u>download tasks</u>
 				</button>
 			</form>
-			<form action="./readFileOfTasksForHomeworkTestsZip"
-				method="GET" id = "downloadHomeworkTestsForm">
-				<input type='hidden' value='${sessionScope.currHomework.testTasksFile}'
-					name='fileName'>
-				 <button class='btn btn-link btn-xs' type='submit'><u>download tests</u>
+			<form action="./readFileOfTasksForHomeworkTestsZip" method="GET"
+				id="downloadHomeworkTestsForm">
+				<input type='hidden'
+					value='${sessionScope.currHomework.testTasksFile}' name='fileName'>
+				<button class='btn btn-link btn-xs' type='submit'>
+					<u>download tests</u>
 				</button>
 			</form>
-		<form action="./removeHomeworkDetails"
-			method="POST" id = "removeHomeworkForm" >
-							<button type="submit"
-						class="glyphicon glyphicon-remove btn btn-default btn-xs"
-						onclick="javascript:return confirm('Are you sure you want to remove this homework permanently?')"></button>
-	</form></div>
-		<div id="formUpdate" align="right" class = "form-horizontal">
-		
+			<form action="./removeHomeworkDetails" method="POST"
+				id="removeHomeworkForm">
+				<button type="submit"
+					class="glyphicon glyphicon-remove btn btn-default btn-xs"
+					onclick="javascript:return confirm('Are you sure you want to remove this homework permanently?')"></button>
+			</form>
+		</div>
+		<div id="formUpdate" align="right" class="form-horizontal">
 			<legend>Update homework</legend>
-
-			<form action="./updateHomework"
-				method="POST" enctype="multipart/form-data" id="updateHomeworkForm"  accept-charset="UTF-8">
-				
-
+			<form action="./updateHomework" method="POST"
+				enctype="multipart/form-data" id="updateHomeworkForm"
+				accept-charset="UTF-8">
 				<c:if test="${not empty sessionScope.invalidFields}">
 					<c:if test="${sessionScope.invalidFields}">
 						<p class="input-invalid-or-empty">You have invalid fields</p>
@@ -87,11 +84,13 @@
 					<label class="control-label">Heading:</label>
 					<div class="control-label-input">
 						<input type="text" class="form-control" name="name"
-							value='${sessionScope.currHomework.heading}' placeholder = "Enter homework heading" maxlength="40"
+							value='${sessionScope.currHomework.heading}'
+							placeholder="Enter homework heading" maxlength="40"
 							data-toggle="popover" data-placement="bottom"
 							data-trigger="focus"
 							data-content="Valid length is from 5 to 40 symbols. Valid inputs are numbers and letters (large and small)"
-							 required/><c:if test="${not empty sessionScope.validHeading}">
+							required />
+						<c:if test="${not empty sessionScope.validHeading}">
 							<c:if test="${not sessionScope.validHeading}">
 								<p id="nameMsg" class="input-invalid">Heading is not valid</p>
 							</c:if>
@@ -116,7 +115,7 @@
 								class="form-control" id="opens" name="opens"
 								placeholder="Enter opening time" data-toggle="popover"
 								data-placement="bottom" data-trigger="focus"
-								data-content="Maximum 6 months from today"  required/><span
+								data-content="Maximum 6 months from today" required /><span
 								class="input-group-addon"> <span
 								class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -139,7 +138,7 @@
 								class="form-control" id="closes" name="closes"
 								placeholder="Enter closing time" data-toggle="popover"
 								data-placement="bottom" data-trigger="focus"
-								data-content="Maximum 6 months after opening time"  required/><span
+								data-content="Maximum 6 months after opening time" required /><span
 								class="input-group-addon"> <span
 								class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -153,16 +152,15 @@
 						<p id="closesMsg" class="input-invalid"></p>
 					</div>
 				</div>
-
 				<div class="form-group">
-					<label class="control-label">Number
-						of tasks:</label>
+					<label class="control-label">Number of tasks:</label>
 					<div class="control-label-input">
-						<input type="number" min="1" max = "40" class="form-control"
+						<input type="number" min="1" max="40" class="form-control"
 							name="numberOfTasks"
 							value='${sessionScope.currHomework.numberOfTasks}' maxlength="2"
-							data-toggle="popover" placeholder = "Enter number of tasks" data-placement="bottom"
-							data-trigger="focus" data-content="From 1 to 40" required />
+							data-toggle="popover" placeholder="Enter number of tasks"
+							data-placement="bottom" data-trigger="focus"
+							data-content="From 1 to 40" required />
 						<c:if test="${not empty sessionScope.validTasks}">
 							<c:if test="${not sessionScope.validTasks}">
 								<p id="numberOfTasksMsg" class="input-invalid">Number of
@@ -175,8 +173,9 @@
 				<div class="form-group">
 					<label class="control-label">Groups:</label>
 					<div class="control-label-input">
-						<select class="selectpicker form-control" data-size="7" data-width="101%"
-							multiple name="groups" id="groups" class="form-control" required >
+						<select class="selectpicker form-control" data-size="7"
+							data-width="101%" multiple name="groups" id="groups"
+							class="form-control" required>
 							<c:forEach items="${applicationScope.allGroups}" var="group">
 								<c:set var="isHwInGroup" value="false"></c:set>
 								<c:forEach items="${group.homeworks}" var="homework">
@@ -202,9 +201,8 @@
 						<p id="groupsMsg" class="input-invalid"></p>
 					</div>
 				</div>
-				
 				<div class="form-group">
-				 <label class="control-label">Tasks:</label>
+					<label class="control-label">Tasks:</label>
 					<div class="control-label-input">
 						<input type="file" accept="application/pdf" name="file">
 						<c:if test="${not empty sessionScope.validFile}">
@@ -219,25 +217,21 @@
 				<div class="form-group">
 					<label class="control-label">Tests:</label>
 					<div class="control-label-input">
-					
-						<input type="file" accept="application/zip" name="testsFile" /><span id = "testsFileConstraint">(Files in ZIP must be ".txt")</span>
-						<br/>
+						<input type="file" accept="application/zip" name="testsFile" /><span
+							id="testsFileConstraint">(Files in ZIP must be ".txt")</span> <br />
 						<c:if test="${not empty validTestsFile}">
 							<c:if test="${not validTestsFile}">
-								<p id="testsFileMsg" class="input-invalid">Valid file format -
-									zip, maximal size - 20MB</p>
+								<p id="testsFileMsg" class="input-invalid">Valid file format
+									- zip, maximal size - 20MB</p>
 							</c:if>
 						</c:if>
-						
 						<p id="testsFileMsg" class="input-invalid"></p>
 					</div>
-					
 				</div>
 				<legend></legend>
- 			<div class="form-group" >
-						<input 
-							type="submit" id = "updateHomeworkButton" class=" form-control btn btn-default"
-							value="Update">
+				<div class="form-group">
+					<input type="submit" id="updateHomeworkButton"
+						class=" form-control btn btn-default" value="Update">
 				</div>
 			</form>
 		</div>
@@ -300,9 +294,7 @@
 			}
 			var size = (document.forms["updateHomeworkForm"]["testsFile"].files[0].size / 1024 / 1024)
 					.toFixed(10);
-			console.log(size)
-			if (size > 20 || size == 0) {//TODO tuk + v add hw
-				console.log(false)//DA DOBAVA
+			if (size > 20 || size == 0) {
 				return false;
 			}
 			return true;
@@ -318,7 +310,6 @@
 							var file = document.forms["updateHomeworkForm"]["file"].value;
 							var groups = document.forms["updateHomeworkForm"]["groups"].value;
 							var testsFile = document.forms["updateHomeworkForm"]["testsFile"].value;
-
 							var isNameValid = true;
 							var isNameUnique = true;
 							var isOpensValid = true;
@@ -327,7 +318,6 @@
 							var isFileValid = true;
 							var isGroupsValid = true;
 							var isTestsFileValid = true;
-
 							if (!$('#nameMsg').is(':empty')) {
 								$("#nameMsg").empty();
 							}
@@ -520,7 +510,6 @@
 							}
 							var isTestsFileValid = true;
 							if (testsFile != "") {
-							
 							var file = document.forms["updateHomeworkForm"]["testsFile"].value;
 			var val = file.toLowerCase();
 			var regex = new RegExp("(.*?)\.(zip)$");
@@ -529,30 +518,24 @@
 			}
 			var size = (document.forms["updateHomeworkForm"]["testsFile"].files[0].size / 1024 / 1024)
 					.toFixed(10);
-			console.log(size)
 			if (size > 20 || size == 0) {
-				console.log(false)//DA DOBAVA
 				isTestsFileValid =  false;
 			}
 			
 			var form = new FormData(document.forms["updateHomeworkForm"]);
-			console.log(form)
 			//see types
 			if(isTestsFileValid === true){
 					$.ajax({
 								url : './isHomeworkZipFileValid',
 								type : 'POST',
-			
 							 	data: form, 
 							 	processData: false,
 								contentType:false,
 								 dataType: false,
-				
 								success : function(response) {
 									if (!$('#testsFileMsg').is(':empty')) {
 										$("#testsFileMsg").empty();
 										isTestsFileValid = true;
-										console.log("TRUE")
 									}
 								},
 								error : function(data) {
@@ -560,34 +543,20 @@
 										$("#testsFileMsg").empty();
 									}
 									isTestsFileValid = false;
-									console.log("FALSE")
-
 								}
 			
 						});
 
 							
 			}
-							//isTestsFileValid = isTestsFileValidCheck();
-							/* if (!isTestsFileValid) {
-								if (!$('#testsFileMsg').is(':empty')) {
-									$("#testsFileMsg").empty();
-								}
-								document
-										.getElementById("testsFileMsg")
-										.append(
-												"Valid file format - zip, maximal size - 20MB");
 							}
-							} */
 							$(document)
 									.ajaxStop(
 											function() {
-												console.log("AJAX READU")
 												if (!$('#testsFileMsg').is(':empty')) {
 													$("#testsFileMsg").empty();
 												}
-												if (isTestsFileValid === false) {console.log("L:::::::: " + isTestsFileValid)
-													
+												if (isTestsFileValid === false) {
 													document
 															.getElementById("testsFileMsg")
 															.append(
@@ -604,7 +573,7 @@
 															.submit();
 												}
 											});
-							}});
+							});
 		$(document).ready(function() {
 			$('[data-toggle="popover"]').popover();
 		});

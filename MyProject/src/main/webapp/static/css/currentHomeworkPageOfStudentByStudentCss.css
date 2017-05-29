@@ -1,15 +1,19 @@
 @CHARSET "UTF-8";
-.uploadSolutionButton{
-	float:right;
-	text-decoration:underline;
+
+.uploadSolutionButton {
+	float: right;
+	text-decoration: underline;
 }
-.systemScore{
-	z-index:1;
-	padding-left:1em;
+
+.systemScore {
+	z-index: 1;
+	padding-left: 1em;
 }
-#solution{
-	display:none;
+
+#solution {
+	display: none;
 }
+
 label {
 	display: inline-block;
 	*display: inline; /* for IE7*/
@@ -19,14 +23,16 @@ label {
 	text-align: left;
 	width: 8.750em;
 }
-.homeworkInfo{
-   line-height: 2em;
+
+.homeworkInfo {
+	line-height: 2em;
 }
-#solution{
- width: 52%;
-    float: left;
-    padding-left: 3.125em;
-    padding-top: 11em;
+
+#solution {
+	width: 52%;
+	float: left;
+	padding-left: 3.125em;
+	padding-top: 11em;
 }
 
 #currTaskSolution {
@@ -34,16 +40,17 @@ label {
 }
 
 #currHomework {
-    width: 44%;
-    float: left;
-    padding-left: 7em;
-    padding-right: 1.313em;
-    padding-top: 3.750em;
+	width: 44%;
+	float: left;
+	padding-left: 7em;
+	padding-right: 1.313em;
+	padding-top: 3.750em;
 }
+
 .input-invalid {
-    padding-top: 0.750em;
-    margin-bottom: -0.188em;
-    text-align: left;
+	padding-top: 0.750em;
+	margin-bottom: -0.188em;
+	text-align: left;
 }
 
 #teacherComment {
@@ -56,48 +63,54 @@ label {
 	font-size: 0.750em;
 	font-style: italic;
 }
-.dataTables_scrollBody{
-	max-height:40.5vh !important;
+
+.dataTables_scrollBody {
+	max-height: 40.5vh !important;
 }
+
 #teacherGrade {
-    line-height: 2.5em;
+	line-height: 2.5em;
 }
-#divTable{
+
+#divTable {
 	padding-bottom: 0.625em;
 }
-#tasksTable{
+
+#tasksTable {
 	border-size: 0.125em;
 	border: groove;
 }
-.dataTables_scrollHeadInner{
- 	width:/* 100% !important */;
-}
-#tasksTable td{
+
+#tasksTable td {
 	padding-bottom: 0.938em;
-    padding-top: 1.188em;
+	padding-top: 1.188em;
 	border-size: 0.125em;
 }
-#seeTaskSolutionButton{
-	color: #fff; 
+
+#seeTaskSolutionButton {
+	color: #fff;
 	background-color: #0086b3;
 }
-#taskUpload{
+
+#taskUpload {
 	display: none;
-	    padding-bottom: 0.1em;
-	
+	padding-bottom: 0.1em;
 }
-#currTaskSolution{
-	overflow-y:scroll;
-	 height: 42em;
-    width: 30em;
+
+#currTaskSolution {
+	overflow-y: scroll;
+	height: 42em;
+	width: 30em;
 }
- @media ( min-width : 1280px) {
-#currTaskSolution{
-	overflow-y:scroll;
-	 height: 43em;
-    width: 30em;
+
+@media ( min-width : 1280px) {
+	#currTaskSolution {
+		overflow-y: scroll;
+		height: 43em;
+		width: 30em;
+	}
 }
-} 
+
 @media ( max-width : 1025px) {
 	#teacherComment {
 		overflow-y: scroll;
@@ -109,53 +122,56 @@ label {
 		font-size: 0.750em;
 		font-style: italic;
 	}
-	#solution{
-		width:100%;
+	#solution {
+		width: 100%;
 	}
-	
 	#currHomework {
-    width: 100%;
-    padding-right: 1em;
-    padding-left: 1em;
-    padding-bottom:0em;
+		width: 100%;
+		padding-right: 1em;
+		padding-left: 1em;
+		padding-bottom: 0em;
+	}
+	#solution {
+		float: left;
+		padding-left: 1em;
+		padding-top: 1em;
+	}
+	#currTaskSolution {
+		height: 33em;
+		width: 71em;
+	}
 }
 
-#solution {
-    float: left;
-    padding-left: 1em;
-    padding-top: 1em;
+@media ( max-width : 1011px) {
+	#currTaskSolution {
+		height: 33em;
+		width: 68em;
+	}
 }
-#currTaskSolution {
-    height: 33em;
-     width:71em; 
+
+@media ( max-width : 992px) {
+	#currTaskSolution {
+		height: 33em;
+		width: 51.5em;
+	}
 }
-}
- @media ( max-width : 1011px) {
-#currTaskSolution {
-    height: 33em;
-    width: 68em; 
-}
-}
- @media ( max-width : 992px) {
-#currTaskSolution {
-    height: 33em;
-    width: 51.5em; 
-}
-} 
+
 @media ( max-width : 991px) {
-#currTaskSolution {
-    height: 33em;
-    width: 51.5em; 
+	#currTaskSolution {
+		height: 33em;
+		width: 51.5em;
+	}
 }
-}
+
 @media ( max-width : 789px) {
-#currTaskSolution {
-    height: 33em;
-    width: 38.5em;
+	#currTaskSolution {
+		height: 33em;
+		width: 38.5em;
+	}
 }
-}
+
 @media ( max-width : 590px) {
-#teacherComment {
+	#teacherComment {
 		width: 25em;
 	}
 	#currTaskSolution {
@@ -163,6 +179,6 @@ label {
 		padding-left: 0em;
 	}
 	.input-invalid {
-    font-size: 0.9em;
-}
+		font-size: 0.9em;
+	}
 }

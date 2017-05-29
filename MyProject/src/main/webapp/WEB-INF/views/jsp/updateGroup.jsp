@@ -10,6 +10,7 @@
 <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
 <link href="<c:url value="css/updateGroupCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+<link rel="icon" type="image/png" href="./images/favIcon.png">
 
 </head>
 <body>
@@ -17,33 +18,29 @@
 	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
-				<li><a
-					href="./mainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
-				<li><a href="./seeGroups">See groups</a><span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
-				<li><c:out value="${sessionScope.currGroup.name}"></c:out><span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
+				<li><a href="./mainPageTeacher">Home</a><span class="divider"><span
+						class="accesshide "><span class="arrow_text"></span></span> </span></li>
+				<li><a href="./seeGroups">See groups</a><span class="divider"><span
+						class="accesshide "><span class="arrow_text"></span></span> </span></li>
+				<li><c:out value="${sessionScope.currGroup.name}"></c:out><span
+					class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span> </span></li>
 			</ul>
 		</nav>
 	</div>
 	<c:if test="${not empty sessionScope.invalidFields}">
-			<c:if test="${not sessionScope.invalidFields}">
-				<div class="alert alertAllPages alert-success">
-					<strong>Success!</strong> Group has been updated successfully
-				</div>
-			</c:if>
+		<c:if test="${not sessionScope.invalidFields}">
+			<div class="alert alertAllPages alert-success">
+				<strong>Success!</strong> Group has been updated successfully
+			</div>
 		</c:if>
+	</c:if>
 	<div id="pageWrapper">
-		
-		<div id="formUpdateGroup"><!-- align="right" -->
-				<legend>Update Group</legend>
-		
-			<form action="./updateGroup" method="POST"
-				id="updateGroupForm" class = "form-horizontal">
+
+		<div id="formUpdateGroup">
+			<legend>Update Group</legend>
+			<form action="./updateGroup" method="POST" id="updateGroupForm"
+				class="form-horizontal">
 				<c:if test="${not empty sessionScope.invalidFields}">
 					<c:if test="${sessionScope.invalidFields}">
 						<p class="input-invalid-or-empty">You have invalid fields</p>
@@ -57,20 +54,23 @@
 				<div class="form-group">
 					<label class="control-label">Name:</label>
 					<div class="control-label-input">
-						<input type="text" class="form-control" name="groupName" maxlength="15"
-							placeholder="Enter group name" data-toggle="popover"
-							class="form-control" value="${sessionScope.currGroup.name}"
-							data-placement="bottom" data-trigger="focus" 
+						<input type="text" class="form-control" name="groupName"
+							maxlength="15" placeholder="Enter group name"
+							data-toggle="popover" class="form-control"
+							value="${sessionScope.currGroup.name}" data-placement="bottom"
+							data-trigger="focus"
 							data-content="Valid length is from 4 to 15 symbols. Valid inputs are numbers and letters (large and small)"
 							required />
 						<c:if test="${not empty sessionScope.validName}">
 							<c:if test="${not sessionScope.validName}">
-								<p id="nameMsg" class="input-invalid">Group name is not valid</p>
+								<p id="nameMsg" class="input-invalid">Group name is not
+									valid</p>
 							</c:if>
 							<c:if test="${not empty sessionScope.uniqueName}">
 								<c:if test="${sessionScope.validName}">
 									<c:if test="${not sessionScope.uniqueName}">
-										<p id="nameMsg" class="input-invalid">Group name already exists</p>
+										<p id="nameMsg" class="input-invalid">Group name already
+											exists</p>
 									</c:if>
 								</c:if>
 							</c:if>
@@ -109,11 +109,10 @@
 					</div>
 				</div>
 				<legend></legend>
-					<div class="form-group">
- 						<input id = "updateGroupButton"
-								type="submit" class=" form-control btn btn-default"
-								value="Update">
-						</div>
+				<div class="form-group">
+					<input id="updateGroupButton" type="submit"
+						class=" form-control btn btn-default" value="Update">
+				</div>
 			</form>
 		</div>
 		<c:if test="${not empty sessionScope.invalidFields}">

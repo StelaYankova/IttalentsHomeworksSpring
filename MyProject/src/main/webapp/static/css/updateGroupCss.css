@@ -1,6 +1,5 @@
 @CHARSET "UTF-8";
 
-
 .form-horizontal .control-label {
 	padding-right: 1em;
 	width: 38%;
@@ -79,7 +78,7 @@ legend {
 		width: 90%;
 	}
 	.form-horizontal .control-label {
-	    width: 100%;
+		width: 100%;
 		padding-top: 0.438em;
 		margin-bottom: 0;
 		text-align: left;

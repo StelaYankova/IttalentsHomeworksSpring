@@ -1,4 +1,5 @@
 package com.IttalentsHomeworks.controller;
+
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,30 +15,32 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 @Controller
 @ControllerAdvice
 public class ExceptionController {
-	
+
 	@ExceptionHandler(AccessDeniedException.class)
 	public String handle403(Exception ex) {
-	    return "redirect:/403";
+		return "redirect:/403";
 	}
-	
-	@RequestMapping(value = {"/403"}, method = RequestMethod.GET)
+
+	@RequestMapping(value = { "/403" }, method = RequestMethod.GET)
 	public String ForbiddenPage() {
-	    return "forbiddenPage";
+		return "forbiddenPage";
 	}
+
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	public String handleNoGET(Exception ex) {
-	    return "redirect:/404";
-	} 
+		return "redirect:/404";
+	}
+
 	@ExceptionHandler(NoHandlerFoundException.class)
 	public String handle404(Exception ex) {
-	    return "redirect:/404";
+		return "redirect:/404";
 	}
-	
-	@RequestMapping(value = {"/404"}, method = RequestMethod.GET)
+
+	@RequestMapping(value = { "/404" }, method = RequestMethod.GET)
 	public String NotFoudPage() {
-	    return "pageNotFound";
+		return "pageNotFound";
 	}
-	
+
 	@ExceptionHandler(Exception.class)
 	public String exception(Exception e) {
 		ModelAndView mav = new ModelAndView("exception");
@@ -46,5 +49,5 @@ public class ExceptionController {
 		e.printStackTrace(System.err);
 		return "exception";
 	}
-	
+
 }

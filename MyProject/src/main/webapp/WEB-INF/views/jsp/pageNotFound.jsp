@@ -6,13 +6,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
- <link href="<c:url value="css/pageNotFoundCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+<link href="<c:url value="css/pageNotFoundCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+<link rel="icon" type="image/png" href="./images/favIcon.png">
 
 </head>
 <body>
-<c:if test="${sessionScope.isTeacher == false}">
+	<c:if test="${sessionScope.isTeacher == false}">
 		<%@ include file="navBarStudent.jsp"%>
 	</c:if>
 	<c:if test="${sessionScope.isTeacher == true}">

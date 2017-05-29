@@ -3,8 +3,6 @@ package com.IttalentsHomeworks.DAO;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.IttalentsHomeworks.DB.DBManager;
 import com.IttalentsHomeworks.Exceptions.GroupException;
 import com.IttalentsHomeworks.Exceptions.UserException;
@@ -35,7 +33,6 @@ public interface IUserDAO {
 
 	User getUserByUsername(String username) throws UserException, GroupException;
 
-	//all homeworks
 	ArrayList<Homework> getHomeworksOfStudent(int id) throws UserException;
 
 	void createNewUser(User u) throws UserException, ValidationException, NoSuchAlgorithmException;
@@ -69,8 +66,6 @@ public interface IUserDAO {
 
 	String getUserUsernameById(Integer studentId) throws UserException;
 
-	ArrayList<Group> topFiveMostRecentlyClosedHomeworksForTeacher(int id) throws UserException;
-
 	ArrayList<HomeworkDetails> getActiveHomeworksOfStudent(int id) throws UserException;
 
 	ArrayList<Group> getGroupsOfUserWithoutStudents(int id) throws UserException, GroupException;
@@ -78,13 +73,8 @@ public interface IUserDAO {
 	Homework getHomeworkOfStudent(int userId, int homeworkId) throws UserException;
 
 	void setPassedSystemTest(int id, int id2, int taskNum, boolean hasPassedTest) throws UserException;
+
+	void logout() throws UserException;
 	
-	//boolean doesUserHaveGroup(int userId, int groupId) throws UserException, GroupException;
-
-	//Homework getHomeworkOfStudentByGroup(int studentId, int selectedGroupId, int id);
-
-	//boolean isStudentAlreadyInGroup(int userId, int groupId) throws UserException, GroupException;
 	
-
-
 }

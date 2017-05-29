@@ -1,32 +1,24 @@
 @CHARSET "UTF-8";
-/* .container{
-	
-} */
-/* footer{
-	z-index:-1;
-} */
+
 .input-invalid-or-empty {
 	color: red;
 	text-align: left;
 }
 
 .breadcrumb>li+li:before {
-    padding: 0 5px;
-    color: #ccc;
-    content: ">"!important;
+	padding: 0 5px;
+	color: #ccc;
+	content: ">" !important;
 }
-.breadcrumb{
-	margin-top:0.5em;
+
+.breadcrumb {
+	margin-top: 0.5em;
 	margin-bottom: 0.1em !important;
 }
+
 html {
-    position: relative;
-    min-height: 100%;
-}
-body {
-  /*  margin-bottom: 25px; */
- /*  margin-bottom:2em; */
-   /* color:#2E71AC; */
+	position: relative;
+	min-height: 100%;
 }
 
 .input-invalid {
@@ -37,77 +29,60 @@ body {
 .invalidData {
 	color: red;
 }
+
 #pageWrapper:after {
-    content:'';
-    display:block;
-   clear:both;
+	content: '';
+	display: block;
+	clear: both;
 }
+
 #pageWrapper {
-	max-width:73.125em;
-/* 	//padding-top: 2.500em;
- */	padding-top: 5em;
+	max-width: 73.125em;
+	padding-top: 5em;
 	margin-left: 1.250em;
 	margin-right: 1.250em;
-	/* margin-bottom:170px; */
-	/* margin-bottom: 15.625em; */
 	margin-bottom: 14em;
-	  margin-left:auto;
-    margin-right:auto; 
-    /* width:960px; */
+	margin-left: auto;
+	margin-right: auto;
 }
-
 
 @media ( max-width :992px) {
-	
 	#pageWrapper {
-	width:53.125em;
-	     margin-bottom: 24em;
-}
+		width: 53.125em;
+		margin-bottom: 24em;
+	}
 	#solution {
-    /* width: 52%; */
-    float: left;
-    padding-left: 1em;
-    padding-top: 1em;
-    height: 43em;
+		float: left;
+		padding-left: 1em;
+		padding-top: 1em;
+		height: 43em;
+	}
 }
-}
+
 @media ( max-width :789px) {
 	.breadcrumb {
-    margin-top: 0.5em;
-    margin-bottom: 1.4em !important;
-}
+		margin-top: 0.5em;
+		margin-bottom: 1.4em !important;
+	}
 	#pageWrapper {
-	width:40em;
-	  /*   margin-bottom: 35.625em; */
+		width: 40em;
+	}
+	@media ( max-width :589px) {
+		#pageWrapper {
+			width: 22.5em;
+		}
+	}
+	.alert-success {
+		margin-top: -1.3em;
+	}
+	.wrapword {
+		white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+		white-space: -webkit-pre-wrap; /*Chrome & Safari */
+		white-space: -pre-wrap; /* Opera 4-6 */
+		white-space: -o-pre-wrap; /* Opera 7 */
+		white-space: pre-wrap; /* css-3 */
+		word-wrap: break-word; /* Internet Explorer 5.5+ */
+		word-break: break-all;
+		white-space: normal;
+	}
 }
-@media ( max-width :589px) {
-	
-	#pageWrapper {
-	width:22.5em;
-	   /*  margin-bottom: 45.625em; */
-}	
-}
-
-/* #alert {
-	position: absolute;
-	margin-top: 33px;
-	top: 77px;
-	width: 100%;
-}
-
- */
- .alert-success{
- 	margin-top:-1.3em;
- }
-.wrapword {
-	white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
-	white-space: -webkit-pre-wrap; /*Chrome & Safari */
-	white-space: -pre-wrap; /* Opera 4-6 */
-	white-space: -o-pre-wrap; /* Opera 7 */
-	white-space: pre-wrap; /* css-3 */
-	word-wrap: break-word; /* Internet Explorer 5.5+ */
-	word-break: break-all;
-	white-space: normal;
-}
-
-

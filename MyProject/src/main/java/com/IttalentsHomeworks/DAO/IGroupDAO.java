@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import com.IttalentsHomeworks.DB.DBManager;
 import com.IttalentsHomeworks.Exceptions.GroupException;
-import com.IttalentsHomeworks.Exceptions.NotUniqueUsernameException;
 import com.IttalentsHomeworks.Exceptions.UserException;
 import com.IttalentsHomeworks.Exceptions.ValidationException;
 import com.IttalentsHomeworks.model.Group;

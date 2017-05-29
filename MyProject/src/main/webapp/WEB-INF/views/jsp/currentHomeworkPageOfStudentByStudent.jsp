@@ -12,6 +12,8 @@
 <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/currentHomeworkPageOfStudentByStudentCss.css" />" rel="stylesheet">
+<link rel="icon" type="image/png" href="./images/favIcon.png">
+
 </head>
 <style>
 
@@ -65,8 +67,6 @@
 	<div id="pageWrapper">
 		<div id="currHomework">
 			<br>
-			<!-- <div class="form-group"> -->
-			
 			<div id="downloadHomeworkForm">
 				<form action="./readFileOfTasksForHomeworkPDF" method="GET">
 					<input type='hidden'
@@ -86,7 +86,6 @@
 			<c:out value="${opens}" /><br>
 			<b class = "homeworkInfo">Closing time:  </b>
 			<c:out value="${closes}" />
-			<!-- </div> -->
  			<div id="divTable">
  			<table id="tasksTable" 
 				class="table table-striped table-bordered table-hover">
@@ -108,7 +107,6 @@
 								<span class = "systemScore" id = "systemScore${i}">
 								<c:if test="${sessionScope.currHomework.tasks[i-1].hasPassedSystemTest eq true}"><c:out value = "${sessionScope.pointsPerTask}%"></c:out></c:if>
  										<c:if test="${sessionScope.currHomework.tasks[i-1].hasPassedSystemTest ne true}">0%</c:if></span>
- 										
  										<c:if test="${sessionScope.hasUploadTimePassed == 'false'}">
 									<c:if test="${sessionScope.hasUploadTimeCome == 'true'}">
 										<form action="./uploadSolutionToTaskJava" method="POST" class = "uploadSolutionButton"
@@ -119,19 +117,7 @@
 												type="file" accept="application/java" size="50"
 												name="datafile" class="hidden"></label>
 										</form>
-<!-- 										<span class="invalidData">
- -->										<%-- <c:if test="${sessionScope.currTaskUpload+1 == i}">
- 												
-												<p class = "input-invalid wrongFile"><!-- You can upload only .java files u</p>
-												You can upload only files up to 1 MB --></p>
-												
-											</c:if> --%>
-<!-- 										</span>
---> 									
- 										
- <%-- 										<span class = "systemScore" id = "systemScore${i}"><c:if test="${sessionScope.currHomework.tasks[i-1].hasPassedSystemTest eq true}"><c:out value = "${sessionScope.pointsPerTask}%"></c:out></c:if>
- 										<c:if test="${sessionScope.currHomework.tasks[i-1].hasPassedSystemTest ne true}">0%</c:if></span> --%>
- 										<p id="fileMsguploadSolutionForm${i}" class="input-invalid"></p>
+										<p id="fileMsguploadSolutionForm${i}" class="input-invalid"></p>
 									</c:if>
 								</c:if>
 							</td>
@@ -141,11 +127,9 @@
 			</table></div>
 			<br> <b id="teacherGrade">Teacher grade:</b>
 			<c:out value="${sessionScope.currHomework.teacherGrade }" /><br>
-
 			<b>Teacher comment:</b><br>
 			<br> <label id="teacherComment" class = "wrapword"><c:out
 					value="${sessionScope.currHomework.teacherComment}" /></label> <br>
-			<!-- <br> <br> -->
 		</div>
 
 		<div id="solution">
@@ -153,13 +137,12 @@
 				<div id="taskUpload"></div>
 				<c:if test="${sessionScope.hasUploadTimePassed == 'false'}">
 					<textarea id="currTaskSolution"
-						class="form-control" ><!-- cols="30" rows="27" -->
+						class="form-control" >
 					</textarea>
 				</c:if>
 				<c:if test="${sessionScope.hasUploadTimePassed == 'true'}">
 					<textarea id="currTaskSolution" disabled="disabled"
-						class="form-control"><!--  cols="30"
-						rows="27" -->
+						class="form-control">
 					</textarea>
 				</c:if>
 			</c:if>
@@ -188,37 +171,18 @@
 <script>
 
 function uploadFile(e){
-	
-	
-	 //console.log(arguments) ; return;
-	/* var form = document.getElementById(e);
-	var formData = new FormData(form);
-	var oReq = new XMLHttpRequest();
-	oReq.open("POST", './uploadSolutionToTaskJava', true);
-	oReq.onload = function(oEvent){
-		if(oReq.status == 200){
-			alert("OK");
-		}
-	}
-	oReq.send(formData);return; */
-	
-	
-	console.log("uploadSolutionForm" + e)
 	var file = document.forms[e]["datafile"].value;
-	
-
-	 $('.input-invalid').empty();
+	$('.input-invalid').empty();
 		if (file == "") {
 			isFileValid = false;
 			return false;
 		}
 		var isFileValid = isFileValidCheck(e);
-		if (!isFileValid) {console.log("fileMsg" + e)
+		if (!isFileValid) {
 			document.getElementById("fileMsg"+e).append(
 					"Valid file format - java, maximal size - 1MB");
 		}else{  
 		var form = new FormData(document.getElementById(e));
-		//console.log(form.get("taskNum"))
 		$.ajax({
 			url:'./uploadSolutionToTaskJava',
 			type:'POST',
@@ -228,8 +192,6 @@ function uploadFile(e){
 			 dataType: 'json',
 			success:function(response){
 				alert("The solution has been added successfully!");
-				console.log(response.pointsPerTask)
-				console.log("systemScore" + form.get("taskNum"));
 				if(response.hasPassedTest){
 					document.getElementById("systemScore" + form.get("taskNum")).innerHTML = response.pointsPerTask + "%";
 				}else{
@@ -237,9 +199,7 @@ function uploadFile(e){
 				}
 				seeTaskSolution(form.get("taskNum"));
 			},
-			
 			error:function(data){
-				 
 				document.getElementById("fileMsg"+e).append(
 				"Valid file format - java, maximal size - 1MB");
 			}
@@ -262,8 +222,6 @@ function uploadFile(e){
 			"aoColumns" : [ {
 				'sWidth' : '12%'
 			} ],
-
-			/* "lengthMenu" : [ 5 ], */
 			"scrollY" : '41vh',
 			"scrollCollapse" : true,
 
@@ -279,7 +237,6 @@ function uploadFile(e){
 		$('.input-invalid').empty();
 		var taskNum = sessionStorage.getItem("currTask");
 		var text = document.getElementById("currTaskSolution").value;
-		console.log(taskNum);
 		$
 				.ajax({
 					url : './updateSolutionTextOfTaskByStudentJava',
@@ -290,8 +247,6 @@ function uploadFile(e){
 						"text" : text
 					},
 					success: function(data){
-						console.log(data.pointsPerTask)
-						console.log("systemScore" + taskNum);
 						if(data.hasPassedTest){
 							document.getElementById("systemScore" + taskNum).innerHTML = data.pointsPerTask + "%";
 						}else{
@@ -309,16 +264,11 @@ function uploadFile(e){
 									.getItem("currTaskSolution");
 						}
 					}
-				
-					/* sessionStorage.setItem("currTask", taskNum);
-					sessionStorage.setItem("currTaskSolution",
-							response.solution); */
 				})
 	}
 	
 	function seeTaskSolution(taskNum) {
 		$('.input-invalid').empty();
-		console.log(taskNum + " !");
 		$
 				.ajax({
 					url : './readSolutionOfTaskJava',
@@ -329,7 +279,6 @@ function uploadFile(e){
 					dataType : 'json',
 					success : function(response) {
 						var uploaded = response.uploadedOn;
-						console.log(uploaded)
 						var uploadedRep = uploaded.replace("T", " ");
 						$("#taskUpload").html(
 								"Task " + taskNum + " last changed on: "
@@ -337,9 +286,7 @@ function uploadFile(e){
 						document.getElementById('currTaskSolution').value = response.solution;
 						document.getElementById("taskUpload").style.display = "block";
 						document.getElementById("currTaskSolution").style.display = "block";
-						console.log(uploaded)
 						var hasUploadTimePassed = ${sessionScope.hasUploadTimePassed};
-						console.log(hasUploadTimePassed)
 						if(!hasUploadTimePassed){
 							if (uploaded === "-") {
 								document.getElementById("currTaskSolution").disabled = true;
@@ -350,7 +297,6 @@ function uploadFile(e){
 						sessionStorage.setItem("currTask", taskNum);
 						sessionStorage.setItem("currTaskSolution",
 								response.solution);
-						console.log("willll")
 						document.getElementById("solution").style.display = "block";
 
 					}

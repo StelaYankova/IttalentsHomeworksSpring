@@ -1,41 +1,43 @@
 @CHARSET "UTF-8";
 
 .navbar-nav>li>a, .navbar-brand {
- 	padding-top: 0.2em !important;
- 	height: 20%;
- 	padding-left: 4em;
+	padding-top: 0.2em !important;
+	height: 20%;
+	padding-left: 4em;
 }
-.navbar-brand>#img-href{
+
+.navbar-brand>#img-href {
 	height: 85%;
 }
 
 .input-invalid-login {
 	position: absolute;
-    top: 3.2em;
-    right: 18.8em;
-    color: red;
-    font-size: 0.92em;
-}
-.navbar {
-	background-color: #2E71AC ;
-	margin-bottom: 0px;
-	 min-height: 80px !important; 
+	top: 3.2em;
+	right: 18.8em;
+	color: red;
+	font-size: 0.92em;
 }
 
-/* .navbar-collapse>a.registerPageButton{
- */	
- a.registerPageButton{color: #ffffff;
-	  float:right;
-	  padding-right:5.7em;
-    /* padding-top: 2em;  */
-    font-size:0.9em;
-    z-index:1;
+.navbar {
+	background-color: #2E71AC;
+	margin-bottom: 0px;
+	min-height: 80px !important;
 }
-.navbar-nav>li{
-	float:right;
-	margin-top:1.5em;
-	padding-right:1.2em;
+
+a.registerPageButton {
+	color: #ffffff;
+	float: right;
+	padding-right: 5.7em;
+	font-size: 0.9em;
+	z-index: 1;
 }
+
+.navbar-nav>li {
+	float: right;
+	margin-top: 1.5em;
+	padding-right: 1.2em;
+}
+
 .navbar-header {
 	z-index: 1;
 }
@@ -44,7 +46,7 @@
 	position: absolute;
 	z-index: 1;
 }
- 
+
 .wrapword {
 	white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
 	white-space: -webkit-pre-wrap; /*Chrome & Safari */
@@ -56,7 +58,7 @@
 	white-space: normal;
 }
 
- @media ( max-width:767px) {
+@media ( max-width :767px) {
 	.navbar-nav>li>a, .navbar-brand {
 		display: none;
 	}
@@ -70,51 +72,36 @@
 		box-shadow: none;
 	}
 	a.registerPageButton {
-    color: #ffffff;
-    float: left;
-    padding-left: 12em;
-    margin-top: -2.7em;
-    font-size: 0.9em;
-    z-index:2 !important;
-    width:100%;
-}
+		color: #ffffff;
+		float: left;
+		padding-left: 12em;
+		margin-top: -2.7em;
+		font-size: 0.9em;
+		z-index: 2 !important;
+		width: 100%;
+	}
 	.navbar-nav>li {
 		float: left;
 		margin-top: 1.5em;
 		padding-left: 7em;
 	}
 	.input-invalid-login {
-    position: absolute;
-       top: -1.2em;
-    right: 1.2em;
-    color: red;
-    font-size: 0.92em;
+		position: absolute;
+		top: -1.2em;
+		right: 1.2em;
+		color: red;
+		font-size: 0.92em;
+	}
 }
-}
-  @media ( max-width:500px) {
-  a.registerPageButton {
-    color: #ffffff;
-    float: left;
-    padding-left: 12em;
-    margin-top: -2.7em;
-    font-size: 0.9em;
-    z-index:2 !important;
-    width:120%;
-}
- /* .navbar-collapse>a.registerPageButton {
-    color: #ffffff;
-    float: left;
-    padding-left: 13em;
-    margin-top: -3.55em;
-    font-size: 6px;
-    z-index: 2 !important;
-    width: 100%;
-} */
-/* .input-invalid-login {
-    position: absolute;
-    top: 9.8em;
-    right: 1em;
-    color: red;
-    font-size: 0.92em;
-} */
+
+@media ( max-width :500px) {
+	a.registerPageButton {
+		color: #ffffff;
+		float: left;
+		padding-left: 12em;
+		margin-top: -2.7em;
+		font-size: 0.9em;
+		z-index: 2 !important;
+		width: 120%;
+	}
 }

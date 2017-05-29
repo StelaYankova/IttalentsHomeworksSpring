@@ -5,17 +5,20 @@
 	padding-left: 1em;
 	font-size: 1em;
 }
-#tableAndStudents>.list>ul#listOfStudentsOfGroup>li>form>button{
-	padding-left:0em;
-	    padding-bottom: 0.3em;
-    margin-top: -0.2em;
+
+#tableAndStudents>.list>ul#listOfStudentsOfGroup>li>form>button {
+	padding-left: 0em;
+	padding-bottom: 0.3em;
+	margin-top: -0.2em;
 }
-#divTable table.dataTable tbody .btn{
+
+#divTable table.dataTable tbody .btn {
 	padding: 0em 0em 0em 0.3em !important;
 	font-size: 0.98em !important;
 	margin-top: -0.1em;
-	text-align:left;
+	text-align: left;
 }
+
 .dataTables_wrapper {
 	padding-bottom: 0.5em;
 }
@@ -37,9 +40,11 @@
 	width: 80%;
 	padding-bottom: 3.750em;
 }
+
 #select .bootstrap-select.btn-group .dropdown-menu {
-    max-height: 14em !important;
+	max-height: 14em !important;
 }
+
 #pageTitle {
 	text-align: center;
 }
@@ -126,7 +131,7 @@
 	#divTable table.dataTable tbody td {
 		padding: 0.5em;
 		padding-left: 0.8em;
-		    font-size: 0.72em;
+		font-size: 0.72em;
 	}
 	#divTable table.dataTable tbody td .btn {
 		padding: 0em 0em 0em 0.3em;
@@ -151,12 +156,11 @@
 		padding-left: 4em;
 		padding-top: 12.6em;
 	}
-	 .dataTables_paginate {
+	.dataTables_paginate {
 		margin-top: -0.40em;
 		max-width: 34em;
 		font-size: 0.61em;
-	} 
-	
+	}
 }
 
 @media ( max-width :900px) {
@@ -195,55 +199,44 @@
 	}
 }
 
-@media
-(
-max-width
-:900px)
-{
-#tableAndStudents {
-	padding-top: 9em;
+@media ( max-width :900px) {
+	#tableAndStudents {
+		padding-top: 9em;
+	}
+	.list>#listOfStudentsOfGroup button {
+		font-size: 0.7em;
+	}
+	#divTable {
+		padding-top: 0em;
+	}
+	#currTable {
+		width: 100%;
+		padding-left: 0em;
+		padding-top: 4.5em;
+		margin: 0px auto;
+	}
+	.list {
+		width: 100%;
+		padding-left: 0px;
+		padding-top: 0em !important;
+	}
+	#listHeading {
+		text-align: center;
+	}
+	.list>#listOfStudentsOfGroup button {
+		padding-left: 0px;
+		font-size: 0.85em;
+	}
+	#listOfStudentsOfGroup {
+		display: none;
+		border-style: double;
+		z-index: 1;
+		height: 16.563em;
+		width: 33%;
+		margin: 0px auto;
+	}
 }
 
-.list>#listOfStudentsOfGroup button {
-	font-size: 0.7em;
-}
-
-#divTable {
-	padding-top: 0em;
-}
-
-#currTable {
-	width: 100%;
-	padding-left: 0em;
-	padding-top: 4.5em;
-	margin: 0px auto;
-}
-
-.list {
-	width: 100%;
-	padding-left: 0px;
-	padding-top: 0em !important;
-}
-
-#listHeading {
-	text-align: center;
-}
-
-.list>#listOfStudentsOfGroup button {
-	padding-left: 0px;
-	font-size: 0.85em;
-}
-
-#listOfStudentsOfGroup {
-	display: none;
-	border-style: double;
-	z-index: 1;
-	height: 16.563em;
-	width: 33%;
-	margin: 0px auto;
-}
-
-}
 @media ( max-width :789px) {
 	.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_paginate
 		{

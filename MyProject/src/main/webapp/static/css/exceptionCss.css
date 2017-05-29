@@ -1,12 +1,9 @@
 @CHARSET "UTF-8";
 
 body {
-	background:
-		url("../images/exception.png")
-		no-repeat center center fixed;
+	background: url("../images/exception.png") no-repeat center center fixed;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
-	
-    background-size:100% 87vh;
+	background-size: 100% 87vh;
 }

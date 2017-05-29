@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 
 <!DOCTYPE html>
@@ -10,7 +10,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
-<link href="<c:url value="css/currentHomeworkPageOfStudentByTeacherCss.css" />" rel="stylesheet">
+<link
+	href="<c:url value="css/currentHomeworkPageOfStudentByTeacherCss.css" />"
+	rel="stylesheet">
+<link rel="icon" type="image/png" href="./images/favIcon.png">
 
 <title>Insert title here</title>
 </head>
@@ -19,20 +22,16 @@
 	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
-				<li><a
-					href="./mainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
+				<li><a href="./mainPageTeacher">Home</a><span class="divider"><span
+						class="accesshide "><span class="arrow_text"></span></span> </span></li>
 				<li><c:if
 						test="${not empty sessionScope.throughtSeeOrUpdateHomeworks}">
-						<a href="./seeOrUpdateHomeworks">See/
-							Update homeworks</a>
+						<a href="./seeOrUpdateHomeworks">See/ Update homeworks</a>
 					</c:if> <c:if test="${empty sessionScope.throughtSeeOrUpdateHomeworks}">
-						<a href="./studentsScoresByTeacher">See
-							student's scores</a>
-					</c:if><span
-					class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span> </span></li></li>
+						<a href="./studentsScoresByTeacher">See student's scores</a>
+					</c:if><span class="divider"><span class="accesshide "><span
+							class="arrow_text"></span></span> </span></li>
+				</li>
 				<li><c:out value="${sessionScope.chosenGroupName}"></c:out><span
 					class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span> </span></li>
@@ -40,19 +39,20 @@
 						value="${sessionScope.currHomework.homeworkDetails.heading}"></c:out><span
 					class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span> </span></li>
-				<li><c:out value = "${sessionScope.currStudentUsername}"></c:out><span class="divider"> <span
-						class="accesshide "><span class="arrow_text"></span></span>
+				<li><c:out value="${sessionScope.currStudentUsername}"></c:out><span
+					class="divider"> <span class="accesshide "><span
+							class="arrow_text"></span></span>
 				</span></li>
 			</ul>
 		</nav>
 	</div>
 	<c:if test="${not empty invalidFields}">
-			<c:if test="${not invalidFields}">
-				<div class="alert alertAllPages alert-success">
-					<strong>Success!</strong> Homework has been added successfully
-				</div>
-			</c:if>
+		<c:if test="${not invalidFields}">
+			<div class="alert alertAllPages alert-success">
+				<strong>Success!</strong> Homework has been added successfully
+			</div>
 		</c:if>
+	</c:if>
 	<div id="pageWrapper">
 		<div id="currHomework">
 			<br>
@@ -67,16 +67,18 @@
 					</strong>
 				</form>
 			</div>
-			<c:set var="opens" value="${fn:replace(sessionScope.currHomework.homeworkDetails.openingTime,'T', ' ')}" />
-			<c:set var="closes" value="${fn:replace(sessionScope.currHomework.homeworkDetails.closingTime,'T', ' ')}" />
-			<b class = "homeworkInfo">Heading: </b>
-			<c:out value="${sessionScope.currHomework.homeworkDetails.heading}" /><br>
-			<b class = "homeworkInfo">Opening time: </b>
-			<c:out value="${opens}" /><br>
-			<b class = "homeworkInfo">Closing time:  </b>
+			<c:set var="opens"
+				value="${fn:replace(sessionScope.currHomework.homeworkDetails.openingTime,'T', ' ')}" />
+			<c:set var="closes"
+				value="${fn:replace(sessionScope.currHomework.homeworkDetails.closingTime,'T', ' ')}" />
+			<b class="homeworkInfo">Heading: </b>
+			<c:out value="${sessionScope.currHomework.homeworkDetails.heading}" />
+			<br> <b class="homeworkInfo">Opening time: </b>
+			<c:out value="${opens}" />
+			<br> <b class="homeworkInfo">Closing time: </b>
 			<c:out value="${closes}" />
-		<div id="divTable">
-				<table id="tasksTable" 
+			<div id="divTable">
+				<table id="tasksTable"
 					class="table table-striped table-bordered table-hover">
 					<thead>
 						<tr>
@@ -92,10 +94,11 @@
 										class="btn btn-primary btn-sm" type="submit"
 										onclick="seeTaskSolution('${i}')">
 										<c:out value="Task ${i}" />
-									</button>
-									<span class = "systemScore" id = "systemScore${i}"><c:if test="${sessionScope.currHomework.tasks[i-1].hasPassedSystemTest eq true}"><c:out value = "${sessionScope.pointsPerTask}%"></c:out></c:if>
- 										<c:if test="${sessionScope.currHomework.tasks[i-1].hasPassedSystemTest ne true}">0%</c:if></span>
- 									
+									</button> <span class="systemScore" id="systemScore${i}"><c:if
+											test="${sessionScope.currHomework.tasks[i-1].hasPassedSystemTest eq true}">
+											<c:out value="${sessionScope.pointsPerTask}%"></c:out>
+										</c:if> <c:if
+											test="${sessionScope.currHomework.tasks[i-1].hasPassedSystemTest ne true}">0%</c:if></span>
 								</td>
 							</tr>
 						</c:forEach>
@@ -107,11 +110,11 @@
 					<p class="input-invalid-or-empty">You have invalid fields</p>
 				</c:if>
 			</c:if>
-				<form action="./updateTeacherGradeAndComment" method="POST"
+			<form action="./updateTeacherGradeAndComment" method="POST"
 				id="UpdateTeacherGradeAndCommentForm" accept-charset="UTF-8">
 				<div class="formInput">
-					<label><b>Teacher grade:</b></label>
-						<input type="number" class="form-control" min=0 max=100 id="grade"
+					<label><b>Teacher grade:</b></label> <input type="number"
+						class="form-control" min=0 max=100 id="grade"
 						value="${sessionScope.currHomework.teacherGrade}" name="grade" />
 				</div>
 				<c:if test="${not empty sessionScope.GradeTooLong}">
@@ -127,13 +130,14 @@
 				<p id="gradeMsg" class="invalidData"></p>
 				<div class="formInput">
 					<label><b>Teacher comment:</b></label>&nbsp; <br>
-					<textarea class="form-control" id="textareaComment" placeholder = "Enter comment..." maxlength="250"
-						name="comment"><c:out
+					<textarea class="form-control" id="textareaComment"
+						placeholder="Enter comment..." maxlength="250" name="comment"><c:out
 							value="${sessionScope.currHomework.teacherComment}"></c:out></textarea>
 					<c:if test="${not empty sessionScope.validComment}">
 
 						<c:if test="${not sessionScope.validComment}">
-							<p id="textareaCommentMsg" class="invalidData">Comment - maximum 250 symbols</p>
+							<p id="textareaCommentMsg" class="invalidData">Comment -
+								maximum 250 symbols</p>
 						</c:if>
 					</c:if>
 					<p id="textareaCommentMsg" class="invalidData"></p>
@@ -144,28 +148,27 @@
 				</div>
 			</form>
 		</div>
-
 		<div id="solution">
-		<div id="taskUpload"></div>
+			<div id="taskUpload"></div>
 			<textarea id="currTaskSolution" disabled="disabled"
 				class="form-control">
 	</textarea>
 		</div>
 	</div>
 	<c:if test="${not empty sessionScope.invalidFields}">
-			<c:remove var="invalidFields" scope="session" />
-		</c:if>
-		<c:if test="${not empty sessionScope.GradeTooLong}">
-			<c:remove var="GradeTooLong" scope="session" />
-		</c:if>
-		<c:if test="${not empty sessionScope.validGrade}">
-			<c:remove var="validGrade" scope="session" />
-		</c:if>
-		<c:if test="${not empty sessionScope.validComment}">
-			<c:remove var="validComment" scope="session" />
-		</c:if>
+		<c:remove var="invalidFields" scope="session" />
+	</c:if>
+	<c:if test="${not empty sessionScope.GradeTooLong}">
+		<c:remove var="GradeTooLong" scope="session" />
+	</c:if>
+	<c:if test="${not empty sessionScope.validGrade}">
+		<c:remove var="validGrade" scope="session" />
+	</c:if>
+	<c:if test="${not empty sessionScope.validComment}">
+		<c:remove var="validComment" scope="session" />
+	</c:if>
 	<script>
-		/* $('#UpdateTeacherGradeAndCommentForm')
+		 $('#UpdateTeacherGradeAndCommentForm')
 				.submit(
 						function(e) {
 							e.preventDefault();
@@ -202,7 +205,7 @@
 							} else {
 								return false;
 							}
-						}); */
+						}); 
 		$(document).ready(function() {
 			var table = $('#tasksTable').DataTable({
 				"autoWidth" : false,
@@ -218,8 +221,6 @@
 				"aoColumns" : [ {
 					'sWidth' : '140%'
 				} ],
-
-				// "lengthMenu" : [ 5 ], 
 				"scrollY" : '36vh',
 				"scrollCollapse" : true,
 
@@ -257,7 +258,6 @@
 						location.href = '/MyProject/index';
 					},
 					403 : function() {
-						console.log(1)
 						location.href = '/MyProject/forbiddenPage';
 					},404 : function(){
 						location.href = '/MyProject/pageNotFoundPage';

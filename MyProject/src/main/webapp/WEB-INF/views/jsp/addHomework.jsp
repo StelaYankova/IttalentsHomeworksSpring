@@ -10,6 +10,7 @@
 <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
 <link href="<c:url value="css/addHomeworkCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+<link rel="icon" type="image/png" href="./images/favIcon.png">
 
 </head>
 <body>
@@ -17,28 +18,23 @@
 	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
-				<li><a
-					href="./mainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
-				<li>Add
-						homework<span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
+				<li><a href="./mainPageTeacher">Home</a><span class="divider"><span
+						class="accesshide "><span class="arrow_text"></span></span> </span></li>
+				<li>Add homework<span class="divider"><span
+						class="accesshide "><span class="arrow_text"></span></span> </span></li>
 			</ul>
 		</nav>
 	</div>
 	<c:if test="${not empty invalidFields}">
-			<c:if test="${not invalidFields}">
-				<div class="alert alertAllPages alert-success">
-					<strong>Success!</strong> Homework has been added successfully
-				</div>
-			</c:if>
+		<c:if test="${not invalidFields}">
+			<div class="alert alertAllPages alert-success">
+				<strong>Success!</strong> Homework has been added successfully
+			</div>
 		</c:if>
+	</c:if>
 	<div id="pageWrapper">
 		<div id="formAddHomework">
 			<legend>Add homework</legend>
-
 			<form action="./addHomework" method="POST"
 				enctype="multipart/form-data" id="addHomeworkForm"
 				accept-charset="UTF-8" class="form-horizontal">
@@ -180,16 +176,17 @@
 						<p id="fileMsg" class="input-invalid"></p>
 					</div>
 				</div>
-				
+
 				<div class="form-group">
 					<label class="control-label">Tests:</label>
 					<div class="control-label-input">
-						<input type="file" accept="application/zip" name="testsFile" required /><span id = "testsFileConstraint">(Files in ZIP must be ".txt")</span>
-						<br/>
+						<input type="file" accept="application/zip" name="testsFile"
+							required /><span id="testsFileConstraint">(Files in ZIP
+							must be ".txt")</span> <br />
 						<c:if test="${not empty validTestsFile}">
 							<c:if test="${not validTestsFile}">
-								<p id="testsFileMsg" class="input-invalid">Valid file format -
-									zip, maximal size - 20MB</p>
+								<p id="testsFileMsg" class="input-invalid">Valid file format
+									- zip, maximal size - 20MB</p>
 							</c:if>
 						</c:if>
 						<p id="testsFileMsg" class="input-invalid"></p>
@@ -197,10 +194,8 @@
 				</div>
 				<legend></legend>
 				<div class="form-group">
-					<!-- <div class="col-md-offset-4 col-sm-5"> -->
 					<input type="submit" id="addButton"
 						class=" form-control btn btn-default" value="Add">
-					<!-- </div> -->
 				</div>
 			</form>
 		</div>
@@ -230,30 +225,23 @@
 			}
 			var size = (document.forms["addHomeworkForm"]["testsFile"].files[0].size / 1024 / 1024)
 					.toFixed(10);
-			console.log(size)
 			if (size > 20 || size == 0) {
-				console.log(false)//DA DOBAVA
 				return false;
 			}
 			var isTestsFileValid = false;
 			var form = new FormData(document.forms["addHomeworkForm"]);
-			console.log(form)
 			//see types
 					$.ajax({
 								url : './isHomeworkZipFileValid',
 								type : 'POST',
-			
 							 	data: form, 
 							 	processData: false,
 								contentType:false,
 								 dataType: false,
-				
 								success : function(response) {
 									if (!$('#testsFileMsg').is(':empty')) {
 										$("#testsFileMsg").empty();
 										isTestsFileValid = true;
-										console.log("TRUE")
-										//return true;
 									}
 								},
 								error : function(data) {
@@ -261,23 +249,13 @@
 										$("#testsFileMsg").empty();
 									}
 									isTestsFileValid = false;
-									/* document.getElementById("testsFileMsg").append(
-											"Extensions in .zip are not valid"); */
-									console.log("FALSE")
-									//return false;
-
 								}
-			
 						});
 
 		 $(document).ajaxStop(function() {
-				console.log("Are valid at the end: " + isTestsFileValid)
 				if(isTestsFileValid === true){
-					console.log("return"+ isTestsFileValid);
 					return true;
 				}else{
-					console.log("return"+ isTestsFileValid);
-
 					return false;
 				}
 			});
@@ -292,7 +270,6 @@
 			var size = (document.forms["addHomeworkForm"]["file"].files[0].size / 1024 / 1024)
 					.toFixed(10);
 			if (size > 20 || size == 0) {
-				console.log(false)
 				return false;
 			}
 			return true;
@@ -399,7 +376,6 @@
 											"heading" : name
 										},
 										success : function(response) {
-											console.log(99)
 											if (!$('#nameMsg').is(':empty')) {
 												$("#nameMsg").empty();
 												isNameValid = true;
@@ -414,7 +390,6 @@
 
 														success : function(
 																response) {
-															console.log(99)
 															if (!$('#nameMsg')
 																	.is(
 																			':empty')) {
@@ -469,7 +444,6 @@
 									isOpensValid = false;
 									document.getElementById("opensMsg").append(
 											"Opening time is not valid");
-									console.log("invalid opens")
 								}
 							});
 							$
@@ -513,9 +487,6 @@
 												"Number of tasks - between 1 and 40");
 							}
 							isFileValid = isFileValidCheck();
-							
-							
-							
 							if (!isFileValid) {
 								if (!$('#fileMsg').is(':empty')) {
 									$("#fileMsg").empty();
@@ -535,14 +506,11 @@
 			}
 			var size = (document.forms["addHomeworkForm"]["testsFile"].files[0].size / 1024 / 1024)
 					.toFixed(10);
-			console.log(size)
 			if (size > 20 || size == 0) {
-				console.log(false)//DA DOBAVA
 				isTestsFileValid =  false;
 			}
 			
 			var form = new FormData(document.forms["addHomeworkForm"]);
-			console.log(form)
 			//see types
 			if(isTestsFileValid === true){
 					$.ajax({
@@ -558,7 +526,6 @@
 									if (!$('#testsFileMsg').is(':empty')) {
 										$("#testsFileMsg").empty();
 										isTestsFileValid = true;
-										console.log("TRUE")
 									}
 								},
 								error : function(data) {
@@ -566,57 +533,32 @@
 										$("#testsFileMsg").empty();
 									}
 									isTestsFileValid = false;
-									console.log("FALSE")
-
 								}
-			
 						});
-
-							
 			}
-						
-							
-							
-							
-							
-							
-							//setTimeout(function () {
-						//	console.log("((())) + " + isTestsFileValid)
-							
-							$(document)
+						$(document)
 									.ajaxStop(
-											function() {console.log("AJAX READU")
+											function() {
 												if (!$('#testsFileMsg').is(':empty')) {
 													$("#testsFileMsg").empty();
 												}
-												if (isTestsFileValid === false) {console.log("L:::::::: " + isTestsFileValid)
-													
+												if (isTestsFileValid === false) {
 													document
 															.getElementById("testsFileMsg")
 															.append(
 																	"Valid file format - zip, maximal size - 20MB, valid extensions in zip - .txt");
 												}
-												console.log("!!!")
-												console.log(isNameUnique)
-												console.log(isNameValid)
-												console.log(isOpensValid)
-												console.log(isClosesValid)
-												console.log(isNumberOfTasksValid)
-												console.log(isFileValid)
-												console.log(isTestsFileValid)
-											
 												if ((isNameUnique === true
 														&& isNameValid === true
 														&& isOpensValid === true
 														&& isClosesValid === true
 														&& isNumberOfTasksValid === true
 														&& isFileValid === true && isTestsFileValid == true)) {
-	console.log("WILL SUBMIT")
 													document.getElementById(
 															"addHomeworkForm")
 															.submit();
 												}
-											});//},2000);
+											});
 						});
 						
 		$(function() {

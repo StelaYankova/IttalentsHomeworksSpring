@@ -4,26 +4,36 @@
 	margin: 0px auto !important;
 	padding-top: 0.125em;
 }
-ul.ui-autocomplete>li{
-	line-height:1.5em !important;
+
+ul.ui-autocomplete>li {
+	line-height: 1.5em !important;
 }
+
 #addButtonDiv>input {
 	background-color: #2E71AC;
 	color: #ffffff;
 }
 
 .bootstrap-select>select {
-    left: 0% !important;
+	left: 0% !important;
 }
+
 #addStudentToGroupForm .bootstrap-select.btn-group .dropdown-menu {
-    max-height: 16em !important;
+	max-height: 16em !important;
 }
-li.list-group-item>button{
-	background:transparent; borders:none; position:relative;float:right;
+
+li.list-group-item>button {
+	background: transparent;
+	borders: none;
+	position: relative;
+	float: right;
+	margin-top: -0.3em;
 }
-#listOfStudentsOfGroupHeading{
-	padding-bottom:0.2em;
+
+#listOfStudentsOfGroupHeading {
+	padding-bottom: 0.2em;
 }
+
 #addButtonDiv {
 	padding-top: 1.2em;
 	width: 0%;
@@ -36,6 +46,7 @@ li.list-group-item>button{
 	padding-left: 0.7em;
 	padding-bottom: 0.313em;
 }
+
 .form-horizontal .control-label {
 	float: left;
 	text-align: left !important;
@@ -106,13 +117,14 @@ ul.ui-autocomplete {
 	padding-top: 1.5em;
 	width: 5%;
 }
+
 .input-invalid-addStudentToGroup {
-    text-align: left;
-    color: red;
-    width: 60%;
-    margin-left: 20.5em;
-    margin-bottom: 0em;
-}	
+	text-align: left;
+	color: red;
+	width: 60%;
+	margin-left: 20.5em;
+	margin-bottom: 0em;
+}
 
 @media ( max-width : 1250px) {
 	#listHeadingAndStudents {
@@ -141,32 +153,31 @@ ul.ui-autocomplete {
 		width: 20em;
 	}
 	#formLargeScreen {
-	width: 100%;
-}
-.form-inline .form-group {
-    display: block !important;
-        padding-top: 0.5em;
-    width: 28%;
-    margin: 0px auto;
-}
-.form-inline .form-control {
-    width: 100% !important;
-}
-#addButtonDiv {
-    padding-top: 1.5em;
-    width: 28.2%;
-    padding-left: 0em;
-}
-.input-invalid-addStudentToGroup {
-    margin-left: 26.5em;
-}	
+		width: 100%;
+	}
+	.form-inline .form-group {
+		display: block !important;
+		padding-top: 0.5em;
+		width: 28%;
+		margin: 0px auto;
+	}
+	.form-inline .form-control {
+		width: 100% !important;
+	}
+	#addButtonDiv {
+		padding-top: 1.5em;
+		width: 28.2%;
+		padding-left: 0em;
+	}
+	.input-invalid-addStudentToGroup {
+		margin-left: 26.5em;
+	}
 }
 
 @media ( max-width : 1000px) {
 	#listHeadingAndStudents {
 		width: 28.5%;
 	}
-	
 }
 
 @media ( max-width : 992px) {
@@ -174,62 +185,60 @@ ul.ui-autocomplete {
 		width: 38%;
 	}
 	.form-inline .form-group {
-    display: inline-block;
-    margin-bottom: 0;
-    width: 38%;
-    vertical-align: middle;
-    
-}
-#addButtonDiv {
-    padding-top: 1.5em;
-    width: 38.2%;
-    padding-left: 0em;
-}
-.input-invalid-addStudentToGroup {
-    margin-left: 16.5em;
-}
+		display: inline-block;
+		margin-bottom: 0;
+		width: 38%;
+		vertical-align: middle;
+	}
+	#addButtonDiv {
+		padding-top: 1.5em;
+		width: 38.2%;
+		padding-left: 0em;
+	}
+	.input-invalid-addStudentToGroup {
+		margin-left: 16.5em;
+	}
 }
 
 @media ( max-width : 789px) {
 	#listHeadingAndStudents {
 		width: 50%;
 	}
-		.form-inline .form-group {
-    display: inline-block;
-    margin-bottom: 0;
-    width: 50%;
-    vertical-align: middle;
-}
-#addButtonDiv {
-    padding-top: 1.5em;
-    width: 50.2%;
-    padding-left: 0em;
-}
-.input-invalid-addStudentToGroup {
-    margin-left: 10em;
-}
+	.form-inline .form-group {
+		display: inline-block;
+		margin-bottom: 0;
+		width: 50%;
+		vertical-align: middle;
+	}
+	#addButtonDiv {
+		padding-top: 1.5em;
+		width: 50.2%;
+		padding-left: 0em;
+	}
+	.input-invalid-addStudentToGroup {
+		margin-left: 10em;
+	}
 }
 
 @media ( max-width :590px) {
 	#listHeadingAndStudents {
 		width: 89%;
 	}
-		.form-inline .form-group {
-    display: inline-block;
-    margin-bottom: 0;
-    width: 88%;
-    vertical-align: middle;
-}
-#addButtonDiv {
-    padding-top: 1.5em;
-    width: 88.2%;
-    padding-left: 0em;
-}
-
-.bootstrap-select>select {
-    left: 0% !important;
-}
-.input-invalid-addStudentToGroup {
-    margin-left: 1.2em;
-}
+	.form-inline .form-group {
+		display: inline-block;
+		margin-bottom: 0;
+		width: 88%;
+		vertical-align: middle;
+	}
+	#addButtonDiv {
+		padding-top: 1.5em;
+		width: 88.2%;
+		padding-left: 0em;
+	}
+	.bootstrap-select>select {
+		left: 0% !important;
+	}
+	.input-invalid-addStudentToGroup {
+		margin-left: 1.2em;
+	}
 }

@@ -2,6 +2,11 @@ package com.IttalentsHomeworks.DAO;
 
 public class HomeworkException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public HomeworkException() {
 		// TODO Auto-generated constructor stub
 	}

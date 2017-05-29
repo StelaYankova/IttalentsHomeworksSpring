@@ -1,38 +1,43 @@
 @CHARSET "UTF-8";
 
 #createButtonPosition {
-    width:100%;
+	width: 100%;
 }
 
-#pageTitle{
+#pageTitle {
 	text-align: center;
 }
-#divTable{
+
+#divTable {
 	width: 45%;
-	margin:0 auto;
+	margin: 0 auto;
 	padding-top: 3em;
-	
 }
-#updateGroupForm{
+
+#updateGroupForm {
 	padding-top: 0.2em;
-		width:40%;
-		float:left;
+	width: 40%;
+	float: left;
 }
+
 #tdContent {
 	display: inline-block;
-	width:100%;
+	width: 100%;
 }
 
 #removeGroupForm {
 	float: right;
 }
-#removeGroupForm button{
-		margin-top:0.1em;
-		padding:0em 0.1em 0em 0.1em !important;
-	}
+
+#removeGroupForm button {
+	margin-top: 0.1em;
+	padding: 0em 0.1em 0em 0.1em !important;
+}
+
 #resultTable {
 	width: 100% !important;
 }
+
 #divTable table.dataTable tbody td {
 	padding: 0.5em;
 	padding-left: 0.8em;
@@ -63,9 +68,9 @@
 	#divTable {
 		width: 70%;
 	}
-	#removeGroupForm button{
-		margin-top:0.3em;
-		padding:0em 0.1em 0em 0.1em !important;
+	#removeGroupForm button {
+		margin-top: 0.3em;
+		padding: 0em 0.1em 0em 0.1em !important;
 	}
 }
 
@@ -73,8 +78,9 @@
 	#divTable {
 		width: 100%;
 	}
-	#removeGroupForm button{
-		margin-top:0.3em;
-		padding:0em 0.1em 0em 0.1em !important;
+	#removeGroupForm button {
+		margin-top: 0.3em;
+		padding: 0em 0.1em 0em 0.1em !important;
 	}
-}}
+}
+}

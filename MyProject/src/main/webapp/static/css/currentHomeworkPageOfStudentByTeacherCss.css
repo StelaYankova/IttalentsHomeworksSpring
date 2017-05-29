@@ -1,12 +1,15 @@
 @CHARSET "UTF-8";
-#grade{
-	width:19%;
-	    height: 1.8em;
+
+#grade {
+	width: 19%;
+	height: 1.8em;
 }
-.systemScore{
-	z-index:1;
-	padding-left:1em;
+
+.systemScore {
+	z-index: 1;
+	padding-left: 1em;
 }
+
 label {
 	display: inline-block;
 	*display: inline; /* for IE7*/
@@ -16,31 +19,35 @@ label {
 	text-align: left;
 	width: 9em;
 }
-.formInput{
-	margin-bottom:1em;	
+
+.formInput {
+	margin-bottom: 1em;
 }
-#solution{
-	display:none;
+
+#solution {
+	display: none;
 }
-#solution{
- width: 52%;
-    float: left;
-    padding-left: 3.125em;
-    padding-top: 11em;
- }
+
+#solution {
+	width: 52%;
+	float: left;
+	padding-left: 3.125em;
+	padding-top: 11em;
+}
 
 #currTaskSolution {
-	display:none;
+	display: none;
 }
 
 #currHomework {
-    width: 44%;
-    float: left;
-        padding-left: 7em;
-    padding-right: 1.313em;
-    padding-top: 3.750em;
+	width: 44%;
+	float: left;
+	padding-left: 7em;
+	padding-right: 1.313em;
+	padding-top: 3.750em;
 }
-.input-invalid-or-empty{
+
+.input-invalid-or-empty {
 	width: 15.625em;
 }
 
@@ -54,53 +61,63 @@ label {
 	font-size: 0.85em;
 	font-style: italic
 }
-.homeworkInfo{
-   line-height: 2em;
+
+.homeworkInfo {
+	line-height: 2em;
 }
-.dataTables_scrollBody{
-	max-height:40.5vh !important;
+
+.dataTables_scrollBody {
+	max-height: 40.5vh !important;
 }
-#saveButton{
-	float:left;	
+
+#saveButton {
+	float: left;
 }
+
 .invalidData {
-    padding-right: 3.750em;
+	padding-right: 3.750em;
 }
-#divTable{
+
+#divTable {
 	padding-bottom: 0.625em;
 }
-#tasksTable{
+
+#tasksTable {
 	border-size: 0.125em;
 	border-style: groove;
 }
 
-#tasksTable td{
+#tasksTable td {
 	padding-bottom: 0.938em;
-    padding-top: 1.188em;
+	padding-top: 1.188em;
 	border-size: 0.125em;
 	border-style: groove;
 }
-#seeTaskSolutionButton{
-	color: #fff; 
+
+#seeTaskSolutionButton {
+	color: #fff;
 	background-color: #0086b3;
 }
-#taskUpload{
-	display:none;
+
+#taskUpload {
+	display: none;
 	padding-bottom: 0.1em;
-	
 }
-#currTaskSolution{
-	overflow-y:scroll;
-	 height: 42em;
-    width: 30em;
+
+#currTaskSolution {
+	overflow-y: scroll;
+	height: 42em;
+	width: 30em;
 }
- @media ( min-width : 1280px) {
-#currTaskSolution{
-	overflow-y:scroll;
-	 height: 43em;
-    width: 30em;
+
+@media ( min-width : 1280px) {
+	#currTaskSolution {
+		overflow-y: scroll;
+		height: 43em;
+		width: 30em;
+	}
 }
-} 
+
 @media ( max-width : 1025px) {
 	#textareaComment {
 		overflow-y: scroll;
@@ -112,79 +129,76 @@ label {
 		font-size: 0.750em;
 		font-style: italic;
 	}
-	#solution{
-		width:100%;
+	#solution {
+		width: 100%;
 	}
-	
-.formInput {
-    width: 38%;
-    clear: both;
-    margin-bottom:1em !important;
-}
-	#currHomework {
-    width: 100%;
-    padding-right: 1em;
-    padding-left: 1em;
-    padding-bottom:0em;
-}
-
-#solution {
-   /*  width: 52%; */
-    float: left;
-    padding-left: 1em;
-    padding-top: 1em;
-}
-#currTaskSolution {
-    height: 33em;
-    /* margin-bottom:15em; */
-     width:71em; 
-}
-}
- @media ( max-width : 1011px) {
-#currTaskSolution {
-    height: 33em;
-    width: 68em; 
-}
-}
- @media ( max-width : 992px) {
- #grade {
-    width: 23%;
-}
-#currTaskSolution {
-    height: 33em;
-    width: 51.5em; 
-display:block;
-}
-#solution {
-    float: left;
-    padding-left: 1em;
-    padding-top: 1em;
-    height:36em !important;
-} 
-@media ( max-width : 991px) {
-#currTaskSolution {
-    height: 33em;
-    width: 51.5em;
-}
-}
-@media ( max-width : 789px) {
-	#grade {
-    width: 30.7%;
-}
-#currTaskSolution {
-    height: 33em;
-    width: 38.4em;
-}
-}
-@media ( max-width : 590px) {
 	.formInput {
-    width: 73%;
-}
-	#textareaComment {
-		width: 24em;
+		width: 38%;
+		clear: both;
+		margin-bottom: 1em !important;
+	}
+	#currHomework {
+		width: 100%;
+		padding-right: 1em;
+		padding-left: 1em;
+		padding-bottom: 0em;
+	}
+	#solution {
+		float: left;
+		padding-left: 1em;
+		padding-top: 1em;
 	}
 	#currTaskSolution {
-    width: 21em;
-    padding-left:0em;
+		height: 33em;
+		width: 71em;
+	}
 }
+
+@media ( max-width : 1011px) {
+	#currTaskSolution {
+		height: 33em;
+		width: 68em;
+	}
 }
+
+@media ( max-width : 992px) {
+	#grade {
+		width: 23%;
+	}
+	#currTaskSolution {
+		height: 33em;
+		width: 51.5em;
+		display: block;
+	}
+	#solution {
+		float: left;
+		padding-left: 1em;
+		padding-top: 1em;
+		height: 36em !important;
+	}
+	@media ( max-width : 991px) {
+		#currTaskSolution {
+			height: 33em;
+			width: 51.5em;
+		}
+	}
+	@media ( max-width : 789px) {
+		#grade {
+			width: 30.7%;
+		}
+		#currTaskSolution {
+			height: 33em;
+			width: 38.4em;
+		}
+	}
+	@media ( max-width : 590px) {
+		.formInput {
+			width: 73%;
+		}
+		#textareaComment {
+			width: 24em;
+		}
+		#currTaskSolution {
+			width: 21em;
+			padding-left: 0em;
+		}}

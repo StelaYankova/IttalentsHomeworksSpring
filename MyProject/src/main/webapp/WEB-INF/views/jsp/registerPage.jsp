@@ -7,17 +7,21 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
- <link href="<c:url value="css/registerPageCss.css" />" type="text/css" rel="stylesheet">
-<link href="<c:url value="css/generalCss.css" />" type="text/css" rel="stylesheet">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="<c:url value="css/registerPageCss.css" />" type="text/css"
+	rel="stylesheet">
+<link href="<c:url value="css/generalCss.css" />" type="text/css"
+	rel="stylesheet">
+<link rel="icon" type="image/png" href="./images/favIcon.png">
+	
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="HandheldFriendly" content="true">
-	<link rel="icon" type="image/png" href="./images/favIcon.png">
 
 </head>
 <body>
 	<%@ include file="navBarHomePage.jsp"%>
-	
+
 	<c:if test="${not empty invalidFields}">
 		<c:if test="${not invalidFields}">
 			<div class="alert alertRegisterPage alert-success">
@@ -85,7 +89,8 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="repeatedPassword" class="control-label">Repeat password:</label>
+					<label for="repeatedPassword" class="control-label">Repeat
+						password:</label>
 					<div class="control-label-input">
 						<input type="password" class="form-control" maxlength="15"
 							name="repeatedPassword" placeholder="Repeat password"
@@ -115,9 +120,8 @@
 				</div>
 				<legend></legend>
 				<div class="form-group">
-						<input id = "registerButton"
-							type="submit" class=" form-control btn btn-default"
-							value="Register">
+					<input id="registerButton" type="submit"
+						class=" form-control btn btn-default" value="Register">
 				</div>
 			</form>
 		</div>
@@ -253,13 +257,13 @@
 							data : {
 								"password" : password
 							},
-							success : function(response) {console.log("da")
+							success : function(response) {
 								if (!$('#passwordMsg').is(':empty')) {
 									$("#passwordMsg").empty();
 									isPasswordValid = true;
 								}
 							},
-							error : function(data) {console.log("ne")
+							error : function(data) {
 								if (!$('#passwordMsg').is(':empty')) {
 									$("#passwordMsg").empty();
 								}

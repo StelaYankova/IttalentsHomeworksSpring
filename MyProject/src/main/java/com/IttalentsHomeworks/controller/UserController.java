@@ -5,16 +5,9 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.ServletException;
@@ -34,7 +27,6 @@ import com.IttalentsHomeworks.model.Group;
 import com.IttalentsHomeworks.model.Homework;
 import com.IttalentsHomeworks.model.HomeworkDetails;
 import com.IttalentsHomeworks.model.Student;
-import com.IttalentsHomeworks.model.Task;
 import com.IttalentsHomeworks.model.Teacher;
 import com.IttalentsHomeworks.model.User;
 import com.google.gson.JsonArray;
@@ -47,7 +39,7 @@ public class UserController {
 	protected void getGroupsOfStudent(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User userTry = (User) request.getSession().getAttribute("user");
-		if (!userTry.isTeacher()) {	
+		if (!userTry.isTeacher()) {
 			User user = (User) request.getSession().getAttribute("user");
 			ArrayList<Group> groupsOfUser = user.getGroups();
 			JsonArray jsonGroups = new JsonArray();
@@ -75,7 +67,7 @@ public class UserController {
 			response.setStatus(IValidationsDAO.FORBIDDEN_STATUS);
 		}
 	}
-	
+
 	@RequestMapping(value = "/getHomeworkOfStudentByTeacher", method = RequestMethod.GET)
 	protected String getHomeworksOfStudent(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -83,39 +75,22 @@ public class UserController {
 		if (user.isTeacher()) {
 			if (request.getParameter("studentId") != null && !(request.getParameter("studentId").trim().equals(""))
 					&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("studentId").trim())
-					&& request.getParameter("homeworkId") != null && !(request.getParameter("homeworkId").trim().equals(""))
+					&& request.getParameter("homeworkId") != null
+					&& !(request.getParameter("homeworkId").trim().equals(""))
 					&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("homeworkId").trim())) {
 				int studentId = Integer.parseInt(request.getParameter("studentId").trim());
 				int homeworkId = Integer.parseInt(request.getParameter("homeworkId").trim());
 				request.getSession().setAttribute("studentId", studentId);
 				Homework homework = null;
-				//ArrayList<Homework> homeworks;
 				try {
-					//homeworks = UserDAO.getInstance().getHomeworksOfStudent(studentId);
-					
 					Student chosenStudent = (Student) UserDAO.getInstance().getUserById(studentId);
 					homework = UserDAO.getInstance().getHomeworkOfStudent(studentId, homeworkId);
-//					for (Homework h : chosenStudent.getHomeworks()) {
-//						if (h.getHomeworkDetails().getId() == homeworkId) {
-//							homework = new Homework(h.getTeacherGrade(), h.getTeacherComment(), h.getTasks(),
-//									h.getHomeworkDetails());
-//							break;
-//						}
-//					}
-					if(homework == null || chosenStudent == null){
+					if (homework == null || chosenStudent == null) {
 						return "pageNotFound";
 					}
-					for(Task t: homework.getTasks()){
-						System.out.println("HAS PASSSSSED");
-						System.out.println(t.isHasPassedSystemTest());
-					}
 					int numberOfTasks = homework.getHomeworkDetails().getNumberOfTasks();
-					System.out.println("Number of tasks is " + numberOfTasks);
 					int pointsPerTask = 100 / numberOfTasks;
-					System.out.println("Points per task is " + pointsPerTask);
 					request.getSession().setAttribute("pointsPerTask", pointsPerTask);
-					
-					
 					request.getSession().setAttribute("currHomework", homework);
 					request.getSession().setAttribute("currStudentUsername", chosenStudent.getUsername());
 					return "redirect:./seeChosenHomeworkPageOfStudentByTeacher";
@@ -134,16 +109,6 @@ public class UserController {
 		}
 		return "forbiddenPage";
 	}
-
-//	@RequestMapping(value = "/getChosenHomeworkPageByStudent", method = RequestMethod.GET)
-//	protected String getHomeworkPage(HttpServletRequest request, HttpServletResponse response)
-//			throws ServletException, IOException {
-//		User user = (User) request.getSession().getAttribute("user");
-//		if (!user.isTeacher()) {
-//			return "currentHomeworkPageOfStudentByStudent";
-//		}
-//		return "forbiddenPage";
-//	}
 
 	@RequestMapping(value = "/mainPageStudent", method = RequestMethod.GET)
 	protected String mainPageStudent(HttpServletRequest request, HttpServletResponse response)
@@ -179,7 +144,6 @@ public class UserController {
 	protected String getStudentsScored(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
-//		request.getSession().setAttribute("throughtSeeOrUpdateHomeworks",1); 
 		request.getSession().removeAttribute("throughtSeeOrUpdateHomeworks");
 		if (user.isTeacher()) {
 			return "seeStudentsScores";
@@ -193,11 +157,6 @@ public class UserController {
 		return "homePage";
 	}
 
-//	@RequestMapping(value = "/", method = RequestMethod.GET)
-//	protected String loginGet(HttpServletRequest request, HttpServletResponse response)
-//			throws ServletException, IOException {
-//		return "homePage";
-//	}
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	protected String loginPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -215,18 +174,15 @@ public class UserController {
 					request.getSession().setAttribute("user", user);
 					ArrayList<Group> allGroups;
 					try {
-//						allGroups = GroupDAO.getInstance().getAllGroups();
 						allGroups = GroupDAO.getInstance().getAllGroupsWithoutStudents();
-
-						if(request.getServletContext().getAttribute("allGroups") == null){
+						if (request.getServletContext().getAttribute("allGroups") == null) {
 							request.getServletContext().setAttribute("allGroups", allGroups);
 						}
 						ArrayList<Teacher> allTeachers = UserDAO.getInstance().getAllTeachers();
 						for (Teacher t : allTeachers) {
-							//t.setGroups(UserDAO.getInstance().getGroupsOfUser(t.getId()));
 							t.setGroups(UserDAO.getInstance().getGroupsOfUserWithoutStudents(t.getId()));
 						}
-						if(request.getServletContext().getAttribute("allTeachers") == null){
+						if (request.getServletContext().getAttribute("allTeachers") == null) {
 							request.getServletContext().setAttribute("allTeachers", allTeachers);
 						}
 					} catch (UserException | GroupException e) {
@@ -237,7 +193,7 @@ public class UserController {
 					if (user.isTeacher()) {
 						request.getSession().setAttribute("isTeacher", true);
 						ArrayList<Student> allStudents = UserDAO.getInstance().getAllStudents();
-						if(request.getServletContext().getAttribute("allStudents") == null){
+						if (request.getServletContext().getAttribute("allStudents") == null) {
 							request.getServletContext().setAttribute("allStudents", allStudents);
 						}
 						return "redirect:./mainPageTeacher";
@@ -266,7 +222,8 @@ public class UserController {
 	}
 
 	private void getActiveHomeworksOfStudent(Student user, HttpServletRequest request) throws UserException {
-		ArrayList<HomeworkDetails> activeHomeworksOfStudent = UserDAO.getInstance().getActiveHomeworksOfStudent(user.getId());
+		ArrayList<HomeworkDetails> activeHomeworksOfStudent = UserDAO.getInstance()
+				.getActiveHomeworksOfStudent(user.getId());
 		request.getSession().setAttribute("activeHomeworksOfStudent", activeHomeworksOfStudent);
 	}
 
@@ -298,7 +255,7 @@ public class UserController {
 			}
 		}
 
-		// we get wanted groups of top 5
+		// we get wanted groups of top 10
 		for (Group g : user.getGroups()) {
 			for (HomeworkDetails hd : topMostRecentlyClosedHomeworksForTeacher) {
 				ArrayList<Integer> currGroupIds = GroupDAO.getInstance().getIdsOfGroupsForWhichIsHomework(hd.getId());
@@ -310,19 +267,12 @@ public class UserController {
 				}
 			}
 		}
-//		for (HashMap.Entry<Group, HashSet<HomeworkDetails>> entry : mostRecentlyClosedHomeworksForTeacherMap
-//				.entrySet()) {
-//			System.out.println("Key : " + entry.getKey().getName() + " Value : ");
-//			for (HomeworkDetails hd : entry.getValue()) {
-//				System.out.println("Value: " + hd.getHeading() + " pass "  + hd.getClosingTime());
-//
-//			}
-//		}
 		request.getSession().setAttribute("mostRecentlyClosedHomeworks", mostRecentlyClosedHomeworksForTeacherMap);
 
 	}
 
-	private boolean doesUserLoginExist(String username, String password) throws UserException, NoSuchAlgorithmException {
+	private boolean doesUserLoginExist(String username, String password)
+			throws UserException, NoSuchAlgorithmException {
 		return ValidationsDAO.getInstance().doesUserExistInDB(username, password);
 	}
 
@@ -336,14 +286,13 @@ public class UserController {
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	protected String logout(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		/*Connection con = DBManager.getInstance().getConnection();
 		try {
-			con.close();
-		} catch (SQLException e) {
+			UserDAO.getInstance().logout();
+		} catch (UserException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 			return "exception";
-		}*/
+		}
 		request.getSession().invalidate();
 		return "redirect:./index";
 	}
@@ -359,13 +308,15 @@ public class UserController {
 			throws ServletException, IOException {
 		String username = (request.getParameter("username") != null) ? (request.getParameter("username").trim()) : ("");
 		String password = (request.getParameter("password") != null) ? (request.getParameter("password").trim()) : ("");
-		String repeatedPassword = (request.getParameter("repeatedPassword") != null) ? (request.getParameter("repeatedPassword").trim()) : ("");
+		String repeatedPassword = (request.getParameter("repeatedPassword") != null)
+				? (request.getParameter("repeatedPassword").trim()) : ("");
 		String email = (request.getParameter("email") != null) ? (request.getParameter("email").trim()) : ("");
 		User userTry = new Student(username, password, repeatedPassword, email);
 		request.setAttribute("userTry", userTry);
 		// not null
-		if (isThereEmptyFieldRegister(request.getParameter("username").trim(), request.getParameter("password").trim(), request.getParameter("repeatedPassword").trim(), request.getParameter("email").trim())) {
-			request.setAttribute("emptyFields", true);			
+		if (isThereEmptyFieldRegister(request.getParameter("username").trim(), request.getParameter("password").trim(),
+				request.getParameter("repeatedPassword").trim(), request.getParameter("email").trim())) {
+			request.setAttribute("emptyFields", true);
 		} else {
 			request.setAttribute("userTry", userTry);
 			// uniqueUsername
@@ -403,17 +354,11 @@ public class UserController {
 					isEmailValid = true;
 				}
 				request.setAttribute("validEmail", isEmailValid);
-				System.out.println(isUsernameUnique);
-				System.out.println(isUsernameValid);
-				System.out.println(isPassValid);
-				System.out.println(isRepeatedPassValid);
-				System.out.println(isEmailValid);
 				if (isUsernameUnique == true && isUsernameValid == true && isPassValid == true
 						&& isRepeatedPassValid == true && isEmailValid == true) {
 					// we create user
 					User user = new Student(username, password, repeatedPassword, email);
 					UserDAO.getInstance().createNewUser(user);
-					System.out.println("REGISTERED");
 					request.setAttribute("invalidFields", false);
 				}
 			} catch (UserException e) {
@@ -432,7 +377,8 @@ public class UserController {
 	}
 
 	private boolean isLengthValidUsernameRegister(String username) {
-		if (username.length() >= IValidationsDAO.MIN_LENGTH_USERNAME && username.length() <= IValidationsDAO.MAX_LENGTH_USERNAME) {
+		if (username.length() >= IValidationsDAO.MIN_LENGTH_USERNAME
+				&& username.length() <= IValidationsDAO.MAX_LENGTH_USERNAME) {
 			return true;
 		}
 		return false;
@@ -443,7 +389,7 @@ public class UserController {
 	}
 
 	private boolean areCharactersValidUsernameRegister(String username) {
-		for(int i = 0; i < username.length(); i++){
+		for (int i = 0; i < username.length(); i++) {
 			if (!(((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO
 					&& (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
 					|| ((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A
@@ -455,18 +401,11 @@ public class UserController {
 			}
 		}
 		return true;
-//		for (int i = 0; i < username.length(); i++) {
-//			if (!(((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO && (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
-//					|| ((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A && (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
-//					|| ((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a && (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z)) || ((int) username.charAt(i) == IValidationsDAO.ASCII_TABLE_VALUE_OF_DOT)) {
-//				return false;
-//			}
-//		}
-//		return true;
 	}
 
 	private boolean isLengthValidPassRegister(String password) {
-		if (password.length() >= IValidationsDAO.MIN_LENGTH_OF_PASSWORD && password.length() <= IValidationsDAO.MAX_LENGTH_OF_PASSWORD) {
+		if (password.length() >= IValidationsDAO.MIN_LENGTH_OF_PASSWORD
+				&& password.length() <= IValidationsDAO.MAX_LENGTH_OF_PASSWORD) {
 			return true;
 		}
 		return false;
@@ -474,9 +413,12 @@ public class UserController {
 
 	private boolean areCharactersValidPassRegister(String password) {
 		for (int i = 0; i < password.length(); i++) {
-			if (!(((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO && (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
-					|| ((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A && (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
-					|| ((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a && (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z))) {
+			if (!(((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO
+					&& (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
+					|| ((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A
+							&& (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
+					|| ((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a
+							&& (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z))) {
 				return false;
 			}
 		}
@@ -527,11 +469,12 @@ public class UserController {
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		int userId = user.getId();
-		
+
 		User newUser = null;
 
 		// empty fields
-		if (isThereEmptyFieldUpdateProfile(request.getParameter("password").trim(), request.getParameter("repeatedPassword").trim(), request.getParameter("email").trim())) {
+		if (isThereEmptyFieldUpdateProfile(request.getParameter("password").trim(),
+				request.getParameter("repeatedPassword").trim(), request.getParameter("email").trim())) {
 			request.setAttribute("emptyFields", true);
 		} else {
 			// password valid
@@ -542,7 +485,7 @@ public class UserController {
 			User userTry = new Student(username, password, repeatedPassword, email);
 			request.setAttribute("userTry", userTry);
 			boolean isPassValid = false;
-			if(!password.equals(user.getPassword())){
+			if (!password.equals(user.getPassword())) {
 				if (isPasswordValidUpdateProfile(password)) {
 					isPassValid = true;
 				}
@@ -563,7 +506,7 @@ public class UserController {
 				isEmailValid = true;
 			}
 			request.setAttribute("validEmail", isEmailValid);
-			
+
 			if (isPassValid == true && isRepeatedPassValid == true && isEmailValid == true) {
 				if (user.isTeacher()) {
 					newUser = new Teacher(username, password, repeatedPassword, email);
@@ -575,14 +518,6 @@ public class UserController {
 					UserDAO.getInstance().updateUser(newUser, user.getPassword());
 					newUser = UserDAO.getInstance().getUserByUsername(username);
 					request.setAttribute("invalidFields", false);
-//					if(!password.equals(user.getPassword())){
-//						String encryptedPassword = ValidationsDAO.getInstance().encryptPass(password);
-//						newUser.setPassword(encryptedPassword);
-//					}
-					/////
-				
-					
-					////
 					request.getSession().setAttribute("user", newUser);
 				} catch (UserException e) {
 					System.out.println(e.getMessage());
@@ -612,7 +547,8 @@ public class UserController {
 	}
 
 	private boolean isLengthValidPassUpdateProfile(String password) {
-		if (password.length() >= IValidationsDAO.MIN_LENGTH_OF_PASSWORD && password.length() <= IValidationsDAO.MAX_LENGTH_OF_PASSWORD) {
+		if (password.length() >= IValidationsDAO.MIN_LENGTH_OF_PASSWORD
+				&& password.length() <= IValidationsDAO.MAX_LENGTH_OF_PASSWORD) {
 			return true;
 		}
 		return false;
@@ -620,9 +556,12 @@ public class UserController {
 
 	private boolean areCharactersValidPassUpdateProfile(String password) {
 		for (int i = 0; i < password.length(); i++) {
-			if (!(((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO && (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
-					|| ((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A && (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
-					|| ((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a && (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z))) {
+			if (!(((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO
+					&& (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
+					|| ((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A
+							&& (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
+					|| ((int) password.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a
+							&& (int) password.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z))) {
 				return false;
 			}
 		}
@@ -637,8 +576,8 @@ public class UserController {
 	}
 
 	private boolean isThereEmptyFieldUpdateProfile(String password, String repeatedPassword, String email) {
-		if (password != null && !(password.equals(""))
-				&& repeatedPassword != null && !(repeatedPassword.equals("")) && email != null && !(email.equals(""))) {
+		if (password != null && !(password.equals("")) && repeatedPassword != null && !(repeatedPassword.equals(""))
+				&& email != null && !(email.equals(""))) {
 			return false;
 		}
 		return true;
@@ -650,16 +589,19 @@ public class UserController {
 		}
 		return false;
 	}
+
 	@RequestMapping(value = "/forbiddenPage", method = RequestMethod.GET)
 	protected String getForbiddenPage(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		return "forbiddenPage";
 	}
+
 	@RequestMapping(value = "/exceptionPage", method = RequestMethod.GET)
 	protected String getExceptionPage(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		return "exception";
 	}
+
 	@RequestMapping(value = "/pageNotFoundPage", method = RequestMethod.GET)
 	protected String pageNotFoundPage(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

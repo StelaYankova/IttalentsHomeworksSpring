@@ -3,33 +3,35 @@
 .dataTables_wrapper {
 	padding-bottom: 0.5em;
 }
-#studentAverageScore{
-	padding-top:0.5em;
-}
-#studentAverageSystemScore{
-	padding-top:0.5em;
+
+#studentAverageScore {
+	padding-top: 0.5em;
 }
 
-#tableAndStudents>.list>ul#listOfStudentsOfGroup>li>button{
-	padding-left:0em;
-	    padding-bottom: 0.3em;
-    margin-top: -0.2em;
+#studentAverageSystemScore {
+	padding-top: 0.5em;
 }
+
+#tableAndStudents>.list>ul#listOfStudentsOfGroup>li>button {
+	padding-left: 0em;
+	padding-bottom: 0.3em;
+	margin-top: -0.2em;
+}
+
 #resultTable_length {
-    padding-bottom: 0.5em;
+	padding-bottom: 0.5em;
 }
-/* .dataTables_paginate {
-	margin-top: -0.7em;
-	max-width: 28em;
-} */
+
 .dataTables_paginate {
 	margin-top: -0.45em;
 	max-width: 32em;
 	font-size: 0.9em;
 }
+
 #select .bootstrap-select.btn-group .dropdown-menu {
-    max-height: 14em !important;
+	max-height: 14em !important;
 }
+
 #select {
 	position: absolute;
 	padding-top: 5em;
@@ -53,33 +55,29 @@
 	display: none;
 	margin: 0 auto;
 }
-/* #divTable table.dataTable tbody td:last-child{
-	width:30%;
-}
-#divTable table.dataTable tbody td {
-	padding: 0.5em;
-	padding-left: 0.8em;
-	font-size: 0.95em;
-	width: 17%;
-} */
+
 #divTable table.dataTable tbody td:nth-child(1) {
 	padding: 0.5em;
 	padding-left: 0.8em;
 	font-size: 0.95em;
-	width:27.5%;
-} 
-#divTable table.dataTable tbody td:nth-child(2), #divTable table.dataTable tbody td:nth-child(3) {
+	width: 27.5%;
+}
+
+#divTable table.dataTable tbody td:nth-child(2), #divTable table.dataTable tbody td:nth-child(3)
+	{
 	padding: 0.5em;
 	padding-left: 0.8em;
 	font-size: 0.95em;
-	width:22.5%;
-} 
- #divTable table.dataTable tbody td:nth-child(4) {
+	width: 22.5%;
+}
+
+#divTable table.dataTable tbody td:nth-child(4) {
 	padding: 0.5em;
 	padding-left: 0.8em;
 	font-size: 0.95em;
-	width:45%;
-} 
+	width: 45%;
+}
+
 #divTable table.dataTable tbody td form .btn {
 	padding: 0em 0em 0em 0.3em;
 	font-size: 0.98em;
@@ -94,7 +92,7 @@
 
 #listOfStudentsOfGroup {
 	padding-bottom: 3.750em;
-	border:groove !important;
+	border: groove !important;
 }
 
 #listHeading {
@@ -119,7 +117,7 @@
 	border-style: double;
 	z-index: 1;
 	height: 19.063em;
-width: 80%;
+	width: 80%;
 	overflow: hidden;
 	overflow-y: scroll;
 	overflow-x: scroll;
@@ -159,11 +157,11 @@ width: 80%;
 	#divTable {
 		width: 95%;
 	}
-	 .dataTables_paginate {
+	.dataTables_paginate {
 		margin-top: -0.45em;
 		max-width: 34em;
 		font-size: 0.61em;
-	} 
+	}
 	#resultTable_length {
 		padding-bottom: 0.5em;
 		font-size: 0.7em;
@@ -210,8 +208,8 @@ width: 80%;
 		flex-flow: column-reverse;
 	}
 	.list {
-    padding-top: 13.8em;
-}
+		padding-top: 13.8em;
+	}
 	.list>#listOfStudentsOfGroup button {
 		font-size: 0.7em;
 	}
@@ -220,8 +218,8 @@ width: 80%;
 	}
 	#currTable {
 		width: 80%;
- 		padding-left: 0em;
- 		padding-top: 4.5em;
+		padding-left: 0em;
+		padding-top: 4.5em;
 		margin: 0px auto;
 	}
 	.list {

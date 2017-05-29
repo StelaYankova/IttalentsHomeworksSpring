@@ -1,30 +1,31 @@
 @CHARSET "UTF-8";
 
-
 .form-horizontal .control-label {
-/* 	padding-top:0.125em !important;
- */	padding-right: 1em;
+	padding-right: 1em;
 	width: 38%;
 	text-align: right;
 	float: left;
 }
+
 .form-horizontal .form-group:nth-child(7) .control-label-input {
-    padding-top: 0.55em;
+	padding-top: 0.55em;
 }
+
 .form-horizontal .form-group:nth-child(6) .control-label-input {
-    padding-top: 0.55em;
+	padding-top: 0.55em;
 }
-#testsFileConstraint{
+
+#testsFileConstraint {
 	font-size: 0.65em;
-    color: red;
-    float: left;
-        padding-top: 0.4em;
-    padding-left: 0.2em;
+	color: red;
+	float: left;
+	padding-top: 0.4em;
+	padding-left: 0.2em;
 }
 
 .form-horizontal .control-label:last-child {
 	margin-bottom: 0;
-    text-align: right;
+	text-align: right;
 }
 
 .form-horizontal .control-label-input {
@@ -33,12 +34,10 @@
 	padding-left: 1em;
 }
 
-/* .form-horizontal .form-group:first-of-type .control-label-input{
-	padding-top:0.3em !important;
-} */
-.form-horizontal .form-group:nth-child(6) .control-label-input {	
-	    padding-top: 0.4em;
+.form-horizontal .form-group:nth-child(6) .control-label-input {
+	padding-top: 0.4em;
 }
+
 .form-horizontal .form-group:last-child {
 	width: 95%;
 	padding-left: 13.3em;
@@ -64,16 +63,12 @@ legend {
 	color: #ffffff;
 }
 
-@media
-(
-max-width
-:1000px)
-{
-#formAddHomework {
-	width: 60%;
+@media ( max-width :1000px) {
+	#formAddHomework {
+		width: 60%;
+	}
 }
 
-}
 @media ( max-width :992px) {
 	.form-horizontal .form-group:last-child {
 		width: 95%;

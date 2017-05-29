@@ -9,7 +9,9 @@
 <title>Insert title here</title>
 <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
-<link href="<c:url value="css/seeAndChangeGroupsCss.css" />" rel="stylesheet">
+<link href="<c:url value="css/seeAndChangeGroupsCss.css" />"
+	rel="stylesheet">
+<link rel="icon" type="image/png" href="./images/favIcon.png">
 
 </head>
 <body>
@@ -17,70 +19,60 @@
 	<div class="navPath">
 		<nav class="breadcrumb-nav">
 			<ul class="breadcrumb">
-				<li><a
-					href="./mainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
-				<li>See groups<span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
+				<li><a href="./mainPageTeacher">Home</a><span class="divider"><span
+						class="accesshide "><span class="arrow_text"></span></span> </span></li>
+				<li>See groups<span class="divider"><span
+						class="accesshide "><span class="arrow_text"></span></span> </span></li>
 			</ul>
 		</nav>
 	</div>
-		<c:if test="${not empty invalidFields}">
-			<c:if test="${not invalidFields}">
-				<div class="alert alertAllPages alert-success">
-					<strong>Success!</strong> Group has been removed successfully
-				</div>
-			</c:if>
+	<c:if test="${not empty invalidFields}">
+		<c:if test="${not invalidFields}">
+			<div class="alert alertAllPages alert-success">
+				<strong>Success!</strong> Group has been removed successfully
+			</div>
 		</c:if>
+	</c:if>
 	<div id="pageWrapper">
-<!-- 	<div id = "pageContent">
- -->		<h4 id = "pageTitle">
+		<h4 id="pageTitle">
 			<b><u>All groups</u></b>
 		</h4>
-		
+
 		<br>
 		<div id="divTable">
-		<!-- <form action="./createGroup" method="GET">
-			<button id="createButtonPosition"
-				class="glyphicon glyphicon-plus btn-primary btn btn-md"
-				type="submit"><b><font size="3">  Create group</font></b></button>
-		</form> -->
-		<a href = "./createGroup" id="createButtonPosition"
-				class="glyphicon glyphicon-plus btn-primary btn "
-				type="submit"><b><font size="3">  Create group</font></b></a>
-				
-				
+			<a href="./createGroup" id="createButtonPosition"
+				class="glyphicon glyphicon-plus btn-primary btn " type="submit"><b><font
+					size="3"> Create group</font></b></a>
 			<table id="resultTable" border="1"
 				class="table table-striped table-bordered table-hover">
 				<thead>
 					<tr>
 						<th>Name</th>
-						<!-- <th></th> -->
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach var="group" items="${applicationScope.allGroups}">
 						<tr>
-							<td><div id = "tdContent"><form action="./updateGroup" method="GET" id = "updateGroupForm">
-									<input type="hidden" name="groupId" value="${group.id}">
-									<button class="btn btn-link" type="submit">
-										<c:out value="${group.name}"></c:out>
-									</button></form>
-									<form action="./removeGroup" method="POST"
-										id="removeGroupForm">
+							<td><div id="tdContent">
+									<form action="./updateGroup" method="GET" id="updateGroupForm">
+										<input type="hidden" name="groupId" value="${group.id}">
+										<button class="btn btn-link" type="submit">
+											<c:out value="${group.name}"></c:out>
+										</button>
+									</form>
+									<form action="./removeGroup" method="POST" id="removeGroupForm">
 										<input type="hidden" name="groupId" value="${group.id}">
 										<button type="submit"
 											class="glyphicon glyphicon-remove btn btn-default btn-xs"
 											onclick="javascript:return confirm('Are you sure you want to remove this group permanently?')"></button>
 									</form>
-						</div></td></tr>
+								</div></td>
+						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
 		</div>
-	</div><!-- </div> -->
+	</div>
 	<c:if test="${not empty invalidFields}">
 		<c:remove var="invalidFields" scope="session" />
 	</c:if>
@@ -93,8 +85,6 @@
 				'aTargets' : [ 0, 1 ],
 				'className' : "wrapword",
 				"targets" : [ 0 ],
-				
-
 			} ],
 			"dom" : '<"top"l>rt<"bottom"ip><"clear">',
 			"aoColumns" : [ {

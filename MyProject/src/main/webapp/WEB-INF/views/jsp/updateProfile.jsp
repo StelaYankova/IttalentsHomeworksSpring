@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
@@ -8,14 +8,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
- <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+<link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
 <link href="<c:url value="css/updateProfileCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
+<link rel="icon" type="image/png" href="./images/favIcon.png">
+
 </head>
 
 <body>
-	
+
 	<c:if test="${sessionScope.isTeacher == false}">
 		<%@ include file="navBarStudent.jsp"%>
 	</c:if>
@@ -26,14 +27,10 @@
 		<div class="navPath">
 			<nav class="breadcrumb-nav">
 				<ul class="breadcrumb">
-					<li><a
-						href="./mainPageStudent">Home</a><span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
-					<li>Your
-							profile<span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
+					<li><a href="./mainPageStudent">Home</a><span class="divider"><span
+							class="accesshide "><span class="arrow_text"></span></span> </span></li>
+					<li>Your profile<span class="divider"><span
+							class="accesshide "><span class="arrow_text"></span></span> </span></li>
 				</ul>
 			</nav>
 		</div>
@@ -42,14 +39,10 @@
 		<div class="navPath">
 			<nav class="breadcrumb-nav">
 				<ul class="breadcrumb">
-					<li><a
-						href="./mainPageTeacher">Home</a><span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
-					<li>Your
-							profile<span class="divider"><span class="accesshide "><span
-							class="arrow_text"></span></span>
-				</span></li>
+					<li><a href="./mainPageTeacher">Home</a><span class="divider"><span
+							class="accesshide "><span class="arrow_text"></span></span> </span></li>
+					<li>Your profile<span class="divider"><span
+							class="accesshide "><span class="arrow_text"></span></span> </span></li>
 				</ul>
 			</nav>
 		</div>
@@ -62,7 +55,8 @@
 		</c:if>
 	</c:if>
 	<div id="pageWrapper">
-		<div id="formUpdateProfile" ><!-- align="center" -->
+		<div id="formUpdateProfile">
+			<!-- align="center" -->
 			<legend>Update profile</legend>
 			<c:if test="${not empty invalidFields}">
 				<c:if test="${invalidFields}">
@@ -72,8 +66,8 @@
 			<c:if test="${emptyFields}">
 				<p class="input-invalid-or-empty">You cannot have empty fields</p>
 			</c:if>
-			<form action="./updateProfile" method="POST"
-				id="updateForm" name="updateForm" class="form-horizontal">
+			<form action="./updateProfile" method="POST" id="updateForm"
+				name="updateForm" class="form-horizontal">
 				<div id="inputFields">
 					<div class="form-group">
 						<label class="control-label">Username:</label>
@@ -90,7 +84,7 @@
 								data-toggle="popover" data-placement="bottom"
 								data-trigger="focus"
 								data-content="Valid length is from 6 to 15 symbols. Valid inputs are numbers and letters (large and small)"
-								 required />
+								required />
 							<c:if test="${not empty validPass}">
 								<c:if test="${not validPass}">
 									<p id="passwordMsg" class="input-invalid">Password is not
@@ -101,13 +95,12 @@
 						</div>
 					</div>
 					<div class="form-group ">
-						<label class="control-label">Repeat
-							password:</label>
+						<label class="control-label">Repeat password:</label>
 						<div class="control-label-input">
 							<input type="password" class="form-control"
 								placeholder="Repeat password"
 								value="${sessionScope.user.password}" maxlength="32"
-								name="repeatedPassword"  required/>
+								name="repeatedPassword" required />
 							<c:if test="${not empty validRepeatedPass}">
 								<c:if test="${not validRepeatedPass}">
 									<p id="repeatedPasswordMsg" class="input-invalid">Repeated
@@ -119,35 +112,24 @@
 					</div>
 					<div class="form-group">
 						<label class="control-label">Email:</label>
-						 <div class="control-label-input"> 
-							<input type="email" class="form-control" 
+						<div class="control-label-input">
+							<input type="email" class="form-control"
 								placeholder="Enter email" value="${sessionScope.user.email}"
-								name="email"  required />
+								name="email" required />
 							<c:if test="${not empty validEmail}">
 								<c:if test="${not validEmail}">
 									<p id="emailMsg" class="input-invalid">Email is not valid</p>
 								</c:if>
 							</c:if>
 							<p id="emailMsg" class="input-invalid"></p>
-						 </div> 
+						</div>
 					</div>
 					<legend></legend>
-					<!-- <div class="form-group">
-						<div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-4 col-sm-3">class="col-md-offset-4 col-sm-5"
-							<input id = "updateProfileButton"
-								type="submit" class=" form-control btn btn-default"
-								value="Update">
-						</div>
-					</div> -->
-					<div class="form-group button" >
-					<%-- <div class="col-md-offset-4 <!--  col-sm-5 -->"> --%>
-						<input 
-							type="submit" id = "updateProfileButton" class="form-control btn btn-default"
-							value="Update">
-					<!-- </div> -->
+					<div class="form-group button">
+						<input type="submit" id="updateProfileButton"
+							class="form-control btn btn-default" value="Update">
+					</div>
 				</div>
-				</div>
-				
 			</form>
 		</div>
 	</div>
@@ -253,7 +235,7 @@
 									$("#emailMsg").empty();
 								}
 							}
-							if (password !== currPassword) {console.log(1)
+							if (password !== currPassword) {
 								$(document)
 										.ajaxStop(
 												function() {
