@@ -18,10 +18,10 @@
 
 	<div class="wrapMain">
 		<div class="video">
-			<video autoplay="" loop="" class="ng-scope" style="width:"
-				id="backgroundvid">
-				<source type="video/mp4"
-					src="http://ittalents.bg/video_sequence/IT_Talents_Web.mp4">
+			<video autoplay loop 
+				id="backgroundvid" >
+				<source  type="video/mp4"
+					src="http://ittalents.bg/video_sequence/IT_Talents_Web.mp4" >
 			</video>
 		</div>
 	</div>

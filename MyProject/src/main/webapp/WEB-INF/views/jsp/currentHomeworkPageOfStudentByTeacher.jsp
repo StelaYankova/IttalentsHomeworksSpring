@@ -31,7 +31,6 @@
 						<a href="./studentsScoresByTeacher">See student's scores</a>
 					</c:if><span class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span> </span></li>
-				</li>
 				<li><c:out value="${sessionScope.chosenGroupName}"></c:out><span
 					class="divider"><span class="accesshide "><span
 							class="arrow_text"></span></span> </span></li>
@@ -186,14 +185,13 @@
 								document.getElementById("grade").value = 0;
 							} else {
 								if ((grade < 0) || (grade > 100)) {
-									document.getElementById("gradeMsg").append(
+									$("#gradeMsg").append(
 											"Grade - between 0 and 100");
 									isGradeValid = false;
 								}
 							}
 							if (textareaComment.length > 250) {
-								document
-										.getElementById("textareaCommentMsg")
+								$("#textareaCommentMsg")
 										.append("Comment - maximum 250 symbols");
 								isCommentValid = false;
 							}

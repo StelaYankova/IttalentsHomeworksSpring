@@ -148,7 +148,7 @@
 			if (!$('#nameMsg').is(':empty')) {
 				$("#nameMsg").empty();
 			}
-			document.getElementById("nameMsg").append(
+			$("#nameMsg").append(
 					"Fill group name");
 			return false;
 		}
@@ -156,7 +156,7 @@
 			if (!$('#allTeachersExistMsg').is(':empty')) {
 				$("#allTeachersExistMsg").empty();
 			}
-			document.getElementById("allTeachersExistMsg").append(
+			$("#allTeachersExistMsg").append(
 					"Fill teachers");
 			return false;
 		}
@@ -188,7 +188,7 @@
 							$("#nameMsg").empty();
 						}
 						isNameValid = false;
-						document.getElementById("nameMsg").append(
+						$("#nameMsg").append(
 								"Group name is not valid");
 					}
 				});
@@ -198,7 +198,7 @@
 					$("#nameMsg").empty();
 				}
 				isNameValid = false;
-				document.getElementById("nameMsg").append(
+				$("#nameMsg").append(
 						"Group name already exists");
 			}
 		});

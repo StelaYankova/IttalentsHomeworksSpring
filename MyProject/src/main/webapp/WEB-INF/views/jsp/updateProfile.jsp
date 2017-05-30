@@ -170,25 +170,24 @@
 						var isRepeatedPasswordValid = true;
 						var isEmailValid = true;
 						if (password == "") {
-							document.getElementById("passwordMsg").append(
+							$("#passwordMsg").append(
 									"Fill password");
 							isPasswordValid = false;
 						}
 						if (repeatedPassword == "") {
-							document.getElementById("repeatedPasswordMsg")
+							$("#repeatedPasswordMsg")
 									.append("Fill password");
 							isRepeatedPasswordValid = false;
 						}
 						if (email == "") {
-							document.getElementById("emailMsg").append(
+							$("#emailMsg").append(
 									"Fill email");
 							isEmailValid = false;
 						}
 						if ((isPasswordValid === true
 								&& isRepeatedPasswordValid === true && isEmailValid === true)) {
 							if (password !== repeatedPassword) {
-								document
-										.getElementById("repeatedPasswordMsg")
+								$("#repeatedPasswordMsg")
 										.append(
 												"Repeated password is not valid");
 								isRepeatedPasswordValid = false;
@@ -216,9 +215,8 @@
 													$("#passwordMsg").empty();
 												}
 												isPasswordValid = false;
-												document
-														.getElementById(
-																"passwordMsg")
+												$(
+																"#passwordMsg")
 														.append(
 																"Password is not valid");
 											}
@@ -228,7 +226,7 @@
 								if (!$('#emailMsg').is(':empty')) {
 									$("#emailMsg").empty();
 								}
-								document.getElementById("emailMsg").append(
+								$("#emailMsg").append(
 										"Email is not valid");
 							} else {
 								if (!$('#emailMsg').is(':empty')) {

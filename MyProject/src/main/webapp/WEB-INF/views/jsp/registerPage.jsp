@@ -163,24 +163,24 @@
 						var isRepeatedPasswordValid = true;
 						var isEmailValid = true;
 						if (username == "") {
-							document.getElementById("usernameMsg").append(
+							$("#usernameMsg").append(
 									"Fill username");
 							isUsernameValid = false;
 
 						}
 						if (password == "") {
-							document.getElementById("passwordMsg").append(
+							$("#passwordMsg").append(
 									"Fill password");
 							isPasswordValid = false;
 						}
 						if (repeatedPassword == "") {
 
-							document.getElementById("repeatedPasswordMsg")
+							$("#repeatedPasswordMsg")
 									.append("Fill repeated password");
 							isRepeatedPasswordValid = false;
 						}
 						if (email == "") {
-							document.getElementById("emailMsg").append(
+							$("#emailMsg").append(
 									"Fill email");
 							isEmailValid = false;
 						}
@@ -190,7 +190,7 @@
 							return false;
 						}
 						if (password !== repeatedPassword) {
-							document.getElementById("repeatedPasswordMsg")
+							$("#repeatedPasswordMsg")
 									.append("Repeated password is not valid");
 							isRepeatedPasswordValid = false;
 
@@ -232,9 +232,8 @@
 																	.empty();
 														}
 														isUsernameValid = false;
-														document
-																.getElementById(
-																		"usernameMsg")
+														$(
+																		"#usernameMsg")
 																.append(
 																		"Username is not valid");
 													}
@@ -245,8 +244,7 @@
 											$("#usernameMsg").empty();
 										}
 										isUsernameUnique = false;
-										document
-												.getElementById("usernameMsg")
+										$("#usernameMsg")
 												.append(
 														"Username already exists");
 									}
@@ -268,7 +266,7 @@
 									$("#passwordMsg").empty();
 								}
 								isPasswordValid = false;
-								document.getElementById("passwordMsg").append(
+								$("#passwordMsg").append(
 										"Password is not valid");
 							}
 						});
@@ -277,7 +275,7 @@
 							if (!$('#emailMsg').is(':empty')) {
 								$("#emailMsg").empty();
 							}
-							document.getElementById("emailMsg").append(
+							$("#emailMsg").append(
 									"Email is not valid");
 
 						} else {

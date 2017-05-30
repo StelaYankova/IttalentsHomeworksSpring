@@ -341,33 +341,33 @@
 							}
 							
 							if (name == "") {
-								document.getElementById("nameMsg").append(
+								$("#nameMsg").append(
 										"Fill heading");
 								isNameValid = false;
 							}
 							if (opens == "") {
-								document.getElementById("opensMsg").append(
+								$("#opensMsg").append(
 										"Fill opening time");
 								isOpensValid = false;
 							}
 							if (closes == "") {
-								document.getElementById("closesMsg").append(
+								$("#closesMsg").append(
 										"Fill closing time");
 								isClosesValid = false;
 							}
 							if (numberOfTasks == "") {
-								document.getElementById("numberOfTasksMsg")
+								$("#numberOfTasksMsg")
 										.append("Fill number of tasks");
 								isNumberOfTasksValid = false;
 							} else {
 								if ((numberOfTasks < 1) || (numberOfTasks > 40)) {
-									document.getElementById("numberOfTasksMsg")
+									$("#numberOfTasksMsg")
 											.append("From 1 to 40");
 									isNumberOfTasksValid = false;
 								}
 							}
 							if (groups.length == 0) {
-								document.getElementById("groupsMsg").append(
+								$("#groupsMsg").append(
 										"Fill groups");
 								isGroupsValid = false;
 							}
@@ -415,9 +415,8 @@
 																		.empty();
 															}
 															isNameUnique = false;
-															document
-																	.getElementById(
-																			"nameMsg")
+															$(
+																			"#nameMsg")
 																	.append(
 																			"Heading already exist");
 														}
@@ -428,8 +427,7 @@
 												$("#nameMsg").empty();
 											}
 											isNameValid = false;
-											document
-													.getElementById("nameMsg")
+											$("#nameMsg")
 													.append(
 															"Heading is not valid");
 										}
@@ -451,7 +449,7 @@
 										$("#opensMsg").empty();
 									}
 									isOpensValid = false;
-									document.getElementById("opensMsg").append(
+									$("#opensMsg").append(
 											"Opening time is not valid");
 								}
 							});
@@ -474,8 +472,7 @@
 												$("#closesMsg").empty();
 											}
 											isClosesValid = false;
-											document
-													.getElementById("closesMsg")
+											$("#closesMsg")
 													.append(
 															"Closing time is not valid");
 										}
@@ -490,8 +487,7 @@
 									$("#numberOfTasksMsg").empty();
 								}
 								isNumberOfTasksValid = false;
-								document
-										.getElementById("numberOfTasksMsg")
+								$("#numberOfTasksMsg")
 										.append(
 												"From 1 to 40");
 							}
@@ -502,8 +498,7 @@
 									if (!$('#fileMsg').is(':empty')) {
 										$("#fileMsg").empty();
 									}
-									document
-											.getElementById("fileMsg")
+									$("#fileMsg")
 											.append(
 													"Valid file format - pdf, maximal size - 20MB");
 								}
@@ -557,8 +552,7 @@
 													$("#testsFileMsg").empty();
 												}
 												if (isTestsFileValid === false) {
-													document
-															.getElementById("testsFileMsg")
+													$("#testsFileMsg")
 															.append(
 																	"Valid file format - zip, maximal size - 20MB, valid extensions in zip - .txt");
 												}

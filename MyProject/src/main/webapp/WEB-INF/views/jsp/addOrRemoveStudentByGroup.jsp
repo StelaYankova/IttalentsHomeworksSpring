@@ -151,7 +151,7 @@
 							$("#studentMsg").empty();
 						}
 						if (chosenGroupEmpty === true) {
-							document.getElementById("groupMsg").append(
+							$("#groupMsg").append(
 									"Choose group first");
 							return false;
 						}
@@ -159,7 +159,7 @@
 							chosenStudentUsernameEmpty = true;
 						}
 						if (chosenStudentUsernameEmpty === true) {
-							document.getElementById("groupMsg").append(
+							$("#groupMsg").append(
 									"Student is empty");
 							return false;
 						}
@@ -198,9 +198,8 @@
 																	.empty();
 														}
 														chosenStudentUsernameAlreadyInGroup = true;
-														document
-																.getElementById(
-																		"studentMsg")
+														$(
+																		"#studentMsg")
 																.append(
 																		"Student is already in group");
 													}
@@ -211,8 +210,7 @@
 											$("#studentMsg").empty();
 										}
 										doesUserExist = false;
-										document
-												.getElementById("studentMsg")
+										$("#studentMsg")
 												.append(
 														"Student does not exist");
 									}
@@ -329,12 +327,12 @@
 						}
 						document.getElementById('listOfStudentsOfGroup').style.visibility = 'visible';
 						if ($('#listOfStudentsOfGroup').is(':empty')) {
-							document.getElementById(
-									'listOfStudentsOfGroupHeading').append(
+							$(
+									'#listOfStudentsOfGroupHeading').append(
 									'There are no students in this group.');
 						} else {
-							document.getElementById(
-									'listOfStudentsOfGroupHeading').append(
+							$(
+									'#listOfStudentsOfGroupHeading').append(
 									'Students in chosen group:');
 
 						}

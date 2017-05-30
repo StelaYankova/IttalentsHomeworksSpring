@@ -91,7 +91,7 @@
 			</div>
 
 			<div class="list">
-				<h id="listHeading">Students in chosen group:</h>
+				<h6 id="listHeading">Students in chosen group:</h6>
 				<ul id="listOfStudentsOfGroup" class="editable"></ul>
 			</div>
 		</div>
@@ -187,18 +187,18 @@
 								$("#score").empty();
 							}
 							if(answer === 'NaN'){
-								document.getElementById("score").append(0);
+								$("#score").append(0);
 							}else{
-								document.getElementById("score").append(answer);
+								$("#score").append(answer);
 							}
 							
 							if (!$('#scoreSystem').is(':empty')) {
 								$("#scoreSystem").empty();
 							}
 							if(answerSystemScore === 'NaN'){
-								document.getElementById("scoreSystem").append(0);
+								$("#scoreSystem").append(0);
 							}else{
-								document.getElementById("scoreSystem").append(answerSystemScore);
+								$("#scoreSystem").append(answerSystemScore);
 							}
 							document.getElementById("studentAverageScore").style.display = "block";
 						}

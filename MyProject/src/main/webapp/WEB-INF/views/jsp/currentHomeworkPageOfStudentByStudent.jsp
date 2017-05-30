@@ -179,10 +179,12 @@ function uploadFile(e){
 		}
 		var isFileValid = isFileValidCheck(e);
 		if (!isFileValid) {
-			document.getElementById("fileMsg"+e).append(
+			$("#fileMsg"+e).append(
 					"Valid file format - java, maximal size - 1MB");
 		}else{  
 		var form = new FormData(document.getElementById(e));
+		console.log(e)
+		var taskNum = e.slice(-1);
 		$.ajax({
 			url:'./uploadSolutionToTaskJava',
 			type:'POST',
@@ -193,14 +195,17 @@ function uploadFile(e){
 			success:function(response){
 				alert("The solution has been added successfully!");
 				if(response.hasPassedTest){
-					document.getElementById("systemScore" + form.get("taskNum")).innerHTML = response.pointsPerTask + "%";
+					document.getElementById("systemScore" + taskNum).innerHTML = response.pointsPerTask + "%";
 				}else{
-					document.getElementById("systemScore" + form.get("taskNum")).innerHTML = "0%";
+/* 					document.getElementById("systemScore" + form.get("taskNum")).innerHTML = "0%";
+ */				
+					document.getElementById("systemScore" + taskNum).innerHTML = "0%";
 				}
-				seeTaskSolution(form.get("taskNum"));
+				/* seeTaskSolution(form.get("taskNum")); */
+				seeTaskSolution(taskNum); 
 			},
 			error:function(data){
-				document.getElementById("fileMsg"+e).append(
+				$("#fileMsg"+e).append(
 				"Valid file format - java, maximal size - 1MB");
 			}
 		});

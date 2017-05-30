@@ -27,11 +27,13 @@
 a.registerPageButton {
 	color: #ffffff;
 	float: right;
-	padding-right: 5.7em;
+	margin-right: 5.7em;
 	font-size: 0.9em;
 	z-index: 1;
 }
-
+#registerHref{
+	font-family: sans-serif;
+}
 .navbar-nav>li {
 	float: right;
 	margin-top: 1.5em;
@@ -102,6 +104,6 @@ a.registerPageButton {
 		margin-top: -2.7em;
 		font-size: 0.9em;
 		z-index: 2 !important;
-		width: 120%;
+		width: 100%;
 	}
 }

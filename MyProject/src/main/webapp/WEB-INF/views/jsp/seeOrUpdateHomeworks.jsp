@@ -66,7 +66,7 @@
 				</div>
 			</div>
 			<div class="list">
-				<h id="listHeading">Students in chosen group:</h>
+				<h6 id="listHeading">Students in chosen group:</h6>
 				<ul id="listOfStudentsOfGroup" class="editable"></ul>
 			</div>
 		</div>

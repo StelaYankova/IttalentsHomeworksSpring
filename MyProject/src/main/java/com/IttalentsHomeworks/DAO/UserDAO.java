@@ -795,16 +795,5 @@ public class UserDAO implements IUserDAO {
 
 	}
 
-	@Override
-	public void logout() throws UserException {
-		// Connection con = DBManager.getInstance().getConnection();
-		// try {
-		// con.close();
-		// } catch (SQLException e) {
-		// System.out.println(e.getMessage());
-		// e.printStackTrace();
-		// throw new UserException("Something went wrong with logging out..");
-		// }
-	}
 
 }

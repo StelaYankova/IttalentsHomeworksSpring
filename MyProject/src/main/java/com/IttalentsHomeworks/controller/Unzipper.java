@@ -61,8 +61,11 @@ public class Unzipper {
 			destDir.mkdir();
 		}
 		ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
-		ZipEntry entry = zipIn.getNextEntry();
+		ZipEntry entry = zipIn.getNextEntry();		
+		//zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
+
 		if (areExtensionsValid(zipIn)) {
+			zipIn.close();
 			zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
 			entry = zipIn.getNextEntry();
 			while (entry != null) {
@@ -81,6 +84,8 @@ public class Unzipper {
 		} else {
 			throw new InvalidFilesExtensionInZIP("Valid file extension is .txt");
 		}
+			zipIn.close();
+		
 	}
 
 	/**

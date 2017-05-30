@@ -695,7 +695,7 @@ public class HomeworkController {
 			String fileName = request.getParameter("fileName").trim();
 			boolean canUserAccessHomeworkTasks = false;
 			if (!user.isTeacher()) {
-				canUserAccessHomeworkTasks = true;
+				canUserAccessHomeworkTasks = false;
 			} else {
 				canUserAccessHomeworkTasks = true;
 			}
@@ -706,7 +706,6 @@ public class HomeworkController {
 				String fullPath = IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator + fileName + ".zip";
 				File downloadFile = new File(fullPath);
 				FileInputStream inputStream = new FileInputStream(downloadFile);
-
 				// get MIME type of the file
 				String mimeType = context.getMimeType(fullPath);
 				if (mimeType == null) {
@@ -1149,7 +1148,6 @@ public class HomeworkController {
 					try {
 						JsonArray array = new JsonArray();
 						if (request.getParameter("selectedGroupId").equals("allGroups")) {
-							ArrayList<Integer> checkedIds = new ArrayList<>();
 							for (Group g : user.getGroups()) {
 								ArrayList<Homework> homeworksOfStudentByGroup = UserDAO.getInstance()
 										.getHomeworksOfStudentByGroup(user.getId(), g.getId());
@@ -1332,7 +1330,9 @@ public class HomeworkController {
 								request.getParameter("closes").trim().replace("/", "-"),
 								request.getParameter("numberOfTasks").trim(), request.getParameterValues("groups"));
 					}
-
+					if(testsFileUploaded != null && testsFileUploaded.getSize() == 0){
+						emptyFields = true;
+					}
 					if (emptyFields) {
 						request.getSession().setAttribute("emptyFields", true);
 					} else {

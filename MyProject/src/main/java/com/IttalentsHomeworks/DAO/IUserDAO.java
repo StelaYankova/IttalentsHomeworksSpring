@@ -72,9 +72,6 @@ public interface IUserDAO {
 
 	Homework getHomeworkOfStudent(int userId, int homeworkId) throws UserException;
 
-	void setPassedSystemTest(int id, int id2, int taskNum, boolean hasPassedTest) throws UserException;
-
-	void logout() throws UserException;
-	
+	void setPassedSystemTest(int id, int id2, int taskNum, boolean hasPassedTest) throws UserException;	
 	
 }

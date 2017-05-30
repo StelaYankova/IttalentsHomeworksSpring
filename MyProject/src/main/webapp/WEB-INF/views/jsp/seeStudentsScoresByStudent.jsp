@@ -207,15 +207,13 @@
 																			.empty();
 																}
 																if (answer === 'NaN') {
-																	document
-																			.getElementById(
-																					"score")
+																	$(
+																					"#score")
 																			.append(
 																					0);
 																} else {
-																	document
-																			.getElementById(
-																					"score")
+																	$(
+																					"#score")
 																			.append(
 																					answer);
 																}
@@ -228,15 +226,13 @@
 																			.empty();
 																}
 																if (answerSystemScore === 'NaN') {
-																	document
-																			.getElementById(
-																					"scoreSystem")
+																	$(
+																					"#scoreSystem")
 																			.append(
 																					0);
 																} else {
-																	document
-																			.getElementById(
-																					"scoreSystem")
+																	$(
+																					"#scoreSystem")
 																			.append(
 																					answerSystemScore);
 																}

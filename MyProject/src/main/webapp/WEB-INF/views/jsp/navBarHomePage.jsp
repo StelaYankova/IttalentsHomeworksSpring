@@ -79,7 +79,7 @@
 				</ul>
 			</div>
 			<a class="registerPageButton" href="./register"><span
-				class="glyphicon glyphicon-log-in btn-xs"></span> Register here</a>
+				class="glyphicon glyphicon-log-in btn-xs"><span id = "registerHref">  Register here</span></span> </a>
 		</div>
 	</nav>
 	<c:if test="${not empty sessionScope.invalidField}">
@@ -117,7 +117,7 @@
 						return true;
 					},
 					error : function(response) {
-						document.getElementById("usernamePasswordMsg").append(
+						$("#usernamePasswordMsg").append(
 								"Wrong username or password");
 						return false;
 					}

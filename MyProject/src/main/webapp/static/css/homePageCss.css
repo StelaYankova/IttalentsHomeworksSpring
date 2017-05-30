@@ -1,13 +1,97 @@
 @CHARSET "UTF-8";
-
+/* 
 video {
 	max-width: 100%;
 	height: auto;
 }
-
+.wrapMain{
+	}
 @media ( max-width : 771px) {
+	
 	video {
 		max-width: 100%;
 		height: auto;
 	}
+} */
+/* video {
+    width: 320px;
+    height: 240px;
+} */
+
+@media ( min-width : 1200px) {
+
+	
+	#backgroundvid {
+		object-fit: initial;
+		width: 100%;
+		height: 750px;
+	}
 }
+@media ( min-width : 1600px) {
+
+	
+	#backgroundvid {
+		object-fit: initial;
+		width: 100%;
+		/* height: 1050px; */
+		height: 2400px;
+	}
+}
+@media ( max-width : 1200px) {
+
+	#backgroundvid {
+		object-fit: initial;
+		width: 100%;
+		/* height: 540px; */
+		/* height: 644px; */
+   /*  height: 612px; */
+       height: 640px; 
+      /*  height: 1150px; */
+	}
+}
+@media ( max-width : 1000px) {
+
+	#backgroundvid {
+		object-fit: initial;
+		width: 100%;
+		/* height: 520px; */
+		/* height: 866px; */
+		   height: 570px;
+	}
+}
+@media ( max-width : 900px) {
+
+	#backgroundvid {
+		object-fit: initial;
+		width: 100%;
+		/* height: 520px; */
+		/* height: 868px; */
+		height: 550px;
+	}
+}
+@media ( max-width : 767px) {
+
+	#backgroundvid {
+		object-fit: initial;
+		width: 100%;
+		height: 480px;
+	}
+}
+@media ( max-width : 667px) {
+
+	#backgroundvid {
+		object-fit: initial;
+		width: 100%;
+		height: 460px;
+	}
+}
+
+@media ( max-width : 500px) {
+
+	#backgroundvid {
+		object-fit: initial;
+		width: 100%;
+		height: 360px;
+	}
+}
+

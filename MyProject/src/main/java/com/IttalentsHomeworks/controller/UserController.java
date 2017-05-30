@@ -286,13 +286,6 @@ public class UserController {
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	protected String logout(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		try {
-			UserDAO.getInstance().logout();
-		} catch (UserException e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-			return "exception";
-		}
 		request.getSession().invalidate();
 		return "redirect:./index";
 	}
