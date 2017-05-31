@@ -907,6 +907,29 @@ public class GroupDAO implements IGroupDAO {
 						ps.setInt(3, currTaskNumberRemove);
 						ps.execute();
 
+						File fileTasks = new File(
+								IValidationsDAO.SAVE_DIR_HOMEWORK_FILES_PDF + File.separator + homeworkDetails.getTasksFile());
+						if (fileTasks.exists()) {
+							fileTasks.delete();
+						}
+						File fileTests = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator
+								+ homeworkDetails.getTestTasksFile());
+						if (fileTests.exists()) {
+							String[] entries = fileTests.list();
+							if (entries != null) {
+								for (String s : entries) {
+									File currentFile = new File(fileTests.getPath(), s);
+									currentFile.delete();
+								}
+							}
+							fileTests.delete();
+						}
+						File fileTestsZip = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator
+								+ homeworkDetails.getTestTasksFile() + ".zip");
+						if (fileTestsZip.exists()) {
+							fileTestsZip.delete();
+						}
+						
 						String fileName = "hwId" + homeworkDetails.getId() + "userId" + studentId + "taskNum"
 								+ currTaskNumberRemove;
 						System.out.println("Remove file " + fileName);
@@ -923,7 +946,7 @@ public class GroupDAO implements IGroupDAO {
 							fileStudentTasks.delete();
 						}
 						currTaskNumberRemove++;
-
+						
 					} catch (SQLException e) {
 						throw new GroupException("Something went wrong with removing tasks from homework of student..");
 					}
