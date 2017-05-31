@@ -113,7 +113,7 @@
 				id="UpdateTeacherGradeAndCommentForm" accept-charset="UTF-8">
 				<div class="formInput">
 					<label><b>Teacher grade:</b></label> <input type="number"
-						class="form-control" min=0 max=100 id="grade"
+						class="form-control" min=0 max=100 maxlength="3" id="grade"
 						value="${sessionScope.currHomework.teacherGrade}" name="grade" />
 				</div>
 				<c:if test="${not empty sessionScope.GradeTooLong}">

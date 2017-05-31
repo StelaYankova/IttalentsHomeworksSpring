@@ -44,14 +44,25 @@ public class ValidationsDAO implements IValidationsDAO {
 		return instance;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#getManager()
+	 */
+	@Override
 	public DBManager getManager() {
 		return manager;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#setManager(com.IttalentsHomeworks.DB.DBManager)
+	 */
+	@Override
 	public void setManager(DBManager manager) {
 		this.manager = manager;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isUsernameUnique(java.lang.String)
+	 */
 	@Override
 	public boolean isUsernameUnique(String username) throws UserException {
 		boolean isUsernameUnique = true;
@@ -69,18 +80,21 @@ public class ValidationsDAO implements IValidationsDAO {
 		return isUsernameUnique;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isPasswordValid(java.lang.String)
+	 */
 	@Override
 	public boolean isPasswordValid(String pass) {
 		boolean isPasswordValid = true;
-		if (pass.length() >= ValidationsDAO.MIN_LENGTH_OF_PASSWORD
-				&& pass.length() <= ValidationsDAO.MAX_LENGTH_OF_PASSWORD) {
+		if (pass.length() >= IValidationsDAO.MIN_LENGTH_OF_PASSWORD
+				&& pass.length() <= IValidationsDAO.MAX_LENGTH_OF_PASSWORD) {
 			for (int i = 0; i < pass.length(); i++) {
-				if (!(((int) pass.charAt(i) >= ValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO
-						&& (int) pass.charAt(i) <= ValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
-						|| ((int) pass.charAt(i) >= ValidationsDAO.ASCII_TABLE_VALUE_OF_A
-								&& (int) pass.charAt(i) <= ValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
-						|| ((int) pass.charAt(i) >= ValidationsDAO.ASCII_TABLE_VALUE_OF_a
-								&& (int) pass.charAt(i) <= ValidationsDAO.ASCII_TABLE_VALUE_OF_z))) {
+				if (!(((int) pass.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO
+						&& (int) pass.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
+						|| ((int) pass.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A
+								&& (int) pass.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
+						|| ((int) pass.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a
+								&& (int) pass.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z))) {
 					isPasswordValid = false;
 					break;
 				}
@@ -91,19 +105,22 @@ public class ValidationsDAO implements IValidationsDAO {
 		return isPasswordValid;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isUsernameValid(java.lang.String)
+	 */
 	@Override
 	public boolean isUsernameValid(String username) {
 		boolean isUsernameValid = true;
-		if (username.length() >= ValidationsDAO.MIN_LENGTH_USERNAME
-				&& username.length() <= ValidationsDAO.MAX_LENGTH_USERNAME) {
+		if (username.length() >= IValidationsDAO.MIN_LENGTH_USERNAME
+				&& username.length() <= IValidationsDAO.MAX_LENGTH_USERNAME) {
 			for (int i = 0; i < username.length(); i++) {
-				if (!(((int) username.charAt(i) >= ValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO
-						&& (int) username.charAt(i) <= ValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
-						|| ((int) username.charAt(i) >= ValidationsDAO.ASCII_TABLE_VALUE_OF_A
-								&& (int) username.charAt(i) <= ValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
-						|| ((int) username.charAt(i) >= ValidationsDAO.ASCII_TABLE_VALUE_OF_a
-								&& (int) username.charAt(i) <= ValidationsDAO.ASCII_TABLE_VALUE_OF_z)
-						|| (int) username.charAt(i) == ValidationsDAO.ASCII_TABLE_VALUE_OF_DOT)) {
+				if (!(((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO
+						&& (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
+						|| ((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A
+								&& (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
+						|| ((int) username.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a
+								&& (int) username.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z)
+						|| (int) username.charAt(i) == IValidationsDAO.ASCII_TABLE_VALUE_OF_DOT)) {
 					isUsernameValid = false;
 					break;
 				}
@@ -113,15 +130,21 @@ public class ValidationsDAO implements IValidationsDAO {
 		return isUsernameValid;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isEmailValid(java.lang.String)
+	 */
 	@Override
 	public boolean isEmailValid(String email) {
 
-		String regex = ValidationsDAO.EMAIL_VALIDATION;
+		String regex = IValidationsDAO.EMAIL_VALIDATION;
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher((CharSequence) email);
 		return matcher.matches();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isRepeatedPasswordValid(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public boolean isRepeatedPasswordValid(String pass, String repeatedPass) {
 		if (pass.equals(repeatedPass)) {
@@ -130,6 +153,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#createUserAreThereEmptyFields(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public boolean createUserAreThereEmptyFields(String username, String password, String repeatedPassword,
 			String email) {
@@ -141,6 +167,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isGroupNameUnique(java.lang.String)
+	 */
 	@Override
 	public boolean isGroupNameUnique(String groupName) throws GroupException {
 		Connection con = manager.getConnection();
@@ -158,6 +187,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return isGroupNameUnique;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isGroupNameValid(java.lang.String)
+	 */
 	@Override
 	public boolean isGroupNameValid(String groupName) {
 		if (ValidationsDAO.getInstance().isGroupNameLengthValid(groupName)
@@ -167,20 +199,26 @@ public class ValidationsDAO implements IValidationsDAO {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isGroupNameLengthValid(java.lang.String)
+	 */
 	@Override
 	public boolean isGroupNameLengthValid(String groupName) {
-		if (groupName.length() >= ValidationsDAO.MIN_SIZE_OF_GROUP_NAME
-				&& groupName.length() <= ValidationsDAO.MAX_SIZE_OF_GROUP_NAME) {
+		if (groupName.length() >= IValidationsDAO.MIN_SIZE_OF_GROUP_NAME
+				&& groupName.length() <= IValidationsDAO.MAX_SIZE_OF_GROUP_NAME) {
 			return true;
 		}
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#areGroupNameCharactersValid(java.lang.String)
+	 */
 	@Override
 	public boolean areGroupNameCharactersValid(String groupName) {
 		for (int i = 0; i < groupName.length(); i++) {
-			if (!(((int) groupName.charAt(i) >= ValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM
-					&& (int) groupName.charAt(i) <= ValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO))
+			if (!(((int) groupName.charAt(i) >= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_FROM
+					&& (int) groupName.charAt(i) <= IValidationsDAO.GROUP_NAME_VALID_CHARS_ASCII_TABLE_TO))
 					|| (int) groupName.charAt(i) == IValidationsDAO.ASCII_TABLE_QUOTES) {
 				return false;
 			}
@@ -188,6 +226,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#addGroupAreThereEmptyFields(java.lang.String)
+	 */
 	@Override
 	public boolean addGroupAreThereEmptyFields(String name) {
 		if (name != null && !(name.trim().equals(""))) {
@@ -196,6 +237,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#updateUserAreThereEmptyFields(java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public boolean updateUserAreThereEmptyFields(String password, String repeatedPassword, String email) {
 		if (password != null && !(password.trim().equals("")) && repeatedPassword != null
@@ -205,6 +249,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isGroupNameUniqueUpdate(int, java.lang.String)
+	 */
 	@Override
 	public boolean isGroupNameUniqueUpdate(int groupId, String groupName) throws GroupException {
 		int wantedGroupNameId = GroupDAO.getInstance().getGroupIdByGroupName(groupName);
@@ -218,6 +265,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isThereGroupEmptyFieldUpdate(java.lang.String)
+	 */
 	@Override
 	public boolean isThereGroupEmptyFieldUpdate(String groupName) {
 		if (groupName != null && !(groupName.trim().equals(""))) {
@@ -226,22 +276,31 @@ public class ValidationsDAO implements IValidationsDAO {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isGradeValueValid(int)
+	 */
 	@Override
 	public boolean isGradeValueValid(int grade) {
-		if (grade >= ValidationsDAO.MIN_VALUE_OF_GRADE && grade <= ValidationsDAO.MAX_VALUE_OF_GRADE) {
+		if (grade >= IValidationsDAO.MIN_VALUE_OF_GRADE && grade <= IValidationsDAO.MAX_VALUE_OF_GRADE) {
 			return true;
 		}
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isCommentLengthValid(java.lang.String)
+	 */
 	@Override
 	public boolean isCommentLengthValid(String comment) {
-		if (comment.length() <= ValidationsDAO.MAX_LENGTH_OF_COMMENT) {
+		if (comment.length() <= IValidationsDAO.MAX_LENGTH_OF_COMMENT) {
 			return true;
 		}
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#doesStudentExist(java.lang.String)
+	 */
 	@Override
 	public boolean doesStudentExist(String username) throws UserException {
 		if (ValidationsDAO.getInstance().isUsernameUnique(username)) {
@@ -250,6 +309,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#encryptPass(java.lang.String)
+	 */
 	@Override
 	public String encryptPass(String pass) throws NoSuchAlgorithmException {
 		MessageDigest md = MessageDigest.getInstance(PASSWORD_MD5);
@@ -263,6 +325,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return sb.toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#doesUserExistInDB(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public boolean doesUserExistInDB(String username, String password) throws UserException, NoSuchAlgorithmException {
 		Connection con = manager.getConnection();
@@ -282,6 +347,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isStudentAlreadyInGroupAddStudent(int, int)
+	 */
 	@Override
 	public boolean isStudentAlreadyInGroupAddStudent(int groupId, int userId) throws GroupException, UserException {
 		if (ValidationsDAO.getInstance().isStudentAlreadyInGroup(groupId, userId)) {
@@ -291,6 +359,9 @@ public class ValidationsDAO implements IValidationsDAO {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isThereEmptyFieldAddStudentToGroup(java.lang.String)
+	 */
 	@Override
 	public boolean isThereEmptyFieldAddStudentToGroup(String username) {
 		if (username != null && !(username.trim().equals(""))) {
@@ -299,6 +370,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isThereEmptyFieldAddHomework(java.lang.String, java.lang.String, java.lang.String, int)
+	 */
 	@Override
 	public boolean isThereEmptyFieldAddHomework(String heading, String opens, String closes, int numberOfTasksString) {
 		if (heading != null && !(heading.trim().equals("")) && opens != null && !(opens.trim().equals(""))
@@ -308,20 +382,26 @@ public class ValidationsDAO implements IValidationsDAO {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isLengthHeadingValidAddHomework(java.lang.String)
+	 */
 	@Override
 	public boolean isLengthHeadingValidAddHomework(String heading) {
-		if (heading.length() >= ValidationsDAO.HOMEWORK_HEADING_MIN_LENGTH
-				&& heading.length() <= ValidationsDAO.HOMEWORK_HEADING_MAX_LENGTH) {
+		if (heading.length() >= IValidationsDAO.HOMEWORK_HEADING_MIN_LENGTH
+				&& heading.length() <= IValidationsDAO.HOMEWORK_HEADING_MAX_LENGTH) {
 			return true;
 		}
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#areCharactersHeadingValidAddHomework(java.lang.String)
+	 */
 	@Override
 	public boolean areCharactersHeadingValidAddHomework(String heading) {
 		for (int i = 0; i < heading.length(); i++) {
-			if (!(((int) heading.charAt(i) >= ValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM
-					&& (int) heading.charAt(i) <= ValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO))
+			if (!(((int) heading.charAt(i) >= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM
+					&& (int) heading.charAt(i) <= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO))
 					|| (int) heading.charAt(i) == IValidationsDAO.ASCII_TABLE_QUOTES) {
 				return false;
 			}
@@ -329,6 +409,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isHomeworkHeadingUniqueAddHomework(java.lang.String)
+	 */
 	@Override
 	public boolean isHomeworkHeadingUniqueAddHomework(String heading) throws GroupException {
 		if (heading != null && (!heading.trim().equals(""))) {
@@ -341,6 +424,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isHomeworkOpeningTimeValidAddHomework(java.lang.String)
+	 */
 	@Override
 	public boolean isHomeworkOpeningTimeValidAddHomework(String opens) {
 		try {
@@ -359,6 +445,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isHomeworkClosingTimeValidAddHomework(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public boolean isHomeworkClosingTimeValidAddHomework(String opens, String closes) {
 		try {
@@ -368,7 +457,7 @@ public class ValidationsDAO implements IValidationsDAO {
 			long diffInMonths = ChronoUnit.MONTHS.between(openingDateTime, closingDateTime);
 
 			if (closingDateTime.isAfter(LocalDateTime.now()) && closingDateTime.isAfter(openingDateTime)
-					&& diffInMonths < ValidationsDAO.MAX_DIFFERENCE_IN_MONTHS_FROM_OPENING_TO_CLOSING_OF_HOMEWORK) {
+					&& diffInMonths < IValidationsDAO.MAX_DIFFERENCE_IN_MONTHS_FROM_OPENING_TO_CLOSING_OF_HOMEWORK) {
 				return true;
 			} else {
 				return false;
@@ -378,15 +467,21 @@ public class ValidationsDAO implements IValidationsDAO {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isHomeworkNumberOfTasksValidAddHomework(int)
+	 */
 	@Override
 	public boolean isHomeworkNumberOfTasksValidAddHomework(int numberOfTasks) {
-		if (numberOfTasks >= ValidationsDAO.MIN_NUMBER_OF_TASKS_FOR_HOMEWORK
-				&& numberOfTasks <= ValidationsDAO.MAX_NUMBER_OF_TASKS_FOR_HOMEWORK) {
+		if (numberOfTasks >= IValidationsDAO.MIN_NUMBER_OF_TASKS_FOR_HOMEWORK
+				&& numberOfTasks <= IValidationsDAO.MAX_NUMBER_OF_TASKS_FOR_HOMEWORK) {
 			return true;
 		}
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#updateGroupAreThereEmptyFields(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public boolean updateGroupAreThereEmptyFields(String heading, String opens, String closes, String tasksFile) {
 		if (heading != null && !(heading.trim().equals("")) && opens != null && !(opens.trim().equals(""))
@@ -396,20 +491,26 @@ public class ValidationsDAO implements IValidationsDAO {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isHomeworkUpdateLengthValid(java.lang.String)
+	 */
 	@Override
 	public boolean isHomeworkUpdateLengthValid(String heading) {
-		if (heading.length() >= ValidationsDAO.HOMEWORK_HEADING_MIN_LENGTH
-				&& heading.length() <= ValidationsDAO.HOMEWORK_HEADING_MAX_LENGTH) {
+		if (heading.length() >= IValidationsDAO.HOMEWORK_HEADING_MIN_LENGTH
+				&& heading.length() <= IValidationsDAO.HOMEWORK_HEADING_MAX_LENGTH) {
 			return true;
 		}
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#areHomeworkUpdateCharactersValid(java.lang.String)
+	 */
 	@Override
 	public boolean areHomeworkUpdateCharactersValid(String heading) {
 		for (int i = 0; i < heading.length(); i++) {
-			if (!(((int) heading.charAt(i) >= ValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM
-					&& (int) heading.charAt(i) <= ValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO))
+			if (!(((int) heading.charAt(i) >= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_FROM
+					&& (int) heading.charAt(i) <= IValidationsDAO.HOMEWORK_HEADING_VALID_CHARS_ASCII_TABLE_TO))
 					|| (int) heading.charAt(i) == IValidationsDAO.ASCII_TABLE_QUOTES) {
 				return false;
 			}
@@ -417,6 +518,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isHomeworkUpdateHeadingUnique(java.lang.String, com.IttalentsHomeworks.model.HomeworkDetails)
+	 */
 	@Override
 	public boolean isHomeworkUpdateHeadingUnique(String heading, HomeworkDetails currHd) throws GroupException {
 		if (heading != null && (!heading.equals(""))) {
@@ -429,6 +533,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isHomeworkUpdateOpeningTimeValid(java.lang.String, com.IttalentsHomeworks.model.HomeworkDetails)
+	 */
 	@Override
 	public boolean isHomeworkUpdateOpeningTimeValid(String opens, HomeworkDetails currHd) {
 		try {
@@ -439,10 +546,10 @@ public class ValidationsDAO implements IValidationsDAO {
 			if (openingTime.equals(currHd.getOpeningTime())) {
 				return true;
 			} else {
-				if (openingDate.isAfter(LocalDate.now().minusDays(ValidationsDAO.MINUS_ONE_DAY))
+				if (openingDate.isAfter(LocalDate.now().minusDays(IValidationsDAO.MINUS_ONE_DAY))
 						&& openingDate.isBefore(LocalDate.now()
-								.plusMonths(ValidationsDAO.MAX_DIFFERENCE_IN_MONTHS_FROM_OPENING_TO_CLOSING_OF_HOMEWORK)
-								.minusDays(ValidationsDAO.MINUS_ONE_DAY))) {
+								.plusMonths(IValidationsDAO.MAX_DIFFERENCE_IN_MONTHS_FROM_OPENING_TO_CLOSING_OF_HOMEWORK)
+								.minusDays(IValidationsDAO.MINUS_ONE_DAY))) {
 					return true;
 				} else {
 					return false;
@@ -454,6 +561,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isHomeworkUpdateClosingTimeValid(java.lang.String, java.lang.String, com.IttalentsHomeworks.model.HomeworkDetails)
+	 */
 	@Override
 	public boolean isHomeworkUpdateClosingTimeValid(String opens, String closes, HomeworkDetails currHd) {
 		try {
@@ -465,7 +575,7 @@ public class ValidationsDAO implements IValidationsDAO {
 				return true;
 			} else {
 				if (closingDateTime.isAfter(LocalDateTime.now()) && closingDateTime.isAfter(openingDateTime)
-						&& diffInMonths < ValidationsDAO.MAX_DIFFERENCE_IN_MONTHS_FROM_OPENING_TO_CLOSING_OF_HOMEWORK) {
+						&& diffInMonths < IValidationsDAO.MAX_DIFFERENCE_IN_MONTHS_FROM_OPENING_TO_CLOSING_OF_HOMEWORK) {
 					return true;
 				} else {
 					return false;
@@ -477,15 +587,21 @@ public class ValidationsDAO implements IValidationsDAO {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isHomeworkUpdateNumberOfTasksValid(int)
+	 */
 	@Override
 	public boolean isHomeworkUpdateNumberOfTasksValid(int numberOfTasks) {
-		if (numberOfTasks >= ValidationsDAO.MIN_NUMBER_OF_TASKS_FOR_HOMEWORK
-				&& numberOfTasks <= ValidationsDAO.MAX_NUMBER_OF_TASKS_FOR_HOMEWORK) {
+		if (numberOfTasks >= IValidationsDAO.MIN_NUMBER_OF_TASKS_FOR_HOMEWORK
+				&& numberOfTasks <= IValidationsDAO.MAX_NUMBER_OF_TASKS_FOR_HOMEWORK) {
 			return true;
 		}
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isHomeworkHeadingUnique(java.lang.String)
+	 */
 	@Override
 	public boolean isHomeworkHeadingUnique(String heading) throws GroupException {
 		Connection con = manager.getConnection();
@@ -504,6 +620,9 @@ public class ValidationsDAO implements IValidationsDAO {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#doesUserExistInDBByUsername(java.lang.String)
+	 */
 	@Override
 	public boolean doesUserExistInDBByUsername(String username) throws UserException {
 		Connection con = manager.getConnection();
@@ -521,19 +640,22 @@ public class ValidationsDAO implements IValidationsDAO {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isPasswordUpdateValid(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public boolean isPasswordUpdateValid(String pass, String formerPass) {
 		boolean isPasswordValid = true;
 		if (!pass.equals(formerPass)) {
-			if (pass.length() >= ValidationsDAO.MIN_LENGTH_OF_PASSWORD
-					&& pass.length() <= ValidationsDAO.MAX_LENGTH_OF_PASSWORD) {
+			if (pass.length() >= IValidationsDAO.MIN_LENGTH_OF_PASSWORD
+					&& pass.length() <= IValidationsDAO.MAX_LENGTH_OF_PASSWORD) {
 				for (int i = 0; i < pass.length(); i++) {
-					if (!(((int) pass.charAt(i) >= ValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO
-							&& (int) pass.charAt(i) <= ValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
-							|| ((int) pass.charAt(i) >= ValidationsDAO.ASCII_TABLE_VALUE_OF_A
-									&& (int) pass.charAt(i) <= ValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
-							|| ((int) pass.charAt(i) >= ValidationsDAO.ASCII_TABLE_VALUE_OF_a
-									&& (int) pass.charAt(i) <= ValidationsDAO.ASCII_TABLE_VALUE_OF_z))) {
+					if (!(((int) pass.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_ZERO
+							&& (int) pass.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_NINE)
+							|| ((int) pass.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_A
+									&& (int) pass.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_Z)
+							|| ((int) pass.charAt(i) >= IValidationsDAO.ASCII_TABLE_VALUE_OF_a
+									&& (int) pass.charAt(i) <= IValidationsDAO.ASCII_TABLE_VALUE_OF_z))) {
 						isPasswordValid = false;
 						break;
 					}
@@ -545,6 +667,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return isPasswordValid;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isStringValidInteger(java.lang.String)
+	 */
 	@Override
 	public boolean isStringValidInteger(String string) {
 		if (string.length() > IValidationsDAO.MIN_SIZE_OF_INTEGER
@@ -561,6 +686,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#doesUserExistInDBById(int)
+	 */
 	@Override
 	public boolean doesUserExistInDBById(int studentId) throws UserException {
 		Connection con = manager.getConnection();
@@ -577,6 +705,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#doesGroupExistInDBById(int)
+	 */
 	@Override
 	public boolean doesGroupExistInDBById(int groupId) throws GroupException {
 		Connection con = manager.getConnection();
@@ -594,6 +725,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#isStudentAlreadyInGroup(int, int)
+	 */
 	@Override
 	public boolean isStudentAlreadyInGroup(int userId, int groupId) throws UserException, GroupException {
 		Connection con = manager.getConnection();
@@ -613,6 +747,9 @@ public class ValidationsDAO implements IValidationsDAO {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#doHomeworkDetailsExist(int)
+	 */
 	@Override
 	public boolean doHomeworkDetailsExist(int chosenHomeworkId) throws HomeworkException {
 		Connection con = manager.getConnection();

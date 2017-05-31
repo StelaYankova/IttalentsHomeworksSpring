@@ -1,6 +1,8 @@
 package com.IttalentsHomeworks.DAO;
 
 import java.security.NoSuchAlgorithmException;
+
+import com.IttalentsHomeworks.DB.DBManager;
 import com.IttalentsHomeworks.Exceptions.GroupException;
 import com.IttalentsHomeworks.Exceptions.UserException;
 import com.IttalentsHomeworks.model.HomeworkDetails;
@@ -138,6 +140,10 @@ public interface IValidationsDAO {
 
 	boolean isStudentAlreadyInGroup(int userId, int groupId) throws UserException, GroupException;
 
-	boolean doHomeworkDetailsExist(int chosenHomeworkId) throws HomeworkException;;
+	boolean doHomeworkDetailsExist(int chosenHomeworkId) throws HomeworkException;
+
+	DBManager getManager();
+
+	void setManager(DBManager manager);
 
 }

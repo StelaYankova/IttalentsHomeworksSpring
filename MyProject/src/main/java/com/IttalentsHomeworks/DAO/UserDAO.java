@@ -22,7 +22,7 @@ import com.mysql.cj.api.jdbc.Statement;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 
-public class UserDAO implements IUserDAO {
+public class UserDAO implements IUserDAO  {
 	private static final String GET_GROUPS_OF_USER_WITHOUT_STUDENTS_AND_TEACHERS_AND_HOMEWORKS = "SELECT G.id, G.group_name FROM IttalentsHomeworks.Groups G JOIN IttalentsHomeworks.User_has_Group UG ON (UG.group_id=G.id) WHERE UG.user_id = ?;";
 	private static final String GET_ALL_STUDENTS = "SELECT * FROM IttalentsHomeworks.Users WHERE isTeacher = 0;";
 	private static final String GET_ALL_TEACHERS = "SELECT * FROM IttalentsHomeworks.Users WHERE isTeacher = 1;";
@@ -58,33 +58,30 @@ public class UserDAO implements IUserDAO {
 		return instance;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getManager()
 	 */
+	
 	@Override
 	public DBManager getManager() {
 		return manager;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.IttalentsHomeworks.DAO.IUserDAO#setManager(com.IttalentsHomeworks.DB.
-	 * DBManager)
+
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#setManager(com.IttalentsHomeworks.DB.DBManager)
 	 */
+	
 	@Override
 	public void setManager(DBManager manager) {
 		this.manager = manager;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	
+	/* (non-Javadoc)
 	 * @see com.IttalentsHomeworks.DAO.IUserDAO#isUserATeacher(int)
 	 */
+	
 	@Override
 	public boolean isUserATeacher(int userId) throws UserException {
 		Connection con = manager.getConnection();
@@ -102,12 +99,11 @@ public class UserDAO implements IUserDAO {
 		return isTeacher;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.IttalentsHomeworks.DAO.IUserDAO#getUserIdByUsername(java.lang.String)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getUserIdByUsername(java.lang.String)
 	 */
+	
 	@Override
 	public int getUserIdByUsername(String username) throws UserException {
 		Connection con = manager.getConnection();
@@ -126,11 +122,11 @@ public class UserDAO implements IUserDAO {
 		return userId;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	
+	/* (non-Javadoc)
 	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getGroupsOfUser(int)
 	 */
+	
 	@Override
 	public ArrayList<Group> getGroupsOfUser(int userId) throws UserException, GroupException {
 		Connection con = manager.getConnection();
@@ -152,13 +148,11 @@ public class UserDAO implements IUserDAO {
 		return groupsOfUser;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.IttalentsHomeworks.DAO.IUserDAO#getHomeworksOfStudentByGroup(com.
-	 * IttalentsHomeworks.model.Student, com.IttalentsHomeworks.model.Group)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getHomeworksOfStudentByGroup(int, int)
 	 */
+	
 	@Override
 	public ArrayList<Homework> getHomeworksOfStudentByGroup(int studentId, int groupId)
 			throws UserException, ValidationException, GroupException {
@@ -202,13 +196,11 @@ public class UserDAO implements IUserDAO {
 		return homeworksOfStudentByGroup;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getTasksOfHomeworkOfStudent(com.
-	 * IttalentsHomeworks.model.Student,
-	 * com.IttalentsHomeworks.model.HomeworkDetails)
+
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getTasksOfHomeworkOfStudent(int, int)
 	 */
+	
 	@Override
 	public ArrayList<Task> getTasksOfHomeworkOfStudent(int studentId, int homeworkDetailsId) throws UserException {
 		ArrayList<Task> tasksOfHomeworkOfStudent = new ArrayList<>();
@@ -236,12 +228,10 @@ public class UserDAO implements IUserDAO {
 		return tasksOfHomeworkOfStudent;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.IttalentsHomeworks.DAO.IUserDAO#getUserByUsername(java.lang.String)
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getUserByUsername(java.lang.String)
 	 */
+	
 	@Override
 	public User getUserByUsername(String username) throws UserException, GroupException {
 		User u = null;
@@ -270,13 +260,11 @@ public class UserDAO implements IUserDAO {
 		return u;
 	}
 
-	// all homeworks
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getHomeworksOfStudent(com.
-	 * IttalentsHomeworks.model.Student)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getHomeworksOfStudent(int)
 	 */
+	
 	@Override
 	public ArrayList<Homework> getHomeworksOfStudent(int userId) throws UserException {
 		ArrayList<Homework> homeworksOfStudent = new ArrayList<>();
@@ -312,13 +300,11 @@ public class UserDAO implements IUserDAO {
 		return homeworksOfStudent;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.IttalentsHomeworks.DAO.IUserDAO#createNewUser(com.IttalentsHomeworks.
-	 * model.User)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#createNewUser(com.IttalentsHomeworks.model.User)
 	 */
+	
 	@Override
 	public void createNewUser(User user) throws UserException, ValidationException, NoSuchAlgorithmException {
 		Connection con = manager.getConnection();
@@ -350,12 +336,11 @@ public class UserDAO implements IUserDAO {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IUserDAO#removeUserProfile(com.
-	 * IttalentsHomeworks.model.User)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#removeUserProfile(int)
 	 */
+	
 	@Override
 	public void removeUserProfile(int userId) throws UserException {
 		Connection con = manager.getConnection();
@@ -368,13 +353,11 @@ public class UserDAO implements IUserDAO {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IUserDAO#setTeacherGrade(com.
-	 * IttalentsHomeworks.model.HomeworkDetails,
-	 * com.IttalentsHomeworks.model.Student, int)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#setTeacherGrade(int, int, int)
 	 */
+	
 	@Override
 	public void setTeacherGrade(int homeworkDetailsId, int studentId, int teacherGrade)
 			throws UserException, ValidationException {
@@ -395,13 +378,11 @@ public class UserDAO implements IUserDAO {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IUserDAO#setTeacherComment(com.
-	 * IttalentsHomeworks.model.HomeworkDetails,
-	 * com.IttalentsHomeworks.model.Student, java.lang.String)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#setTeacherComment(int, int, java.lang.String)
 	 */
+	
 	@Override
 	public void setTeacherComment(int homeworkDetailsId, int studentId, String teacherComment)
 			throws UserException, ValidationException {
@@ -421,14 +402,11 @@ public class UserDAO implements IUserDAO {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IUserDAO#setSolutionOfTask(com.
-	 * IttalentsHomeworks.model.HomeworkDetails,
-	 * com.IttalentsHomeworks.model.Student, com.IttalentsHomeworks.model.Task,
-	 * java.lang.String, java.time.LocalDateTime)
+
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#setSolutionOfTask(int, int, int, java.lang.String, java.time.LocalDateTime)
 	 */
+	
 	@Override
 	public void setSolutionOfTask(int homeworkDetailsId, int studentId, int taskNumber, String solution,
 			LocalDateTime timeOfUpload) throws UserException {// is a student
@@ -460,14 +438,11 @@ public class UserDAO implements IUserDAO {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IUserDAO#setTimeOfUploadOfTask(com.
-	 * IttalentsHomeworks.model.HomeworkDetails,
-	 * com.IttalentsHomeworks.model.Student, com.IttalentsHomeworks.model.Task,
-	 * java.time.LocalDateTime)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#setTimeOfUploadOfTask(int, int, int, java.time.LocalDateTime)
 	 */
+	
 	@Override
 	public void setTimeOfUploadOfTask(int homeworkDetailsId, int studentId, int taskNumber, LocalDateTime timeOfUpload)
 			throws UserException {
@@ -487,13 +462,11 @@ public class UserDAO implements IUserDAO {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IUserDAO#doesTaskAlreadyExist(com.
-	 * IttalentsHomeworks.model.HomeworkDetails,
-	 * com.IttalentsHomeworks.model.Student, com.IttalentsHomeworks.model.Task)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#doesTaskAlreadyExist(int, int, int)
 	 */
+	
 	@Override
 	public boolean doesTaskAlreadyExist(int homeworkDetailsId, int studentId, int taskNum) throws UserException {
 		boolean doesExist = false;
@@ -513,13 +486,10 @@ public class UserDAO implements IUserDAO {
 		return doesExist;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.IttalentsHomeworks.DAO.IUserDAO#updateUser(com.IttalentsHomeworks.
-	 * model.User)
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#updateUser(com.IttalentsHomeworks.model.User, java.lang.String)
 	 */
+	
 	@Override
 	public void updateUser(User user, String formerPass)
 			throws UserException, ValidationException, NoSuchAlgorithmException {
@@ -548,6 +518,10 @@ public class UserDAO implements IUserDAO {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getStudentsByUsername(java.lang.String)
+	 */
+	
 	@Override
 	public Student getStudentsByUsername(String username) throws UserException {
 		User u = null;
@@ -566,6 +540,10 @@ public class UserDAO implements IUserDAO {
 		return (Student) u;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#isTaskNumberValid(int, int, int)
+	 */
+	
 	@Override
 	public boolean isTaskNumberValid(int studentId, int homeworkId, int taskNumber) throws UserException {
 		boolean isValid = false;
@@ -587,6 +565,10 @@ public class UserDAO implements IUserDAO {
 		return isValid;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#addHomeworkToStudent(int, com.IttalentsHomeworks.model.HomeworkDetails)
+	 */
+	
 	@Override
 	public void addHomeworkToStudent(int userId, HomeworkDetails hd) throws UserException {
 		Connection con = manager.getConnection();
@@ -623,6 +605,10 @@ public class UserDAO implements IUserDAO {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getAllTeachers()
+	 */
+	
 	@Override
 	public ArrayList<Teacher> getAllTeachers() throws UserException {
 		ArrayList<Teacher> allTeachers = new ArrayList<>();
@@ -640,6 +626,10 @@ public class UserDAO implements IUserDAO {
 		return allTeachers;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getAllStudents()
+	 */
+	
 	@Override
 	public ArrayList<Student> getAllStudents() throws UserException {
 		ArrayList<Student> allStudents = new ArrayList<>();
@@ -657,6 +647,10 @@ public class UserDAO implements IUserDAO {
 		return allStudents;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getUserById(int)
+	 */
+	
 	@Override
 	public User getUserById(int userId) throws UserException, GroupException {
 		User u = null;
@@ -680,6 +674,10 @@ public class UserDAO implements IUserDAO {
 		return u;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getUserUsernameById(java.lang.Integer)
+	 */
+	
 	@Override
 	public String getUserUsernameById(Integer studentId) throws UserException {
 		Connection con = manager.getConnection();
@@ -697,6 +695,10 @@ public class UserDAO implements IUserDAO {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getActiveHomeworksOfStudent(int)
+	 */
+	
 	@Override
 	public ArrayList<HomeworkDetails> getActiveHomeworksOfStudent(int studentId) throws UserException {
 		ArrayList<HomeworkDetails> activeHomeworksOfStudent = new ArrayList<>();
@@ -723,6 +725,10 @@ public class UserDAO implements IUserDAO {
 		return activeHomeworksOfStudent;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getGroupsOfUserWithoutStudents(int)
+	 */
+	
 	@Override
 	public ArrayList<Group> getGroupsOfUserWithoutStudents(int userId) throws UserException, GroupException {
 		ArrayList<Group> groups = new ArrayList<>();
@@ -742,6 +748,10 @@ public class UserDAO implements IUserDAO {
 		return groups;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getHomeworkOfStudent(int, int)
+	 */
+	
 	@Override
 	public Homework getHomeworkOfStudent(int userId, int homeworkId) throws UserException {
 		Connection con = manager.getConnection();
@@ -777,7 +787,10 @@ public class UserDAO implements IUserDAO {
 		return null;
 	}
 
-	@Override
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IUserDAO#setPassedSystemTest(int, int, int, boolean)
+	 */
+	
 	public void setPassedSystemTest(int userId, int homeworkDetailsId, int taskNum, boolean hasPassedTest)
 			throws UserException {
 		Connection con = manager.getConnection();
@@ -794,6 +807,4 @@ public class UserDAO implements IUserDAO {
 		}
 
 	}
-
-
 }

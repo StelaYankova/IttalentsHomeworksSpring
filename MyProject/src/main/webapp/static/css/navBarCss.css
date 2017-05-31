@@ -10,12 +10,30 @@
 	height: 85%;
 }
 
-.input-invalid-login {
-	position: absolute;
-	top: 3.2em;
-	right: 18.8em;
-	color: red;
-	font-size: 0.92em;
+#signInForm {
+	max-width: 100% !important;
+}
+
+@media ( min-width :767px) {
+	.input-invalid-login {
+		position: initial;
+		color: red;
+		font-size: 0.92em;
+		color: red;
+		margin-top: 0.51em;
+		font-size: 0.9em;
+		float: left;
+		box-sizing: content-box;
+		max-width: 15em;
+	}
+	a#registerPageButton {
+		color: #ffffff;
+		float: right;
+		margin-right: 5.7em;
+		font-size: 0.9em;
+		z-index: 1;
+		margin-bottom: 0.1em;
+	}
 }
 
 .navbar {
@@ -24,16 +42,10 @@
 	min-height: 80px !important;
 }
 
-a.registerPageButton {
-	color: #ffffff;
-	float: right;
-	margin-right: 5.7em;
-	font-size: 0.9em;
-	z-index: 1;
-}
-#registerHref{
+#registerHref {
 	font-family: sans-serif;
 }
+
 .navbar-nav>li {
 	float: right;
 	margin-top: 1.5em;
@@ -73,14 +85,14 @@ a.registerPageButton {
 		-webkit-box-shadow: none;
 		box-shadow: none;
 	}
-	a.registerPageButton {
+	a#registerPageButton {
 		color: #ffffff;
 		float: left;
-		padding-left: 12em;
+		padding-left: 5em;
 		margin-top: -2.7em;
 		font-size: 0.9em;
-		z-index: 2 !important;
-		width: 100%;
+		margin-top: -1.9em;
+		width: 96%;
 	}
 	.navbar-nav>li {
 		float: left;
@@ -88,22 +100,15 @@ a.registerPageButton {
 		padding-left: 7em;
 	}
 	.input-invalid-login {
-		position: absolute;
-		top: -1.2em;
-		right: 1.2em;
 		color: red;
 		font-size: 0.92em;
-	}
-}
-
-@media ( max-width :500px) {
-	a.registerPageButton {
-		color: #ffffff;
-		float: left;
-		padding-left: 12em;
-		margin-top: -2.7em;
+		margin-top: 0.65em;
+		color: red;
 		font-size: 0.9em;
-		z-index: 2 !important;
-		width: 100%;
+		float: left;
+		box-sizing: content-box;
+		max-width: 15em;
+		position: absolute;
+		top: -2em;
 	}
 }

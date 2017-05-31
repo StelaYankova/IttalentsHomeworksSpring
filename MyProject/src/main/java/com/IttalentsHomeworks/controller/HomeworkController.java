@@ -1330,7 +1330,9 @@ public class HomeworkController {
 								request.getParameter("closes").trim().replace("/", "-"),
 								request.getParameter("numberOfTasks").trim(), request.getParameterValues("groups"));
 					}
-					if(testsFileUploaded != null && testsFileUploaded.getSize() == 0){
+					System.out.println(testsFileUploaded.getOriginalFilename());
+					System.out.println(testsFileUploaded.getSize());
+					if(testsFileUploaded.getOriginalFilename() != null && (!testsFileUploaded.getOriginalFilename().trim().equals("")) && testsFileUploaded.getSize() == 0){
 						emptyFields = true;
 					}
 					if (emptyFields) {

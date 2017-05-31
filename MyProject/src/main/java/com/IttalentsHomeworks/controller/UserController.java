@@ -484,7 +484,6 @@ public class UserController {
 				}
 			} else {
 				isPassValid = true;
-				request.setAttribute("invalidFields", false);
 			}
 			request.setAttribute("validPass", isPassValid);
 			// repeatedPass

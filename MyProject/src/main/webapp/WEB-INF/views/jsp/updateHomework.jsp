@@ -11,9 +11,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link href="<c:url value="css/cssReset.css" />" rel="stylesheet">
+<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/updateHomeworkCss.css" />"
 	rel="stylesheet">
-<link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 <link rel="icon" type="image/png" href="./images/favIcon.png">
 
 </head>
@@ -228,6 +228,7 @@
 						<p id="testsFileMsg" class="input-invalid"></p>
 					</div>
 				</div>
+				
 				<legend></legend>
 				<div class="form-group">
 					<input type="submit" id="updateHomeworkButton"

@@ -149,7 +149,7 @@
 		}
 		return true;
 	}
-	  $('#updateForm')
+	   $('#updateForm')
 			.submit(
 					function(e) {
 						e.preventDefault();
@@ -222,6 +222,7 @@
 											}
 										});
 							}
+							isEmailValid = checkIsEmailValid();
 							if (!isEmailValid) {
 								if (!$('#emailMsg').is(':empty')) {
 									$("#emailMsg").empty();
@@ -253,7 +254,7 @@
 								}
 							}
 						}
-					});  
+					});   
 	$(document).ready(function() {
 		$('[data-toggle="popover"]').popover();
 	});

@@ -1,7 +1,9 @@
 package com.IttalentsHomeworks.DAO;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import com.IttalentsHomeworks.DB.DBManager;
 import com.IttalentsHomeworks.Exceptions.GroupException;
 import com.IttalentsHomeworks.Exceptions.UserException;
@@ -14,6 +16,7 @@ import com.IttalentsHomeworks.model.Teacher;
 
 public interface IGroupDAO {
 
+	
 	DBManager getManager();
 
 	void setManager(DBManager manager);
@@ -26,41 +29,47 @@ public interface IGroupDAO {
 
 	boolean isUserAlreadyInGroup(int groupId, String username) throws GroupException, UserException;
 
-	void addUserToGroup(int chosenGroupId, int idUser) throws GroupException, UserException, ValidationException;
+	void addUserToGroup(int groupId, int userId) throws GroupException, UserException, ValidationException;
 
-	void createNewGroup(Group g) throws GroupException, ValidationException;
+	boolean doesStudentAlreadyHaveHomework(int userId, HomeworkDetails hd) throws GroupException;
+
+	void createNewGroup(Group group) throws GroupException, ValidationException;
 
 	ArrayList<HomeworkDetails> getAllHomeworksDetails() throws GroupException;
 
 	ArrayList<Group> getAllGroups() throws UserException, GroupException;
 
-	void removeUserFromGroup(int groupId, int i) throws GroupException, UserException;
+	void removeUserFromGroup(int groupId, int userId) throws GroupException, UserException;
 
-	void removeGroup(int groupId) throws GroupException;
+	void removeGroup(int groupId) throws GroupException, UserException;
 
-	void createHomeworkDetails(HomeworkDetails hd, ArrayList<Integer> groupsForHw) throws GroupException, UserException, ValidationException, NotUniqueHomeworkHeadingException;
+	void createHomeworkDetails(HomeworkDetails homeworkDetails, ArrayList<Integer> groupsForHomework)
+			throws GroupException, UserException, ValidationException, NotUniqueHomeworkHeadingException;
 
-	int getHomeworkDetailsId(String heading) throws GroupException;
+	int getHomeworkDetailsId(String homeworkDetailsHeading) throws GroupException;
 
-	void updateHomeworkDetails(HomeworkDetails hd, ArrayList<Integer> groupsForHw) throws GroupException, UserException, ValidationException, NotUniqueHomeworkHeadingException;
+	void updateHomeworkDetails(HomeworkDetails homeworkDetails, ArrayList<Integer> groupsForHomework)
+			throws GroupException, UserException, ValidationException, NotUniqueHomeworkHeadingException;
+
+	ArrayList<Integer> getIdsOfGroupsForWhichIsHomework(int homeworkDetailsId) throws GroupException;
 
 	void removeHomeworkFromGroup(int homeworkDetailsId, int groupId) throws GroupException, UserException;
 
-	void addHomeworkToGroup(HomeworkDetails hd, int groupId) throws GroupException, UserException;
+	void addHomeworkToGroup(HomeworkDetails homeworkDetails, int groupId) throws GroupException, UserException;
 
 	Group getGroupById(int id) throws GroupException, UserException;
 
 	int getGroupIdByGroupName(String groupName) throws GroupException;
 
-	void removeHomeworkDetails(HomeworkDetails hd) throws GroupException, UserException;
+	void removeHomeworkDetails(HomeworkDetails homeworkDetails) throws GroupException, UserException;
 
-	void updateGroup(Group group, ArrayList<Integer> wishedTeacherIds) throws GroupException, ValidationException, UserException;
-
-	ArrayList<Integer> getIdsOfGroupsForWhichIsHomework(int homeworkDetailsId) throws GroupException;
+	void updateGroup(Group group, ArrayList<Integer> wishedTeacherIds)
+			throws GroupException, ValidationException, UserException;
 
 	HomeworkDetails getHomeworkDetailsById(int chosenHomeworkId) throws GroupException;
 
-	void addHomeworkToGroupTransaction(HomeworkDetails homeworkDetails, int groupId) throws GroupException, UserException, SQLException;
+	void addHomeworkToGroupTransaction(HomeworkDetails homeworkDetails, int groupId)
+			throws GroupException, UserException, SQLException;
 
 	void updateNumberOfTasksForStudents(HomeworkDetails homeworkDetails, int numOfTasks) throws GroupException;
 
@@ -74,6 +83,9 @@ public interface IGroupDAO {
 
 	ArrayList<Group> getAllGroupsWithoutStudents() throws GroupException;
 
-	boolean doesPassSystemTest(String solutionOfStudent, Homework homework, int taskNum) throws IOException, InterruptedException;
+	boolean doesPassSystemTest(String solutionOfStudent, Homework homework, int taskNum)
+			throws IOException, InterruptedException;
+
+	boolean isHomeworkJustForThisGroup(int homeworkId, int groupId) throws GroupException;
 
 }

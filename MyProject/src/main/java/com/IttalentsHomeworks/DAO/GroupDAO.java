@@ -64,9 +64,8 @@ public class GroupDAO implements IGroupDAO {
 		return instance;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	
+	/* (non-Javadoc)
 	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getManager()
 	 */
 	@Override
@@ -74,23 +73,18 @@ public class GroupDAO implements IGroupDAO {
 		return manager;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.IttalentsHomeworks.DAO.IGroupDAO#setManager(com.IttalentsHomeworks.DB
-	 * .DBManager)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#setManager(com.IttalentsHomeworks.DB.DBManager)
 	 */
 	@Override
 	public void setManager(DBManager manager) {
 		this.manager = manager;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getTeachersOfGroup(com.
-	 * IttalentsHomeworks.model.Group)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getTeachersOfGroup(int)
 	 */
 	@Override
 	public ArrayList<Teacher> getTeachersOfGroup(int groupId) throws GroupException {
@@ -110,11 +104,9 @@ public class GroupDAO implements IGroupDAO {
 		return teachersOfGroup;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getStudentsOfGroup(com.
-	 * IttalentsHomeworks.model.Group)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getStudentsOfGroup(int)
 	 */
 	@Override
 	public ArrayList<Student> getStudentsOfGroup(int groupId) throws GroupException, UserException {
@@ -133,11 +125,9 @@ public class GroupDAO implements IGroupDAO {
 		return studentsOfGroup;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getHomeworksDetailsOfGroup(com.
-	 * IttalentsHomeworks.model.Group)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getHomeworkDetailsOfGroup(int)
 	 */
 	@Override
 	public ArrayList<HomeworkDetails> getHomeworkDetailsOfGroup(int groupId) throws GroupException {
@@ -163,11 +153,8 @@ public class GroupDAO implements IGroupDAO {
 		return homeworksOfGroup;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#isUserAlreadyInGroup(com.
-	 * IttalentsHomeworks.model.Group, com.IttalentsHomeworks.model.User)
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#isUserAlreadyInGroup(int, java.lang.String)
 	 */
 	@Override
 	public boolean isUserAlreadyInGroup(int groupId, String username) throws GroupException, UserException {
@@ -189,11 +176,9 @@ public class GroupDAO implements IGroupDAO {
 		return isUserAlreadyInGroup;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#addUserToGroup(com.
-	 * IttalentsHomeworks.model.Group, com.IttalentsHomeworks.model.User)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#addUserToGroup(int, int)
 	 */
 	@Override
 	public void addUserToGroup(int groupId, int userId) throws GroupException, UserException, ValidationException {
@@ -209,7 +194,7 @@ public class GroupDAO implements IGroupDAO {
 					ps.execute();
 					if (!UserDAO.getInstance().isUserATeacher(userId)) {
 						for (HomeworkDetails hd : GroupDAO.getInstance().getHomeworkDetailsOfGroup(groupId)) {
-							if (!((GroupDAO) GroupDAO.getInstance()).doesStudentAlreadyHaveHomework(userId, hd)) {
+							if (!((IGroupDAO) GroupDAO.getInstance()).doesStudentAlreadyHaveHomework(userId, hd)) {
 								UserDAO.getInstance().addHomeworkToStudent(userId, hd);
 							}
 						}
@@ -225,6 +210,10 @@ public class GroupDAO implements IGroupDAO {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#doesStudentAlreadyHaveHomework(int, com.IttalentsHomeworks.model.HomeworkDetails)
+	 */
+	@Override
 	public boolean doesStudentAlreadyHaveHomework(int userId, HomeworkDetails hd) throws GroupException {
 		boolean doesHaveHw = false;
 		Connection con = manager.getConnection();
@@ -242,11 +231,9 @@ public class GroupDAO implements IGroupDAO {
 		return doesHaveHw;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#createNewGroup(com.
-	 * IttalentsHomeworks.model.Group)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#createNewGroup(com.IttalentsHomeworks.model.Group)
 	 */
 	@Override
 	public void createNewGroup(Group group) throws GroupException, ValidationException {
@@ -294,9 +281,8 @@ public class GroupDAO implements IGroupDAO {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	
+	/* (non-Javadoc)
 	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getAllHomeworksDetails()
 	 */
 	@Override
@@ -322,9 +308,8 @@ public class GroupDAO implements IGroupDAO {
 		return homeworksOfGroup;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	
+	/* (non-Javadoc)
 	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getAllGroups()
 	 */
 	@Override
@@ -344,11 +329,9 @@ public class GroupDAO implements IGroupDAO {
 		return groups;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#removeUserFromGroup(com.
-	 * IttalentsHomeworks.model.Group, com.IttalentsHomeworks.model.Student)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#removeUserFromGroup(int, int)
 	 */
 	@Override
 	public void removeUserFromGroup(int groupId, int userId) throws GroupException, UserException {
@@ -364,32 +347,44 @@ public class GroupDAO implements IGroupDAO {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.IttalentsHomeworks.DAO.IGroupDAO#removeGroup(com.IttalentsHomeworks.
-	 * model.Group)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#removeGroup(int)
 	 */
 	@Override
-	public void removeGroup(int groupId) throws GroupException {
-		Connection con = manager.getConnection();
+	public void removeGroup(int groupId) throws GroupException, UserException {
+		Connection con = manager.getConnection();// add transaction
 		try {
-			PreparedStatement ps = con.prepareStatement(REMOVE_GROUP);
-			ps.setInt(1, groupId);
-			ps.execute();
-		} catch (SQLException e) {
-			throw new GroupException("Something went wrong with removing a group.." + e.getMessage());
+			con.setAutoCommit(false);
+			try {
+				// are homeworks of group just for this group
+				ArrayList<HomeworkDetails> hdOfGroup = GroupDAO.getInstance().getHomeworkDetailsOfGroup(groupId);
+				for (HomeworkDetails hd : hdOfGroup) {
+					if (GroupDAO.getInstance().isHomeworkJustForThisGroup(hd.getId(), groupId)) {
+						GroupDAO.getInstance().removeHomeworkDetails(hd);
+					}
+				}
+				PreparedStatement ps = con.prepareStatement(REMOVE_GROUP);
+				ps.setInt(1, groupId);
+				ps.execute();
+				con.commit();
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+				e.getStackTrace();
+				con.rollback();
+				throw new GroupException("Something went wrong with removing a group.." + e.getMessage());
+			} finally {
+				con.setAutoCommit(true);
+			}
+		} catch (SQLException e1) {
+			throw new GroupException("Something went wrong with removing a group.." + e1.getMessage());
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#createHomeworkForGroup(com.
-	 * IttalentsHomeworks.model.HomeworkDetails, java.util.ArrayList)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#createHomeworkDetails(com.IttalentsHomeworks.model.HomeworkDetails, java.util.ArrayList)
 	 */
-
 	@Override
 	public void createHomeworkDetails(HomeworkDetails homeworkDetails, ArrayList<Integer> groupsForHomework)
 			throws GroupException, UserException, ValidationException, NotUniqueHomeworkHeadingException {
@@ -459,11 +454,9 @@ public class GroupDAO implements IGroupDAO {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getHomeworkDetailsId(com.
-	 * IttalentsHomeworks.model.HomeworkDetails)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getHomeworkDetailsId(java.lang.String)
 	 */
 	@Override
 	public int getHomeworkDetailsId(String homeworkDetailsHeading) throws GroupException {
@@ -482,12 +475,9 @@ public class GroupDAO implements IGroupDAO {
 		return homeworkDetailsId;
 	}
 
-	// updateHomework
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#updateHomeworkDetails(com.
-	 * IttalentsHomeworks.model.HomeworkDetails, java.util.ArrayList)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#updateHomeworkDetails(com.IttalentsHomeworks.model.HomeworkDetails, java.util.ArrayList)
 	 */
 	@Override
 	public void updateHomeworkDetails(HomeworkDetails homeworkDetails, ArrayList<Integer> groupsForHomework)
@@ -572,11 +562,9 @@ public class GroupDAO implements IGroupDAO {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getIdsOfGroupsForWhichIsHw(com.
-	 * IttalentsHomeworks.model.HomeworkDetails)
+	
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getIdsOfGroupsForWhichIsHomework(int)
 	 */
 	@Override
 	public ArrayList<Integer> getIdsOfGroupsForWhichIsHomework(int homeworkDetailsId) throws GroupException {
@@ -596,14 +584,9 @@ public class GroupDAO implements IGroupDAO {
 		return groupsIds;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#removeHomeworkFromGroup(com.
-	 * IttalentsHomeworks.model.HomeworkDetails,
-	 * com.IttalentsHomeworks.model.Group)
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#removeHomeworkFromGroup(int, int)
 	 */
-
 	@Override
 	public void removeHomeworkFromGroup(int homeworkDetailsId, int groupId) throws GroupException, UserException {
 		Connection con = manager.getConnection();
@@ -617,12 +600,9 @@ public class GroupDAO implements IGroupDAO {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#addHomeworkToGroup(com.
-	 * IttalentsHomeworks.model.HomeworkDetails,
-	 * com.IttalentsHomeworks.model.Group)
+
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#addHomeworkToGroup(com.IttalentsHomeworks.model.HomeworkDetails, int)
 	 */
 	@Override
 	public void addHomeworkToGroup(HomeworkDetails homeworkDetails, int groupId) throws GroupException, UserException {
@@ -635,7 +615,7 @@ public class GroupDAO implements IGroupDAO {
 				ps.setInt(2, homeworkDetails.getId());
 				ps.execute();
 				for (Student s : GroupDAO.getInstance().getStudentsOfGroup(groupId)) {
-					if (!((GroupDAO) GroupDAO.getInstance()).doesStudentAlreadyHaveHomework(s.getId(),
+					if (!((IGroupDAO) GroupDAO.getInstance()).doesStudentAlreadyHaveHomework(s.getId(),
 							homeworkDetails)) {
 						ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_II);
 						ps.setInt(1, s.getId());
@@ -667,9 +647,8 @@ public class GroupDAO implements IGroupDAO {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	
+	/* (non-Javadoc)
 	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getGroupById(int)
 	 */
 	@Override
@@ -689,6 +668,9 @@ public class GroupDAO implements IGroupDAO {
 		return group;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getGroupIdByGroupName(java.lang.String)
+	 */
 	@Override
 	public int getGroupIdByGroupName(String groupName) throws GroupException {
 		int idGroup = 0;
@@ -707,6 +689,9 @@ public class GroupDAO implements IGroupDAO {
 		return idGroup;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#removeHomeworkDetails(com.IttalentsHomeworks.model.HomeworkDetails)
+	 */
 	@Override
 	public void removeHomeworkDetails(HomeworkDetails homeworkDetails) throws GroupException, UserException {
 		Connection con = manager.getConnection();
@@ -766,6 +751,9 @@ public class GroupDAO implements IGroupDAO {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#updateGroup(com.IttalentsHomeworks.model.Group, java.util.ArrayList)
+	 */
 	@Override
 	public void updateGroup(Group group, ArrayList<Integer> wishedTeacherIds)
 			throws GroupException, ValidationException, UserException {
@@ -821,6 +809,9 @@ public class GroupDAO implements IGroupDAO {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getHomeworkDetailsById(int)
+	 */
 	@Override
 	public HomeworkDetails getHomeworkDetailsById(int chosenHomeworkId) throws GroupException {
 		Connection con = manager.getConnection();
@@ -845,6 +836,9 @@ public class GroupDAO implements IGroupDAO {
 		return homeworkDetails;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#addHomeworkToGroupTransaction(com.IttalentsHomeworks.model.HomeworkDetails, int)
+	 */
 	@Override
 	public void addHomeworkToGroupTransaction(HomeworkDetails homeworkDetails, int groupId)
 			throws GroupException, UserException, SQLException {
@@ -854,7 +848,7 @@ public class GroupDAO implements IGroupDAO {
 		ps.setInt(2, homeworkDetails.getId());
 		ps.execute();
 		for (Student s : GroupDAO.getInstance().getStudentsOfGroup(groupId)) {
-			if (!((GroupDAO) GroupDAO.getInstance()).doesStudentAlreadyHaveHomework(s.getId(), homeworkDetails)) {
+			if (!((IGroupDAO) GroupDAO.getInstance()).doesStudentAlreadyHaveHomework(s.getId(), homeworkDetails)) {
 				ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_II);
 				ps.setInt(1, s.getId());
 				ps.setInt(2, homeworkDetails.getId());
@@ -874,6 +868,9 @@ public class GroupDAO implements IGroupDAO {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#updateNumberOfTasksForStudents(com.IttalentsHomeworks.model.HomeworkDetails, int)
+	 */
 	@Override
 	public void updateNumberOfTasksForStudents(HomeworkDetails homeworkDetails, int numOfTasks) throws GroupException {
 		Connection con = manager.getConnection();
@@ -909,7 +906,24 @@ public class GroupDAO implements IGroupDAO {
 						ps.setInt(2, homeworkDetails.getId());
 						ps.setInt(3, currTaskNumberRemove);
 						ps.execute();
+
+						String fileName = "hwId" + homeworkDetails.getId() + "userId" + studentId + "taskNum"
+								+ currTaskNumberRemove;
+						System.out.println("Remove file " + fileName);
+						File fileStudentTasks = new File(
+								IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA + File.separator + fileName);
+						if (fileStudentTasks.exists()) {
+							String[] entries = fileStudentTasks.list();
+							if (entries != null) {
+								for (String entry : entries) {
+									File currentFile = new File(fileStudentTasks.getPath(), entry);
+									currentFile.delete();
+								}
+							}
+							fileStudentTasks.delete();
+						}
 						currTaskNumberRemove++;
+
 					} catch (SQLException e) {
 						throw new GroupException("Something went wrong with removing tasks from homework of student..");
 					}
@@ -920,6 +934,9 @@ public class GroupDAO implements IGroupDAO {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getStudentsWithSearchedHomework(int)
+	 */
 	@Override
 	public ArrayList<Integer> getStudentsWithSearchedHomework(int homeworkDetailsId) throws GroupException {
 		Connection con = manager.getConnection();
@@ -939,6 +956,9 @@ public class GroupDAO implements IGroupDAO {
 		return students;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getGroupWithoutStudentsById(int)
+	 */
 	@Override
 	public Group getGroupWithoutStudentsById(int groupId) throws GroupException {
 		Group group = null;
@@ -957,6 +977,9 @@ public class GroupDAO implements IGroupDAO {
 		return group;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getGroupNameById(int)
+	 */
 	@Override
 	public String getGroupNameById(int chosenGroupId) throws GroupException {
 		Connection con = manager.getConnection();
@@ -974,6 +997,9 @@ public class GroupDAO implements IGroupDAO {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getStudentsIdsOfGroup(int)
+	 */
 	@Override
 	public ArrayList<Integer> getStudentsIdsOfGroup(int groupId) throws GroupException {
 		ArrayList<Integer> studentsOfGroup = new ArrayList<>();
@@ -991,6 +1017,9 @@ public class GroupDAO implements IGroupDAO {
 		return studentsOfGroup;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#getAllGroupsWithoutStudents()
+	 */
 	@Override
 	public ArrayList<Group> getAllGroupsWithoutStudents() throws GroupException {
 		Connection con = manager.getConnection();
@@ -1010,6 +1039,9 @@ public class GroupDAO implements IGroupDAO {
 		return groups;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#doesPassSystemTest(java.lang.String, com.IttalentsHomeworks.model.Homework, int)
+	 */
 	@Override
 	public boolean doesPassSystemTest(String solutionOfStudent, Homework homework, int taskNum)
 			throws IOException, InterruptedException {
@@ -1067,5 +1099,28 @@ public class GroupDAO implements IGroupDAO {
 		}
 		boolean doesPastSystemTest = answerStudent.toString().equals(answerTruth.toString());
 		return doesPastSystemTest;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.IttalentsHomeworks.DAO.IGroupDAO#isHomeworkJustForThisGroup(int, int)
+	 */
+	@Override
+	public boolean isHomeworkJustForThisGroup(int homeworkId, int groupId) throws GroupException {
+		Connection con = manager.getConnection();
+		try {
+			PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM IttalentsHomeworks.Group_has_Homework WHERE homework_id = ?;");
+			ps.setInt(1, homeworkId);
+			ResultSet rs = ps.executeQuery();
+			int count = 0;
+			if(rs.next()){
+				count = rs.getInt(1);
+			}
+			if(count == 1){
+				return true;
+			}
+		} catch (SQLException e) {
+			throw new GroupException("Something went wrong with checking if a homework is just for one group.." + e.getMessage());
+		}
+		return false;
 	}
 }

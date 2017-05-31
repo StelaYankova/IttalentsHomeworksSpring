@@ -412,7 +412,7 @@ public class GroupController {
 						request.getServletContext().setAttribute("allGroups", allGroupsUpdated);
 						request.getSession().setAttribute("invalidFields", false);
 					}
-				} catch (GroupException e) {
+				} catch (GroupException | UserException e) {
 					System.out.println(e.getMessage());
 					e.printStackTrace();
 					return "exception";

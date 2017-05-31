@@ -74,12 +74,13 @@
 								</c:if>
 							</c:if>
 							<p id="usernamePasswordMsg" class="input-invalid-login"></p>
+							<a id="registerPageButton" href="./register"><span
+				class="glyphicon glyphicon-log-in btn-xs"><span id = "registerHref">  Register here</span></span> </a>
 						</div>
 					</li>
 				</ul>
 			</div>
-			<a class="registerPageButton" href="./register"><span
-				class="glyphicon glyphicon-log-in btn-xs"><span id = "registerHref">  Register here</span></span> </a>
+			
 		</div>
 	</nav>
 	<c:if test="${not empty sessionScope.invalidField}">
@@ -114,7 +115,6 @@
 					},
 					success : function(response) {
 						document.getElementById("signInForm").submit();
-						return true;
 					},
 					error : function(response) {
 						$("#usernamePasswordMsg").append(

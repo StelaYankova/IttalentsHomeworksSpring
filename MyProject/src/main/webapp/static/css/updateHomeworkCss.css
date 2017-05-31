@@ -16,7 +16,9 @@
 .form-horizontal .form-group:nth-child(6) .control-label-input {
 	padding-top: 0.55em;
 }
-
+input[type=file]{
+	display:inline-block !important;
+}
 #testsFileConstraint {
 	font-size: 0.65em;
 	color: red;

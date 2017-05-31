@@ -6,6 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="<c:url value="css/cssResetCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/generalCss.css" />" rel="stylesheet">
 <link href="<c:url value="css/mainPageTeacherCss.css" />"
 	rel="stylesheet">
@@ -60,7 +61,7 @@
 			</div>
 
 			<div class="list">
-				<h id="listHeading">Students in chosen group:</h>
+				<h6 id="listHeading">Students in chosen group:</h6>
 				<ul id="listOfStudentsOfGroup" class="editable"></ul>
 			</div>
 
