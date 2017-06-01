@@ -339,6 +339,10 @@ public class GroupController {
 				}
 				response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 			} else {
+				if(request.getParameter("chosenGroupId") == null){
+					response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
+					
+				}else
 				if (!request.getParameter("chosenGroupId").equals("null")) {
 					response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 				}
