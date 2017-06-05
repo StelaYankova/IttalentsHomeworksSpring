@@ -63,7 +63,7 @@ public class Group {
 	}
 
 	public void setTeachers(ArrayList<Teacher> teachers) {
-		this.teachers = teachers;
+		this.teachers = new ArrayList<Teacher>(teachers);
 	}
 
 	public ArrayList<Student> getStudents() {
@@ -71,7 +71,7 @@ public class Group {
 	}
 
 	public void setStudents(ArrayList<Student> students) {
-		this.students = students;
+		this.students = new ArrayList<Student>(students);
 	}
 
 	public ArrayList<HomeworkDetails> getHomeworks() {
@@ -79,7 +79,7 @@ public class Group {
 	}
 
 	public void setHomeworks(ArrayList<HomeworkDetails> homeworks) {
-		this.homeworks = homeworks;
+		this.homeworks = new ArrayList<HomeworkDetails>(homeworks);
 	}
 
 	@Override

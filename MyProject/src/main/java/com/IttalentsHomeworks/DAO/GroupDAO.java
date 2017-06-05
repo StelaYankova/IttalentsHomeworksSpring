@@ -13,6 +13,8 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import com.IttalentsHomeworks.DB.DBManager;
 import com.IttalentsHomeworks.Exceptions.GroupException;
 import com.IttalentsHomeworks.Exceptions.UserException;
@@ -24,6 +26,7 @@ import com.IttalentsHomeworks.model.Student;
 import com.IttalentsHomeworks.model.Task;
 import com.IttalentsHomeworks.model.Teacher;
 
+@Component
 public class GroupDAO implements IGroupDAO {
 
 	private static final String DOES_STUDENT_ALREADY_HAVE_HOMEWORK = "SELECT * FROM IttalentsHomeworks.User_has_homework WHERE user_id = ? AND homework_id = ?;";
@@ -52,17 +55,24 @@ public class GroupDAO implements IGroupDAO {
 	private static final String GET_STUDENTS_OF_GROUP_BY_ID = "SELECT U.id, U.username, U.email, U.isTeacher FROM IttalentsHomeworks.User_has_Group G JOIN IttalentsHomeworks.Users U ON (G.user_id = U.id) WHERE G.group_id = ? AND U.isTeacher = 0;";
 	private static final String GET_TEACHERS_OF_GROUP = "SELECT U.id, U.username, U.email, U.isTeacher FROM IttalentsHomeworks.User_has_Group G JOIN IttalentsHomeworks.Users U ON (G.user_id = U.id) WHERE G.group_id = ? AND U.isTeacher = 1;";
 	private static IGroupDAO instance;
+	@Autowired
 	private DBManager manager;
-
-	private GroupDAO() {
-		setManager(DBManager.getInstance());
+	
+	
+	
+	public GroupDAO() {
+		setManager(manager);
 	}
-
-	public static IGroupDAO getInstance() {
-		if (instance == null)
-			instance = new GroupDAO();
-		return instance;
-	}
+	@Autowired
+	private ValidationsDAO validationsDAO;
+	
+	@Autowired
+	private UserDAO userDAO;
+//	public static IGroupDAO getInstance() {
+//		if (instance == null)
+//			instance = new GroupDAO();
+//		return instance;
+//	}
 
 	
 	/* (non-Javadoc)
@@ -160,10 +170,10 @@ public class GroupDAO implements IGroupDAO {
 	public boolean isUserAlreadyInGroup(int groupId, String username) throws GroupException, UserException {
 		Connection con = manager.getConnection();
 		boolean isUserAlreadyInGroup = false;
-		if (ValidationsDAO.getInstance().doesUserExistInDBByUsername(username)) {
+		if (validationsDAO.doesUserExistInDBByUsername(username)) {
 			try {
 				PreparedStatement ps = con.prepareStatement(IS_USER_ALREADY_IN_GROUP);
-				ps.setInt(1, UserDAO.getInstance().getUserIdByUsername(username));
+				ps.setInt(1, userDAO.getUserIdByUsername(username));
 				ps.setInt(2, groupId);
 				ResultSet rs = ps.executeQuery();
 				if (rs.next()) {
@@ -183,19 +193,19 @@ public class GroupDAO implements IGroupDAO {
 	@Override
 	public void addUserToGroup(int groupId, int userId) throws GroupException, UserException, ValidationException {
 		Connection con = manager.getConnection();
-		if ((ValidationsDAO.getInstance().doesGroupExistInDBById(groupId)
-				&& ValidationsDAO.getInstance().doesUserExistInDBById(userId))
-				&& ValidationsDAO.getInstance().doesUserExistInDBById(userId)) {
-			if (!ValidationsDAO.getInstance().isStudentAlreadyInGroupAddStudent(groupId, userId)) {
+		if ((validationsDAO.doesGroupExistInDBById(groupId)
+				&& validationsDAO.doesUserExistInDBById(userId))
+				&& validationsDAO.doesUserExistInDBById(userId)) {
+			if (!validationsDAO.isStudentAlreadyInGroupAddStudent(groupId, userId)) {
 				try {
 					PreparedStatement ps = con.prepareStatement(ADD_USER_TO_GROUP);
 					ps.setInt(1, userId);
 					ps.setInt(2, groupId);
 					ps.execute();
-					if (!UserDAO.getInstance().isUserATeacher(userId)) {
-						for (HomeworkDetails hd : GroupDAO.getInstance().getHomeworkDetailsOfGroup(groupId)) {
-							if (!((IGroupDAO) GroupDAO.getInstance()).doesStudentAlreadyHaveHomework(userId, hd)) {
-								UserDAO.getInstance().addHomeworkToStudent(userId, hd);
+					if (!userDAO.isUserATeacher(userId)) {
+						for (HomeworkDetails hd : this.getHomeworkDetailsOfGroup(groupId)) {
+							if (!((IGroupDAO) this).doesStudentAlreadyHaveHomework(userId, hd)) {
+								userDAO.addHomeworkToStudent(userId, hd);
 							}
 						}
 					}
@@ -238,20 +248,20 @@ public class GroupDAO implements IGroupDAO {
 	@Override
 	public void createNewGroup(Group group) throws GroupException, ValidationException {
 		Connection con = manager.getConnection();
-		if (!ValidationsDAO.getInstance().addGroupAreThereEmptyFields(group.getName())) {
-			if (ValidationsDAO.getInstance().isGroupNameValid(group.getName())) {
-				if (ValidationsDAO.getInstance().isGroupNameUnique(group.getName())) {
+		if (!validationsDAO.addGroupAreThereEmptyFields(group.getName())) {
+			if (validationsDAO.isGroupNameValid(group.getName())) {
+				if (validationsDAO.isGroupNameUnique(group.getName())) {
 					try {
 						con.setAutoCommit(false);
 						PreparedStatement ps = con.prepareStatement(CREATE_NEW_GROUP);
 						ps.setString(1, group.getName());
 						ps.executeUpdate();
-						group.setId(GroupDAO.getInstance().getGroupIdByGroupName(group.getName()));
+						group.setId(this.getGroupIdByGroupName(group.getName()));
 						for (int i = 0; i < group.getTeachers().size(); i++) {
-							ps = con.prepareStatement(ADD_USER_TO_GROUP);
-							ps.setInt(1, group.getTeachers().get(i).getId());
-							ps.setInt(2, group.getId());
-							ps.executeUpdate();
+							PreparedStatement ps1 = con.prepareStatement(ADD_USER_TO_GROUP);
+							ps1.setInt(1, group.getTeachers().get(i).getId());
+							ps1.setInt(2, group.getId());
+							ps1.executeUpdate();
 						}
 						con.commit();
 					} catch (SQLException e1) {
@@ -358,10 +368,10 @@ public class GroupDAO implements IGroupDAO {
 			con.setAutoCommit(false);
 			try {
 				// are homeworks of group just for this group
-				ArrayList<HomeworkDetails> hdOfGroup = GroupDAO.getInstance().getHomeworkDetailsOfGroup(groupId);
+				ArrayList<HomeworkDetails> hdOfGroup = this.getHomeworkDetailsOfGroup(groupId);
 				for (HomeworkDetails hd : hdOfGroup) {
-					if (GroupDAO.getInstance().isHomeworkJustForThisGroup(hd.getId(), groupId)) {
-						GroupDAO.getInstance().removeHomeworkDetails(hd);
+					if (this.isHomeworkJustForThisGroup(hd.getId(), groupId)) {
+						this.removeHomeworkDetails(hd);
 					}
 				}
 				PreparedStatement ps = con.prepareStatement(REMOVE_GROUP);
@@ -389,21 +399,21 @@ public class GroupDAO implements IGroupDAO {
 	public void createHomeworkDetails(HomeworkDetails homeworkDetails, ArrayList<Integer> groupsForHomework)
 			throws GroupException, UserException, ValidationException, NotUniqueHomeworkHeadingException {
 		Connection con = manager.getConnection();
-		if (ValidationsDAO.getInstance().isHomeworkHeadingUniqueAddHomework(homeworkDetails.getHeading())) {
+		if (validationsDAO.isHomeworkHeadingUniqueAddHomework(homeworkDetails.getHeading())) {
 			if (homeworkDetails.getTasksFile() != null
 					&& !(homeworkDetails.getTasksFile().trim().equals("") && homeworkDetails.getTestTasksFile() != null
 							&& !homeworkDetails.getTestTasksFile().trim().equals("") && groupsForHomework != null
 							&& groupsForHomework.size() > 0)) {
-				if (!ValidationsDAO.getInstance().isThereEmptyFieldAddHomework(homeworkDetails.getHeading(),
+				if (!validationsDAO.isThereEmptyFieldAddHomework(homeworkDetails.getHeading(),
 						homeworkDetails.getOpeningTime().toString(), homeworkDetails.getClosingTime().toString(),
 						homeworkDetails.getNumberOfTasks())) {
-					if (ValidationsDAO.getInstance().isLengthHeadingValidAddHomework(homeworkDetails.getHeading())
-							&& ValidationsDAO.getInstance()
+					if (validationsDAO.isLengthHeadingValidAddHomework(homeworkDetails.getHeading())
+							&& validationsDAO
 									.isHomeworkOpeningTimeValidAddHomework(homeworkDetails.getOpeningTime().toString())
-							&& ValidationsDAO.getInstance().isHomeworkClosingTimeValidAddHomework(
+							&& validationsDAO.isHomeworkClosingTimeValidAddHomework(
 									homeworkDetails.getOpeningTime().toString(),
 									homeworkDetails.getClosingTime().toString())
-							&& ValidationsDAO.getInstance()
+							&& validationsDAO
 									.isHomeworkNumberOfTasksValidAddHomework(homeworkDetails.getNumberOfTasks())) {
 						try {
 							con.setAutoCommit(false);
@@ -416,9 +426,9 @@ public class GroupDAO implements IGroupDAO {
 							ps.setString(6, homeworkDetails.getTestTasksFile());
 							ps.execute();
 							homeworkDetails
-									.setId(GroupDAO.getInstance().getHomeworkDetailsId(homeworkDetails.getHeading()));
+									.setId(this.getHomeworkDetailsId(homeworkDetails.getHeading()));
 							for (Integer groupId : groupsForHomework) {
-								GroupDAO.getInstance().addHomeworkToGroupTransaction(homeworkDetails, groupId);
+								this.addHomeworkToGroupTransaction(homeworkDetails, groupId);
 							}
 							con.commit();
 						} catch (SQLException e) {
@@ -483,24 +493,24 @@ public class GroupDAO implements IGroupDAO {
 	public void updateHomeworkDetails(HomeworkDetails homeworkDetails, ArrayList<Integer> groupsForHomework)
 			throws GroupException, UserException, ValidationException, NotUniqueHomeworkHeadingException {
 		Connection con = manager.getConnection();
-		HomeworkDetails currHd = GroupDAO.getInstance().getHomeworkDetailsById(homeworkDetails.getId());
-		if (ValidationsDAO.getInstance().isHomeworkUpdateHeadingUnique(homeworkDetails.getHeading(), currHd)) {
+		HomeworkDetails currHd = this.getHomeworkDetailsById(homeworkDetails.getId());
+		if (validationsDAO.isHomeworkUpdateHeadingUnique(homeworkDetails.getHeading(), currHd)) {
 
 			if (homeworkDetails.getTasksFile() != null
 					&& !(homeworkDetails.getTasksFile().trim().equals("") && homeworkDetails.getTestTasksFile() != null
 							&& !(homeworkDetails.getTestTasksFile().trim().equals("")))
 					&& groupsForHomework != null && groupsForHomework.size() > 0) {
-				if (!ValidationsDAO.getInstance().updateGroupAreThereEmptyFields(homeworkDetails.getHeading(),
+				if (!validationsDAO.updateGroupAreThereEmptyFields(homeworkDetails.getHeading(),
 						homeworkDetails.getOpeningTime().toString(), homeworkDetails.getClosingTime().toString(),
 						homeworkDetails.getTasksFile().trim())) {
-					if (ValidationsDAO.getInstance().areHomeworkUpdateCharactersValid(homeworkDetails.getHeading())
-							&& ValidationsDAO.getInstance().isHomeworkUpdateLengthValid(homeworkDetails.getHeading())
-							&& ValidationsDAO.getInstance().isHomeworkUpdateOpeningTimeValid(
+					if (validationsDAO.areHomeworkUpdateCharactersValid(homeworkDetails.getHeading())
+							&& validationsDAO.isHomeworkUpdateLengthValid(homeworkDetails.getHeading())
+							&& validationsDAO.isHomeworkUpdateOpeningTimeValid(
 									homeworkDetails.getOpeningTime().toString(), currHd)
-							&& ValidationsDAO.getInstance().isHomeworkUpdateClosingTimeValid(
+							&& validationsDAO.isHomeworkUpdateClosingTimeValid(
 									homeworkDetails.getOpeningTime().toString(),
 									homeworkDetails.getClosingTime().toString(), currHd)
-							&& ValidationsDAO.getInstance()
+							&& validationsDAO
 									.isHomeworkUpdateNumberOfTasksValid(homeworkDetails.getNumberOfTasks())) {
 						try {
 							con.setAutoCommit(false);
@@ -513,7 +523,7 @@ public class GroupDAO implements IGroupDAO {
 							ps.setString(6, homeworkDetails.getTestTasksFile());
 							ps.setInt(7, homeworkDetails.getId());
 							ps.executeUpdate();
-							ArrayList<Integer> currGroupIds = GroupDAO.getInstance()
+							ArrayList<Integer> currGroupIds = this
 									.getIdsOfGroupsForWhichIsHomework(homeworkDetails.getId());
 							ArrayList<Integer> wishedGroupIds = new ArrayList<>();
 							for (Integer id : groupsForHomework) {
@@ -521,15 +531,15 @@ public class GroupDAO implements IGroupDAO {
 							}
 							for (Integer id : currGroupIds) {
 								if (!(wishedGroupIds.contains(id))) {
-									GroupDAO.getInstance().removeHomeworkFromGroup(homeworkDetails.getId(), id);
+									this.removeHomeworkFromGroup(homeworkDetails.getId(), id);
 								}
 							}
 							for (Integer id : wishedGroupIds) {
 								if (!(currGroupIds.contains(id))) {
-									GroupDAO.getInstance().addHomeworkToGroupTransaction(homeworkDetails, id);
+									this.addHomeworkToGroupTransaction(homeworkDetails, id);
 								}
 							}
-							GroupDAO.getInstance().updateNumberOfTasksForStudents(homeworkDetails,
+							this.updateNumberOfTasksForStudents(homeworkDetails,
 									currHd.getNumberOfTasks());
 							con.commit();
 						} catch (SQLException e) {
@@ -614,8 +624,8 @@ public class GroupDAO implements IGroupDAO {
 				ps.setInt(1, groupId);
 				ps.setInt(2, homeworkDetails.getId());
 				ps.execute();
-				for (Student s : GroupDAO.getInstance().getStudentsOfGroup(groupId)) {
-					if (!((IGroupDAO) GroupDAO.getInstance()).doesStudentAlreadyHaveHomework(s.getId(),
+				for (Student s : this.getStudentsOfGroup(groupId)) {
+					if (!((IGroupDAO) this).doesStudentAlreadyHaveHomework(s.getId(),
 							homeworkDetails)) {
 						ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_II);
 						ps.setInt(1, s.getId());
@@ -623,7 +633,7 @@ public class GroupDAO implements IGroupDAO {
 						ps.execute();
 						for (int i = 0; i < homeworkDetails.getNumberOfTasks(); i++) {
 							Task t = new Task(i, null, null, false);
-							if (!UserDAO.getInstance().doesTaskAlreadyExist(homeworkDetails.getId(), s.getId(), i)) {
+							if (!userDAO.doesTaskAlreadyExist(homeworkDetails.getId(), s.getId(), i)) {
 								ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_III);
 								ps.setInt(1, s.getId());
 								ps.setInt(2, homeworkDetails.getId());
@@ -698,11 +708,11 @@ public class GroupDAO implements IGroupDAO {
 		try {
 			PreparedStatement ps = con.prepareStatement(REMOVE_HOMEWORK_DETAILS);
 			ps.setInt(1, homeworkDetails.getId());
-			ArrayList<Integer> currGroupIds = GroupDAO.getInstance()
+			ArrayList<Integer> currGroupIds = this
 					.getIdsOfGroupsForWhichIsHomework(homeworkDetails.getId());
 			ArrayList<Group> currGroups = new ArrayList<>();
 			for (Integer id : currGroupIds) {
-				currGroups.add(GroupDAO.getInstance().getGroupById(id));
+				currGroups.add(this.getGroupById(id));
 			}
 			ps.execute();
 			File fileTasks = new File(
@@ -728,7 +738,7 @@ public class GroupDAO implements IGroupDAO {
 				fileTestsZip.delete();
 			}
 			for (Group group : currGroups) {
-				for (Student s : GroupDAO.getInstance().getStudentsOfGroup(group.getId())) {
+				for (Student s : this.getStudentsOfGroup(group.getId())) {
 					for (int i = 0; i < homeworkDetails.getNumberOfTasks(); i++) {
 						String fileName = "hwId" + homeworkDetails.getId() + "userId" + s.getId() + "taskNum" + i;
 						File fileStudentTasks = new File(
@@ -758,9 +768,9 @@ public class GroupDAO implements IGroupDAO {
 	public void updateGroup(Group group, ArrayList<Integer> wishedTeacherIds)
 			throws GroupException, ValidationException, UserException {
 		Connection con = manager.getConnection();
-		if (!(ValidationsDAO.getInstance().isThereGroupEmptyFieldUpdate(group.getName()))
-				&& ValidationsDAO.getInstance().isGroupNameUniqueUpdate(group.getId(), group.getName())
-				&& ValidationsDAO.getInstance().isGroupNameValid(group.getName())) {
+		if (!(validationsDAO.isThereGroupEmptyFieldUpdate(group.getName()))
+				&& validationsDAO.isGroupNameUniqueUpdate(group.getId(), group.getName())
+				&& validationsDAO.isGroupNameValid(group.getName())) {
 			try {
 				con.setAutoCommit(false);
 				PreparedStatement ps = con.prepareStatement(CHANGE_GROUP_NAME);
@@ -768,7 +778,7 @@ public class GroupDAO implements IGroupDAO {
 				ps.setInt(2, group.getId());
 				ps.executeUpdate();
 				// curr teachers
-				ArrayList<Teacher> currTeachers = GroupDAO.getInstance().getTeachersOfGroup(group.getId());
+				ArrayList<Teacher> currTeachers = this.getTeachersOfGroup(group.getId());
 				ArrayList<Integer> currTeachersIds = new ArrayList<>();
 				for (Teacher t : currTeachers) {
 					currTeachersIds.add(t.getId());
@@ -779,14 +789,14 @@ public class GroupDAO implements IGroupDAO {
 				if (currTeachersIds != null) {
 					for (Integer teacherId : currTeachersIds) {
 						if (!(wishedTeachersIds.contains(teacherId))) {
-							GroupDAO.getInstance().removeUserFromGroup(group.getId(), teacherId);
+							this.removeUserFromGroup(group.getId(), teacherId);
 						}
 					}
 				}
 				if (wishedTeachersIds != null) {
 					for (Integer id : wishedTeachersIds) {
 						if (!(currTeachersIds.contains(id))) {
-							GroupDAO.getInstance().addUserToGroup(group.getId(), id);
+							this.addUserToGroup(group.getId(), id);
 						}
 					}
 				}
@@ -847,15 +857,15 @@ public class GroupDAO implements IGroupDAO {
 		ps.setInt(1, groupId);
 		ps.setInt(2, homeworkDetails.getId());
 		ps.execute();
-		for (Student s : GroupDAO.getInstance().getStudentsOfGroup(groupId)) {
-			if (!((IGroupDAO) GroupDAO.getInstance()).doesStudentAlreadyHaveHomework(s.getId(), homeworkDetails)) {
+		for (Student s : this.getStudentsOfGroup(groupId)) {
+			if (!((IGroupDAO) this).doesStudentAlreadyHaveHomework(s.getId(), homeworkDetails)) {
 				ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_II);
 				ps.setInt(1, s.getId());
 				ps.setInt(2, homeworkDetails.getId());
 				ps.execute();
 				for (int i = 0; i < homeworkDetails.getNumberOfTasks(); i++) {
 					Task t = new Task(i, null, null, false);
-					if (!UserDAO.getInstance().doesTaskAlreadyExist(homeworkDetails.getId(), s.getId(), i)) {
+					if (!userDAO.doesTaskAlreadyExist(homeworkDetails.getId(), s.getId(), i)) {
 						ps = con.prepareStatement(ADD_HOMEWORK_TO_GROUP_III);
 						ps.setInt(1, s.getId());
 						ps.setInt(2, homeworkDetails.getId());
@@ -875,7 +885,7 @@ public class GroupDAO implements IGroupDAO {
 	public void updateNumberOfTasksForStudents(HomeworkDetails homeworkDetails, int numOfTasks) throws GroupException {
 		Connection con = manager.getConnection();
 		PreparedStatement ps;
-		ArrayList<Integer> students = GroupDAO.getInstance().getStudentsWithSearchedHomework(homeworkDetails.getId());
+		ArrayList<Integer> students = this.getStudentsWithSearchedHomework(homeworkDetails.getId());
 		if (homeworkDetails.getNumberOfTasks() > numOfTasks) {
 			for (Integer studentId : students) {
 				int currTaskNumberInsert = numOfTasks;
@@ -932,7 +942,6 @@ public class GroupDAO implements IGroupDAO {
 						
 						String fileName = "hwId" + homeworkDetails.getId() + "userId" + studentId + "taskNum"
 								+ currTaskNumberRemove;
-						System.out.println("Remove file " + fileName);
 						File fileStudentTasks = new File(
 								IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA + File.separator + fileName);
 						if (fileStudentTasks.exists()) {
@@ -991,7 +1000,7 @@ public class GroupDAO implements IGroupDAO {
 			ps.setInt(1, groupId);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				ArrayList<Teacher> teachers = GroupDAO.getInstance().getTeachersOfGroup(groupId);
+				ArrayList<Teacher> teachers = this.getTeachersOfGroup(groupId);
 				group = new Group(rs.getInt(1), rs.getString(2), teachers);
 			}
 		} catch (SQLException e) {
@@ -1052,7 +1061,7 @@ public class GroupDAO implements IGroupDAO {
 			st = con.createStatement();
 			ResultSet rs = st.executeQuery(GET_ALL_GROUPS);
 			while (rs.next()) {
-				ArrayList<HomeworkDetails> homeworkDetailsOfGroup = GroupDAO.getInstance()
+				ArrayList<HomeworkDetails> homeworkDetailsOfGroup = this
 						.getHomeworkDetailsOfGroup(rs.getInt(1));
 				groups.add(new Group(rs.getInt(1), rs.getString(2), null, null, homeworkDetailsOfGroup));
 			}

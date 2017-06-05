@@ -13,11 +13,15 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.IttalentsHomeworks.DB.DBManager;
 import com.IttalentsHomeworks.Exceptions.GroupException;
 import com.IttalentsHomeworks.Exceptions.UserException;
 import com.IttalentsHomeworks.model.HomeworkDetails;
-
+@Component
 public class ValidationsDAO implements IValidationsDAO {
 
 	private static final int MD5_PART_4 = 1;
@@ -25,7 +29,9 @@ public class ValidationsDAO implements IValidationsDAO {
 	private static final int MD5_PART_2 = 0x100;
 	private static final int MD5_PART_1 = 0xff;
 	private static final String PASSWORD_MD5 = "MD5";
-	private static IValidationsDAO instance;
+	//private static IValidationsDAO instance;
+	
+	@Autowired
 	private DBManager manager;
 	private static final String DOES_USER_HAVE_GROUP = "SELECT count(*) FROM IttalentsHomeworks.User_has_Group WHERE user_id=? AND group_id=?;";
 	private static final String IS_USERNAME_UNIQUE = "SELECT * FROM IttalentsHomeworks.Users WHERE BINARY username = ?;";
@@ -34,15 +40,18 @@ public class ValidationsDAO implements IValidationsDAO {
 	private static final String DOES_USER_EXIST = "SELECT * FROM IttalentsHomeworks.Users WHERE BINARY username = ? AND BINARY pass = ?;";
 	private static final String DOES_USER_EXIST_BY_USERNAME = "SELECT * FROM IttalentsHomeworks.Users WHERE BINARY username = ?";
 
-	private ValidationsDAO() {
-		setManager(DBManager.getInstance());
+	public ValidationsDAO() {
+		setManager(manager);
 	}
-
-	public static IValidationsDAO getInstance() {
-		if (instance == null)
-			instance = (IValidationsDAO) new ValidationsDAO();
-		return instance;
-	}
+	
+	@Autowired
+	private GroupDAO groupDAO;
+	
+//	public static IValidationsDAO getInstance() {
+//		if (instance == null)
+//			instance = (IValidationsDAO) new ValidationsDAO();
+//		return instance;
+//	}
 
 	/* (non-Javadoc)
 	 * @see com.IttalentsHomeworks.DAO.IValidationsDAO#getManager()
@@ -192,8 +201,8 @@ public class ValidationsDAO implements IValidationsDAO {
 	 */
 	@Override
 	public boolean isGroupNameValid(String groupName) {
-		if (ValidationsDAO.getInstance().isGroupNameLengthValid(groupName)
-				&& ValidationsDAO.getInstance().areGroupNameCharactersValid(groupName)) {
+		if (this.isGroupNameLengthValid(groupName)
+				&& this.areGroupNameCharactersValid(groupName)) {
 			return true;
 		}
 		return false;
@@ -254,8 +263,8 @@ public class ValidationsDAO implements IValidationsDAO {
 	 */
 	@Override
 	public boolean isGroupNameUniqueUpdate(int groupId, String groupName) throws GroupException {
-		int wantedGroupNameId = GroupDAO.getInstance().getGroupIdByGroupName(groupName);
-		if (ValidationsDAO.getInstance().isGroupNameUnique(groupName)) {
+		int wantedGroupNameId = groupDAO.getGroupIdByGroupName(groupName);
+		if (this.isGroupNameUnique(groupName)) {
 			return true;
 		} else {
 			if (wantedGroupNameId == groupId) {
@@ -303,7 +312,7 @@ public class ValidationsDAO implements IValidationsDAO {
 	 */
 	@Override
 	public boolean doesStudentExist(String username) throws UserException {
-		if (ValidationsDAO.getInstance().isUsernameUnique(username)) {
+		if (this.isUsernameUnique(username)) {
 			return false;
 		}
 		return true;
@@ -352,7 +361,7 @@ public class ValidationsDAO implements IValidationsDAO {
 	 */
 	@Override
 	public boolean isStudentAlreadyInGroupAddStudent(int groupId, int userId) throws GroupException, UserException {
-		if (ValidationsDAO.getInstance().isStudentAlreadyInGroup(groupId, userId)) {
+		if (this.isStudentAlreadyInGroup(groupId, userId)) {
 			return true;
 		}
 		return false;
@@ -415,7 +424,7 @@ public class ValidationsDAO implements IValidationsDAO {
 	@Override
 	public boolean isHomeworkHeadingUniqueAddHomework(String heading) throws GroupException {
 		if (heading != null && (!heading.trim().equals(""))) {
-			if (ValidationsDAO.getInstance().isHomeworkHeadingUnique(heading)) {
+			if (this.isHomeworkHeadingUnique(heading)) {
 				return true;
 			}
 		} else {
@@ -524,7 +533,7 @@ public class ValidationsDAO implements IValidationsDAO {
 	@Override
 	public boolean isHomeworkUpdateHeadingUnique(String heading, HomeworkDetails currHd) throws GroupException {
 		if (heading != null && (!heading.equals(""))) {
-			if (currHd.getHeading().equals(heading) || ValidationsDAO.getInstance().isHomeworkHeadingUnique(heading)) {
+			if (currHd.getHeading().equals(heading) || this.isHomeworkHeadingUnique(heading)) {
 				return true;
 			}
 		} else {

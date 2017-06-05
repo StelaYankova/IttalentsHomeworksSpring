@@ -1,5 +1,4 @@
 package com.IttalentsHomeworks.DAO;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,6 +6,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
+
 import com.IttalentsHomeworks.DB.DBManager;
 import com.IttalentsHomeworks.Exceptions.GroupException;
 import com.IttalentsHomeworks.Exceptions.UserException;
@@ -22,7 +27,9 @@ import com.mysql.cj.api.jdbc.Statement;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 
+@Component
 public class UserDAO implements IUserDAO  {
+	
 	private static final String GET_GROUPS_OF_USER_WITHOUT_STUDENTS_AND_TEACHERS_AND_HOMEWORKS = "SELECT G.id, G.group_name FROM IttalentsHomeworks.Groups G JOIN IttalentsHomeworks.User_has_Group UG ON (UG.group_id=G.id) WHERE UG.user_id = ?;";
 	private static final String GET_ALL_STUDENTS = "SELECT * FROM IttalentsHomeworks.Users WHERE isTeacher = 0;";
 	private static final String GET_ALL_TEACHERS = "SELECT * FROM IttalentsHomeworks.Users WHERE isTeacher = 1;";
@@ -36,7 +43,7 @@ public class UserDAO implements IUserDAO  {
 	private static final String SET_TEACHER_COMMENT_TO_HOMEWORK = "UPDATE IttalentsHomeworks.User_has_homework SET teacher_comment = ? WHERE user_id = ? AND homework_id = ?;";
 	private static final String SET_TEACHER_GRADE_TO_HOMEWORK = "UPDATE IttalentsHomeworks.User_has_homework SET teacher_grade = ? WHERE user_id = ? AND homework_id = ?;";
 	private static final String REMOVE_USER_PROFILE = "DELETE FROM IttalentsHomeworks.Users WHERE id = ?;";
-	private static final String CREATE_NEW_USER = "INSERT INTO IttalentsHomeworks.Users (username, pass, email) VALUES (?,?,?);";
+	private static final String CREATE_NEW_USER = "INSERT INTO IttalentsHomeworks.Users (username, pass, email, isTeacher) VALUES (?,?,?,?);";
 	private static final String GET_HOMEWORKS_OF_STUDENT = "SELECT H.id, H.heading, H.num_of_tasks, H.tasks_pdf, H.opens, H.closes, UH.teacher_grade, UH.teacher_comment,H.test_tasks_directory FROM IttalentsHomeworks.User_has_homework UH JOIN IttalentsHomeworks.Homework H ON (H.id = UH.homework_id) WHERE UH.user_id = ?;";
 	private static final String GET_TASKS_OF_HOMEWORK_OF_STUDENT = "SELECT homework_id,task_number,uploaded_on,solution_java,has_passed_system_test FROM IttalentsHomeworks.Homework_task_solution WHERE student_id = ? AND homework_id = ?;";
 	private static final String GET_HOMEWORKS_OF_STUDENT_BY_GROUP = "SELECT H.id, H.heading, H.opens, H.closes,H.num_of_tasks, H.tasks_pdf, UH.teacher_grade, UH.teacher_comment,H.test_tasks_directory FROM IttalentsHomeworks.User_has_homework UH JOIN IttalentsHomeworks.Homework H ON (H.id = UH.homework_id) JOIN IttalentsHomeworks.Group_has_Homework GH ON (H.id = GH.homework_id) WHERE UH.user_id = ? AND GH.group_id = ?;";
@@ -46,18 +53,28 @@ public class UserDAO implements IUserDAO  {
 	private static final String GET_USER_BY_ID = "SELECT * FROM IttalentsHomeworks.Users WHERE id = ?;";
 	private static final String GET_HOMEWORK_OF_STUDENT = "SELECT H.id, H.heading, H.num_of_tasks, H.tasks_pdf, H.opens, H.closes, UH.teacher_grade, UH.teacher_comment,H.test_tasks_directory FROM IttalentsHomeworks.User_has_homework UH JOIN IttalentsHomeworks.Homework H ON (H.id = UH.homework_id) WHERE UH.user_id = ? AND UH.homework_id = ?;";
 	private static IUserDAO instance;
+	
+	@Autowired
 	private DBManager manager;
 
-	private UserDAO() {
-		setManager(DBManager.getInstance());
+	
+	
+	public UserDAO() {
+		setManager(manager);
 	}
-
-	public static IUserDAO getInstance() {
-		if (instance == null)
-			instance = new UserDAO();
-		return instance;
-	}
-
+	@Autowired
+	private ValidationsDAO validationsDAO;
+	
+	@Autowired
+	private GroupDAO groupDAO;
+//	public static IUserDAO getInstance() {
+//		if (instance == null)
+//			instance = new UserDAO();
+//		return instance;
+//	}
+//	@Autowired
+//	private UserDAO userDAO1;
+	
 	/* (non-Javadoc)
 	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getManager()
 	 */
@@ -152,7 +169,7 @@ public class UserDAO implements IUserDAO  {
 	/* (non-Javadoc)
 	 * @see com.IttalentsHomeworks.DAO.IUserDAO#getHomeworksOfStudentByGroup(int, int)
 	 */
-	
+	//todo see
 	@Override
 	public ArrayList<Homework> getHomeworksOfStudentByGroup(int studentId, int groupId)
 			throws UserException, ValidationException, GroupException {
@@ -163,7 +180,7 @@ public class UserDAO implements IUserDAO  {
 			ps.setInt(1, studentId);
 			ps.setInt(2, groupId);
 			ResultSet rs = ps.executeQuery();
-			if (ValidationsDAO.getInstance().doesUserExistInDBById(studentId)) {
+			if (validationsDAO.doesUserExistInDBById(studentId)) {
 				while (rs.next()) {
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 					String openingTimeString = rs.getString(3);
@@ -182,8 +199,7 @@ public class UserDAO implements IUserDAO  {
 
 					HomeworkDetails hd = new HomeworkDetails(rs.getInt(1), rs.getString(2), openingTime, closingTime,
 							rs.getInt(5), rs.getString(6), rs.getString(7));
-					ArrayList<Task> tasksOfHomeworkOfStudent = UserDAO.getInstance()
-							.getTasksOfHomeworkOfStudent(studentId, hd.getId());
+					ArrayList<Task> tasksOfHomeworkOfStudent = this.getTasksOfHomeworkOfStudent(studentId, hd.getId());
 					homeworksOfStudentByGroup
 							.add(new Homework(teacherScore, teacherComment, tasksOfHomeworkOfStudent, hd));
 				}
@@ -236,7 +252,7 @@ public class UserDAO implements IUserDAO  {
 	public User getUserByUsername(String username) throws UserException, GroupException {
 		User u = null;
 		Connection con = manager.getConnection();
-		int userId = UserDAO.getInstance().getUserIdByUsername(username);
+		int userId = this.getUserIdByUsername(username);
 		if (userId != 0) {
 			try {
 				PreparedStatement ps = con.prepareStatement(GET_USER_BY_ID);
@@ -244,12 +260,12 @@ public class UserDAO implements IUserDAO  {
 
 				ResultSet rs = ps.executeQuery();
 				if (rs.next()) {
-					ArrayList<Group> groupsOfUser = UserDAO.getInstance().getGroupsOfUserWithoutStudents(userId);
-					if (UserDAO.getInstance().isUserATeacher(userId)) {
+					ArrayList<Group> groupsOfUser = this.getGroupsOfUserWithoutStudents(userId);
+					if (this.isUserATeacher(userId)) {
 						u = new Teacher(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), groupsOfUser);
 					} else {
 						u = new Student(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), groupsOfUser,
-								null);
+								null);	
 					}
 				}
 			} catch (SQLException e) {
@@ -281,7 +297,7 @@ public class UserDAO implements IUserDAO  {
 				LocalDateTime closingTime = LocalDateTime.parse(closingTimeString, formatter);
 				HomeworkDetails hd = new HomeworkDetails(rs.getInt(1), rs.getString(2), openingTime, closingTime,
 						rs.getInt(3), rs.getString(4), rs.getString(9));
-				ArrayList<Task> tasksOfHomeworkOfStudent = UserDAO.getInstance().getTasksOfHomeworkOfStudent(userId,
+				ArrayList<Task> tasksOfHomeworkOfStudent = this.getTasksOfHomeworkOfStudent(userId,
 						hd.getId());
 				int teacherScore = 0;
 				if (rs.getInt(7) != 0) {
@@ -308,20 +324,21 @@ public class UserDAO implements IUserDAO  {
 	@Override
 	public void createNewUser(User user) throws UserException, ValidationException, NoSuchAlgorithmException {
 		Connection con = manager.getConnection();
-		if (!(ValidationsDAO.getInstance().createUserAreThereEmptyFields(user.getUsername().trim(),
+		if (!(validationsDAO.createUserAreThereEmptyFields(user.getUsername().trim(),
 				user.getPassword().trim(), user.getRepeatedPassword().trim(), user.getEmail().trim()))) {
-			if (ValidationsDAO.getInstance().isUsernameUnique(user.getUsername())
-					&& ValidationsDAO.getInstance().isEmailValid(user.getEmail())
-					&& ValidationsDAO.getInstance().isPasswordValid(user.getPassword())
-					&& ValidationsDAO.getInstance().isRepeatedPasswordValid(user.getPassword(),
+			if (validationsDAO.isUsernameUnique(user.getUsername())
+					&& validationsDAO.isEmailValid(user.getEmail())
+					&& validationsDAO.isPasswordValid(user.getPassword())
+					&& validationsDAO.isRepeatedPasswordValid(user.getPassword(),
 							user.getRepeatedPassword())
-					&& ValidationsDAO.getInstance().isUsernameValid(user.getUsername())) {
+					&& validationsDAO.isUsernameValid(user.getUsername())) {
 				try {
 					PreparedStatement ps = con.prepareStatement(CREATE_NEW_USER);
 					ps.setString(1, user.getUsername());
-					String passe = ValidationsDAO.getInstance().encryptPass(user.getPassword());
+					String passe = validationsDAO.encryptPass(user.getPassword());
 					ps.setString(2, passe);
 					ps.setString(3, user.getEmail().trim());
+					ps.setBoolean(4, user.isTeacher());
 					ps.execute();
 				} catch (SQLException e) {
 					System.out.println(e.getMessage());
@@ -363,7 +380,7 @@ public class UserDAO implements IUserDAO  {
 			throws UserException, ValidationException {
 		Connection con = manager.getConnection();
 
-		if (ValidationsDAO.getInstance().isGradeValueValid(teacherGrade)) {
+		if (validationsDAO.isGradeValueValid(teacherGrade)) {
 			try {
 				PreparedStatement ps = con.prepareStatement(SET_TEACHER_GRADE_TO_HOMEWORK);
 				ps.setInt(1, teacherGrade);
@@ -387,7 +404,7 @@ public class UserDAO implements IUserDAO  {
 	public void setTeacherComment(int homeworkDetailsId, int studentId, String teacherComment)
 			throws UserException, ValidationException {
 		Connection con = manager.getConnection();
-		if (ValidationsDAO.getInstance().isCommentLengthValid(teacherComment)) {
+		if (validationsDAO.isCommentLengthValid(teacherComment)) {
 			try {
 				PreparedStatement ps = con.prepareStatement(SET_TEACHER_COMMENT_TO_HOMEWORK);
 				ps.setString(1, teacherComment);
@@ -411,7 +428,7 @@ public class UserDAO implements IUserDAO  {
 	public void setSolutionOfTask(int homeworkDetailsId, int studentId, int taskNumber, String solution,
 			LocalDateTime timeOfUpload) throws UserException {// is a student
 		Connection con = manager.getConnection();
-		if (solution != null && UserDAO.getInstance().isTaskNumberValid(studentId, homeworkDetailsId, taskNumber)) {
+		if (solution != null && this.isTaskNumberValid(studentId, homeworkDetailsId, taskNumber)) {
 			try {
 				con.setAutoCommit(false);
 				try {
@@ -421,7 +438,7 @@ public class UserDAO implements IUserDAO  {
 					ps.setInt(3, homeworkDetailsId);
 					ps.setInt(4, taskNumber);
 					ps.executeUpdate();
-					UserDAO.getInstance().setTimeOfUploadOfTask(homeworkDetailsId, studentId, taskNumber, timeOfUpload);
+					this.setTimeOfUploadOfTask(homeworkDetailsId, studentId, taskNumber, timeOfUpload);
 					con.commit();
 				} catch (SQLException e) {
 					System.out.println(e.getMessage());
@@ -447,7 +464,7 @@ public class UserDAO implements IUserDAO  {
 	public void setTimeOfUploadOfTask(int homeworkDetailsId, int studentId, int taskNumber, LocalDateTime timeOfUpload)
 			throws UserException {
 		Connection con = manager.getConnection();
-		if (UserDAO.getInstance().isTaskNumberValid(studentId, homeworkDetailsId, taskNumber)) {
+		if (this.isTaskNumberValid(studentId, homeworkDetailsId, taskNumber)) {
 			try {
 				PreparedStatement ps = con.prepareStatement(SET_TIME_OF_UPLOAD_OF_TASK);
 				ps.setString(1, timeOfUpload.toString());
@@ -493,19 +510,19 @@ public class UserDAO implements IUserDAO  {
 	@Override
 	public void updateUser(User user, String formerPass)
 			throws UserException, ValidationException, NoSuchAlgorithmException {
-		int id = UserDAO.getInstance().getUserIdByUsername(user.getUsername());
+		int id = this.getUserIdByUsername(user.getUsername());
 		Connection con = manager.getConnection();
-		if (!(ValidationsDAO.getInstance().updateUserAreThereEmptyFields(user.getPassword(), user.getRepeatedPassword(),
-				user.getEmail())) && ValidationsDAO.getInstance().isEmailValid(user.getEmail())
-				&& ValidationsDAO.getInstance().isPasswordUpdateValid(user.getPassword(), formerPass) && ValidationsDAO
-						.getInstance().isRepeatedPasswordValid(user.getPassword(), user.getRepeatedPassword())) {
+		if (!(validationsDAO.updateUserAreThereEmptyFields(user.getPassword(), user.getRepeatedPassword(),
+				user.getEmail())) && validationsDAO.isEmailValid(user.getEmail())
+				&& validationsDAO.isPasswordUpdateValid(user.getPassword(), formerPass) && validationsDAO.
+						isRepeatedPasswordValid(user.getPassword(), user.getRepeatedPassword())) {
 			try {
 				PreparedStatement ps = con.prepareStatement(UPDATE_USER_PROFILE);
 				if (user.getPassword().equals(formerPass)) {// it is already
 															// encryptet
 					ps.setString(1, user.getPassword());
 				} else {
-					ps.setString(1, ValidationsDAO.getInstance().encryptPass(user.getPassword().trim()));
+					ps.setString(1, validationsDAO.encryptPass(user.getPassword().trim()));
 				}
 				ps.setString(2, user.getEmail().trim());
 				ps.setInt(3, id);
@@ -526,7 +543,7 @@ public class UserDAO implements IUserDAO  {
 	public Student getStudentsByUsername(String username) throws UserException {
 		User u = null;
 		Connection con = manager.getConnection();
-		int userId = UserDAO.getInstance().getUserIdByUsername(username);
+		int userId = this.getUserIdByUsername(username);
 		try {
 			PreparedStatement ps = con.prepareStatement(GET_USER_BY_ID);
 			ps.setInt(1, userId);
@@ -579,7 +596,7 @@ public class UserDAO implements IUserDAO  {
 			ps.setInt(2, hd.getId());
 			ps.execute();
 			for (int i = 0; i < hd.getNumberOfTasks(); i++) {
-				if (!UserDAO.getInstance().doesTaskAlreadyExist(hd.getId(), userId, i)) {
+				if (!this.doesTaskAlreadyExist(hd.getId(), userId, i)) {
 					ps = con.prepareStatement(ADD_HOMEWORK_TO_STUDENT_II);
 					ps.setInt(1, userId);
 					ps.setInt(2, hd.getId());
@@ -660,8 +677,8 @@ public class UserDAO implements IUserDAO  {
 			ps.setInt(1, userId);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				ArrayList<Group> groupsOfUser = UserDAO.getInstance().getGroupsOfUserWithoutStudents(userId);
-				if (UserDAO.getInstance().isUserATeacher(userId)) {
+				ArrayList<Group> groupsOfUser = this.getGroupsOfUserWithoutStudents(userId);
+				if (this.isUserATeacher(userId)) {
 					u = new Teacher(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), groupsOfUser);
 				} else {
 					u = new Student(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), groupsOfUser,
@@ -738,8 +755,8 @@ public class UserDAO implements IUserDAO  {
 			ps.setInt(1, userId);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				ArrayList<Teacher> teachers = GroupDAO.getInstance().getTeachersOfGroup(rs.getInt(1));
-				ArrayList<HomeworkDetails> hd = GroupDAO.getInstance().getHomeworkDetailsOfGroup(rs.getInt(1));
+				ArrayList<Teacher> teachers = groupDAO.getTeachersOfGroup(rs.getInt(1));
+				ArrayList<HomeworkDetails> hd = groupDAO.getHomeworkDetailsOfGroup(rs.getInt(1));
 				groups.add(new Group(rs.getInt(1), rs.getString(2), teachers, hd));
 			}
 		} catch (SQLException e) {
@@ -769,7 +786,7 @@ public class UserDAO implements IUserDAO  {
 				HomeworkDetails hd = new HomeworkDetails(rs.getInt(1), rs.getString(2), openingTime, closingTime,
 						rs.getInt(3), rs.getString(4), rs.getString(9));
 
-				ArrayList<Task> tasksOfHomeworkOfStudent = UserDAO.getInstance().getTasksOfHomeworkOfStudent(userId,
+				ArrayList<Task> tasksOfHomeworkOfStudent = this.getTasksOfHomeworkOfStudent(userId,
 						hd.getId());
 				int teacherScore = 0;
 				if (rs.getInt(7) != 0) {

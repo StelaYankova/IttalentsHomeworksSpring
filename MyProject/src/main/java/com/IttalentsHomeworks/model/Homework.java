@@ -37,7 +37,7 @@ public class Homework {
 	}
 
 	public void setTasks(ArrayList<Task> tasks) {
-		this.tasks = tasks;
+		this.tasks = new ArrayList<Task>(tasks);
 	}
 
 	public HomeworkDetails getHomeworkDetails() {

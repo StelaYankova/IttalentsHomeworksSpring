@@ -1,5 +1,6 @@
 package com.IttalentsHomeworks.DAO;
 
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 
 import com.IttalentsHomeworks.DB.DBManager;
@@ -51,9 +52,9 @@ public interface IValidationsDAO {
 	static final int MAX_LENGTH_USERNAME = 25;
 	static final int MIN_LENGTH_USERNAME = 6;
 	static final int topMostRecentlyClosedHomeworksForTeacher = 10;
-	static final String SAVE_DIR_HOMEWORK_FILES_PDF = "/Users/Stela/Desktop/homeworkFilesPdfIttalentsHomework";
-	static final String SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA = "/Users/Stela/Desktop/homeworkSolutionsJavaIttalentsHomework";
-	static final String SAVE_DIR_HOMEWORK_TESTS_FILES = "/Users/Stela/Desktop/homeworkTestsFilesIttalentsHomework";
+	static final String SAVE_DIR_HOMEWORK_FILES_PDF = File.separator + "Users"+File.separator+"Stela"+File.separator+"Desktop"+File.separator+"homeworkFilesPdfIttalentsHomework";
+	static final String SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA = File.separator + "Users"+File.separator+"Stela"+File.separator+"Desktop"+File.separator+"homeworkSolutionsJavaIttalentsHomework";
+	static final String SAVE_DIR_HOMEWORK_TESTS_FILES = File.separator+"Users"+File.separator+"Stela"+File.separator+"Desktop"+File.separator+"homeworkTestsFilesIttalentsHomework";
 	static final int NOT_ACCEPTABLE = 406;
 
 	boolean isUsernameUnique(String username) throws UserException;

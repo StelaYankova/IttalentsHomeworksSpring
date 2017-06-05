@@ -27,6 +27,8 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -55,6 +57,15 @@ import com.google.gson.JsonObject;
 @MultipartConfig
 public class HomeworkController {
 
+	@Autowired
+	private UserDAO userDAO;
+	
+	@Autowired
+	private GroupDAO groupDAO;
+	
+	@Autowired
+	private ValidationsDAO validationsDAO;
+	
 	@RequestMapping(value = "/addHomework", method = RequestMethod.GET)
 	protected String addHomeworkGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -65,6 +76,7 @@ public class HomeworkController {
 		return "forbiddenPage";
 	}
 
+	//synchronized
 	@RequestMapping(value = "/addHomework", method = RequestMethod.POST)
 	protected String addHomeworkPost(HttpServletRequest request,
 			@RequestParam(value = "file") MultipartFile fileUploaded,
@@ -239,14 +251,14 @@ public class HomeworkController {
 
 						unzip.unzip(unzip.zipFilePath, unzip.destDirectory);
 
-						GroupDAO.getInstance().createHomeworkDetails(homeworkDetails, groupsForHw);
+						groupDAO.createHomeworkDetails(homeworkDetails, groupsForHw);
 
-						ArrayList<Group> allGroupsUpdated = GroupDAO.getInstance().getAllGroupsWithoutStudents();
+						ArrayList<Group> allGroupsUpdated = groupDAO.getAllGroupsWithoutStudents();
 						request.getServletContext().setAttribute("allGroups", allGroupsUpdated);
-						ArrayList<Teacher> allTeachers = UserDAO.getInstance().getAllTeachers();
+						ArrayList<Teacher> allTeachers = userDAO.getAllTeachers();
 						request.getServletContext().setAttribute("allTeachers", allTeachers);
 						for (Teacher t : allTeachers) {
-							t.setGroups(UserDAO.getInstance().getGroupsOfUserWithoutStudents(t.getId()));
+							t.setGroups(userDAO.getGroupsOfUserWithoutStudents(t.getId()));
 						}
 						if (fileTests.exists()) {
 							fileTests.delete();
@@ -431,7 +443,7 @@ public class HomeworkController {
 	}
 
 	private boolean isHomeworkHeadingUnique(String heading) throws GroupException {
-		if (ValidationsDAO.getInstance().isHomeworkHeadingUnique(heading)) {
+		if (validationsDAO.isHomeworkHeadingUnique(heading)) {
 			return true;
 		}
 		return false;
@@ -507,8 +519,8 @@ public class HomeworkController {
 
 	private boolean doAllGroupsExist(String[] selectedGroups) throws GroupException, UserException {
 		for (String groupId : selectedGroups) {
-			if (ValidationsDAO.getInstance().isStringValidInteger(groupId)) {
-				if (!ValidationsDAO.getInstance().doesGroupExistInDBById(Integer.parseInt(groupId))) {
+			if (validationsDAO.isStringValidInteger(groupId)) {
+				if (!validationsDAO.doesGroupExistInDBById(Integer.parseInt(groupId))) {
 					return false;
 				}
 			} else {
@@ -543,7 +555,7 @@ public class HomeworkController {
 			String idHomework = request.getParameter("homeworkId");
 			if (idHomework != null) {
 				String number = request.getParameter("homeworkId").trim();
-				if (!ValidationsDAO.getInstance().isStringValidInteger(number)) {
+				if (!validationsDAO.isStringValidInteger(number)) {
 					return "pageNotFound";
 				}
 				homeworkId = Integer.parseInt(idHomework.trim());
@@ -557,7 +569,7 @@ public class HomeworkController {
 			}
 			Homework homework = null;
 			try {
-				homework = UserDAO.getInstance().getHomeworkOfStudent(user.getId(), homeworkId);
+				homework = userDAO.getHomeworkOfStudent(user.getId(), homeworkId);
 			} catch (UserException e1) {
 				System.out.println(e1.getMessage());
 				e1.printStackTrace();
@@ -584,7 +596,7 @@ public class HomeworkController {
 						&& (!request.getSession().getAttribute("chosenGroup").equals(""))) {
 					int chosenGroupId = (int) request.getSession().getAttribute("chosenGroup");
 					try {
-						ArrayList<HomeworkDetails> allHomeworkDetailsOfGroup = GroupDAO.getInstance()
+						ArrayList<HomeworkDetails> allHomeworkDetailsOfGroup = groupDAO
 								.getHomeworkDetailsOfGroup(chosenGroupId);
 						for (HomeworkDetails h : allHomeworkDetailsOfGroup) {
 							if (h.getId() == homeworkId) {
@@ -603,7 +615,7 @@ public class HomeworkController {
 							}
 							request.getSession().setAttribute("chosenGroupName", gName);
 						} else {
-							gName = GroupDAO.getInstance().getGroupNameById(chosenGroupId);
+							gName = groupDAO.getGroupNameById(chosenGroupId);
 							request.getSession().setAttribute("chosenGroupName", gName);
 						}
 
@@ -640,7 +652,7 @@ public class HomeworkController {
 			User user = (User) request.getSession().getAttribute("user");
 			if (groupIdUrl != null && groupIdUrl.trim() != "") {
 				String groupChosen = groupIdUrl;
-				if (!ValidationsDAO.getInstance().isStringValidInteger(groupChosen)) {
+				if (!validationsDAO.isStringValidInteger(groupChosen)) {
 					return "pageNotFound";
 				}
 				try {
@@ -661,12 +673,12 @@ public class HomeworkController {
 							HomeworkDetails currHd = new HomeworkDetails(h.getHeading(), h.getOpeningTime(),
 									h.getClosingTime(), h.getNumberOfTasks(), h.getTasksFile(), h.getTestTasksFile());
 							currHd.setDaysLeft((int) days);
-							currHd.setId(GroupDAO.getInstance().getHomeworkDetailsId(currHd.getHeading()));
+							currHd.setId(groupDAO.getHomeworkDetailsId(currHd.getHeading()));
 							homeworks.add(currHd);
 						}
 						request.getSession().setAttribute("chosenGroup", groupId);
 						request.getSession().setAttribute("chosenGroupName",
-								GroupDAO.getInstance().getGroupNameById(groupId));
+								groupDAO.getGroupNameById(groupId));
 						request.getSession().setAttribute("currHomeworksOfGroup", homeworks);
 					} else {
 						return "forbiddenPage";
@@ -799,7 +811,7 @@ public class HomeworkController {
 		User user = (User) request.getSession().getAttribute("user");
 		if (request.getSession().getAttribute("currHomework") != null && request.getParameter("text") != null
 				&& request.getParameter("taskNum") != null
-				&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("taskNum"))) {
+				&& validationsDAO.isStringValidInteger(request.getParameter("taskNum"))) {
 			Homework homework = (Homework) request.getSession().getAttribute("currHomework");
 			HomeworkDetails homeworkDetails = homework.getHomeworkDetails();
 			if (homeworkDetails.getOpeningTime().isBefore(LocalDateTime.now())
@@ -851,13 +863,13 @@ public class HomeworkController {
 						String currDateTimeString = currDateTime.format(formatter);
 						currDateTime = LocalDateTime.parse(currDateTimeString, formatter);
 						try {
-							UserDAO.getInstance().setTimeOfUploadOfTask(homeworkDetails.getId(), user.getId(), taskNum,
+							userDAO.setTimeOfUploadOfTask(homeworkDetails.getId(), user.getId(), taskNum,
 									currDateTime);
 							homework.getTasks().get(taskNum).setUploadedOn(currDateTime);
 							fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
-							boolean doesPastSystemTest = GroupDAO.getInstance()
+							boolean doesPastSystemTest = groupDAO
 									.doesPassSystemTest(fileDirectory + File.separator + fileName, homework, taskNum);
-							UserDAO.getInstance().setPassedSystemTest(user.getId(), homeworkDetails.getId(), taskNum,
+							userDAO.setPassedSystemTest(user.getId(), homeworkDetails.getId(), taskNum,
 									doesPastSystemTest);
 							homework.getTasks().get(taskNum).setHasPassedSystemTest(doesPastSystemTest);
 							int numberOfTasks = homework.getHomeworkDetails().getNumberOfTasks();
@@ -901,7 +913,7 @@ public class HomeworkController {
 			throws ServletException, IOException {
 		if (request.getSession().getAttribute("currHomework") != null && request.getParameter("taskNum") != null
 				&& !request.getParameter("taskNum").trim().equals("")
-				&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("taskNum").trim())) {
+				&& validationsDAO.isStringValidInteger(request.getParameter("taskNum").trim())) {
 			int taskNum = Integer.parseInt(request.getParameter("taskNum").trim()) - 1;
 			User user = (User) request.getSession().getAttribute("user");
 			Homework homework = (Homework) request.getSession().getAttribute("currHomework");
@@ -979,7 +991,7 @@ public class HomeworkController {
 			if (request.getSession().getAttribute("currHomework") != null) {
 				HomeworkDetails hd = (HomeworkDetails) request.getSession().getAttribute("currHomework");
 				try {
-					GroupDAO.getInstance().removeHomeworkDetails(hd);
+					groupDAO.removeHomeworkDetails(hd);
 					request.getSession().removeAttribute("currHomework");
 				} catch (GroupException | UserException e) {
 					System.out.println(e.getMessage());
@@ -1005,22 +1017,22 @@ public class HomeworkController {
 						&& request.getParameter("studentId") != null
 						&& !request.getParameter("studentId").trim().equals("")) {
 
-					if (ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("groupId").trim())
-							&& ValidationsDAO.getInstance()
+					if (validationsDAO.isStringValidInteger(request.getParameter("groupId").trim())
+							&& validationsDAO
 									.isStringValidInteger(request.getParameter("studentId").trim())) {
 
 						int groupId = Integer.parseInt(request.getParameter("groupId").trim());
 						int studentId = Integer.parseInt(request.getParameter("studentId").trim());
 						JsonArray array = new JsonArray();
-						boolean doesGroupExist = ValidationsDAO.getInstance().doesGroupExistInDBById(groupId);
-						boolean doesUserExist = ValidationsDAO.getInstance().doesUserExistInDBById(studentId);
-						boolean isSelectedUserTeacher = UserDAO.getInstance().isUserATeacher(studentId);
-						boolean isStudentInGroup = ValidationsDAO.getInstance().isStudentAlreadyInGroup(studentId,
+						boolean doesGroupExist = validationsDAO.doesGroupExistInDBById(groupId);
+						boolean doesUserExist = validationsDAO.doesUserExistInDBById(studentId);
+						boolean isSelectedUserTeacher = userDAO.isUserATeacher(studentId);
+						boolean isStudentInGroup = validationsDAO.isStudentAlreadyInGroup(studentId,
 								groupId);
 						if (doesGroupExist == true && doesUserExist == true && (!isSelectedUserTeacher)
 								&& (isStudentInGroup == true)) {
 							boolean hasStudentGivenMinOneTask = false;
-							ArrayList<Homework> allHomeworksOfStudent = UserDAO.getInstance()
+							ArrayList<Homework> allHomeworksOfStudent = userDAO
 									.getHomeworksOfStudentByGroup(studentId, groupId);
 							for (Homework h : allHomeworksOfStudent) {
 								JsonObject obj = new JsonObject();
@@ -1082,11 +1094,11 @@ public class HomeworkController {
 				if (request.getParameter("chosenGroup") != null
 						&& !(request.getParameter("chosenGroup").trim().equals(""))) {
 					if (!(request.getParameter("chosenGroup").equals("allGroups"))
-							&& !(request.getParameter("chosenGroup").equals("null")) && ValidationsDAO.getInstance()
+							&& !(request.getParameter("chosenGroup").equals("null")) && validationsDAO
 									.isStringValidInteger(request.getParameter("chosenGroup").trim())) {
 						int groupId = Integer.parseInt(request.getParameter("chosenGroup").trim());
-						if (ValidationsDAO.getInstance().doesGroupExistInDBById(groupId)) {
-							homeworkDetailsByGroup.addAll(GroupDAO.getInstance().getHomeworkDetailsOfGroup(groupId));
+						if (validationsDAO.doesGroupExistInDBById(groupId)) {
+							homeworkDetailsByGroup.addAll(groupDAO.getHomeworkDetailsOfGroup(groupId));
 						} else {
 							response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 							return;
@@ -1097,7 +1109,7 @@ public class HomeworkController {
 							response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 							return;
 						}
-						homeworkDetailsByGroup = GroupDAO.getInstance().getAllHomeworksDetails();
+						homeworkDetailsByGroup = groupDAO.getAllHomeworksDetails();
 					}
 					for (HomeworkDetails hd : homeworkDetailsByGroup) {
 						JsonObject obj = new JsonObject();
@@ -1149,7 +1161,7 @@ public class HomeworkController {
 						JsonArray array = new JsonArray();
 						if (request.getParameter("selectedGroupId").equals("allGroups")) {
 							for (Group g : user.getGroups()) {
-								ArrayList<Homework> homeworksOfStudentByGroup = UserDAO.getInstance()
+								ArrayList<Homework> homeworksOfStudentByGroup = userDAO
 										.getHomeworksOfStudentByGroup(user.getId(), g.getId());
 								for (Homework h : homeworksOfStudentByGroup) {
 									JsonObject obj = new JsonObject();
@@ -1177,11 +1189,11 @@ public class HomeworkController {
 							response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 							response.getWriter().write(array.toString());
 						} else {
-							if (ValidationsDAO.getInstance()
+							if (validationsDAO
 									.isStringValidInteger(request.getParameter("selectedGroupId"))) {
 								int selectedGroupId = Integer.parseInt(request.getParameter("selectedGroupId"));
 								request.getSession().setAttribute("chosenGroup", selectedGroupId);
-								if (!ValidationsDAO.getInstance().doesGroupExistInDBById(selectedGroupId)) {
+								if (!validationsDAO.doesGroupExistInDBById(selectedGroupId)) {
 									response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 									return;
 								}
@@ -1197,8 +1209,8 @@ public class HomeworkController {
 									return;
 								}
 								homeworkDetailsByGroup
-										.addAll(GroupDAO.getInstance().getHomeworkDetailsOfGroup(selectedGroupId));
-								ArrayList<Homework> homeworksOfStudentByGroup = UserDAO.getInstance()
+										.addAll(groupDAO.getHomeworkDetailsOfGroup(selectedGroupId));
+								ArrayList<Homework> homeworksOfStudentByGroup = userDAO
 										.getHomeworksOfStudentByGroup(user.getId(), selectedGroupId);
 								for (Homework h : homeworksOfStudentByGroup) {
 									JsonObject obj = new JsonObject();
@@ -1270,7 +1282,7 @@ public class HomeworkController {
 							return "pageNotFound";
 						}
 						hwId = Integer.parseInt(request.getParameter("chosenHomework"));
-						hd = GroupDAO.getInstance().getHomeworkDetailsById(hwId);
+						hd = groupDAO.getHomeworkDetailsById(hwId);
 						if (hd != null) {
 							request.getSession().setAttribute("currHomework", hd);
 						} else {
@@ -1296,6 +1308,465 @@ public class HomeworkController {
 		}
 		return "forbiddenPage";
 	}
+
+//	@RequestMapping(value = "/updateHomework", method = RequestMethod.POST)
+//	protected String updateHomework(HttpServletRequest request,
+//			@RequestParam(value = "file") MultipartFile fileMultiPart,
+//			@RequestParam(value = "testsFile") MultipartFile testsFileUploaded, HttpServletResponse response)
+//			throws ServletException, IOException {
+//		User user = (User) request.getSession().getAttribute("user");
+//		if (user.isTeacher()) {
+//			if (request.getSession().getAttribute("currHomework") != null) {
+//				File newFilePdf = null;
+//				boolean isFileNameChangedPdf = false;
+//				boolean isFileNameTestsChanged = false;
+//				File newFileTests = null;
+//				File oldFileTests = null;
+//				Unzipper unzip = null;
+//				File unzippedFilesDir = null;
+//				File zipFile = null;
+//				Path oldFileTestsPath = null;
+//				Path newFileTestsPath = null;
+//				File fileSaveDirZip = null;
+//				try {
+//					boolean isFileEmptyPdf = fileMultiPart.getOriginalFilename().isEmpty();
+//					boolean emptyFields = false;
+//					if (!isFileEmptyPdf) {
+//						emptyFields = isThereEmptyFieldUpdateHomework(request.getParameter("name").trim(),
+//								request.getParameter("opens").trim().replace("/", "-"),
+//								request.getParameter("closes").trim().replace("/", "-"), fileMultiPart,
+//								request.getParameter("numberOfTasks").trim(), request.getParameterValues("groups"));
+//					} else {
+//						emptyFields = isThereEmptyFieldUpdateHomeworkNoFileUploaded(request.getParameter("name").trim(),
+//								request.getParameter("opens").trim().replace("/", "-"),
+//								request.getParameter("closes").trim().replace("/", "-"),
+//								request.getParameter("numberOfTasks").trim(), request.getParameterValues("groups"));
+//					}
+//					System.out.println(testsFileUploaded.getOriginalFilename());
+//					System.out.println(testsFileUploaded.getSize());
+//					if(testsFileUploaded.getOriginalFilename() != null && (!testsFileUploaded.getOriginalFilename().trim().equals("")) && testsFileUploaded.getSize() == 0){
+//						emptyFields = true;
+//					}
+//					if (emptyFields) {
+//						request.getSession().setAttribute("emptyFields", true);
+//					} else {
+//						int homeworkDetailsId = ((HomeworkDetails) request.getSession().getAttribute("currHomework"))
+//								.getId();
+//						String heading = request.getParameter("name").trim();
+//						String fileNamePdf = " ";
+//						String[] selectedGroups = request.getParameterValues("groups");
+//						MultipartFile filePartPdf = fileMultiPart;
+//						String opens = request.getParameter("opens").trim().replace("/", "-");
+//						String closes = request.getParameter("closes").trim().replace("/", "-");
+//						String numberOfTasksString = request.getParameter("numberOfTasks").trim();
+//						HomeworkDetails currHd = null;
+//						currHd = groupDAO.getHomeworkDetailsById(homeworkDetailsId);
+//						MultipartFile testsFilePart = testsFileUploaded;
+//						File fileTests = null;
+//						int numberOfTasks = 0;
+//						boolean isHeadingValid = false;
+//						boolean isHeadingUnique = false;
+//						if (areHomeworkUpdateCharactersValid(heading) && isHomeworkUpdateLengthValid(heading)) {
+//							isHeadingValid = true;
+//							if (isHomeworkUpdateHeadingUnique(heading, currHd)) {
+//								isHeadingUnique = true;
+//							}
+//						}
+//						HomeworkDetails homeworkDetailsCurrent = groupDAO
+//								.getHomeworkDetailsById(homeworkDetailsId);
+//						request.getSession().setAttribute("validHeading", isHeadingValid);
+//						request.getSession().setAttribute("uniqueHeading", isHeadingUnique);
+//						boolean isOpeningTimeValid = false;
+//						if (isHomeworkUpdateOpeningTimeValid(opens, currHd)) {
+//							isOpeningTimeValid = true;
+//						}
+//						request.getSession().setAttribute("validOpeningTime", isOpeningTimeValid);
+//						// closing time
+//						boolean isClosingTimeValid = false;
+//						if (isHomeworkUpdateClosingTimeValid(opens, closes, currHd)) {
+//							isClosingTimeValid = true;
+//						}
+//						request.getSession().setAttribute("validClosingTime", isClosingTimeValid);
+//						// numTasks
+//						boolean areTasksValid = false;
+//						if (isHomeworkNumberOfTasksANumber(numberOfTasksString)) {
+//							numberOfTasks = Integer.parseInt(request.getParameter("numberOfTasks"));
+//							if (isHomeworkUpdateNumberOfTasksValid(numberOfTasks)) {
+//								areTasksValid = true;
+//							}
+//						}
+//						request.getSession().setAttribute("validTasks", areTasksValid);
+//						// do all groups exist
+//						boolean areGroupsValid = false;
+//						if (doAllGroupsExistHomeworkUpdate(selectedGroups)) {
+//							areGroupsValid = true;
+//						}
+//						request.getSession().setAttribute("validGroups", areGroupsValid);
+//						boolean isFileValid = false;
+//						if (filePartPdf.getSize() == 0) {
+//							isFileValid = true;
+//						} else {
+//							if (isFileUpdateHomeworkValid(filePartPdf)) {
+//								isFileValid = true;
+//							}
+//						}
+//						// testsFile
+//						boolean isTestsFileValid = false;
+//						if (testsFilePart.getSize() == 0) {
+//							isTestsFileValid = true;
+//						} else {
+//							if (isHomeworkTestsFileSizeValid(testsFilePart)
+//									&& isHomeworkTestsFileContentTypeValid(testsFilePart)) {
+//								isTestsFileValid = true;
+//							}
+//						}
+//						request.setAttribute("validTestsFile", isTestsFileValid);
+//						request.getSession().setAttribute("validFile", isFileValid);
+//						if (isHeadingValid == true && isHeadingUnique == true && isOpeningTimeValid == true
+//								&& isClosingTimeValid == true && areTasksValid == true && areGroupsValid == true
+//								&& isFileValid == true && isTestsFileValid == true) {
+//							fileNamePdf = filePartPdf.getOriginalFilename();
+//							newFilePdf = new File(
+//									IValidationsDAO.SAVE_DIR_HOMEWORK_FILES_PDF + File.separator + fileNamePdf);
+//							File oldFilePdf = null;
+//							if (!fileNamePdf.equals(currHd.getTasksFile()) && !(fileNamePdf.trim().equals(""))) {
+//								String oldNameOfFile = currHd.getTasksFile();
+//								oldFilePdf = new File(
+//										IValidationsDAO.SAVE_DIR_HOMEWORK_FILES_PDF + File.separator + oldNameOfFile);
+//								isFileNameChangedPdf = true;
+//								if (filePartPdf.getSize() != 0) {
+//									String savePath = IValidationsDAO.SAVE_DIR_HOMEWORK_FILES_PDF;
+//									File fileSaveDir = new File(savePath);
+//									if (!fileSaveDir.exists()) {
+//										fileSaveDir.mkdir();
+//									}
+//									while (newFilePdf.exists()) {
+//										Random randomGenerator = new Random();
+//										int randomLength = randomGenerator.nextInt((7 - 1) + 1) + 1;
+//										String randomString = this.getRandomCharacters(randomLength);
+//										fileNamePdf = filePartPdf.getOriginalFilename().substring(0,
+//												filePartPdf.getOriginalFilename().length() - 4) + randomString + ".pdf";
+//										newFilePdf = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_FILES_PDF
+//												+ File.separator + fileNamePdf);
+//									}
+//									newFilePdf.createNewFile();
+//								} else {
+//									fileNamePdf = heading;
+//								}
+//							}
+//							// we save the uploaded file (.pdf)
+//							if (filePartPdf.getSize() != 0) {
+//								OutputStream out = null;
+//								InputStream filecontent = null;
+//								out = new FileOutputStream(newFilePdf, true);
+//								filecontent = filePartPdf.getInputStream();
+//								int read = 0;
+//								final byte[] bytes = new byte[1024];
+//								while ((read = filecontent.read(bytes)) != -1) {
+//									out.write(bytes, 0, read);
+//								}
+//								out.flush();
+//								out.close();
+//							}
+//							isFileNameTestsChanged = false;
+//							if (!homeworkDetailsCurrent.getHeading().equals(heading)) {
+//								isFileNameTestsChanged = true;
+//							}
+//							if (testsFilePart.getSize() != 0) {
+//								// upload file with hw tests
+//								fileSaveDirZip = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES);
+//								if (!fileSaveDirZip.exists()) {
+//									fileSaveDirZip.mkdir();
+//								}
+//								String fileNameTests = " ";
+//								fileNameTests = (testsFileUploaded.getOriginalFilename().substring(0,
+//										testsFileUploaded.getOriginalFilename().length() - 4) + ".zip");
+//								fileTests = new File(
+//										IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator + fileNameTests);
+//								while (fileTests.exists()) {
+//									Random randomGenerator = new Random();
+//									int randomLength = randomGenerator.nextInt((7 - 1) + 1) + 1;
+//									String randomString = this.getRandomCharacters(randomLength);
+//									fileNameTests = (testsFileUploaded.getOriginalFilename().substring(0,
+//											testsFileUploaded.getOriginalFilename().length() - 4) + randomString
+//											+ ".zip");
+//									fileTests = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator
+//											+ fileNameTests);
+//								}
+//
+//								fileTests.createNewFile();
+//								OutputStream out = null;
+//								InputStream filecontent = null;
+//								out = new FileOutputStream(fileTests, true);
+//								filecontent = testsFilePart.getInputStream();
+//								int read = 0;
+//								final byte[] bytes = new byte[1024];
+//								while ((read = filecontent.read(bytes)) != -1) {
+//									out.write(bytes, 0, read);
+//								}
+//								zipFile = new File((IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator
+//										+ heading + ".zip").replaceAll(" ", "%20"));
+//								if (!zipFile.exists()) {
+//									zipFile.mkdirs();
+//								}
+//								out.close();
+//								filecontent.close();
+//								unzippedFilesDir = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES
+//										+ File.separator + homeworkDetailsCurrent.getHeading().replaceAll(" ", "%20"));
+//								if (!unzippedFilesDir.exists()) {
+//									unzippedFilesDir.mkdir();
+//								}
+//								unzip = new Unzipper(
+//										IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator + fileNameTests,
+//										unzippedFilesDir.getAbsolutePath());
+//								if (testsFilePart.getSize() != 0) {
+//									newFileTests = new File(
+//											IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator + heading.replaceAll(" ", "%20"));
+//									if (!newFileTests.exists()) {
+//										newFileTests.createNewFile();
+//									}
+//									oldFileTests = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES
+//											+ File.separator + homeworkDetailsCurrent.getTestTasksFile());
+//									oldFileTestsPath = FileSystems.getDefault().getPath(oldFileTests.getAbsolutePath());
+//									newFileTestsPath = FileSystems.getDefault().getPath(newFileTests.getAbsolutePath());
+//									if (!unzip.areExtensionsValid(
+//											new ZipInputStream((testsFileUploaded.getInputStream())))) {
+//										throw new InvalidFilesExtensionInZIP();
+//									}
+//								}
+//							} else {
+//								if (isFileNameTestsChanged) {
+//									newFileTests = new File(
+//											IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator + heading.replaceAll(" ", "%20"));
+//									if (!newFileTests.exists()) {
+//										newFileTests.createNewFile();
+//									}
+//									oldFileTests = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES
+//											+ File.separator + homeworkDetailsCurrent.getTestTasksFile());
+//
+//									oldFileTestsPath = FileSystems.getDefault().getPath(oldFileTests.getAbsolutePath());
+//									newFileTestsPath = FileSystems.getDefault().getPath(newFileTests.getAbsolutePath());
+//								}
+//							}
+//							File previousZipFile = new File(IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES
+//									+ File.separator + homeworkDetailsCurrent.getTestTasksFile() + ".zip");
+//							zipFile = new File(
+//									IValidationsDAO.SAVE_DIR_HOMEWORK_TESTS_FILES + File.separator + heading.replaceAll(" ", "%20") + ".zip");
+//							if (!zipFile.exists()) {
+//								zipFile.createNewFile();
+//							}
+//							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+//							LocalDateTime openingTime = LocalDateTime.parse(opens, formatter);
+//							LocalDateTime closingTime = LocalDateTime.parse(closes, formatter);
+//							ArrayList<Integer> groupsForHw = new ArrayList<>();
+//							HomeworkDetails homeworkDetails = null;
+//
+//							if (isFileNameChangedPdf) {
+//								homeworkDetails = new HomeworkDetails(homeworkDetailsId, heading, openingTime,
+//										closingTime, numberOfTasks, fileNamePdf, heading.replaceAll(" ", "%20"));
+//							} else {
+//								if (fileNamePdf.equals("")) {
+//									fileNamePdf = currHd.getTasksFile();
+//								}
+//								homeworkDetails = new HomeworkDetails(homeworkDetailsId, heading, openingTime,
+//										closingTime, numberOfTasks, fileNamePdf, heading.replaceAll(" ", "%20"));
+//							}
+//							if (request.getParameterValues("groups") != null) {
+//								for (int i = 0; i < selectedGroups.length; i++) {
+//									int id = Integer.parseInt(selectedGroups[i]);
+//									groupsForHw.add(id);
+//								}
+//							}
+//							groupDAO.updateHomeworkDetails(homeworkDetails, groupsForHw);
+//
+//							Path previousZipFilePath = FileSystems.getDefault()
+//									.getPath(previousZipFile.getAbsolutePath());
+//							Path zipFilePath = FileSystems.getDefault().getPath(zipFile.getAbsolutePath());
+//							Files.move(previousZipFilePath, zipFilePath, StandardCopyOption.REPLACE_EXISTING);
+//							request.getSession().setAttribute("currHomework", homeworkDetails);
+//							request.getServletContext().removeAttribute("allGroups");
+//							ArrayList<Group> allGroups = groupDAO.getAllGroupsWithoutStudents();
+//							request.getServletContext().setAttribute("allGroups", allGroups);
+//							user.setGroups(userDAO.getGroupsOfUserWithoutStudents(user.getId()));
+//							request.getSession().setAttribute("invalidFields", false);
+//							if (testsFilePart.getSize() != 0) {
+//								if (testsFilePart.getSize() != 0 && oldFileTests != null && newFileTests != null) {
+//									File currentFileToReplaceTests = new File(unzippedFilesDir.getAbsolutePath());
+//									if (currentFileToReplaceTests.exists()) {
+//										String[] entries = currentFileToReplaceTests.list();
+//										for (String s : entries) {
+//											File currentFile = new File(currentFileToReplaceTests.getPath(), s);
+//											currentFile.delete();
+//										}
+//									}
+//								}
+//							}
+//							if (testsFilePart.getSize() != 0) {
+//								unzip.unzip(unzip.zipFilePath, unzip.destDirectory);
+//								testsFilePart.transferTo(zipFile);
+//							}
+//
+//							if (oldFileTests != null && newFileTests != null) {
+//								Files.move(oldFileTestsPath, newFileTestsPath, StandardCopyOption.REPLACE_EXISTING);
+//							}
+//							if (testsFilePart.getSize() != 0) {
+//								for (Integer studentId : groupDAO
+//										.getStudentsWithSearchedHomework(homeworkDetailsId)) {
+//									Homework homeworkOfStudent = userDAO.getHomeworkOfStudent(studentId,
+//											homeworkDetails.getId());
+//									ArrayList<Task> tasksOfHomeworkOfStudent = homeworkOfStudent.getTasks();
+//									tasksOfHomeworkOfStudent
+//											.sort((Task o1, Task o2) -> o1.getTaskNumber() - o2.getTaskNumber());
+//									for (int taskNum = 0; taskNum < homeworkDetails.getNumberOfTasks(); taskNum++) {
+//										if (tasksOfHomeworkOfStudent.get(taskNum).getSolution() != null) {
+//											boolean hasPassedNewSystemTest = groupDAO.doesPassSystemTest(
+//													tasksOfHomeworkOfStudent.get(taskNum).getSolution(),
+//													homeworkOfStudent, taskNum);
+//											userDAO.setPassedSystemTest(studentId,
+//													homeworkDetails.getId(), taskNum, hasPassedNewSystemTest);
+//										} else {
+//											userDAO.setPassedSystemTest(studentId,
+//													homeworkDetails.getId(), taskNum, false);
+//										}
+//									}
+//								}
+//							}
+//							if (oldFilePdf != null && oldFilePdf.exists()) {
+//								oldFilePdf.delete();
+//							}
+//							if (fileSaveDirZip != null) {
+//								File originalArchive = new File(
+//										fileSaveDirZip + File.separator + testsFileUploaded.getOriginalFilename());
+//								if (originalArchive.exists()) {
+//									originalArchive.delete();
+//								}
+//							}
+//						}
+//
+//					}
+//				} catch (GroupException | UserException e) {
+//					if (isFileNameChangedPdf) {
+//						if (newFilePdf.exists()) {
+//							newFilePdf.delete();
+//						}
+//					}
+//					if (isFileNameTestsChanged) {
+//						if (newFileTests.exists()) {
+//							String[] entries = newFileTests.list();
+//							if (entries != null) {
+//								for (String s : entries) {
+//									File currentFile = new File(newFileTests.getPath(), s);
+//									currentFile.delete();
+//								}
+//							}
+//							newFileTests.delete();
+//						}
+//						if (zipFile.exists()) {
+//							zipFile.delete();
+//						}
+//					}
+//					System.out.println(e.getMessage());
+//					e.printStackTrace();
+//					return "exception";
+//				} catch (ValidationException e) {
+//					if (isFileNameChangedPdf) {
+//						if (newFilePdf.exists()) {
+//							newFilePdf.delete();
+//						}
+//					}
+//					if (isFileNameTestsChanged) {
+//						if (newFileTests.exists()) {
+//							String[] entries = newFileTests.list();
+//							if (entries != null) {
+//								for (String s : entries) {
+//									File currentFile = new File(newFileTests.getPath(), s);
+//									currentFile.delete();
+//								}
+//							}
+//							newFileTests.delete();
+//						}
+//						if (zipFile.exists()) {
+//							zipFile.delete();
+//						}
+//					}
+//					e.printStackTrace();
+//					request.getSession().setAttribute("invalidFields", true);
+//				} catch (NotUniqueHomeworkHeadingException e) {
+//					if (isFileNameChangedPdf) {
+//						if (newFilePdf.exists()) {
+//							newFilePdf.delete();
+//						}
+//					}
+//					if (isFileNameTestsChanged) {
+//						if (newFileTests.exists()) {
+//							String[] entries = newFileTests.list();
+//							if (entries != null) {
+//								for (String s : entries) {
+//									File currentFile = new File(newFileTests.getPath(), s);
+//									currentFile.delete();
+//								}
+//							}
+//							newFileTests.delete();
+//						}
+//						if (zipFile.exists()) {
+//							zipFile.delete();
+//						}
+//					}
+//					request.getSession().setAttribute("invalidFields", true);
+//					e.printStackTrace();
+//				} catch (InvalidFilesExtensionInZIP e) {
+//					if (isFileNameChangedPdf) {
+//						if (newFilePdf.exists()) {
+//							newFilePdf.delete();
+//						}
+//					}
+//					if (isFileNameTestsChanged) {
+//						if (newFileTests.exists()) {
+//							String[] entries = newFileTests.list();
+//							if (entries != null) {
+//								for (String s : entries) {
+//									File currentFile = new File(newFileTests.getPath(), s);
+//									currentFile.delete();
+//								}
+//							}
+//							newFileTests.delete();
+//						}
+//						if (zipFile.exists()) {
+//							zipFile.delete();
+//						}
+//					}
+//					request.getSession().setAttribute("invalidFields", true);
+//					e.printStackTrace();
+//				} catch (InterruptedException e) {
+//					if (isFileNameChangedPdf) {
+//						if (newFilePdf.exists()) {
+//							newFilePdf.delete();
+//						}
+//					}
+//					if (isFileNameTestsChanged) {
+//						if (newFileTests.exists()) {
+//							String[] entries = newFileTests.list();
+//							if (entries != null) {
+//								for (String s : entries) {
+//									File currentFile = new File(newFileTests.getPath(), s);
+//									currentFile.delete();
+//								}
+//							}
+//							newFileTests.delete();
+//						}
+//						if (zipFile.exists()) {
+//							zipFile.delete();
+//						}
+//					}
+//					response.setStatus(IValidationsDAO.INTERNAL_SERVER_ERROR_STATUS);
+//				}
+//				return "redirect:./updateHomework";
+//			} else {
+//				return "pageNotFound";
+//			}
+//		}
+//		return "forbiddenPage";
+//	}
 
 	@RequestMapping(value = "/updateHomework", method = RequestMethod.POST)
 	protected String updateHomework(HttpServletRequest request,
@@ -1348,7 +1819,7 @@ public class HomeworkController {
 						String closes = request.getParameter("closes").trim().replace("/", "-");
 						String numberOfTasksString = request.getParameter("numberOfTasks").trim();
 						HomeworkDetails currHd = null;
-						currHd = GroupDAO.getInstance().getHomeworkDetailsById(homeworkDetailsId);
+						currHd = groupDAO.getHomeworkDetailsById(homeworkDetailsId);
 						MultipartFile testsFilePart = testsFileUploaded;
 						File fileTests = null;
 						int numberOfTasks = 0;
@@ -1360,7 +1831,7 @@ public class HomeworkController {
 								isHeadingUnique = true;
 							}
 						}
-						HomeworkDetails homeworkDetailsCurrent = GroupDAO.getInstance()
+						HomeworkDetails homeworkDetailsCurrent = groupDAO
 								.getHomeworkDetailsById(homeworkDetailsId);
 						request.getSession().setAttribute("validHeading", isHeadingValid);
 						request.getSession().setAttribute("uniqueHeading", isHeadingUnique);
@@ -1565,7 +2036,7 @@ public class HomeworkController {
 									groupsForHw.add(id);
 								}
 							}
-							GroupDAO.getInstance().updateHomeworkDetails(homeworkDetails, groupsForHw);
+							groupDAO.updateHomeworkDetails(homeworkDetails, groupsForHw);
 
 							Path previousZipFilePath = FileSystems.getDefault()
 									.getPath(previousZipFile.getAbsolutePath());
@@ -1573,9 +2044,9 @@ public class HomeworkController {
 							Files.move(previousZipFilePath, zipFilePath, StandardCopyOption.REPLACE_EXISTING);
 							request.getSession().setAttribute("currHomework", homeworkDetails);
 							request.getServletContext().removeAttribute("allGroups");
-							ArrayList<Group> allGroups = GroupDAO.getInstance().getAllGroupsWithoutStudents();
+							ArrayList<Group> allGroups = groupDAO.getAllGroupsWithoutStudents();
 							request.getServletContext().setAttribute("allGroups", allGroups);
-							user.setGroups(UserDAO.getInstance().getGroupsOfUserWithoutStudents(user.getId()));
+							user.setGroups(userDAO.getGroupsOfUserWithoutStudents(user.getId()));
 							request.getSession().setAttribute("invalidFields", false);
 							if (testsFilePart.getSize() != 0) {
 								if (testsFilePart.getSize() != 0 && oldFileTests != null && newFileTests != null) {
@@ -1598,22 +2069,22 @@ public class HomeworkController {
 								Files.move(oldFileTestsPath, newFileTestsPath, StandardCopyOption.REPLACE_EXISTING);
 							}
 							if (testsFilePart.getSize() != 0) {
-								for (Integer studentId : GroupDAO.getInstance()
+								for (Integer studentId : groupDAO
 										.getStudentsWithSearchedHomework(homeworkDetailsId)) {
-									Homework homeworkOfStudent = UserDAO.getInstance().getHomeworkOfStudent(studentId,
+									Homework homeworkOfStudent = userDAO.getHomeworkOfStudent(studentId,
 											homeworkDetails.getId());
 									ArrayList<Task> tasksOfHomeworkOfStudent = homeworkOfStudent.getTasks();
 									tasksOfHomeworkOfStudent
 											.sort((Task o1, Task o2) -> o1.getTaskNumber() - o2.getTaskNumber());
 									for (int taskNum = 0; taskNum < homeworkDetails.getNumberOfTasks(); taskNum++) {
 										if (tasksOfHomeworkOfStudent.get(taskNum).getSolution() != null) {
-											boolean hasPassedNewSystemTest = GroupDAO.getInstance().doesPassSystemTest(
+											boolean hasPassedNewSystemTest = groupDAO.doesPassSystemTest(
 													tasksOfHomeworkOfStudent.get(taskNum).getSolution(),
 													homeworkOfStudent, taskNum);
-											UserDAO.getInstance().setPassedSystemTest(studentId,
+											userDAO.setPassedSystemTest(studentId,
 													homeworkDetails.getId(), taskNum, hasPassedNewSystemTest);
 										} else {
-											UserDAO.getInstance().setPassedSystemTest(studentId,
+											userDAO.setPassedSystemTest(studentId,
 													homeworkDetails.getId(), taskNum, false);
 										}
 									}
@@ -1807,7 +2278,7 @@ public class HomeworkController {
 	}
 
 	private boolean isHomeworkUpdateHeadingUnique(String heading, HomeworkDetails currHd) throws GroupException {
-		if (currHd.getHeading().equals(heading) || ValidationsDAO.getInstance().isHomeworkHeadingUnique(heading)) {
+		if (currHd.getHeading().equals(heading) || validationsDAO.isHomeworkHeadingUnique(heading)) {
 			return true;
 		} else {
 			return false;
@@ -1886,8 +2357,8 @@ public class HomeworkController {
 
 	private boolean doAllGroupsExistHomeworkUpdate(String[] selectedGroups) throws GroupException, UserException {
 		for (String groupId : selectedGroups) {
-			if (ValidationsDAO.getInstance().isStringValidInteger(groupId)) {
-				if (!ValidationsDAO.getInstance().doesGroupExistInDBById(Integer.parseInt(groupId))) {
+			if (validationsDAO.isStringValidInteger(groupId)) {
+				if (!validationsDAO.doesGroupExistInDBById(Integer.parseInt(groupId))) {
 					return false;
 				}
 			} else {
@@ -1932,9 +2403,9 @@ public class HomeworkController {
 					request.getSession().setAttribute("validComment", isCommentLengthValid);
 					if (isGradeValueValid == true && isCommentLengthValid == true) {
 						try {
-							UserDAO.getInstance().setTeacherComment(homework.getHomeworkDetails().getId(), studentId,
+							userDAO.setTeacherComment(homework.getHomeworkDetails().getId(), studentId,
 									teacherComment);
-							UserDAO.getInstance().setTeacherGrade(homework.getHomeworkDetails().getId(), studentId,
+							userDAO.setTeacherGrade(homework.getHomeworkDetails().getId(), studentId,
 									teacherGrade);
 							homework.setTeacherComment(teacherComment);
 							homework.setTeacherGrade(teacherGrade);
@@ -1999,7 +2470,7 @@ public class HomeworkController {
 		User user = (User) request.getSession().getAttribute("user");
 		if (!user.isTeacher()) {
 			if (request.getSession().getAttribute("currHomework") != null && request.getParameter("taskNum") != null
-					&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("taskNum"))) {
+					&& validationsDAO.isStringValidInteger(request.getParameter("taskNum"))) {
 				String savePath = IValidationsDAO.SAVE_DIR_HOMEWORK_SOLUTIONS_JAVA;
 				int taskNum = Integer.parseInt(request.getParameter("taskNum")) - 1;
 				Homework homework = (Homework) request.getSession().getAttribute("currHomework");
@@ -2056,13 +2527,13 @@ public class HomeworkController {
 										String currDateTimeString = currDateTime.format(formatter);
 										currDateTime = LocalDateTime.parse(currDateTimeString, formatter);
 										fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
-										UserDAO.getInstance().setSolutionOfTask(homeworkDetails.getId(), user.getId(),
+										userDAO.setSolutionOfTask(homeworkDetails.getId(), user.getId(),
 												taskNum, fileDirectory + File.separator + fileName, currDateTime);
 										homework.getTasks().get(taskNum).setSolution(fileName);
 										homework.getTasks().get(taskNum).setUploadedOn(currDateTime);
-										boolean doesPastSystemTest = GroupDAO.getInstance().doesPassSystemTest(
+										boolean doesPastSystemTest = groupDAO.doesPassSystemTest(
 												fileDirectory + File.separator + fileName, homework, taskNum);
-										UserDAO.getInstance().setPassedSystemTest(user.getId(), homeworkDetails.getId(),
+										userDAO.setPassedSystemTest(user.getId(), homeworkDetails.getId(),
 												taskNum, doesPastSystemTest);
 										homework.getTasks().get(taskNum).setHasPassedSystemTest(doesPastSystemTest);
 										int numberOfTasks = homework.getHomeworkDetails().getNumberOfTasks();

@@ -33,7 +33,7 @@ public class Student extends User {
 	}
 
 	public void setHomeworks(ArrayList<Homework> homeworks) {
-		this.homeworks = homeworks;
+		this.homeworks = new ArrayList<Homework>(homeworks);
 	}
 
 }

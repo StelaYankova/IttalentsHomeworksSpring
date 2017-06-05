@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,9 +33,20 @@ import com.IttalentsHomeworks.model.User;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+
 @Controller
 public class UserController {
 
+	@Autowired
+	private UserDAO userDAO;
+	
+	@Autowired
+	private GroupDAO groupDAO;
+	
+	@Autowired
+	private ValidationsDAO validationsDAO;	
+	
+	
 	@RequestMapping(value = "/getGroupsOfStudentByStudent", method = RequestMethod.GET)
 	protected void getGroupsOfStudent(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -74,17 +86,17 @@ public class UserController {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.isTeacher()) {
 			if (request.getParameter("studentId") != null && !(request.getParameter("studentId").trim().equals(""))
-					&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("studentId").trim())
+					&& validationsDAO.isStringValidInteger(request.getParameter("studentId").trim())
 					&& request.getParameter("homeworkId") != null
 					&& !(request.getParameter("homeworkId").trim().equals(""))
-					&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("homeworkId").trim())) {
+					&& validationsDAO.isStringValidInteger(request.getParameter("homeworkId").trim())) {
 				int studentId = Integer.parseInt(request.getParameter("studentId").trim());
 				int homeworkId = Integer.parseInt(request.getParameter("homeworkId").trim());
 				request.getSession().setAttribute("studentId", studentId);
 				Homework homework = null;
 				try {
-					Student chosenStudent = (Student) UserDAO.getInstance().getUserById(studentId);
-					homework = UserDAO.getInstance().getHomeworkOfStudent(studentId, homeworkId);
+					Student chosenStudent = (Student) userDAO.getUserById(studentId);
+					homework = userDAO.getHomeworkOfStudent(studentId, homeworkId);
 					if (homework == null || chosenStudent == null) {
 						return "pageNotFound";
 					}
@@ -170,17 +182,17 @@ public class UserController {
 		} else {
 			try {
 				if (doesUserLoginExist(username, password)) {
-					user = UserDAO.getInstance().getUserByUsername(username);
+					user = userDAO.getUserByUsername(username);
 					request.getSession().setAttribute("user", user);
 					ArrayList<Group> allGroups;
 					try {
-						allGroups = GroupDAO.getInstance().getAllGroupsWithoutStudents();
+						allGroups = groupDAO.getAllGroupsWithoutStudents();
 						if (request.getServletContext().getAttribute("allGroups") == null) {
 							request.getServletContext().setAttribute("allGroups", allGroups);
 						}
-						ArrayList<Teacher> allTeachers = UserDAO.getInstance().getAllTeachers();
+						ArrayList<Teacher> allTeachers = userDAO.getAllTeachers();
 						for (Teacher t : allTeachers) {
-							t.setGroups(UserDAO.getInstance().getGroupsOfUserWithoutStudents(t.getId()));
+							t.setGroups(userDAO.getGroupsOfUserWithoutStudents(t.getId()));
 						}
 						if (request.getServletContext().getAttribute("allTeachers") == null) {
 							request.getServletContext().setAttribute("allTeachers", allTeachers);
@@ -192,7 +204,7 @@ public class UserController {
 					}
 					if (user.isTeacher()) {
 						request.getSession().setAttribute("isTeacher", true);
-						ArrayList<Student> allStudents = UserDAO.getInstance().getAllStudents();
+						ArrayList<Student> allStudents = userDAO.getAllStudents();
 						if (request.getServletContext().getAttribute("allStudents") == null) {
 							request.getServletContext().setAttribute("allStudents", allStudents);
 						}
@@ -221,9 +233,10 @@ public class UserController {
 		return "redirect:./index";
 	}
 
+	//todo is ok
 	private void getActiveHomeworksOfStudent(Student user, HttpServletRequest request) throws UserException {
-		ArrayList<HomeworkDetails> activeHomeworksOfStudent = UserDAO.getInstance()
-				.getActiveHomeworksOfStudent(user.getId());
+		ArrayList<HomeworkDetails> activeHomeworksOfStudent = userDAO.getActiveHomeworksOfStudent(user.getId());
+		System.out.println("Instance1 : " + userDAO);
 		request.getSession().setAttribute("activeHomeworksOfStudent", activeHomeworksOfStudent);
 	}
 
@@ -258,7 +271,7 @@ public class UserController {
 		// we get wanted groups of top 10
 		for (Group g : user.getGroups()) {
 			for (HomeworkDetails hd : topMostRecentlyClosedHomeworksForTeacher) {
-				ArrayList<Integer> currGroupIds = GroupDAO.getInstance().getIdsOfGroupsForWhichIsHomework(hd.getId());
+				ArrayList<Integer> currGroupIds = groupDAO.getIdsOfGroupsForWhichIsHomework(hd.getId());
 				if (currGroupIds.contains(g.getId())) {
 					if (!mostRecentlyClosedHomeworksForTeacherMap.containsKey(g)) {
 						mostRecentlyClosedHomeworksForTeacherMap.put(g, new HashSet<>());
@@ -273,7 +286,7 @@ public class UserController {
 
 	private boolean doesUserLoginExist(String username, String password)
 			throws UserException, NoSuchAlgorithmException {
-		return ValidationsDAO.getInstance().doesUserExistInDB(username, password);
+		return validationsDAO.doesUserExistInDB(username, password);
 	}
 
 	private boolean isThereEmptyFieldLogin(String username, String password) {
@@ -351,7 +364,7 @@ public class UserController {
 						&& isRepeatedPassValid == true && isEmailValid == true) {
 					// we create user
 					User user = new Student(username, password, repeatedPassword, email);
-					UserDAO.getInstance().createNewUser(user);
+					userDAO.createNewUser(user);
 					request.setAttribute("invalidFields", false);
 				}
 			} catch (UserException e) {
@@ -378,7 +391,7 @@ public class UserController {
 	}
 
 	private boolean isUsernameUniqueRegister(String username) throws UserException {
-		return ValidationsDAO.getInstance().isUsernameUnique(username);
+		return validationsDAO.isUsernameUnique(username);
 	}
 
 	private boolean areCharactersValidUsernameRegister(String username) {
@@ -507,8 +520,8 @@ public class UserController {
 				}
 				newUser.setId(userId);
 				try {
-					UserDAO.getInstance().updateUser(newUser, user.getPassword());
-					newUser = UserDAO.getInstance().getUserByUsername(username);
+					userDAO.updateUser(newUser, user.getPassword());
+					newUser = userDAO.getUserByUsername(username);
 					request.setAttribute("invalidFields", false);
 					request.getSession().setAttribute("user", newUser);
 				} catch (UserException e) {

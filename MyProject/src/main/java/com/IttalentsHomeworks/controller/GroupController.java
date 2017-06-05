@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +30,15 @@ import com.google.gson.JsonObject;
 @Controller
 public class GroupController {
 
+	@Autowired
+	private UserDAO userDAO;
+	
+	@Autowired
+	private GroupDAO groupDAO;
+	
+	@Autowired
+	private ValidationsDAO validationsDAO;
+	
 	@RequestMapping(value = "/createGroup", method = RequestMethod.GET)
 	protected String addGroupGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -82,21 +92,22 @@ public class GroupController {
 						ArrayList<Teacher> allSelectedTeachers = new ArrayList<>();
 						for (int i = 0; i < selectedTeachersUsername.length; i++) {
 							Teacher t = null;
-							t = (Teacher) UserDAO.getInstance().getUserByUsername(selectedTeachersUsername[i]);
+							t = (Teacher) userDAO.getUserByUsername(selectedTeachersUsername[i]);
 							if (t != null) {
 								allSelectedTeachers.add(t);
 							}
 						}
 						Group newGroup = new Group(groupName, allSelectedTeachers);
-						GroupDAO.getInstance().createNewGroup(newGroup);
+						System.out.println("Will create group..." + newGroup.getName());
+						groupDAO.createNewGroup(newGroup);
 						request.setAttribute("invalidFields", false);
 						ArrayList<Group> allGroupsUpdated = (ArrayList<Group>) request.getServletContext()
 								.getAttribute("allGroups");
-						allGroupsUpdated.add(GroupDAO.getInstance()
-								.getGroupWithoutStudentsById(GroupDAO.getInstance().getGroupIdByGroupName(groupName)));
-						ArrayList<Teacher> allTeachersUpdated = UserDAO.getInstance().getAllTeachers();
+						allGroupsUpdated.add(groupDAO
+								.getGroupWithoutStudentsById(groupDAO.getGroupIdByGroupName(groupName)));
+						ArrayList<Teacher> allTeachersUpdated = userDAO.getAllTeachers();
 						for (Teacher t : allTeachersUpdated) {
-							t.setGroups(UserDAO.getInstance().getGroupsOfUserWithoutStudents(t.getId()));
+							t.setGroups(userDAO.getGroupsOfUserWithoutStudents(t.getId()));
 						}
 						request.getServletContext().setAttribute("allTeachers", allTeachersUpdated);
 					}
@@ -120,7 +131,7 @@ public class GroupController {
 	}
 
 	private boolean isGroupNameUnique(String groupName) throws GroupException {
-		if (ValidationsDAO.getInstance().isGroupNameUnique(groupName)) {
+		if (validationsDAO.isGroupNameUnique(groupName)) {
 			return true;
 		}
 		return false;
@@ -195,7 +206,7 @@ public class GroupController {
 				request.getSession().setAttribute("chosenUsernameTry", chosenStudentUsername);
 				try {
 					// does student exist
-					if (!ValidationsDAO.getInstance().isStringValidInteger(chosenGroupIdString)) {
+					if (!validationsDAO.isStringValidInteger(chosenGroupIdString)) {
 						request.getSession().setAttribute("invalidFields", true);
 						return "redirect:./addOrRemoveStudent";
 					}
@@ -220,8 +231,8 @@ public class GroupController {
 					}
 					request.getSession().setAttribute("isStudentInGroup", isStudentInGroup);
 					if (doesStudentExist == true && isStudentInGroup == false && isGroupValid == true) {
-						GroupDAO.getInstance().addUserToGroup(chosenGroupId,
-								UserDAO.getInstance().getUserIdByUsername(chosenStudentUsername));
+						groupDAO.addUserToGroup(chosenGroupId,
+								userDAO.getUserIdByUsername(chosenStudentUsername));
 						request.getSession().setAttribute("invalidFields", false);
 					}
 				} catch (UserException e) {
@@ -242,14 +253,14 @@ public class GroupController {
 	}
 
 	private boolean doesStudentExist(String username) throws UserException {
-		if (ValidationsDAO.getInstance().isUsernameUnique(username)) {
+		if (validationsDAO.isUsernameUnique(username)) {
 			return false;
 		}
 		return true;
 	}
 
 	public boolean isStudentAlreadyInGroup(int groupId, String username) throws GroupException, UserException {
-		if (GroupDAO.getInstance().isUserAlreadyInGroup(groupId, username)) {
+		if (groupDAO.isUserAlreadyInGroup(groupId, username)) {
 			return true;
 		}
 		return false;
@@ -263,7 +274,7 @@ public class GroupController {
 	}
 
 	private boolean doesGroupExist(int groupId) throws GroupException, UserException {
-		boolean doesGroupExist = ValidationsDAO.getInstance().doesGroupExistInDBById(groupId);
+		boolean doesGroupExist = validationsDAO.doesGroupExistInDBById(groupId);
 		return doesGroupExist;
 	}
 
@@ -276,28 +287,28 @@ public class GroupController {
 					&& !(request.getParameter("chosenGroupId").trim().equals(""))) {
 				String groupIdStr = request.getParameter("chosenGroupId").trim();
 				if (!groupIdStr.equals("allGroups") && !groupIdStr.equals("null")) {
-					if (!ValidationsDAO.getInstance().isStringValidInteger(groupIdStr)) {
+					if (!validationsDAO.isStringValidInteger(groupIdStr)) {
 						response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 						return;
 					}
 					int groupId = Integer.parseInt((String) request.getParameter("chosenGroupId"));
 					try {
-						if (ValidationsDAO.getInstance().doesGroupExistInDBById(groupId)) {
+						if (validationsDAO.doesGroupExistInDBById(groupId)) {
 							request.getSession().setAttribute("chosenGroupName",
-									GroupDAO.getInstance().getGroupNameById(groupId));
-							ArrayList<Integer> allStudentsIdsOfGroup = GroupDAO.getInstance()
+									groupDAO.getGroupNameById(groupId));
+							ArrayList<Integer> allStudentsIdsOfGroup = groupDAO
 									.getStudentsIdsOfGroup(groupId);
 							JsonArray array = new JsonArray();
 							for (Integer studentId : allStudentsIdsOfGroup) {
 								boolean hasStudentGivenMinOneTask = false;
 								JsonObject obj = new JsonObject();
 								obj.addProperty("id", studentId);
-								obj.addProperty("username", UserDAO.getInstance().getUserUsernameById(studentId));
-								if (request.getParameter("homeworkId") != null && ValidationsDAO.getInstance()
+								obj.addProperty("username", userDAO.getUserUsernameById(studentId));
+								if (request.getParameter("homeworkId") != null && validationsDAO
 										.isStringValidInteger(request.getParameter("homeworkId"))) {
 									int chosenHomeworkId = Integer.parseInt(request.getParameter("homeworkId"));
-									if (ValidationsDAO.getInstance().doHomeworkDetailsExist(chosenHomeworkId)) {
-										for (Task t : UserDAO.getInstance().getTasksOfHomeworkOfStudent(studentId,
+									if (validationsDAO.doHomeworkDetailsExist(chosenHomeworkId)) {
+										for (Task t : userDAO.getTasksOfHomeworkOfStudent(studentId,
 												chosenHomeworkId)) {
 											hasStudentGivenMinOneTask = false;
 											String x = t.getSolution();
@@ -360,14 +371,14 @@ public class GroupController {
 			if (request.getParameter("chosenGroupId") != null && !(request.getParameter("chosenGroupId").equals(""))) {
 				String groupIdStr = request.getParameter("chosenGroupId").trim();
 				if (!(groupIdStr.equals("allGroups")) && !(groupIdStr.equals("null"))) {
-					if (!ValidationsDAO.getInstance().isStringValidInteger(groupIdStr)) {
+					if (!validationsDAO.isStringValidInteger(groupIdStr)) {
 						response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
 						return;
 					}
 					int groupId = Integer.parseInt((String) request.getParameter("chosenGroupId"));
 					try {
-						if (ValidationsDAO.getInstance().doesGroupExistInDBById(groupId)) {
-							ArrayList<Student> allStudentsOfGroup = GroupDAO.getInstance().getStudentsOfGroup(groupId);
+						if (validationsDAO.doesGroupExistInDBById(groupId)) {
+							ArrayList<Student> allStudentsOfGroup = groupDAO.getStudentsOfGroup(groupId);
 							JsonArray array = new JsonArray();
 							for (Student student : allStudentsOfGroup) {
 								JsonObject obj = new JsonObject();
@@ -406,13 +417,13 @@ public class GroupController {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.isTeacher()) {
 			if (request.getParameter("groupId") != null && !(request.getParameter("groupId").trim().equals(""))
-					&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("groupId").trim())) {
+					&& validationsDAO.isStringValidInteger(request.getParameter("groupId").trim())) {
 				int groupId = Integer.parseInt(request.getParameter("groupId").trim());
 				try {
-					if (ValidationsDAO.getInstance().doesGroupExistInDBById(groupId)) {
-						GroupDAO.getInstance().removeGroup(groupId);
+					if (validationsDAO.doesGroupExistInDBById(groupId)) {
+						groupDAO.removeGroup(groupId);
 						request.getServletContext().removeAttribute("allGroups");
-						ArrayList<Group> allGroupsUpdated = GroupDAO.getInstance().getAllGroupsWithoutStudents();
+						ArrayList<Group> allGroupsUpdated = groupDAO.getAllGroupsWithoutStudents();
 						request.getServletContext().setAttribute("allGroups", allGroupsUpdated);
 						request.getSession().setAttribute("invalidFields", false);
 					}
@@ -435,14 +446,14 @@ public class GroupController {
 			if (request.getParameter("chosenGroupId") != null
 					&& !(request.getParameter("chosenGroupId").trim().equals(""))
 					&& !(request.getParameter("chosenGroupId").equals("null"))
-					&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("chosenGroupId"))) {
+					&& validationsDAO.isStringValidInteger(request.getParameter("chosenGroupId"))) {
 				try {
 					int chosenGroupId = Integer.parseInt(request.getParameter("chosenGroupId"));
 					String studentUsername = request.getParameter("chosenStudentUsername").trim();
-					int chosenStudentId = UserDAO.getInstance().getUserIdByUsername(studentUsername);
-					if (ValidationsDAO.getInstance().doesGroupExistInDBById(chosenGroupId) == true
-							&& ValidationsDAO.getInstance().doesUserExistInDBById(chosenStudentId)) {
-						GroupDAO.getInstance().removeUserFromGroup(chosenGroupId, chosenStudentId);
+					int chosenStudentId = userDAO.getUserIdByUsername(studentUsername);
+					if (validationsDAO.doesGroupExistInDBById(chosenGroupId) == true
+							&& validationsDAO.doesUserExistInDBById(chosenStudentId)) {
+						groupDAO.removeUserFromGroup(chosenGroupId, chosenStudentId);
 						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 					} else {
 						response.setStatus(IValidationsDAO.PAGE_NOT_FOUND_STATUS);
@@ -477,7 +488,7 @@ public class GroupController {
 		if (user.isTeacher()) {
 			int groupId = 0;
 			if (request.getParameter("groupId") != null) {
-				if (ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("groupId").trim())) {
+				if (validationsDAO.isStringValidInteger(request.getParameter("groupId").trim())) {
 					groupId = Integer.parseInt(request.getParameter("groupId"));
 				} else {
 					return "pageNotFound";
@@ -491,7 +502,7 @@ public class GroupController {
 				}
 			}
 			try {
-				Group group = GroupDAO.getInstance().getGroupWithoutStudentsById(groupId);
+				Group group = groupDAO.getGroupWithoutStudentsById(groupId);
 				if (group != null) {
 					request.getSession().setAttribute("currGroup", group);
 					return "updateGroup";
@@ -557,15 +568,15 @@ public class GroupController {
 							ArrayList<Integer> allSelectedTeachers = new ArrayList<>();
 							for (int i = 0; i < selectedTeachersUsername.length; i++) {
 								allSelectedTeachers
-										.add(UserDAO.getInstance().getUserIdByUsername(selectedTeachersUsername[i]));
+										.add(userDAO.getUserIdByUsername(selectedTeachersUsername[i]));
 							}
 							currGroup.setName(newGroupName);
-							GroupDAO.getInstance().updateGroup(currGroup, allSelectedTeachers);
-							ArrayList<Group> allGroups = GroupDAO.getInstance().getAllGroupsWithoutStudents();
+							groupDAO.updateGroup(currGroup, allSelectedTeachers);
+							ArrayList<Group> allGroups = groupDAO.getAllGroupsWithoutStudents();
 							request.getServletContext().setAttribute("allGroups", allGroups);
-							ArrayList<Teacher> allTeachersUpdated = UserDAO.getInstance().getAllTeachers();
+							ArrayList<Teacher> allTeachersUpdated = userDAO.getAllTeachers();
 							for (Teacher t : allTeachersUpdated) {
-								t.setGroups(UserDAO.getInstance().getGroupsOfUserWithoutStudents(t.getId()));
+								t.setGroups(userDAO.getGroupsOfUserWithoutStudents(t.getId()));
 							}
 							request.getServletContext().setAttribute("allTeachers", allTeachersUpdated);
 							request.getSession().setAttribute("invalidFields", false);
@@ -592,8 +603,8 @@ public class GroupController {
 	}
 
 	private boolean isGroupNameUnique(int groupId, String groupName) throws GroupException {
-		int wantedGroupNameId = GroupDAO.getInstance().getGroupIdByGroupName(groupName);
-		if (ValidationsDAO.getInstance().isGroupNameUnique(groupName)) {
+		int wantedGroupNameId = groupDAO.getGroupIdByGroupName(groupName);
+		if (validationsDAO.isGroupNameUnique(groupName)) {
 			return true;
 		} else {
 			if (wantedGroupNameId == groupId) {

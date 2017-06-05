@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,14 +30,20 @@ import com.IttalentsHomeworks.model.User;
 @MultipartConfig
 
 public class ValidationsController {
-
+	
+	@Autowired
+	private GroupDAO groupDAO;
+	
+	@Autowired
+	private ValidationsDAO validationsDAO;
+	
 	@RequestMapping(value = "/doesUserExist", method = RequestMethod.GET)
 	protected void checkIfUserAlreadyExists(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		if (request.getParameter("chosenStudentUsername") != null) {
 			String chosenStudentUsername = request.getParameter("chosenStudentUsername").trim();
 			try {
-				if (ValidationsDAO.getInstance().isUsernameUnique(chosenStudentUsername)) {
+				if (validationsDAO.isUsernameUnique(chosenStudentUsername)) {
 					response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 				} else {
 					response.setStatus(IValidationsDAO.SUCCESS_STATUS);
@@ -57,14 +64,14 @@ public class ValidationsController {
 		if (request.getParameter("chosenGroupId") != null && request.getParameter("chosenStudentUsername") != null
 				&& (!request.getParameter("chosenGroupId").trim().equals(""))
 				&& (!request.getParameter("chosenStudentUsername").trim().equals(""))
-				&& ValidationsDAO.getInstance().isStringValidInteger(request.getParameter("chosenGroupId"))) {
+				&& validationsDAO.isStringValidInteger(request.getParameter("chosenGroupId"))) {
 			User user = (User) request.getSession().getAttribute("user");
 			if (user.isTeacher()) {
 				int chosenGroupId = Integer.parseInt(request.getParameter("chosenGroupId"));
 				String chosenStudentUsername = request.getParameter("chosenStudentUsername").trim();
 				try {
-					Group chosenGroup = GroupDAO.getInstance().getGroupById(chosenGroupId);
-					if (GroupDAO.getInstance().isUserAlreadyInGroup(chosenGroup.getId(), chosenStudentUsername)) {
+					Group chosenGroup = groupDAO.getGroupById(chosenGroupId);
+					if (groupDAO.isUserAlreadyInGroup(chosenGroup.getId(), chosenStudentUsername)) {
 						response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
 					} else {
 						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
@@ -89,12 +96,14 @@ public class ValidationsController {
 	@RequestMapping(value = "/isGroupNameUnique", method = RequestMethod.GET)
 	protected void isGroupNameUnique(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println("VALID: " + validationsDAO);
+
 		if (request.getParameter("name") != null) {
 			User user = (User) request.getSession().getAttribute("user");
 			if (user.isTeacher()) {
 				String groupName = request.getParameter("name").trim();
 				try {
-					if (ValidationsDAO.getInstance().isGroupNameUnique(groupName)) {
+					if (validationsDAO.isGroupNameUnique(groupName)) {
 						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 					} else {
 						response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
@@ -122,9 +131,9 @@ public class ValidationsController {
 				Group currGroup = (Group) request.getSession().getAttribute("currGroup");
 				int currGroupId = currGroup.getId();
 				try {
-					int wantedGroupNameId = GroupDAO.getInstance().getGroupIdByGroupName(groupName);
+					int wantedGroupNameId = groupDAO.getGroupIdByGroupName(groupName);
 
-					if (ValidationsDAO.getInstance().isGroupNameUnique(groupName)) {
+					if (validationsDAO.isGroupNameUnique(groupName)) {
 						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 					} else {
 						if (wantedGroupNameId == currGroupId) {
@@ -223,7 +232,7 @@ public class ValidationsController {
 			if (user.isTeacher()) {
 				String heading = request.getParameter("heading").trim();
 				try {
-					if (ValidationsDAO.getInstance().isHomeworkHeadingUnique(heading)) {
+					if (validationsDAO.isHomeworkHeadingUnique(heading)) {
 						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 					} else {
 						response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
@@ -356,7 +365,7 @@ public class ValidationsController {
 				HomeworkDetails currHd = (HomeworkDetails) request.getSession().getAttribute("currHomework");
 				try {
 					if (currHd.getHeading().equals(heading)
-							|| ValidationsDAO.getInstance().isHomeworkHeadingUnique(heading)) {
+							|| validationsDAO.isHomeworkHeadingUnique(heading)) {
 						response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 					} else {
 						response.setStatus(IValidationsDAO.BAD_REQUEST_STATUS);
@@ -491,7 +500,7 @@ public class ValidationsController {
 			String username = request.getParameter("username").trim();
 			boolean isUnique = false;
 			try {
-				isUnique = ValidationsDAO.getInstance().isUsernameUnique(username);
+				isUnique = validationsDAO.isUsernameUnique(username);
 			} catch (UserException e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
@@ -553,7 +562,7 @@ public class ValidationsController {
 			String password = request.getParameter("password").trim();
 			boolean areUsernamePasswordValid;
 			try {
-				areUsernamePasswordValid = ValidationsDAO.getInstance().doesUserExistInDB(username, password);
+				areUsernamePasswordValid = validationsDAO.doesUserExistInDB(username, password);
 				if (areUsernamePasswordValid) {
 					response.setStatus(IValidationsDAO.SUCCESS_STATUS);
 				} else {
