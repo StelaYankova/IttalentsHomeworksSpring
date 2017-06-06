@@ -218,7 +218,7 @@
 					<label class="control-label">Tests:</label>
 					<div class="control-label-input">
 						<input type="file" accept="application/zip" name="testsFile" /><span
-							id="testsFileConstraint">(Files in ZIP must be ".txt")</span> <br />
+							id="testsFileConstraint">(Files in ZIP must be ".txt")</span> <br/><br>
 						<c:if test="${not empty validTestsFile}">
 							<c:if test="${not validTestsFile}">
 								<p id="testsFileMsg" class="input-invalid">Valid file format

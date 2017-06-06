@@ -76,9 +76,13 @@ public class GroupController {
 					if (isGroupNameValid(groupName)) {
 						isNameValid = true;
 					}
+					
 					request.setAttribute("validName", isNameValid);
-					ArrayList<Teacher> allTeachers = (ArrayList<Teacher>) request.getServletContext()
+					ArrayList<Teacher> allTeachers = null;
+					synchronized (request.getServletContext()) {
+						allTeachers = (ArrayList<Teacher>) request.getServletContext()
 							.getAttribute("allTeachers");
+					}
 					ArrayList<String> allTeacherUsernames = new ArrayList<>();
 					boolean allTeachersExist = true;
 					for (Teacher teacher : allTeachers) {
@@ -101,15 +105,18 @@ public class GroupController {
 						System.out.println("Will create group..." + newGroup.getName());
 						groupDAO.createNewGroup(newGroup);
 						request.setAttribute("invalidFields", false);
-						ArrayList<Group> allGroupsUpdated = (ArrayList<Group>) request.getServletContext()
-								.getAttribute("allGroups");
-						allGroupsUpdated.add(groupDAO
-								.getGroupWithoutStudentsById(groupDAO.getGroupIdByGroupName(groupName)));
-						ArrayList<Teacher> allTeachersUpdated = userDAO.getAllTeachers();
-						for (Teacher t : allTeachersUpdated) {
-							t.setGroups(userDAO.getGroupsOfUserWithoutStudents(t.getId()));
+						synchronized (request.getServletContext()) {
+							ArrayList<Group> allGroupsUpdated = (ArrayList<Group>) request.getServletContext()
+									.getAttribute("allGroups");
+							allGroupsUpdated.add(
+									groupDAO.getGroupWithoutStudentsById(groupDAO.getGroupIdByGroupName(groupName)));
+							ArrayList<Teacher> allTeachersUpdated = userDAO.getAllTeachers();
+							for (Teacher t : allTeachersUpdated) {
+								t.setGroups(userDAO.getGroupsOfUserWithoutStudents(t.getId()));
+							}
+							request.getServletContext().setAttribute("allTeachers", allTeachersUpdated);
 						}
-						request.getServletContext().setAttribute("allTeachers", allTeachersUpdated);
+						
 					}
 				} catch (GroupException e) {
 					System.out.println(e.getMessage());
@@ -422,9 +429,11 @@ public class GroupController {
 				try {
 					if (validationsDAO.doesGroupExistInDBById(groupId)) {
 						groupDAO.removeGroup(groupId);
-						request.getServletContext().removeAttribute("allGroups");
-						ArrayList<Group> allGroupsUpdated = groupDAO.getAllGroupsWithoutStudents();
-						request.getServletContext().setAttribute("allGroups", allGroupsUpdated);
+						synchronized (request.getServletContext()) {
+							request.getServletContext().removeAttribute("allGroups");
+							ArrayList<Group> allGroupsUpdated = groupDAO.getAllGroupsWithoutStudents();
+							request.getServletContext().setAttribute("allGroups", allGroupsUpdated);
+						}
 						request.getSession().setAttribute("invalidFields", false);
 					}
 				} catch (GroupException | UserException e) {
@@ -553,8 +562,11 @@ public class GroupController {
 							isNameValid = true;
 						}
 						request.getSession().setAttribute("validName", isNameValid);
-						ArrayList<Teacher> allTeachers = (ArrayList<Teacher>) request.getServletContext()
+						ArrayList<Teacher> allTeachers = null;
+						synchronized (request.getServletContext()) {
+							 allTeachers = (ArrayList<Teacher>) request.getServletContext()
 								.getAttribute("allTeachers");
+						}
 						ArrayList<String> allTeacherUsernames = new ArrayList<>();
 						boolean allTeachersExist = true;
 						for (Teacher teacher : allTeachers) {
@@ -573,12 +585,14 @@ public class GroupController {
 							currGroup.setName(newGroupName);
 							groupDAO.updateGroup(currGroup, allSelectedTeachers);
 							ArrayList<Group> allGroups = groupDAO.getAllGroupsWithoutStudents();
-							request.getServletContext().setAttribute("allGroups", allGroups);
-							ArrayList<Teacher> allTeachersUpdated = userDAO.getAllTeachers();
-							for (Teacher t : allTeachersUpdated) {
-								t.setGroups(userDAO.getGroupsOfUserWithoutStudents(t.getId()));
+							synchronized (request.getServletContext()) {
+								request.getServletContext().setAttribute("allGroups", allGroups);
+								ArrayList<Teacher> allTeachersUpdated = userDAO.getAllTeachers();
+								for (Teacher t : allTeachersUpdated) {
+									t.setGroups(userDAO.getGroupsOfUserWithoutStudents(t.getId()));
+								}
+								request.getServletContext().setAttribute("allTeachers", allTeachersUpdated);
 							}
-							request.getServletContext().setAttribute("allTeachers", allTeachersUpdated);
 							request.getSession().setAttribute("invalidFields", false);
 						}
 					}

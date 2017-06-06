@@ -43,15 +43,8 @@ public class TestDAO {
 	@Autowired
 	private GroupDAO groupDAO;
 	
-	
 	@Autowired
 	private ValidationsDAO validationsDAO;
-	
-	
-	
-	
-	
-	
 	
 	static User user1 = new Student("user22221", "1222234", "1222234", "email@user1");
 	static Teacher user2 = new Teacher("user2", "1222234", "1222234", "email@user1");;

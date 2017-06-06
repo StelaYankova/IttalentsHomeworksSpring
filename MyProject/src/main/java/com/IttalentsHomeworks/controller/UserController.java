@@ -187,15 +187,17 @@ public class UserController {
 					ArrayList<Group> allGroups;
 					try {
 						allGroups = groupDAO.getAllGroupsWithoutStudents();
-						if (request.getServletContext().getAttribute("allGroups") == null) {
-							request.getServletContext().setAttribute("allGroups", allGroups);
-						}
-						ArrayList<Teacher> allTeachers = userDAO.getAllTeachers();
-						for (Teacher t : allTeachers) {
-							t.setGroups(userDAO.getGroupsOfUserWithoutStudents(t.getId()));
-						}
-						if (request.getServletContext().getAttribute("allTeachers") == null) {
-							request.getServletContext().setAttribute("allTeachers", allTeachers);
+						synchronized (request.getServletContext()) {
+							if (request.getServletContext().getAttribute("allGroups") == null) {
+								request.getServletContext().setAttribute("allGroups", allGroups);
+							}
+							ArrayList<Teacher> allTeachers = userDAO.getAllTeachers();
+							for (Teacher t : allTeachers) {
+								t.setGroups(userDAO.getGroupsOfUserWithoutStudents(t.getId()));
+							}
+							if (request.getServletContext().getAttribute("allTeachers") == null) {
+								request.getServletContext().setAttribute("allTeachers", allTeachers);
+							}
 						}
 					} catch (UserException | GroupException e) {
 						System.out.println(e.getMessage());
@@ -205,8 +207,10 @@ public class UserController {
 					if (user.isTeacher()) {
 						request.getSession().setAttribute("isTeacher", true);
 						ArrayList<Student> allStudents = userDAO.getAllStudents();
-						if (request.getServletContext().getAttribute("allStudents") == null) {
-							request.getServletContext().setAttribute("allStudents", allStudents);
+						synchronized (request.getServletContext()) {
+							if (request.getServletContext().getAttribute("allStudents") == null) {
+								request.getServletContext().setAttribute("allStudents", allStudents);
+							}
 						}
 						return "redirect:./mainPageTeacher";
 					} else {
